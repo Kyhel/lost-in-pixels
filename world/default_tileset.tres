@@ -1,0 +1,15 @@
+[gd_resource type="TileSet" format=3 uid="uid://cj11y0p1byxuo"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jbmh0"]
+load_path = "res://.godot/imported/TerrainTiles.png-65d0482608f88407bd480a638b841a17.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6i0au"]
+resource_name = "Terrain"
+texture = SubResource("CompressedTexture2D_jbmh0")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_6i0au")

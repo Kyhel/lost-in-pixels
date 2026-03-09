@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://e6m62ghn4205"]
+
+[ext_resource type="Script" uid="uid://cfr34ldh2f3fm" path="res://scenes/game.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://dqrsinwnx82bn" path="res://world/chunk_manager.gd" id="2_lbhrr"]
+[ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://entities/player.gd" id="3_iywne"]
+[ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
+[ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
+
+[node name="Game" type="Node2D" unique_id=839376987]
+script = ExtResource("1_uwrxv")
+
+[node name="World" type="Node2D" parent="." unique_id=351035125]
+
+[node name="ChunkManager" type="Node2D" parent="World" unique_id=381385368]
+script = ExtResource("2_lbhrr")
+
+[node name="Entities" type="Node2D" parent="." unique_id=1123457807]
+
+[node name="Player" type="CharacterBody2D" parent="Entities" unique_id=1652367432]
+script = ExtResource("3_iywne")
+
+[node name="Sprite2D" type="Sprite2D" parent="Entities/Player" unique_id=1558994929]
+texture = ExtResource("4_iywne")
+
+[node name="Camera" type="Camera2D" parent="Entities/Player" unique_id=526099589]
+zoom = Vector2(0.5, 0.5)
+
+[node name="Systems" type="Node2D" parent="." unique_id=668813161]
+
+[node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044]
+script = ExtResource("4_p57ef")
