@@ -1,19 +1,30 @@
 extends Node2D
 
-const CHUNK_SIZE = 32
+const CHUNK_SIZE = ChunkManager.CHUNK_SIZE
 const FOG_TILE = 0
 
 var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 
+var tile_types = []
+
 @onready var tilemap = $Terrain
 @onready var fog = $Fog
 
-func set_tile(x:int, y:int, tile:int):
+func _ready() -> void:
+	tile_types.resize(CHUNK_SIZE);
+	for x in range(CHUNK_SIZE):
+		tile_types[x] = []
+		tile_types[x].resize(CHUNK_SIZE);
+
+func set_tile_type(x:int, y:int, type):
+	tile_types[x][y] = type
+
+func set_tile(x:int, y:int, tile:Vector2i):
 
 	tilemap.set_cell(
 		Vector2i(x,y),
 		0,
-		Vector2i(tile,0)
+		tile
 	)
 
 func init_fog(grid : Variant = null):
@@ -44,3 +55,6 @@ func reveal(x:int,y:int):
 	if fog_grid[x][y]:
 		fog_grid[x][y] = false
 	fog.erase_cell(Vector2i(x,y))
+
+func is_tile_visible(local_x:int, local_y:int) -> bool:
+	return !fog_grid[local_x][local_y]

@@ -1,6 +1,5 @@
 extends Node
 
-@onready var chunk_manager = get_node("../../World/ChunkManager")
 @onready var player = get_node("../../Entities/Player")
 
 func _ready():
@@ -8,4 +7,5 @@ func _ready():
 
 func _process(delta):
 
-	chunk_manager.update_chunks(player.global_position)
+	ChunkManager.update_chunks(player.global_position)
+	EntitiesManager.update_entity_visibility(player.global_position)

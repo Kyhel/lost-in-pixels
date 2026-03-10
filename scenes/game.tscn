@@ -2,9 +2,24 @@
 
 [ext_resource type="Script" uid="uid://cfr34ldh2f3fm" path="res://scenes/game.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://dqrsinwnx82bn" path="res://world/chunk_manager.gd" id="2_lbhrr"]
+[ext_resource type="Script" uid="uid://dvv7d12m2esl1" path="res://scenes/player_light_layer.gd" id="3_gee14"]
 [ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://entities/player.gd" id="3_iywne"]
+[ext_resource type="Shader" uid="uid://bnx32mppxvww1" path="res://scenes/game.gdshader" id="3_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
+[ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
+[ext_resource type="Script" uid="uid://otxlxrmoyt70" path="res://systems/entities_manager.gd" id="6_p57ef"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
+shader = ExtResource("3_u5sy4")
+shader_parameter/light_pos = Vector2(0, 0)
+shader_parameter/radius = 300.0
+shader_parameter/softness = 200.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gee14"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
+radius = 20.0
 
 [node name="Game" type="Node2D" unique_id=839376987]
 script = ExtResource("1_uwrxv")
@@ -14,18 +29,47 @@ script = ExtResource("1_uwrxv")
 [node name="ChunkManager" type="Node2D" parent="World" unique_id=381385368]
 script = ExtResource("2_lbhrr")
 
+[node name="PlayerLightLayer" type="CanvasLayer" parent="World" unique_id=380552608 node_paths=PackedStringArray("player")]
+script = ExtResource("3_gee14")
+player = NodePath("../../Entities/Player")
+
+[node name="ColorRect" type="ColorRect" parent="World/PlayerLightLayer" unique_id=820227772]
+material = SubResource("ShaderMaterial_gee14")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.9019608)
+
 [node name="Entities" type="Node2D" parent="." unique_id=1123457807]
 
 [node name="Player" type="CharacterBody2D" parent="Entities" unique_id=1652367432]
+collision_mask = 7
 script = ExtResource("3_iywne")
+weapon = ExtResource("6_0tnpc")
 
 [node name="Sprite2D" type="Sprite2D" parent="Entities/Player" unique_id=1558994929]
 texture = ExtResource("4_iywne")
 
 [node name="Camera" type="Camera2D" parent="Entities/Player" unique_id=526099589]
-zoom = Vector2(0.5, 0.5)
+zoom = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player" unique_id=664193358]
+shape = SubResource("CircleShape2D_gee14")
+
+[node name="AttackHitbox" type="Area2D" parent="Entities/Player" unique_id=1792221363]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player/AttackHitbox" unique_id=560303145]
+shape = SubResource("CircleShape2D_attack")
 
 [node name="Systems" type="Node2D" parent="." unique_id=668813161]
 
 [node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044]
 script = ExtResource("4_p57ef")
+
+[node name="EntitiesManager" type="Node" parent="Systems" unique_id=994889397]
+script = ExtResource("6_p57ef")

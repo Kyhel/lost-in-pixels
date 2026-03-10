@@ -10,4 +10,5 @@ script = ExtResource("1_jbmh0")
 tile_set = ExtResource("2_uc5gi")
 
 [node name="Fog" type="TileMapLayer" parent="." unique_id=316407783]
+visible = false
 tile_set = ExtResource("2_uc5gi")
