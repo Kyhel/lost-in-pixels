@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3]
+
+[ext_resource type="Script" path="res://entities/creature_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/Monster_1.png" id="2_texture"]
+[ext_resource type="PackedScene" path="res://entities/wandering_bt.tscn" id="3_behavior_tree"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Big Wandering"
+sprite = ExtResource("2_texture")
+behavior_tree = ExtResource("3_behavior_tree")
