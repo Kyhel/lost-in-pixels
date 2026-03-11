@@ -2,15 +2,11 @@ extends CharacterBody2D
 
 var base_speed = 200
 
-## Higher priority can push lower; same priority cannot push each other. Used with PushPriorityHelper.
-@export var push_priority: int = 1
-
 const ATTACK_RANGE = 20 # fallback if no weapon equipped
 const ATTACK_DAMAGE = 1 # fallback if no weapon equipped
 const PICKUP_RADIUS = 16
 
 var AttackEffectScene := preload("res://entities/attack_effect.tscn")
-const PushPriorityHelper = preload("res://entities/push_priority_helper.gd")
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
@@ -44,9 +40,8 @@ func _physics_process(delta):
 
 	velocity = dir.normalized() * base_speed * speed_modifier
 
-	var pos_before := global_position
 	move_and_slide()
-	PushPriorityHelper.apply_after_slide(self, push_priority, pos_before)
+	PushPriorityHelper.push_away_creatures_overlapping(self)
 
 	ChunkManager.reveal_around_player(global_position)
 

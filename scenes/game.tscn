@@ -46,7 +46,8 @@ color = Color(0, 0, 0, 0.9019608)
 [node name="Entities" type="Node2D" parent="." unique_id=1123457807]
 
 [node name="Player" type="CharacterBody2D" parent="Entities" unique_id=1652367432]
-collision_mask = 7
+collision_layer = 1
+collision_mask = 2
 script = ExtResource("3_iywne")
 weapon = ExtResource("6_0tnpc")
 
