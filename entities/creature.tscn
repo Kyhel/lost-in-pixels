@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c102ba4bdwrig"]
+
+[ext_resource type="Script" uid="uid://dls1h3glcsgql" path="res://entities/creature.gd" id="1_script"]
+[ext_resource type="Resource" path="res://entities/creature_data.tres" id="2_creature_data"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 8.0
+
+[node name="Creature" type="CharacterBody2D" unique_id=1127989516]
+script = ExtResource("1_script")
+creature_data = ExtResource("2_creature_data")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=3039133]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=984625315]
+shape = SubResource("CircleShape2D_1")
