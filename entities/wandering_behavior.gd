@@ -1,8 +1,7 @@
 extends Node
 
 ## Makes the creature wander: move a distance, stop, then move in a new random direction.
-
-const DIRECTIONS := [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
+## Uses any random angle (not just cardinal directions) and rotates the creature to face movement.
 
 @export var wander_speed: float = 40.0
 @export var move_distance_min: float = 32.0
@@ -22,6 +21,7 @@ func tick(creature: Creature, delta: float) -> void:
 		if _move_direction == Vector2.ZERO:
 			_start_moving(creature.global_position)
 		creature.velocity = _move_direction * wander_speed
+		creature.rotation = _move_direction.angle()
 		if creature.global_position.distance_to(_move_start_pos) >= _move_distance:
 			creature.velocity = Vector2.ZERO
 			_state = 1
@@ -36,5 +36,5 @@ func tick(creature: Creature, delta: float) -> void:
 
 func _start_moving(from_position: Vector2) -> void:
 	_move_start_pos = from_position
-	_move_direction = DIRECTIONS.pick_random()
+	_move_direction = Vector2.from_angle(randf() * TAU).normalized()
 	_move_distance = randf_range(move_distance_min, move_distance_max)
