@@ -8,6 +8,8 @@ class_name Creature
 signal damage_taken(amount: int, source: Node)
 signal died
 
+const PushPriorityHelper = preload("res://entities/push_priority_helper.gd")
+
 @export var creature_data: CreatureData
 @export var max_health: int = 1
 var health: int
@@ -26,7 +28,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if has_node("BehaviorTree"):
 		get_node("BehaviorTree").tick(self, delta)
+	var pos_before := global_position
 	move_and_slide()
+	var priority := creature_data.push_priority if creature_data != null else 0
+	PushPriorityHelper.apply_after_slide(self, priority, pos_before)
 
 
 func take_damage(amount: int, source: Node = null) -> void:
