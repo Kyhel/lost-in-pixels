@@ -5,6 +5,12 @@ class_name Creature
 ## Handles common health, damage, and death logic. Override [method _on_die] and
 ## [method _on_damage_taken] in subclasses to customize behavior.
 
+## Physics layer bits (project: 1=Player, 2=Terrain, 3=Enemies, 4=Small creatures, 5=Big creatures).
+const LAYER_PLAYER := 1
+const LAYER_TERRAIN := 2
+const LAYER_SMALL_CREATURES := 8   # layer 4
+const LAYER_BIG_CREATURES := 16   # layer 5
+
 signal damage_taken(amount: int, source: Node)
 signal died
 
@@ -21,11 +27,14 @@ func _ready() -> void:
 			var tree = creature_data.behavior_tree.instantiate()
 			tree.name = "BehaviorTree"
 			add_child(tree)
-		# High-priority creatures don't collide with player so they can overlap and push the player.
-		if creature_data.push_priority > PushPriorityHelper.PLAYER_PRIORITY:
-			collision_mask = 6  # Terrain + creatures (layer 2 | 4), not player (layer 1)
+		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
+		var is_big: bool = int(creature_data.size) == 1  # CreatureData.CreatureSize.BIG
+		if is_big:
+			collision_layer = LAYER_BIG_CREATURES
+			collision_mask = LAYER_TERRAIN | LAYER_BIG_CREATURES  # Terrain + other Big creatures
 		else:
-			collision_mask = 7  # Player + terrain + creatures
+			collision_layer = LAYER_SMALL_CREATURES
+			collision_mask = LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES  # Terrain, player, all creatures
 
 
 func _physics_process(delta: float) -> void:

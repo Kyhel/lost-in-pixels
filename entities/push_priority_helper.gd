@@ -41,7 +41,7 @@ static func push_away_creatures_overlapping(body: CharacterBody2D) -> void:
 	var params = PhysicsShapeQueryParameters2D.new()
 	params.shape = shape_node.shape
 	params.transform = body.global_transform
-	params.collision_mask = 4  # layer 3 (Enemies/Creatures)
+	params.collision_mask = 8
 	params.collide_with_bodies = true
 	params.collide_with_areas = false
 	params.exclude = [body.get_rid()]
