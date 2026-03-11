@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="CreatureData" format=3]
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://3x8jvdyeafyk"]
 
-[ext_resource type="Script" path="res://entities/creature_data.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/Monster_1.png" id="2_texture"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://entities/creature_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dyh4mefaigyld" path="res://assets/Monster_1.png" id="2_texture"]
 [ext_resource type="PackedScene" path="res://entities/wandering_bt.tscn" id="3_behavior_tree"]
 
 [resource]
