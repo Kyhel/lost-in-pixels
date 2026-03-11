@@ -17,32 +17,35 @@ signal died
 @export var creature_data: CreatureData
 @export var max_health: int = 1
 var health: int
+var is_big: bool
 
 func _ready() -> void:
 	health = max_health
 	if creature_data != null:
+		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
 			$Sprite2D.texture = creature_data.sprite
+			$Sprite2D.scale = Vector2(creature_data.size, creature_data.size) / $Sprite2D.texture.get_size()
 		if creature_data.behavior_tree != null:
 			var tree = creature_data.behavior_tree.instantiate()
 			tree.name = "BehaviorTree"
 			add_child(tree)
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
-		var is_big: bool = int(creature_data.size) == 1  # CreatureData.CreatureSize.BIG
 		if is_big:
 			collision_layer = LAYER_BIG_CREATURES
 			collision_mask = LAYER_TERRAIN | LAYER_BIG_CREATURES  # Terrain + other Big creatures
 		else:
 			collision_layer = LAYER_SMALL_CREATURES
 			collision_mask = LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES  # Terrain, player, all creatures
-
+		scale = Vector2.ONE * creature_data.scale_factor
+		$CollisionShape2D.scale = Vector2.ONE * creature_data.size / $CollisionShape2D.shape.radius / 2
 
 func _physics_process(delta: float) -> void:
 	if has_node("BehaviorTree"):
 		get_node("BehaviorTree").tick(self, delta)
 	move_and_slide()
-	if creature_data != null and creature_data.push_priority > PushPriorityHelper.PLAYER_PRIORITY:
-		PushPriorityHelper.push_away_player_overlapping(self)
+	if is_big:  # BIG
+		PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 
 
 func take_damage(amount: int, source: Node = null) -> void:

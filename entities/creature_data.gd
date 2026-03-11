@@ -11,7 +11,6 @@ enum CreatureSize {
 @export var display_name: String = ""
 @export var sprite: Texture2D
 @export var behavior_tree: PackedScene
-## SMALL = layer 4, BIG = layer 5. Determines collision layer and mask (see Creature._ready).
-@export var size: CreatureSize = CreatureSize.SMALL
-## Higher priority can push lower. Same priority cannot push each other. Used with PushPriorityHelper.
-@export var push_priority: int = 0
+@export var size_type: CreatureSize = CreatureSize.SMALL
+@export var scale_factor: float = 1.0
+@export var size: int = 16

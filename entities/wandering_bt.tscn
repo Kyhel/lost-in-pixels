@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://db17ppkcy4q3o"]
 
-[ext_resource type="Script" path="res://entities/behavior_tree.gd" id="1_script"]
-[ext_resource type="Script" path="res://entities/wandering_behavior.gd" id="2_wandering"]
+[ext_resource type="Script" uid="uid://bvldv6tp20oct" path="res://entities/behavior_tree.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://18xyfpqx8hr8" path="res://entities/wandering_behavior.gd" id="2_wandering"]
 
-[node name="WanderingBT" type="Node"]
+[node name="WanderingBT" type="Node" unique_id=486536636]
 script = ExtResource("1_script")
 
-[node name="WanderingBehavior" type="Node" parent="."]
+[node name="WanderingBehavior" type="Node" parent="." unique_id=1627584123]
 script = ExtResource("2_wandering")
