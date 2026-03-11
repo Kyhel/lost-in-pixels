@@ -5,7 +5,7 @@ extends Node
 
 @export var wander_speed: float = 40.0
 @export var move_distance_min: float = 32.0
-@export var move_distance_max: float = 96.0
+@export var move_distance_max: float = 200.0
 @export var stop_duration_min: float = 0.5
 @export var stop_duration_max: float = 1.5
 

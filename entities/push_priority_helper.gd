@@ -35,7 +35,7 @@ static func push_away_overlapping(body: CharacterBody2D, collision_mask: int) ->
 
 	var params = PhysicsShapeQueryParameters2D.new()
 	params.shape = shape_node.shape
-	params.transform = body.global_transform
+	params.transform = shape_node.global_transform
 	params.collision_mask = collision_mask
 	params.collide_with_bodies = true
 	params.collide_with_areas = false
