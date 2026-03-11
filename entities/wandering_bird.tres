@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://entities/creature_data.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/FlyingMonster_1.png" id="2_texture"]
-[ext_resource type="PackedScene" path="res://entities/behavior_tree.tscn" id="3_behavior_tree"]
+[ext_resource type="PackedScene" path="res://entities/wandering_bird_bt.tscn" id="3_behavior_tree"]
 
 [resource]
 script = ExtResource("1_script")

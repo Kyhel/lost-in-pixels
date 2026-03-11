@@ -2,7 +2,8 @@ extends Node
 
 var chunk_entities: Dictionary[Vector2i, Array] = {}
 
-var monster_scene = preload("res://entities/monster.tscn")
+var creature_scene = preload("res://entities/creature.tscn")
+var wandering_bird_data: CreatureData = preload("res://entities/wandering_bird.tres") as CreatureData
 
 func on_chunk_unloaded(chunk: Vector2i):
 
@@ -23,16 +24,16 @@ func spawn_entities(chunk:Vector2i):
 	var rng = RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_chunk_seed(chunk.x, chunk.y)
 
-	var monsters = []
+	var entities = []
 
-	var monster_count = rng.randi_range(1,3)
+	var entity_count = rng.randi_range(1, 3)
 
-	for i in range(monster_count):
+	for i in range(entity_count):
+		var creature = creature_scene.instantiate()
+		creature.creature_data = wandering_bird_data
 
-		var monster = monster_scene.instantiate()
-
-		var local_x = rng.randi_range(0, ChunkManager.CHUNK_SIZE-1)
-		var local_y = rng.randi_range(0, ChunkManager.CHUNK_SIZE-1)
+		var local_x = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
+		var local_y = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
 
 		var world_x = chunk.x * ChunkManager.CHUNK_SIZE + local_x
 		var world_y = chunk.y * ChunkManager.CHUNK_SIZE + local_y
@@ -42,13 +43,13 @@ func spawn_entities(chunk:Vector2i):
 			world_y * ChunkManager.TILE_SIZE
 		)
 
-		monster.global_position = pos
+		creature.global_position = pos
 
-		add_child(monster)
+		add_child(creature)
 
-		monsters.append(monster)
+		entities.append(creature)
 
-	chunk_entities[chunk] = monsters
+	chunk_entities[chunk] = entities
 
 func move_monster(monster, old_chunk, new_chunk):
 
