@@ -31,7 +31,7 @@ func _physics_process(delta):
 	if attack_cooldown_timer > 0.0:
 		attack_cooldown_timer -= delta
 
-	if Input.is_action_just_pressed("attack") and attack_cooldown_timer <= 0.0:
+	if Input.is_action_pressed("attack") and attack_cooldown_timer <= 0.0:
 		attack()
 
 	try_pickup_items()
@@ -77,8 +77,7 @@ func attack():
 
 	var fx = effect_scene.instantiate()
 	fx.radius = attack_range
-	get_parent().add_child(fx)
-	fx.global_position = global_position
+	add_child(fx)
 
 
 func try_pickup_items():

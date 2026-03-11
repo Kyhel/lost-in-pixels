@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var t := _elapsed / duration
-	var alpha := (1.0 - t) * 0.6
+	var alpha := (1.0 - t) * 1
 	if alpha <= 0.0:
 		return
 
