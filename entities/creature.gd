@@ -21,12 +21,19 @@ func _ready() -> void:
 			var tree = creature_data.behavior_tree.instantiate()
 			tree.name = "BehaviorTree"
 			add_child(tree)
+		# High-priority creatures don't collide with player so they can overlap and push the player.
+		if creature_data.push_priority > PushPriorityHelper.PLAYER_PRIORITY:
+			collision_mask = 6  # Terrain + creatures (layer 2 | 4), not player (layer 1)
+		else:
+			collision_mask = 7  # Player + terrain + creatures
 
 
 func _physics_process(delta: float) -> void:
 	if has_node("BehaviorTree"):
 		get_node("BehaviorTree").tick(self, delta)
 	move_and_slide()
+	if creature_data != null and creature_data.push_priority > PushPriorityHelper.PLAYER_PRIORITY:
+		PushPriorityHelper.push_away_player_overlapping(self)
 
 
 func take_damage(amount: int, source: Node = null) -> void:

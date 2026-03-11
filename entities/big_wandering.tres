@@ -9,3 +9,4 @@ script = ExtResource("1_script")
 display_name = "Big Wandering"
 sprite = ExtResource("2_texture")
 behavior_tree = ExtResource("3_behavior_tree")
+push_priority = 2
