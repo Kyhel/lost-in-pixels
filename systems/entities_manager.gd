@@ -31,8 +31,7 @@ func spawn_entities(chunk:Vector2i):
 
 	var entities = []
 
-	# var entity_count = rng.randi_range(1, 5)
-	var entity_count = 1
+	var entity_count = rng.randi_range(1, 5)
 
 	for i in range(entity_count):
 		var creature = creature_scene.instantiate()

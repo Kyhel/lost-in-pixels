@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://ai/behavior_trees/behavior_tree.gd" id="1_j7pd1"]
 [ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://ai/behavior_trees/bt_sequence.gd" id="1_qh8k5"]
 [ext_resource type="Script" uid="uid://c8orllrm4h8fx" path="res://ai/actions/wander_action.gd" id="3_knn03"]
+[ext_resource type="Script" uid="uid://bxanopywmp2d8" path="res://ai/actions/wait_action.gd" id="4_gqfhc"]
 
 [node name="WanderBt" type="Node" unique_id=739179755]
 script = ExtResource("1_j7pd1")
@@ -12,3 +13,7 @@ script = ExtResource("1_qh8k5")
 
 [node name="Wander" type="Node" parent="BTSequence" unique_id=1808515636]
 script = ExtResource("3_knn03")
+
+[node name="WaitAction" type="Node" parent="BTSequence" unique_id=477125310]
+script = ExtResource("4_gqfhc")
+metadata/_custom_type_script = "uid://bxanopywmp2d8"
