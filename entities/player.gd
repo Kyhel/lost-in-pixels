@@ -7,6 +7,7 @@ const ATTACK_DAMAGE = 1 # fallback if no weapon equipped
 const PICKUP_RADIUS = 16
 
 var AttackEffectScene := preload("res://entities/attack_effect.tscn")
+var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
@@ -34,7 +35,10 @@ func _physics_process(delta):
 	if Input.is_action_pressed("attack") and attack_cooldown_timer <= 0.0:
 		attack()
 
-	try_pickup_items()
+	if Input.is_action_just_pressed("spawn_carrot"):
+		_spawn_carrot()
+
+	# try_pickup_items()
 
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)
 
@@ -79,6 +83,12 @@ func attack():
 	var fx = effect_scene.instantiate()
 	fx.radius = attack_range
 	add_child(fx)
+
+
+func _spawn_carrot() -> void:
+	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
+	var chunk := ChunkManager.get_chunk_from_position(spawn_pos)
+	ObjectsManager.spawn_item_in_chunk(chunk, carrot_data, spawn_pos, 1)
 
 
 func try_pickup_items():

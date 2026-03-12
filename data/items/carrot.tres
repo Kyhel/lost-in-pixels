@@ -1,15 +1,11 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://d4fipfqbnme6i"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_6g0dw"]
-[ext_resource type="Texture2D" uid="uid://ck3xw0ro28ot1" path="res://assets/Items.png" id="2_cmqf5"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ba1um"]
-atlas = ExtResource("2_cmqf5")
-region = Rect2(0, 16, 16, 16)
+[ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="2_cmqf5"]
 
 [resource]
 script = ExtResource("1_6g0dw")
 id = &"carrot"
 display_name = "Carrot"
-texture = SubResource("AtlasTexture_ba1um")
+texture = ExtResource("2_cmqf5")
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
