@@ -4,8 +4,6 @@ class_name ItemData
 @export var id: StringName
 @export var display_name: String = ""
 @export var description: String = ""
-@export var region: Rect2 = Rect2(0, 0, 16, 16)
-
 @export var texture: Texture2D
 
 @export var stackable: bool = false

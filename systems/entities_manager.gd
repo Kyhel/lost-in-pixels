@@ -5,6 +5,9 @@ var chunk_entities: Dictionary[Vector2i, Array] = {}
 var creature_scene = preload("res://entities/creature.tscn")
 var wandering_bird_data: CreatureData = preload("res://entities/wandering_bird.tres") as CreatureData
 var big_wandering_data: CreatureData = preload("res://entities/big_wandering.tres") as CreatureData
+var rabbit_data: CreatureData = preload("res://entities/passive/rabbit.tres") as CreatureData
+
+var creature_data_list := [wandering_bird_data, big_wandering_data, rabbit_data]
 
 func on_chunk_unloaded(chunk: Vector2i):
 
@@ -27,11 +30,11 @@ func spawn_entities(chunk:Vector2i):
 
 	var entities = []
 
-	var entity_count = rng.randi_range(1, 3)
+	var entity_count = rng.randi_range(1, 5)
 
 	for i in range(entity_count):
 		var creature = creature_scene.instantiate()
-		creature.creature_data = wandering_bird_data if rng.randf() < 0.5 else big_wandering_data
+		creature.creature_data = creature_data_list.pick_random()
 
 		var local_x = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
 		var local_y = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)

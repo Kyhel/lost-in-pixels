@@ -1,15 +1,12 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://djv3immofhr8w"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_m506g"]
-[ext_resource type="Texture2D" uid="uid://ck3xw0ro28ot1" path="res://assets/Items.png" id="2_nd8hd"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nd8hd"]
-atlas = ExtResource("2_nd8hd")
-region = Rect2(0, 0, 16, 16)
+[ext_resource type="Texture2D" uid="uid://bybgxotfpjafy" path="res://assets/objects/coin.png" id="2_nd8hd"]
 
 [resource]
 script = ExtResource("1_m506g")
 id = &"coin"
 display_name = "Coin"
-texture = SubResource("AtlasTexture_nd8hd")
+region = Rect2(0, 0.05, 16, 16)
+texture = ExtResource("2_nd8hd")
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b5yf6sdpcuvkd"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_hpaic"]
+[ext_resource type="Texture2D" uid="uid://dawciy0006qxw" path="res://assets/food/apple.png" id="2_j163c"]
+
+[resource]
+script = ExtResource("1_hpaic")
+id = &"apple"
+display_name = "Apple"
+texture = ExtResource("2_j163c")
+metadata/_custom_type_script = "uid://b12224xo0dkcj"

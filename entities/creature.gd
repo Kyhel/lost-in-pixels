@@ -26,7 +26,8 @@ func _ready() -> void:
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
 			$Sprite2D.texture = creature_data.sprite
-			$Sprite2D.scale = Vector2(creature_data.size, creature_data.size) / $Sprite2D.texture.get_size()
+			var texture_size = $Sprite2D.texture.get_size()
+			$Sprite2D.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
 		if creature_data.behavior_tree != null:
 			var tree = creature_data.behavior_tree.instantiate()
 			tree.name = "BehaviorTree"
@@ -45,8 +46,8 @@ func _physics_process(delta: float) -> void:
 	if has_node("BehaviorTree"):
 		get_node("BehaviorTree").tick(self, delta)
 	move_and_slide()
-	if is_big:  # BIG
-		PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
+	#if is_big:  # BIG
+		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 
 
 func take_damage(amount: int, source: Node = null) -> void:

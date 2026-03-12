@@ -12,8 +12,6 @@ func _ready() -> void:
 	if item_data and item_data.texture:
 		var sprite := $Sprite2D
 		sprite.texture = item_data.texture
-		sprite.region_enabled = true
-		sprite.region_rect = item_data.region
 
 func can_be_picked_up(by: Node) -> bool:
 	return true

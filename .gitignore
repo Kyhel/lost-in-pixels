@@ -1,4 +1,5 @@
 .import/
 .godot/
+.vscode/
 export.cfg
 export_presets.cfg
