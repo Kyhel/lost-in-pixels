@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dhpxlm3jh1l0h"]
+
+[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://ai/behavior_trees/behavior_tree.gd" id="1_j7pd1"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://ai/behavior_trees/bt_sequence.gd" id="1_qh8k5"]
+[ext_resource type="Script" uid="uid://c8orllrm4h8fx" path="res://ai/actions/wander_action.gd" id="3_knn03"]
+
+[node name="WanderBt" type="Node" unique_id=739179755]
+script = ExtResource("1_j7pd1")
+
+[node name="BTSequence" type="Node" parent="." unique_id=243640248]
+script = ExtResource("1_qh8k5")
+
+[node name="Wander" type="Node" parent="BTSequence" unique_id=1808515636]
+script = ExtResource("3_knn03")

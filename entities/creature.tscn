@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://c102ba4bdwrig"]
 
 [ext_resource type="Script" uid="uid://dls1h3glcsgql" path="res://entities/creature.gd" id="1_script"]
-[ext_resource type="Resource" uid="uid://dw1nsi2ru2rw5" path="res://entities/creature_data.tres" id="2_creature_data"]
+[ext_resource type="Script" uid="uid://bbqn8ng8lqgf" path="res://ai/ai_root.gd" id="2_s2qhw"]
+[ext_resource type="Script" uid="uid://cdjvfg3gei13a" path="res://ai/sensors_root.gd" id="3_4w7f4"]
+[ext_resource type="Script" uid="uid://tjjqyymwuh2r" path="res://entities/movement/movement_component.gd" id="4_4w7f4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 8.0
@@ -12,9 +14,17 @@ collision_layer = 4
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_script")
-creature_data = ExtResource("2_creature_data")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=3039133]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=984625315]
 shape = SubResource("CircleShape2D_1")
+
+[node name="AI" type="Node" parent="." unique_id=558838461]
+script = ExtResource("2_s2qhw")
+
+[node name="Sensors" type="Node" parent="." unique_id=1580445558]
+script = ExtResource("3_4w7f4")
+
+[node name="Movement" type="Node" parent="." unique_id=410611400]
+script = ExtResource("4_4w7f4")

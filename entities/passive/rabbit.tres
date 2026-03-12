@@ -2,10 +2,15 @@
 
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://entities/creature_data.gd" id="1_7ksi1"]
 [ext_resource type="PackedScene" uid="uid://db17ppkcy4q3o" path="res://entities/wandering_bt.tscn" id="1_fyaif"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_4ys6m"]
+[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://ai/goals/eat_goal.tres" id="3_32vlr"]
+[ext_resource type="PackedScene" uid="uid://t3fl73nnvosx" path="res://ai/sensors/food_sensor.tscn" id="3_fyaif"]
 [ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/rabbit.png" id="3_i472i"]
 
 [resource]
 script = ExtResource("1_7ksi1")
 sprite = ExtResource("3_i472i")
 behavior_tree = ExtResource("1_fyaif")
+sensor_scenes = Array[PackedScene]([ExtResource("3_fyaif")])
+goals = Array[Resource]([ExtResource("2_4ys6m"), ExtResource("3_32vlr")])
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

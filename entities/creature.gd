@@ -19,19 +19,33 @@ signal died
 @export var max_health: int = 1
 var health: int
 var is_big: bool
+var blackboard: Blackboard  ## Shared memory for sensors and behaviors (e.g. found_food).
+var goals : Array[Goal] = []
+var sensors_node : SensorsRoot
+var ai_root : AIRoot
+var movement : MovementComponent
 
 func _ready() -> void:
+
+	sensors_node = get_node("Sensors")
+	ai_root = get_node("AI")
+	movement = get_node("Movement")
+	blackboard = Blackboard.new()
 	health = max_health
+
 	if creature_data != null:
+		if creature_data.walking_speed > 0:
+			movement.walking_speed = creature_data.walking_speed
+		if creature_data.rotating_speed > 0:
+			movement.rotating_speed = creature_data.rotating_speed
+		for goal in creature_data.goals:
+			goals.append(goal)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
 			$Sprite2D.texture = creature_data.sprite
 			var texture_size = $Sprite2D.texture.get_size()
 			$Sprite2D.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
-		if creature_data.behavior_tree != null:
-			var tree = creature_data.behavior_tree.instantiate()
-			tree.name = "BehaviorTree"
-			add_child(tree)
+		_setup_sensors()
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
 		if is_big:
 			collision_layer = LAYER_BIG_CREATURES | LAYER_ENNEMIES
@@ -43,8 +57,9 @@ func _ready() -> void:
 		$CollisionShape2D.scale = Vector2.ONE * creature_data.size / $CollisionShape2D.shape.radius / 2
 
 func _physics_process(delta: float) -> void:
-	if has_node("BehaviorTree"):
-		get_node("BehaviorTree").tick(self, delta)
+	sensors_node.update_sensors(delta)
+	ai_root.update_ai(delta)
+	movement.update_movement(self, delta)
 	move_and_slide()
 	#if is_big:  # BIG
 		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
@@ -74,3 +89,18 @@ func _on_die() -> void:
 ## Override in subclasses to react to damage (e.g. knockback, invincibility frames).
 func _on_damage_taken(_amount: int, _source: Node) -> void:
 	pass
+
+
+func _setup_sensors() -> void:
+
+	if creature_data.sensor_scenes.is_empty():
+		return
+
+	for scene in creature_data.sensor_scenes:
+		if scene == null:
+			continue
+		var sensor_node: Node = scene.instantiate()
+		if sensor_node is Sensor:
+			sensors_node.add_child(sensor_node)
+		else:
+			sensor_node.queue_free()
