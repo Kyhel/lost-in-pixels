@@ -41,7 +41,7 @@ func _physics_process(delta):
 	velocity = dir.normalized() * base_speed * speed_modifier
 
 	move_and_slide()
-	PushPriorityHelper.push_away_overlapping(self, Creature.LAYER_SMALL_CREATURES)
+	# PushPriorityHelper.push_away_overlapping(self, Creature.LAYER_SMALL_CREATURES)
 
 	ChunkManager.reveal_around_player(global_position)
 

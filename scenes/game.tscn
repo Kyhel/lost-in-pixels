@@ -17,7 +17,7 @@ shader_parameter/radius = 300.0
 shader_parameter/softness = 200.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gee14"]
-radius = 8.0
+resource_local_to_scene = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
 radius = 20.0
@@ -46,8 +46,8 @@ color = Color(0, 0, 0, 0.9019608)
 [node name="Entities" type="Node2D" parent="." unique_id=1123457807]
 
 [node name="Player" type="CharacterBody2D" parent="Entities" unique_id=1652367432]
-collision_layer = 1
 collision_mask = 18
+motion_mode = 1
 script = ExtResource("3_iywne")
 weapon = ExtResource("6_0tnpc")
 
@@ -59,8 +59,10 @@ zoom = Vector2(2, 2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player" unique_id=664193358]
 shape = SubResource("CircleShape2D_gee14")
+debug_color = Color(0.97346765, 0, 0.43715099, 0.41960785)
 
 [node name="AttackHitbox" type="Area2D" parent="Entities/Player" unique_id=1792221363]
+visible = false
 collision_layer = 0
 collision_mask = 4
 monitorable = false

@@ -6,13 +6,18 @@ class_name PushPriorityHelper
 ## Pushes use the minimum distance so shapes no longer overlap (no visible bounce).
 
 
-## Returns the radius of the first CircleShape2D on [param node], or 0.0 if none.
+## Returns the world-space radius of the first CircleShape2D on [param node], or 0.0 if none.
+## Accounts for CollisionShape2D scale so push distance matches actual collision size.
 static func _get_radius(node: Node2D) -> float:
 	for child in node.get_children():
 		if child is CollisionShape2D:
-			var shape = (child as CollisionShape2D).shape
+			var shape_node := child as CollisionShape2D
+			var shape = shape_node.shape
 			if shape is CircleShape2D:
-				return (shape as CircleShape2D).radius
+				var radius: float = (shape as CircleShape2D).radius
+				var scale_vec: Vector2 = shape_node.global_transform.get_scale()
+				var scale_avg: float = (scale_vec.x + scale_vec.y) / 2.0
+				return radius * scale_avg
 	return 0.0
 
 

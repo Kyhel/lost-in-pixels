@@ -8,6 +8,7 @@ class_name Creature
 ## Physics layer bits (project: 1=Player, 2=Terrain, 3=Enemies, 4=Small creatures, 5=Big creatures).
 const LAYER_PLAYER := 1
 const LAYER_TERRAIN := 2
+const LAYER_ENNEMIES := 4
 const LAYER_SMALL_CREATURES := 8   # layer 4
 const LAYER_BIG_CREATURES := 16   # layer 5
 
@@ -32,10 +33,10 @@ func _ready() -> void:
 			add_child(tree)
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
 		if is_big:
-			collision_layer = LAYER_BIG_CREATURES
+			collision_layer = LAYER_BIG_CREATURES | LAYER_ENNEMIES
 			collision_mask = LAYER_TERRAIN | LAYER_BIG_CREATURES  # Terrain + other Big creatures
 		else:
-			collision_layer = LAYER_SMALL_CREATURES
+			collision_layer = LAYER_SMALL_CREATURES | LAYER_ENNEMIES
 			collision_mask = LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES  # Terrain, player, all creatures
 		scale = Vector2.ONE * creature_data.scale_factor
 		$CollisionShape2D.scale = Vector2.ONE * creature_data.size / $CollisionShape2D.shape.radius / 2
