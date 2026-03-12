@@ -7,7 +7,7 @@ const LOAD_RADIUS = 4  # nombre de chunks à charger autour du joueur
 const UNLOAD_RADIUS = 6 # au delà de ce rayon, les chunks sont déchargés
 
 const TERRAIN_VISION_RADIUS = 20
-const MONSTER_VISION_RADIUS = 15
+const MONSTER_VISION_RADIUS = 200
 
 var loaded_chunks:Dictionary[Vector2i, Node] = {}
 

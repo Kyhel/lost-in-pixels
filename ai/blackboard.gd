@@ -4,6 +4,12 @@ extends Resource
 const KEY_FOOD := "visible_food"
 const KEY_TARGET_FOOD := "target_food"
 const KEY_PREDATORS := "visible_predators"
+const KEY_STATE := "state"
+
+enum State {
+	IDLE,
+	EATING,
+}
 
 var data := {}
 

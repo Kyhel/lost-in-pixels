@@ -31,6 +31,7 @@ script = ExtResource("1_uwrxv")
 script = ExtResource("2_lbhrr")
 
 [node name="PlayerLightLayer" type="CanvasLayer" parent="World" unique_id=380552608 node_paths=PackedStringArray("player")]
+visible = false
 script = ExtResource("3_gee14")
 player = NodePath("../../Entities/Player")
 

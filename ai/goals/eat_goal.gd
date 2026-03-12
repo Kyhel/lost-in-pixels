@@ -3,6 +3,9 @@ extends Goal
 
 func get_score(creature):
 
+	if creature.blackboard.get_value(Blackboard.KEY_STATE) == Blackboard.State.EATING:
+		return 10
+
 	var foods = creature.blackboard.get_value(Blackboard.KEY_FOOD)
 
 	if foods == null or foods.is_empty():
