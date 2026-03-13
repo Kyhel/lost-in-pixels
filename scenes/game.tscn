@@ -91,6 +91,7 @@ script = ExtResource("9_vtaks")
 player_node = NodePath("../../Entities/Player")
 
 [node name="Sprite2D" type="Sprite2D" parent="AlphaMaskViewport/MaskRoot" unique_id=1737492742]
+scale = Vector2(4, 4)
 texture = ExtResource("10_kvpfn")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780104474]

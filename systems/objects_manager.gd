@@ -8,6 +8,9 @@ var chunk_trees: Dictionary[Vector2i, Array] = {}
 var world_item_scene := preload("res://entities/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
 
+func _ready() -> void:
+	occlusion_mask_viewport = get_tree().current_scene.find_child("AlphaMaskViewport")
+
 func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantity: int = 1):
 	var item = world_item_scene.instantiate()
 	item.item_data = item_data
@@ -24,6 +27,9 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 
 func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
 	var tree := tree_scene.instantiate()
+	var mask_texture = occlusion_mask_viewport.get_texture()
+	var foliage_material = tree.get_node("Foliage").material
+	foliage_material.set_shader_parameter("mask_tex", mask_texture)
 
 	tree.global_position = Vector2(
 		tile_position.x * ChunkManager.TILE_SIZE,
