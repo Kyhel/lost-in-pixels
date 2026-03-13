@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
-[ext_resource type="Script" uid="uid://otxlxrmoyt70" path="res://systems/entities_manager.gd" id="6_p57ef"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -75,6 +74,3 @@ shape = SubResource("CircleShape2D_attack")
 
 [node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044]
 script = ExtResource("4_p57ef")
-
-[node name="EntitiesManager" type="Node" parent="Systems" unique_id=994889397]
-script = ExtResource("6_p57ef")

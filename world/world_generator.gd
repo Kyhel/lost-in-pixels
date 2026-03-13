@@ -1,4 +1,5 @@
 extends Node
+class_name WorldGenerator
 
 enum TileType {
 	WATER,
@@ -30,6 +31,12 @@ const TILE_DEFS = {
 	},
 }
 
+enum Biome {
+	FOREST,
+	PLAINS,
+	DESERT
+}
+
 var terrain_noise = FastNoiseLite.new()
 var biome_noise = FastNoiseLite.new()
 
@@ -42,32 +49,32 @@ func _init():
 	biome_noise.frequency = terrain_noise.frequency / 3
 	biome_noise.seed = terrain_noise.seed + 1000
 
-func get_tile_type(world_x, world_y) -> TileType:
+func get_tile_type(world_x: int, world_y: int) -> TileType:
 
-	var height = terrain_noise.get_noise_2d(world_x, world_y)
-	var biome = get_biome(world_x, world_y)
+	var height := terrain_noise.get_noise_2d(world_x, world_y)
+	var biome := get_biome(world_x, world_y)
 
 	if height < -0.2:
 		return TileType.WATER
 	
-	if biome == "desert":
+	if biome == Biome.DESERT:
 		return TileType.SAND
 	
-	if biome == "forest":
+	if biome == Biome.FOREST:
 		return TileType.DARK_GRASS
 	
 	return TileType.GRASS
 
-func get_biome(x, y):
+func get_biome(x: int, y: int) -> Biome:
 
 	var b = biome_noise.get_noise_2d(x, y)
 
 	if b < -0.3:
-		return "desert"
+		return Biome.DESERT
 	elif b < 0.3:
-		return "plains"
+		return Biome.PLAINS
 	else:
-		return "forest"
+		return Biome.FOREST
 
 func get_walk_speed(tile_type: int) -> float:
 	return TILE_DEFS[tile_type]["walk_speed"]

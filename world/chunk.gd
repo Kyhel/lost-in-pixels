@@ -1,23 +1,24 @@
 extends Node2D
 
 const CHUNK_SIZE = ChunkManager.CHUNK_SIZE
+const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 const FOG_TILE = 0
 
 var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 
-var tile_types = []
+var tile_types: Array[WorldGenerator.TileType] = []
 
-@onready var tilemap = $Terrain
-@onready var fog = $Fog
+@onready var tilemap : TileMapLayer = $Terrain
+@onready var fog : TileMapLayer = $Fog
 
 func _ready() -> void:
-	tile_types.resize(CHUNK_SIZE);
-	for x in range(CHUNK_SIZE):
-		tile_types[x] = []
-		tile_types[x].resize(CHUNK_SIZE);
+	tile_types.resize(CHUNK_AREA);
 
-func set_tile_type(x:int, y:int, type):
-	tile_types[x][y] = type
+func set_tile_type(x:int, y:int, type: WorldGenerator.TileType) -> void:
+	tile_types[x * CHUNK_SIZE + y] = type
+
+func get_tile_type(x:int, y:int) -> WorldGenerator.TileType:
+	return tile_types[x * CHUNK_SIZE + y]
 
 func set_tile(x:int, y:int, tile:Vector2i):
 

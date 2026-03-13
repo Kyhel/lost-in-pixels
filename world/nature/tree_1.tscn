@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bvppki1eganqm"]
+
+[ext_resource type="Texture2D" uid="uid://cu270wwko7jdg" path="res://assets/nature/tree_trunk_1.png" id="1_60lgh"]
+[ext_resource type="Texture2D" uid="uid://mg1udp0cxmj" path="res://assets/nature/tree_foliage_1.png" id="2_dfk1a"]
+
+[node name="Tree1" type="Node2D" unique_id=1438693898]
+
+[node name="Trunk" type="Sprite2D" parent="." unique_id=762256068]
+texture = ExtResource("1_60lgh")
+
+[node name="Foliage" type="Sprite2D" parent="." unique_id=1153816047]
+texture = ExtResource("2_dfk1a")

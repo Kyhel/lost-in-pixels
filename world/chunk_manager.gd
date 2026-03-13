@@ -13,6 +13,7 @@ var loaded_chunks:Dictionary[Vector2i, Node] = {}
 
 var chunk_scene = preload("res://world/chunk.tscn")
 var generator = preload("res://world/world_generator.gd").new()
+var tree_generator := TreeGenerator.new(generator.terrain_noise.seed)
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
 func load_chunk(chunk_x, chunk_y):
@@ -50,12 +51,15 @@ func generate_chunk(chunk_x, chunk_y, chunk):
 			var world_y = chunk_y * CHUNK_SIZE + y
 
 			var tile_type = generator.get_tile_type(world_x, world_y)
-			var def = generator.TILE_DEFS[tile_type]
 
-			chunk.set_tile(x,y,def["atlas"])
-			chunk.set_tile_type(x, y, def)
+			chunk.set_tile(x,y,generator.TILE_DEFS[tile_type]["atlas"])
+			chunk.set_tile_type(x, y, tile_type)
 
-	# Optionally spawn a few world items in this chunk.
+	_spawn_world_items(chunk_x, chunk_y)
+	tree_generator.generate_trees_for_chunk(Vector2i(chunk_x, chunk_y), CHUNK_SIZE, generator, ObjectsManager)
+
+func _spawn_world_items(chunk_x: int, chunk_y: int):
+
 	var rng := RandomNumberGenerator.new()
 	rng.seed = get_chunk_seed(chunk_x, chunk_y) + 12345
 
@@ -138,7 +142,7 @@ func get_tile_def_from_world_pos(world_pos: Vector2) -> Dictionary:
 	# 3) local tile coordinates inside the chunk
 	var local := get_tile_coords_relative_to_chunk(world_tile_coords)
 	# 4) return the stored def (atlas, walk_speed, walkable, …)
-	return chunk.tile_types[local.x][local.y]
+	return generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
 
 func reveal_tile(world_x, world_y):
 

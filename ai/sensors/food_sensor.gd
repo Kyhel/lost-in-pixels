@@ -22,7 +22,6 @@ func update(creature: Creature) -> void:
 		if not _can_eat(world_item.item_data):
 			continue
 		foods.append(world_item)
-		print("Food found: ", world_item.global_position)
 
 	creature.blackboard.set_value(Blackboard.KEY_FOOD, foods)
 
