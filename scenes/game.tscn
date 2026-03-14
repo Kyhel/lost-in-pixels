@@ -8,9 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
+[ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/player_mask.gdshader" id="9_kvpfn"]
 [ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/mask_root.gd" id="9_vtaks"]
-[ext_resource type="Texture2D" uid="uid://bm8xu4yr3kcrx" path="res://assets/PlayerMaskCircle.png" id="10_kvpfn"]
-[ext_resource type="Texture2D" uid="uid://0s6uy1xislae" path="res://icon.svg" id="11_kvpfn"]
+[ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="10_dinhu"]
+[ext_resource type="Script" uid="uid://d0328u5hju28x" path="res://scenes/mask_camera.gd" id="11_kvpfn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -24,7 +25,12 @@ resource_local_to_scene = true
 [sub_resource type="CircleShape2D" id="CircleShape2D_attack"]
 radius = 20.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_0tnpc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dinhu"]
+shader = ExtResource("9_kvpfn")
+shader_parameter/fade_start = 0.7
+shader_parameter/fade_end = 1.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vtaks"]
 viewport_path = NodePath("AlphaMaskViewport")
 
 [node name="Game" type="Node2D" unique_id=839376987]
@@ -86,20 +92,23 @@ transparent_bg = true
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="MaskRoot" type="Node2D" parent="AlphaMaskViewport" unique_id=24532385 node_paths=PackedStringArray("player_node")]
+[node name="MaskWorld" type="Node2D" parent="AlphaMaskViewport" unique_id=1339888612]
+
+[node name="PlayerAlphaMask" type="Sprite2D" parent="AlphaMaskViewport/MaskWorld" unique_id=1737492742 node_paths=PackedStringArray("player_node")]
+light_mask = 0
+visibility_layer = 2
+material = SubResource("ShaderMaterial_dinhu")
+texture = ExtResource("10_dinhu")
 script = ExtResource("9_vtaks")
-player_node = NodePath("../../Entities/Player")
+player_node = NodePath("../../../Entities/Player")
 
-[node name="Sprite2D" type="Sprite2D" parent="AlphaMaskViewport/MaskRoot" unique_id=1737492742]
-scale = Vector2(4, 4)
-texture = ExtResource("10_kvpfn")
+[node name="MaskCamera" type="Camera2D" parent="AlphaMaskViewport" unique_id=817452987 node_paths=PackedStringArray("main_camera")]
+script = ExtResource("11_kvpfn")
+main_camera = NodePath("../../Entities/Player/Camera")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1780104474]
+[node name="DebugLayer" type="CanvasLayer" parent="." unique_id=132201771]
+visible = false
 
-[node name="ViewportDisplayDebug" type="Sprite2D" parent="CanvasLayer" unique_id=469597396]
-texture = SubResource("ViewportTexture_0tnpc")
-centered = false
-
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=2064322839]
-texture = ExtResource("11_kvpfn")
+[node name="DebugAlphaTexture" type="Sprite2D" parent="DebugLayer" unique_id=668197287]
+texture = SubResource("ViewportTexture_vtaks")
 centered = false
