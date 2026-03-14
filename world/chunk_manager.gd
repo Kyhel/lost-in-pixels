@@ -12,8 +12,8 @@ const MONSTER_VISION_RADIUS = 200
 var loaded_chunks:Dictionary[Vector2i, Node] = {}
 
 var chunk_scene = preload("res://world/chunk.tscn")
-var generator = preload("res://world/world_generator.gd").new()
-var tree_generator := TreeGenerator.new(generator.terrain_noise.seed)
+var world_generator = preload("res://world/world_generator.gd").new()
+var tree_generator := TreeGenerator.new(world_generator.terrain_noise.seed)
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
 func load_chunk(chunk_x, chunk_y):
@@ -23,7 +23,7 @@ func load_chunk(chunk_x, chunk_y):
 	if loaded_chunks.has(key):
 		return
 
-	print("loading chunk ", key)
+	# print("loading chunk ", key)
 
 	var chunk = chunk_scene.instantiate()
 
@@ -42,7 +42,7 @@ func load_chunk(chunk_x, chunk_y):
 
 	EntitiesManager.spawn_entities(key)
 
-func generate_chunk(chunk_x, chunk_y, chunk):
+func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 
 	for x in range(CHUNK_SIZE):
 		for y in range(CHUNK_SIZE):
@@ -50,13 +50,19 @@ func generate_chunk(chunk_x, chunk_y, chunk):
 			var world_x = chunk_x * CHUNK_SIZE + x
 			var world_y = chunk_y * CHUNK_SIZE + y
 
-			var tile_type = generator.get_tile_type(world_x, world_y)
+			var tile_type = world_generator.get_tile_type(world_x, world_y)
 
-			chunk.set_tile(x,y,generator.TILE_DEFS[tile_type]["atlas"])
+			chunk.set_tile(x,y,world_generator.TILE_DEFS[tile_type]["atlas"])
 			chunk.set_tile_type(x, y, tile_type)
 
 	_spawn_world_items(chunk_x, chunk_y)
-	tree_generator.generate_trees_for_chunk(Vector2i(chunk_x, chunk_y), CHUNK_SIZE, generator, ObjectsManager)
+
+	tree_generator.generate_trees_for_chunk(
+		Vector2i(chunk_x, chunk_y),
+		chunk,
+		CHUNK_SIZE,
+		world_generator,
+		ObjectsManager)
 
 func _spawn_world_items(chunk_x: int, chunk_y: int):
 
@@ -142,7 +148,7 @@ func get_tile_def_from_world_pos(world_pos: Vector2) -> Dictionary:
 	# 3) local tile coordinates inside the chunk
 	var local := get_tile_coords_relative_to_chunk(world_tile_coords)
 	# 4) return the stored def (atlas, walk_speed, walkable, …)
-	return generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
+	return world_generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
 
 func reveal_tile(world_x, world_y):
 
@@ -161,7 +167,7 @@ func reveal_tile(world_x, world_y):
 	chunk.reveal(local_x,local_y)
 
 func get_chunk_seed(chunk_x:int, chunk_y:int) -> int:
-	return generator.terrain_noise.seed ^ (chunk_x * 73856093) ^ (chunk_y * 19349663)
+	return world_generator.terrain_noise.seed ^ (chunk_x * 73856093) ^ (chunk_y * 19349663)
 
 func get_chunk_from_position(pos: Vector2) -> Vector2i:
 	return Vector2i(

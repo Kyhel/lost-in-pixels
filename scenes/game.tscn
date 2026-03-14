@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://e6m62ghn4205"]
 
 [ext_resource type="Script" uid="uid://cfr34ldh2f3fm" path="res://scenes/game.gd" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://dqrsinwnx82bn" path="res://world/chunk_manager.gd" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://dvv7d12m2esl1" path="res://scenes/player_light_layer.gd" id="3_gee14"]
 [ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://entities/player.gd" id="3_iywne"]
 [ext_resource type="Shader" uid="uid://bnx32mppxvww1" path="res://scenes/game.gdshader" id="3_u5sy4"]
@@ -38,9 +37,6 @@ script = ExtResource("1_uwrxv")
 
 [node name="World" type="Node2D" parent="." unique_id=351035125]
 
-[node name="ChunkManager" type="Node2D" parent="World" unique_id=381385368]
-script = ExtResource("2_lbhrr")
-
 [node name="PlayerLightLayer" type="CanvasLayer" parent="World" unique_id=380552608 node_paths=PackedStringArray("player")]
 visible = false
 script = ExtResource("3_gee14")
@@ -67,7 +63,7 @@ weapon = ExtResource("6_0tnpc")
 texture = ExtResource("4_iywne")
 
 [node name="Camera" type="Camera2D" parent="Entities/Player" unique_id=526099589]
-zoom = Vector2(2, 2)
+zoom = Vector2(0.5, 0.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player" unique_id=664193358]
 shape = SubResource("CircleShape2D_gee14")
