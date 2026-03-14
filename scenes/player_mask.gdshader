@@ -15,5 +15,5 @@ void fragment() {
 	// compute fade
 	float alpha = 1.0 - smoothstep(fade_start, fade_end, dist);
 
-	COLOR = vec4(vec3(alpha), 1.0);
+	COLOR = vec4(vec3(1.0), alpha);
 }

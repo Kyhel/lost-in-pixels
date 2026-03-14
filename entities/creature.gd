@@ -15,6 +15,8 @@ const LAYER_BIG_CREATURES := 16   # layer 5
 signal damage_taken(amount: int, source: Node)
 signal died
 
+var alpha_mask_scene := preload("res://scenes/alpha.tscn")
+
 @export var creature_data: CreatureData
 @export var max_health: int = 1
 var health: int
@@ -24,8 +26,14 @@ var goals : Array[Goal] = []
 var sensors_node : SensorsRoot
 var ai_root : AIRoot
 var movement : MovementComponent
+var alpha_mask: Node2D
 
 func _ready() -> void:
+
+	var mask_world = get_tree().current_scene.find_child("MaskWorld")
+	alpha_mask = alpha_mask_scene.instantiate()
+	alpha_mask.node = self
+	mask_world.add_child(alpha_mask)
 
 	sensors_node = get_node("Sensors")
 	ai_root = get_node("AI")
@@ -78,6 +86,7 @@ func take_damage(amount: int, source: Node = null) -> void:
 func die() -> void:
 	_on_die()
 	died.emit()
+	alpha_mask.queue_free()
 	queue_free()
 
 

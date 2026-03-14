@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
 [ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/player_mask.gdshader" id="9_kvpfn"]
-[ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/mask_root.gd" id="9_vtaks"]
+[ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/follow_node.gd" id="9_vtaks"]
 [ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="10_dinhu"]
 [ext_resource type="Script" uid="uid://d0328u5hju28x" path="res://scenes/mask_camera.gd" id="11_kvpfn"]
 
@@ -94,13 +94,13 @@ render_target_update_mode = 4
 
 [node name="MaskWorld" type="Node2D" parent="AlphaMaskViewport" unique_id=1339888612]
 
-[node name="PlayerAlphaMask" type="Sprite2D" parent="AlphaMaskViewport/MaskWorld" unique_id=1737492742 node_paths=PackedStringArray("player_node")]
+[node name="PlayerAlphaMask" type="Sprite2D" parent="AlphaMaskViewport/MaskWorld" unique_id=1737492742 node_paths=PackedStringArray("node")]
 light_mask = 0
 visibility_layer = 2
 material = SubResource("ShaderMaterial_dinhu")
 texture = ExtResource("10_dinhu")
 script = ExtResource("9_vtaks")
-player_node = NodePath("../../../Entities/Player")
+node = NodePath("../../../Entities/Player")
 
 [node name="MaskCamera" type="Camera2D" parent="AlphaMaskViewport" unique_id=817452987 node_paths=PackedStringArray("main_camera")]
 script = ExtResource("11_kvpfn")
