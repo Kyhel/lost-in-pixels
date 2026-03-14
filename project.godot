@@ -21,6 +21,7 @@ ChunkManager="*uid://dqrsinwnx82bn"
 EntitiesManager="*uid://otxlxrmoyt70"
 ObjectsManager="*uid://dp4jmd73t0oak"
 ItemDatabase="*res://systems/item_database.gd"
+SpawnManager="*uid://buon80ox32fe5"
 
 [display]
 

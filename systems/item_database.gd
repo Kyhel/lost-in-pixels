@@ -9,6 +9,7 @@ func _ready() -> void:
 func _register_defaults() -> void:
 	_register_item(load("res://data/items/health_potion.tres"))
 	_register_item(load("res://data/items/coin.tres"))
+	_register_item(load("res://data/items/flowers/flower_red_1.tres"))
 
 
 func _register_item(item: ItemData) -> void:
@@ -19,3 +20,6 @@ func _register_item(item: ItemData) -> void:
 
 func get_item(id: StringName) -> ItemData:
 	return _items_by_id.get(id, null)
+
+func get_items() -> Array:
+	return _items_by_id.values()

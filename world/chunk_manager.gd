@@ -2,9 +2,10 @@ extends Node2D
 
 const TILE_SIZE = 16
 const CHUNK_SIZE = 32
+const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
-const LOAD_RADIUS = 4  # nombre de chunks à charger autour du joueur
-const UNLOAD_RADIUS = 6 # au delà de ce rayon, les chunks sont déchargés
+const LOAD_RADIUS = 1  # nombre de chunks à charger autour du joueur
+const UNLOAD_RADIUS = 4 # au delà de ce rayon, les chunks sont déchargés
 
 const TERRAIN_VISION_RADIUS = 20
 const MONSTER_VISION_RADIUS = 200
@@ -26,6 +27,7 @@ func load_chunk(chunk_x, chunk_y):
 	# print("loading chunk ", key)
 
 	var chunk = chunk_scene.instantiate()
+	chunk.coords = key
 
 	add_child(chunk)
 
@@ -40,7 +42,7 @@ func load_chunk(chunk_x, chunk_y):
 
 	generate_chunk(chunk_x, chunk_y, chunk)
 
-	EntitiesManager.spawn_entities(key)
+	EntitiesManager.spawn_entities(chunk, key)
 
 func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 
@@ -51,11 +53,13 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 			var world_y = chunk_y * CHUNK_SIZE + y
 
 			var tile_type = world_generator.get_tile_type(world_x, world_y)
+			var biome = world_generator.get_biome(world_x, world_y)
 
 			chunk.set_tile(x,y,world_generator.TILE_DEFS[tile_type]["atlas"])
 			chunk.set_tile_type(x, y, tile_type)
+			chunk.set_biome(x, y, biome)
 
-	_spawn_world_items(chunk_x, chunk_y)
+	# _spawn_world_items(chunk_x, chunk_y)
 
 	tree_generator.generate_trees_for_chunk(
 		Vector2i(chunk_x, chunk_y),

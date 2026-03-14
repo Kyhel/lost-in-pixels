@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://3x0aoneuyjnq"]
 
 [ext_resource type="Script" uid="uid://cx5271h541bf3" path="res://world/chunk.gd" id="1_jbmh0"]
-[ext_resource type="TileSet" uid="uid://cj11y0p1byxuo" path="res://world/default_tileset.tres" id="2_uc5gi"]
+[ext_resource type="TileSet" uid="uid://cj11y0p1byxuo" path="res://world/terrain_tileset.tres" id="2_uc5gi"]
 
 [node name="Chunk" type="Node2D" unique_id=799622310]
 script = ExtResource("1_jbmh0")

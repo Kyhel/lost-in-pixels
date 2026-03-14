@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dcoj2sx4a6d6e"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_3sdd3"]
+[ext_resource type="Resource" uid="uid://dw85y1x483uiv" path="res://data/items/flowers/flower_red_1_spawn_definition.tres" id="2_we0v4"]
+[ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="3_pievh"]
+
+[resource]
+script = ExtResource("1_3sdd3")
+id = &"flower_red_1"
+display_name = "Red Flower 1"
+texture = ExtResource("3_pievh")
+spawn_definition = ExtResource("2_we0v4")
+metadata/_custom_type_script = "uid://b12224xo0dkcj"
