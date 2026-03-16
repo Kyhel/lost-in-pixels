@@ -3,7 +3,7 @@ extends Sensor
 ## Scans the surroundings for food the creature can eat and stores found positions in the creature's blackboard under [constant BLACKBOARD_KEY_FOOD].
 
 @export var edible_items: Array[Resource] = []  ## ItemData resources this creature can eat (assign in editor).
-@export var scan_radius: float = 150.0
+@export var scan_radius: float = 300.0
 
 func update(creature: Creature) -> void:
 	if creature.blackboard == null:

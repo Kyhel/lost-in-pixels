@@ -15,4 +15,5 @@ goals = Array[ExtResource("1_dp7fp")]([ExtResource("2_dtyic"), ExtResource("3_a2
 size = 12
 hop_multiplier = 0.5
 movement_types = Array[int]([0])
+needs_eating = true
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

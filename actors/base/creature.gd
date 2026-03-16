@@ -89,9 +89,22 @@ func _physics_process(delta: float) -> void:
 	ai_root.update_ai(delta)
 	movement.update_movement(self, delta)
 	move_and_slide()
+	_update_hunger(delta)
 	#if is_big:  # BIG
 		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 
+func _update_hunger(delta: float) -> void:
+
+	if not creature_data.needs_eating:
+		return
+
+	var hunger = blackboard.get_value(Blackboard.KEY_HUNGER)
+
+	if hunger == null:
+		hunger = Blackboard.KEY_HUNGER_MAX
+		blackboard.set_value(Blackboard.KEY_HUNGER, hunger)
+
+	blackboard.set_value(Blackboard.KEY_HUNGER, hunger - creature_data.hunger_decay_rate * delta)
 
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:
@@ -101,7 +114,6 @@ func take_damage(amount: int, source: Node = null) -> void:
 	_on_damage_taken(amount, source)
 	if health <= 0:
 		die()
-
 
 func die() -> void:
 	_on_die()

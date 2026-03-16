@@ -29,6 +29,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	target_food.on_picked_up(self)
 	eating_timer = EATING_TIME
 	creature.blackboard.set_value(Blackboard.KEY_STATE, Blackboard.State.EATING)
+	creature.blackboard.set_value(Blackboard.KEY_HUNGER, Blackboard.KEY_HUNGER_MAX)
 	creature.movement.stop()
 	return State.RUNNING
 
