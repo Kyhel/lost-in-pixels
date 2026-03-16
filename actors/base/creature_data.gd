@@ -8,6 +8,13 @@ enum CreatureSize {
 	BIG     ## Layer 5 "Big creatures" - collides with terrain and other big creatures only.
 }
 
+enum MovementType {
+	HOP,
+	FLY,
+	WALK,
+	RUN
+}
+
 @export var display_name: String = ""
 @export var sprite: Texture2D
 @export var sensor_scenes: Array[PackedScene] = []  ## Sensor scenes (e.g. FoodSensor); each runs every tick and writes to the creature's blackboard. Root node must be a [Sensor].
@@ -16,7 +23,10 @@ enum CreatureSize {
 @export var can_fly: bool = false
 @export var scale_factor: float = 1.0
 @export var size: int = 16
-@export var walking_speed: float = 40.0
+@export var base_speed: float = 40.0
+@export var running_multiplier: float = 2.0
+@export var hop_multiplier: float = 1.0
 @export var rotating_speed: float = TAU
-@export var biomes: Array[WorldGenerator.Biome] = []
-@export var excluded_tile_types: Array[WorldGenerator.TileType] = []
+@export var biomes: Array[WorldGenerator.Biome] = [WorldGenerator.Biome.FOREST, WorldGenerator.Biome.PLAINS]
+@export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
+@export var movement_types: Array[MovementType] = [MovementType.WALK]

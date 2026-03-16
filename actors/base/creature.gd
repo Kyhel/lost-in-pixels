@@ -39,17 +39,15 @@ func _ready() -> void:
 
 	if creature_data != null:
 
+		if movement != null:
+			movement.set_strategy(self)
+
 		if !creature_data.can_fly:
 			var mask_world = get_tree().current_scene.find_child("MaskWorld")
 			alpha_mask = alpha_mask_scene.instantiate()
 			alpha_mask.node = self
 			mask_world.add_child(alpha_mask)
 
-
-		if creature_data.walking_speed > 0:
-			movement.walking_speed = creature_data.walking_speed
-		if creature_data.rotating_speed > 0:
-			movement.rotating_speed = creature_data.rotating_speed
 		for goal in creature_data.goals:
 			goals.append(goal)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
