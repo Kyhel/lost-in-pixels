@@ -1,10 +1,12 @@
 class_name HopStrategy
 extends MovementStrategy
 
-@export var rest_duration: float = 0.8
+@export var rest_duration: float = 0.5
 @export var hop_duration: float = 0.2
 
 var hop_timer: float = 0.0
+
+const NO_MOVEMENT_DIRECTION_THRESHOLD: float = PI / 2
 
 func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 
@@ -25,12 +27,17 @@ func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 
 	creature.rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 
-	# var hop_time_ratio = 1
-	var hop_time_ratio = hop_duration / (rest_duration + hop_duration)
+	if angle_diff_abs >= NO_MOVEMENT_DIRECTION_THRESHOLD:
+		creature.velocity = Vector2.ZERO
+		return
 
-	var speed = creature.creature_data.base_speed * creature.creature_data.hop_multiplier / hop_time_ratio
+	var hop_time_ratio = (rest_duration + hop_duration) / hop_duration
 
-	creature.velocity = direction * speed
+	var speed = creature.creature_data.base_speed * creature.creature_data.hop_multiplier * hop_time_ratio
+
+	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD
+
+	creature.velocity = Vector2.from_angle(creature.rotation).normalized() * speed * rotation_ratio
 
 func reset() -> void:
 	hop_timer = 0.0
