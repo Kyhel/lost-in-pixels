@@ -6,11 +6,13 @@ var creature_scene = preload("res://actors/base/creature.tscn")
 var wandering_bird_data: CreatureData = preload("res://data/actors/animals/wandering_bird.tres") as CreatureData
 var big_wandering_data: CreatureData = preload("res://data/actors/animals/big_wandering.tres") as CreatureData
 var rabbit_data: CreatureData = preload("res://data/actors/animals/rabbit.tres") as CreatureData
+var fox_data: CreatureData = preload("res://data/actors/animals/fox.tres") as CreatureData
 
 var creature_data_list := [
 	wandering_bird_data,
 	# big_wandering_data,
 	rabbit_data,
+	fox_data,
 	]
 
 func on_chunk_unloaded(chunk: Vector2i):

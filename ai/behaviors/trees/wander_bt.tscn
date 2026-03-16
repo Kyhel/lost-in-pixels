@@ -16,6 +16,4 @@ script = ExtResource("3_knn03")
 
 [node name="WaitAction" type="Node" parent="BTSequence" unique_id=477125310]
 script = ExtResource("4_gqfhc")
-max_wait_time = 0.0
-min_wait_time = 0.0
 metadata/_custom_type_script = "uid://bxanopywmp2d8"

@@ -12,6 +12,7 @@ script = ExtResource("4_247ax")
 sprite = ExtResource("6_bg2f0")
 sensor_scenes = Array[PackedScene]([ExtResource("5_q2khm")])
 goals = Array[ExtResource("1_dp7fp")]([ExtResource("2_dtyic"), ExtResource("3_a2dy0")])
+size = 12
 hop_multiplier = 0.5
 movement_types = Array[int]([0])
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

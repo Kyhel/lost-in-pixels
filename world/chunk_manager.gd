@@ -121,6 +121,10 @@ func get_walk_speed_at_world_pos(world_pos: Vector2) -> float:
 	var def := get_tile_def_from_world_pos(world_pos)
 	return def.get("walk_speed", 1.0)
 
+func is_walkable(world_pos: Vector2) -> bool:
+	var def := get_tile_def_from_world_pos(world_pos)
+	return def.get("walkable", false)
+
 func reveal_around_player(player_pos):
 
 	var tile_pos = Vector2i(

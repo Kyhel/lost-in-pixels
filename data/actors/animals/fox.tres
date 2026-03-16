@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://mok3qihbyai6"]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_t6a1h"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_4xntq"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_ovces"]
+[ext_resource type="Texture2D" uid="uid://dmi7t3bssgqpn" path="res://assets/creatures/fox.png" id="3_ovces"]
+
+[resource]
+script = ExtResource("2_ovces")
+sprite = ExtResource("3_ovces")
+goals = Array[ExtResource("1_t6a1h")]([ExtResource("2_4xntq")])
+size = 32
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"
