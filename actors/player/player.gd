@@ -12,6 +12,7 @@ var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
 var attack_cooldown_timer: float = 0.0
 
 @onready var attack_hitbox: Area2D = $AttackHitbox
+@onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
 	_update_attack_hitbox_radius()
@@ -43,6 +44,10 @@ func _physics_process(delta):
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)
 
 	velocity = dir.normalized() * base_speed * speed_modifier
+
+	if not dir.is_zero_approx():
+		# Base sprite orientation is up; rotate to face movement direction
+		sprite.rotation = dir.angle() + TAU / 4.0  # TAU/4 = PI/2, maps up (0,-1) to 0
 
 	move_and_slide()
 	# PushPriorityHelper.push_away_overlapping(self, Creature.LAYER_SMALL_CREATURES)
