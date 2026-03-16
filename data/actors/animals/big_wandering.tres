@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://3x8jvdyeafyk"]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_74u4j"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dyh4mefaigyld" path="res://assets/Monster_1.png" id="2_texture"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_v4pfn"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Big Wandering"
+sprite = ExtResource("2_texture")
+goals = Array[ExtResource("1_74u4j")]([ExtResource("2_v4pfn")])
+size_type = 1
+size = 64
+biomes = Array[int]([1, 0])

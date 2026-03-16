@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SpawnDefinition" format=3 uid="uid://dw85y1x483uiv"]
+
+[ext_resource type="Script" uid="uid://bmemkokxjo2af" path="res://actors/spawn_logic/spawn_definition.gd" id="1_pe13g"]
+[ext_resource type="Script" uid="uid://ph73uwqahm4c" path="res://actors/spawn_logic/spawn_rule.gd" id="2_7mgeo"]
+[ext_resource type="Script" uid="uid://ihk51y7nqyh1" path="res://actors/spawn_logic/rules/no_nearby_tree_rule.gd" id="3_n13aj"]
+[ext_resource type="Resource" uid="uid://4t0mfl4qrl4k" path="res://data/objects/nature/flowers/flower_red_1_density_rule.tres" id="4_ujfjm"]
+
+[sub_resource type="Resource" id="Resource_lbroo"]
+script = ExtResource("3_n13aj")
+metadata/_custom_type_script = "uid://ihk51y7nqyh1"
+
+[resource]
+script = ExtResource("1_pe13g")
+biomes = Array[int]([1])
+excluded_tile_types = Array[int]([0])
+spawn_rules = Array[ExtResource("2_7mgeo")]([SubResource("Resource_lbroo"), ExtResource("4_ujfjm")])
+metadata/_custom_type_script = "uid://bmemkokxjo2af"

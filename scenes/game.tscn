@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cfr34ldh2f3fm" path="res://scenes/game.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://dvv7d12m2esl1" path="res://scenes/player_light_layer.gd" id="3_gee14"]
-[ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://entities/player.gd" id="3_iywne"]
+[ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://actors/player/player.gd" id="3_iywne"]
 [ext_resource type="Shader" uid="uid://bnx32mppxvww1" path="res://scenes/game.gdshader" id="3_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
-[ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
+[ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://managers/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
+[ext_resource type="Script" uid="uid://buon80ox32fe5" path="res://systems/spawn_system.gd" id="8_dinhu"]
 [ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/player_mask.gdshader" id="9_kvpfn"]
 [ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/follow_node.gd" id="9_vtaks"]
 [ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="10_dinhu"]
@@ -82,6 +83,10 @@ shape = SubResource("CircleShape2D_attack")
 [node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044 node_paths=PackedStringArray("player")]
 script = ExtResource("4_p57ef")
 player = NodePath("../../World/Entities/Player")
+
+[node name="SpawnSystem" type="Node" parent="Systems/SystemManager" unique_id=1409381695]
+script = ExtResource("8_dinhu")
+metadata/_custom_type_script = "uid://buon80ox32fe5"
 
 [node name="AlphaMaskViewport" type="SubViewport" parent="." unique_id=1206419223]
 transparent_bg = true

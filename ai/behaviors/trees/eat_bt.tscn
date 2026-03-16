@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://vwinu7iwk2xg"]
+
+[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://ai/behaviors/base/behavior_tree.gd" id="1_5mhbh"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://ai/behaviors/base/bt_sequence.gd" id="1_h3fwb"]
+[ext_resource type="Script" uid="uid://38u27wyoj7au" path="res://ai/actions/food/chose_food_action.gd" id="2_f2ly3"]
+[ext_resource type="Script" uid="uid://bmqnsncfddino" path="res://ai/behaviors/base/bt_reactive_sequence.gd" id="2_nom0i"]
+[ext_resource type="Script" uid="uid://dg6j26ube2um7" path="res://ai/actions/food/move_to_food_action.gd" id="3_5mhbh"]
+[ext_resource type="Script" uid="uid://cxupon3xppdg8" path="res://ai/behaviors/conditions/has_visible_food_condition.gd" id="3_m8456"]
+[ext_resource type="Script" uid="uid://cdj6bb0caq8io" path="res://ai/actions/food/eat_food_action.gd" id="4_qbvdd"]
+[ext_resource type="Script" uid="uid://b7qmdc71lcl1u" path="res://ai/behaviors/conditions/can_eat_target_food_condition.gd" id="7_qjxcg"]
+
+[node name="EatBt" type="Node" unique_id=1665506821]
+script = ExtResource("1_5mhbh")
+
+[node name="BTSequence" type="Node" parent="." unique_id=1110526033]
+script = ExtResource("1_h3fwb")
+metadata/_custom_type_script = "uid://dg12bfp1f47bf"
+
+[node name="BTReactiveSequence" type="Node" parent="BTSequence" unique_id=1830488208]
+script = ExtResource("2_nom0i")
+
+[node name="HasVisibleFoodCondition" type="Node" parent="BTSequence/BTReactiveSequence" unique_id=1321305144]
+script = ExtResource("3_m8456")
+
+[node name="ChoseFood" type="Node" parent="BTSequence/BTReactiveSequence" unique_id=844311212]
+script = ExtResource("2_f2ly3")
+
+[node name="MoveToFood" type="Node" parent="BTSequence/BTReactiveSequence" unique_id=260727819]
+script = ExtResource("3_5mhbh")
+
+[node name="CanEatTargetFoodCondition" type="Node" parent="BTSequence" unique_id=2049537186]
+script = ExtResource("7_qjxcg")
+
+[node name="EatFood" type="Node" parent="BTSequence" unique_id=981091169]
+script = ExtResource("4_qbvdd")
+metadata/_custom_type_script = "uid://cdj6bb0caq8io"

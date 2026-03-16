@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="DensityRule" format=3 uid="uid://4t0mfl4qrl4k"]
-
-[ext_resource type="Script" uid="uid://b5hlqawjlqfc5" path="res://entities/spawn_logic/rules/density_rule.gd" id="1_0kwuf"]
-
-[resource]
-script = ExtResource("1_0kwuf")
-item_type = &"flower_red_1"
-metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
