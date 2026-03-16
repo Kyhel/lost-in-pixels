@@ -11,7 +11,6 @@ func _register_defaults() -> void:
 	_register_item(load("res://data/items/coin.tres"))
 	_register_item(load("res://data/items/flowers/flower_red_1.tres"))
 
-
 func _register_item(item: ItemData) -> void:
 	if item == null:
 		return

@@ -29,10 +29,11 @@ func update_movement(creature: Creature, delta: float) -> void:
 	var max_turn := rotating_speed * delta
 	creature.rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 
-	if angle_diff_abs <= ROTATION_DONE_THRESHOLD:
-		creature.velocity = dir * walking_speed
-		return
+	# if angle_diff_abs <= ROTATION_DONE_THRESHOLD:
+	# 	creature.velocity = dir * walking_speed
+	# 	return
 
-	var rotation_ratio = max(0, (PI - angle_diff_abs) / PI - 0.5)
+	# var rotation_ratio = max(0, (PI - angle_diff_abs) / PI - 0.5)
 
-	creature.velocity = Vector2.from_angle(creature.rotation) * walking_speed * rotation_ratio
+	# creature.velocity = Vector2.from_angle(creature.rotation) * walking_speed * rotation_ratio
+	creature.velocity = dir * walking_speed

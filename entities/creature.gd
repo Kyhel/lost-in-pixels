@@ -11,6 +11,7 @@ const LAYER_TERRAIN := 2
 const LAYER_ENNEMIES := 4
 const LAYER_SMALL_CREATURES := 8   # layer 4
 const LAYER_BIG_CREATURES := 16   # layer 5
+const LAYER_FLYING_CREATURES := 64   # layer 6
 
 signal damage_taken(amount: int, source: Node)
 signal died
@@ -30,11 +31,6 @@ var alpha_mask: Node2D
 
 func _ready() -> void:
 
-	var mask_world = get_tree().current_scene.find_child("MaskWorld")
-	alpha_mask = alpha_mask_scene.instantiate()
-	alpha_mask.node = self
-	mask_world.add_child(alpha_mask)
-
 	sensors_node = get_node("Sensors")
 	ai_root = get_node("AI")
 	movement = get_node("Movement")
@@ -42,6 +38,14 @@ func _ready() -> void:
 	health = max_health
 
 	if creature_data != null:
+
+		if !creature_data.can_fly:
+			var mask_world = get_tree().current_scene.find_child("MaskWorld")
+			alpha_mask = alpha_mask_scene.instantiate()
+			alpha_mask.node = self
+			mask_world.add_child(alpha_mask)
+
+
 		if creature_data.walking_speed > 0:
 			movement.walking_speed = creature_data.walking_speed
 		if creature_data.rotating_speed > 0:
@@ -55,14 +59,32 @@ func _ready() -> void:
 			$Sprite2D.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
 		_setup_sensors()
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
-		if is_big:
-			collision_layer = LAYER_BIG_CREATURES | LAYER_ENNEMIES
-			collision_mask = LAYER_TERRAIN | LAYER_BIG_CREATURES  # Terrain + other Big creatures
-		else:
-			collision_layer = LAYER_SMALL_CREATURES | LAYER_ENNEMIES
-			collision_mask = LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES  # Terrain, player, all creatures
+		collision_layer = _get_collision_layer()
+		collision_mask = _get_collision_mask()
 		scale = Vector2.ONE * creature_data.scale_factor
 		$CollisionShape2D.scale = Vector2.ONE * creature_data.size / $CollisionShape2D.shape.radius / 2
+		if creature_data.can_fly:
+			z_index = 20
+
+func _get_collision_layer() -> int:
+
+	if creature_data.can_fly:
+		return LAYER_FLYING_CREATURES | LAYER_ENNEMIES
+
+	if is_big:
+		return LAYER_BIG_CREATURES | LAYER_ENNEMIES
+	else:
+		return LAYER_SMALL_CREATURES | LAYER_ENNEMIES
+
+func _get_collision_mask() -> int:
+
+	if creature_data.can_fly:
+		return 0
+	
+	if is_big:
+		return LAYER_TERRAIN | LAYER_BIG_CREATURES
+	else:
+		return LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES
 
 func _physics_process(delta: float) -> void:
 	sensors_node.update_sensors(delta)
@@ -86,7 +108,8 @@ func take_damage(amount: int, source: Node = null) -> void:
 func die() -> void:
 	_on_die()
 	died.emit()
-	alpha_mask.queue_free()
+	if is_instance_valid(alpha_mask):
+		alpha_mask.queue_free()
 	queue_free()
 
 

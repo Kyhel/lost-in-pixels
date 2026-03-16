@@ -8,14 +8,14 @@ var is_waiting: bool = false
 
 func tick(_creature: Creature, _delta: float) -> State:
 
-    if not is_waiting:
-        is_waiting = true
-        timer = randf_range(min_wait_time, max_wait_time)
-        return State.RUNNING
+	if not is_waiting:
+		is_waiting = true
+		timer = randf_range(min_wait_time, max_wait_time)
+		return State.RUNNING
 
-    if timer < 0:
-        is_waiting = false
-        return State.SUCCESS
+	if timer < 0:
+		is_waiting = false
+		return State.SUCCESS
 
-    timer -= _delta
-    return State.RUNNING
+	timer -= _delta
+	return State.RUNNING

@@ -84,6 +84,7 @@ spawn_carrot={
 2d_physics/layer_4="Small creatures"
 2d_physics/layer_5="Big creatures"
 2d_physics/layer_6="Environment"
+2d_physics/layer_7="Flying creatures"
 
 [physics]
 

@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://c25bwrgpm260h"]
 
-[ext_resource type="Script" path="res://entities/behavior_tree.gd" id="1_script"]
-[ext_resource type="Script" path="res://entities/flying_behavior.gd" id="2_flying"]
+[ext_resource type="Script" uid="uid://bvldv6tp20oct" path="res://entities/behavior_tree.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b0ae1txpa2qtb" path="res://entities/flying_behavior.gd" id="2_flying"]
 
-[node name="WanderingBirdBT" type="Node"]
+[node name="WanderingBirdBT" type="Node" unique_id=939088830]
 script = ExtResource("1_script")
 
-[node name="FlyingBehavior" type="Node" parent="."]
+[node name="FlyingBehavior" type="Node" parent="." unique_id=1219858536]
 script = ExtResource("2_flying")

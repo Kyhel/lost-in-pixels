@@ -1,7 +1,7 @@
 class_name DensityRule
 extends SpawnRule
 
-@export var max_items: int = 1
+@export var max_items: int = 2
 @export var min_items: int = 1
 @export var radius: int = 10
 @export var item_type: StringName

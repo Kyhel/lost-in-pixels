@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EatGoal" format=3 uid="uid://6kr4qf001sd"]
 
 [ext_resource type="Script" uid="uid://3xhn5noxy88n" path="res://ai/goals/eat_goal.gd" id="1_d34ef"]
-[ext_resource type="PackedScene" uid="uid://vwinu7iwk2xg" path="res://ai/behavior_trees/eat_bt.tscn" id="1_nka4h"]
+[ext_resource type="PackedScene" uid="uid://vwinu7iwk2xg" path="res://ai/behavior_trees/trees/eat_bt.tscn" id="1_nka4h"]
 
 [resource]
 script = ExtResource("1_d34ef")

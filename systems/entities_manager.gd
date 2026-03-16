@@ -7,7 +7,7 @@ var wandering_bird_data: CreatureData = preload("res://entities/wandering_bird.t
 var big_wandering_data: CreatureData = preload("res://entities/big_wandering.tres") as CreatureData
 var rabbit_data: CreatureData = preload("res://entities/passive/rabbit.tres") as CreatureData
 
-var creature_data_list := [rabbit_data]
+var creature_data_list := [rabbit_data, wandering_bird_data]
 # var creature_data_list := [wandering_bird_data, big_wandering_data, rabbit_data]
 
 func on_chunk_unloaded(chunk: Vector2i):

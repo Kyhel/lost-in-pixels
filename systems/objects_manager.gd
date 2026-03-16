@@ -15,7 +15,7 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	var item = world_item_scene.instantiate()
 	item.item_data = item_data
 	item.quantity = quantity
-	item.global_position = world_pos
+	item.global_position = world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
 
 	add_child(item)
 
@@ -76,5 +76,30 @@ func get_nearby_items(origin: Vector2, radius: float) -> Array:
 
 				if dist_sq <= radius_sq:
 					results.append(item)
+
+	return results
+
+func get_nearby_trees(origin: Vector2, radius: float) -> Array:
+	var results: Array = []
+	var radius_sq := radius * radius
+
+	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
+
+	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
+		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
+			var key: Vector2i = Vector2i(cx, cy)
+			if !chunk_trees.has(key):
+				continue
+
+			for tree in chunk_trees[key]:
+				if !is_instance_valid(tree):
+					continue
+
+				var dx: float = tree.global_position.x - origin.x
+				var dy: float = tree.global_position.y - origin.y
+				var dist_sq: float = dx * dx + dy * dy
+
+				if dist_sq <= radius_sq:
+					results.append(tree)
 
 	return results

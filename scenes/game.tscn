@@ -40,7 +40,7 @@ script = ExtResource("1_uwrxv")
 [node name="PlayerLightLayer" type="CanvasLayer" parent="World" unique_id=380552608 node_paths=PackedStringArray("player")]
 visible = false
 script = ExtResource("3_gee14")
-player = NodePath("../../Entities/Player")
+player = NodePath("../Entities/Player")
 
 [node name="ColorRect" type="ColorRect" parent="World/PlayerLightLayer" unique_id=820227772]
 material = SubResource("ShaderMaterial_gee14")
@@ -51,37 +51,37 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.9019608)
 
-[node name="Entities" type="Node2D" parent="." unique_id=1123457807]
+[node name="Entities" type="Node2D" parent="World" unique_id=1123457807]
 
-[node name="Player" type="CharacterBody2D" parent="Entities" unique_id=1652367432]
+[node name="Player" type="CharacterBody2D" parent="World/Entities" unique_id=1652367432]
 collision_mask = 50
 motion_mode = 1
 script = ExtResource("3_iywne")
 weapon = ExtResource("6_0tnpc")
 
-[node name="Sprite2D" type="Sprite2D" parent="Entities/Player" unique_id=1558994929]
+[node name="Sprite2D" type="Sprite2D" parent="World/Entities/Player" unique_id=1558994929]
 texture = ExtResource("4_iywne")
 
-[node name="Camera" type="Camera2D" parent="Entities/Player" unique_id=526099589]
-zoom = Vector2(0.5, 0.5)
+[node name="Camera" type="Camera2D" parent="World/Entities/Player" unique_id=526099589]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player" unique_id=664193358]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Entities/Player" unique_id=664193358]
 shape = SubResource("CircleShape2D_gee14")
 debug_color = Color(0.97346765, 0, 0.43715099, 0.41960785)
 
-[node name="AttackHitbox" type="Area2D" parent="Entities/Player" unique_id=1792221363]
+[node name="AttackHitbox" type="Area2D" parent="World/Entities/Player" unique_id=1792221363]
 visible = false
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Player/AttackHitbox" unique_id=560303145]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Entities/Player/AttackHitbox" unique_id=560303145]
 shape = SubResource("CircleShape2D_attack")
 
 [node name="Systems" type="Node2D" parent="." unique_id=668813161]
 
-[node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044]
+[node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044 node_paths=PackedStringArray("player")]
 script = ExtResource("4_p57ef")
+player = NodePath("../../World/Entities/Player")
 
 [node name="AlphaMaskViewport" type="SubViewport" parent="." unique_id=1206419223]
 transparent_bg = true
@@ -96,11 +96,11 @@ visibility_layer = 2
 material = SubResource("ShaderMaterial_dinhu")
 texture = ExtResource("10_dinhu")
 script = ExtResource("9_vtaks")
-node = NodePath("../../../Entities/Player")
+node = NodePath("../../../World/Entities/Player")
 
 [node name="MaskCamera" type="Camera2D" parent="AlphaMaskViewport" unique_id=817452987 node_paths=PackedStringArray("main_camera")]
 script = ExtResource("11_kvpfn")
-main_camera = NodePath("../../Entities/Player/Camera")
+main_camera = NodePath("../../World/Entities/Player/Camera")
 
 [node name="DebugLayer" type="CanvasLayer" parent="." unique_id=132201771]
 visible = false

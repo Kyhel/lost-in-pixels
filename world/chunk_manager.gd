@@ -4,8 +4,8 @@ const TILE_SIZE = 16
 const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
-const LOAD_RADIUS = 1  # nombre de chunks à charger autour du joueur
-const UNLOAD_RADIUS = 4 # au delà de ce rayon, les chunks sont déchargés
+const LOAD_RADIUS = 4  # nombre de chunks à charger autour du joueur
+const UNLOAD_RADIUS = 6 # au delà de ce rayon, les chunks sont déchargés
 
 const TERRAIN_VISION_RADIUS = 20
 const MONSTER_VISION_RADIUS = 200

@@ -14,6 +14,7 @@ enum CreatureSize {
 @export var sensor_scenes: Array[PackedScene] = []  ## Sensor scenes (e.g. FoodSensor); each runs every tick and writes to the creature's blackboard. Root node must be a [Sensor].
 @export var goals: Array[Goal] = []
 @export var size_type: CreatureSize = CreatureSize.SMALL
+@export var can_fly: bool = false
 @export var scale_factor: float = 1.0
 @export var size: int = 16
 @export var walking_speed: float = 40.0

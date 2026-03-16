@@ -46,7 +46,7 @@ func _tile_passes_tree_rules(wx: int, wy: int, biome_generator: WorldGenerator) 
 	var biome: WorldGenerator.Biome = biome_generator.get_biome(wx, wy)
 	if biome != WorldGenerator.Biome.FOREST and biome != WorldGenerator.Biome.PLAINS:
 		return false
-	if tree_noise.get_noise_2d(wx, wy) < 0.3:
+	if tree_noise.get_noise_2d(wx, wy) < 0.1:
 		return false
 	if _tile_random(wx, wy) < 0.2:
 		return false

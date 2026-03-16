@@ -1,12 +1,18 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://l3jujd554n0k"]
 
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://entities/creature_data.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cwqtctflh1m13" path="res://ai/behavior_trees/trees/fly_bt.tscn" id="1_tk8hh"]
 [ext_resource type="Texture2D" uid="uid://bvek2ki4p8hcc" path="res://assets/FlyingMonster_1.png" id="2_texture"]
-[ext_resource type="PackedScene" path="res://entities/wandering_bird_bt.tscn" id="3_behavior_tree"]
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="2_tk8hh"]
+[ext_resource type="Resource" uid="uid://lid6ossrt48q" path="res://ai/goals/fly_goal.tres" id="3_sg2rb"]
 
 [resource]
 script = ExtResource("1_script")
 display_name = "Wandering Bird"
 sprite = ExtResource("2_texture")
-behavior_tree = ExtResource("3_behavior_tree")
+behavior_tree = ExtResource("1_tk8hh")
+goals = Array[ExtResource("2_tk8hh")]([ExtResource("3_sg2rb")])
+can_fly = true
 size = 24
+walking_speed = 60
+biomes = Array[int]([0, 1, 2])
