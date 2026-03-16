@@ -125,6 +125,26 @@ func is_walkable(world_pos: Vector2) -> bool:
 	var def := get_tile_def_from_world_pos(world_pos)
 	return def.get("walkable", false)
 
+## Returns true if every tile within [size_pixels] of [center] is walkable (uses [method is_walkable] per tile).
+func is_area_walkable_for_creature(center: Vector2, size_pixels: float) -> bool:
+	if size_pixels <= 0.0:
+		return is_walkable(center)
+	var radius := size_pixels
+	var base_tile := get_tile_coords_from_world_pos(center)
+	var tile_radius := ceili(radius / TILE_SIZE)
+	for dx in range(-tile_radius, tile_radius + 1):
+		for dy in range(-tile_radius, tile_radius + 1):
+			var tile_coords := Vector2i(base_tile.x + dx, base_tile.y + dy)
+			var tile_center := Vector2(
+				(tile_coords.x + 0.5) * TILE_SIZE,
+				(tile_coords.y + 0.5) * TILE_SIZE
+			)
+			if center.distance_to(tile_center) > radius:
+				continue
+			if not is_walkable(tile_center):
+				return false
+	return true
+
 func reveal_around_player(player_pos):
 
 	var tile_pos = Vector2i(

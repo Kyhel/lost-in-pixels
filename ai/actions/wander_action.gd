@@ -11,10 +11,10 @@ func tick(creature: Creature, _delta: float) -> State:
 
 		target_position = pick_wander_target(creature)
 
-		if not ChunkManager.is_walkable(target_position):
+		if not ChunkManager.is_area_walkable_for_creature(target_position, creature.creature_data.size):
 			# retry once
 			target_position = pick_wander_target(creature)
-			if not ChunkManager.is_walkable(target_position):
+			if not ChunkManager.is_area_walkable_for_creature(target_position, creature.creature_data.size):
 				# give up
 				target_position = null
 				return State.RUNNING
