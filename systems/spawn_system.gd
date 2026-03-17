@@ -1,10 +1,8 @@
 class_name SpawnSystem
 extends Node
 
-var spawn_timer: float = 0.0
-const SPAWN_INTERVAL = 10.0
-## Tracks the last spawn cycle we ran for each chunk (so we only update once per interval).
-var _chunk_last_cycle: Dictionary = {}
+const SPAWN_INTERVAL: float = 10.0
+var _stagger: ChunkStagger = ChunkStagger.new(SPAWN_INTERVAL)
 
 const RABBIT_MAX_PER_CHUNK = 3
 const RABBIT_SPAWN_INTERVAL = 5.0
@@ -13,37 +11,19 @@ const RABBIT_SPAWN_TRY_COUNT = 5
 ## Tracks last time we spawned a rabbit in each chunk (for rate limiting).
 var _rabbit_last_spawn_time: Dictionary = {}
 
-func _get_chunk_phase(coords: Vector2i) -> float:
-	## Deterministic phase in [0, SPAWN_INTERVAL) so updates are spread over the interval.
-	var h := (coords.x * 73856093) ^ (coords.y * 19349663)
-	return absf(float(h % 10000)) / 10000.0 * SPAWN_INTERVAL
-
 func _physics_process(delta: float) -> void:
-	spawn_timer += delta
-	# Keep spawn_timer in [0, SPAWN_INTERVAL) and shift cycle counts so logic is unchanged
-	if spawn_timer >= SPAWN_INTERVAL:
-		var cycles_elapsed: int = int(floorf(spawn_timer / SPAWN_INTERVAL))
-		spawn_timer = fmod(spawn_timer, SPAWN_INTERVAL)
-		for coords in _chunk_last_cycle.keys():
-			_chunk_last_cycle[coords] -= float(cycles_elapsed)
+	var result: Dictionary = _stagger.update(delta)
+	var chunks_to_update: Array[Vector2i] = result["chunks"]
 
-	for chunk in ChunkManager.loaded_chunks.values():
-		var coords: Vector2i = chunk.coords
-		var phase: float = _get_chunk_phase(coords)
-		var current_cycle: float = floorf((spawn_timer - phase) / SPAWN_INTERVAL)
-		var last_cycle: float = _chunk_last_cycle.get(coords, -1.0)
-		if current_cycle > last_cycle:
-			_chunk_last_cycle[coords] = current_cycle
-			spawn_in_chunk(chunk)
-			spawn_creatures(chunk)
-	# Drop entries for unloaded chunks to avoid unbounded growth
-	var loaded_keys := ChunkManager.loaded_chunks.keys()
-	var to_remove: Array[Vector2i] = []
-	for coords in _chunk_last_cycle.keys():
-		if coords not in loaded_keys:
-			to_remove.append(coords)
-	for coords in to_remove:
-		_chunk_last_cycle.erase(coords)
+	for coords in chunks_to_update:
+		var chunk: Chunk = ChunkManager.loaded_chunks.get(coords, null)
+		if chunk == null:
+			continue
+		spawn_in_chunk(chunk)
+		spawn_creatures(chunk)
+
+	var removed: Array[Vector2i] = result["removed"]
+	for coords in removed:
 		_rabbit_last_spawn_time.erase(coords)
 
 func spawn_in_chunk(chunk: Chunk) -> void:

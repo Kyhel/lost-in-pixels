@@ -2,6 +2,9 @@ extends Node
 
 var chunk_entities: Dictionary[Vector2i, Array] = {}
 
+const CHUNK_UPDATE_INTERVAL: float = 0.5
+var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
+
 var creature_scene = preload("res://actors/base/creature.tscn")
 var wandering_bird_data: CreatureData = preload("res://data/actors/animals/wandering_bird.tres") as CreatureData
 var big_wandering_data: CreatureData = preload("res://data/actors/animals/big_wandering.tres") as CreatureData
@@ -66,6 +69,23 @@ func move_monster(monster, old_chunk, new_chunk):
 		chunk_entities[new_chunk] = []
 
 	chunk_entities[new_chunk].append(monster)
+
+func update_entity_chunks(delta: float) -> void:
+	var result: Dictionary = _chunk_stagger.update(delta)
+	var chunks_to_check: Array[Vector2i] = result["chunks"]
+
+	for coords in chunks_to_check:
+		if !chunk_entities.has(coords):
+			continue
+
+		var monsters: Array = chunk_entities[coords]
+		for monster in monsters:
+			if !is_instance_valid(monster):
+				continue
+
+			var new_chunk: Vector2i = ChunkManager.get_chunk_from_position(monster.global_position)
+			if new_chunk != coords:
+				move_monster(monster, coords, new_chunk)
 
 func update_entity_visibility(player_pos:Vector2):
 
