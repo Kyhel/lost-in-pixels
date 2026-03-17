@@ -8,12 +8,11 @@ var big_wandering_data: CreatureData = preload("res://data/actors/animals/big_wa
 var rabbit_data: CreatureData = preload("res://data/actors/animals/rabbit.tres") as CreatureData
 var fox_data: CreatureData = preload("res://data/actors/animals/fox.tres") as CreatureData
 
-var creature_data_list := [
-	wandering_bird_data,
-	# big_wandering_data,
-	rabbit_data,
-	fox_data,
-	]
+var creature_spawn_probability_scores := [
+	[wandering_bird_data, 0],
+	[rabbit_data, 5],
+	[fox_data, 2],
+]
 
 func on_chunk_unloaded(chunk: Vector2i):
 
@@ -50,14 +49,17 @@ func spawn_entities(chunk:Chunk, chunk_position:Vector2i):
 		var tile_type = chunk.get_tile_type(local_x, local_y)
 		var biome = ChunkManager.world_generator.get_biome(world_x, world_y)
 
-		var valid_creatures = creature_data_list.filter(func(creature_data):
+		var valid_creatures = creature_spawn_probability_scores.filter(func(creature_spawn_probability):
+			var creature_data = creature_spawn_probability[0]
 			return creature_data.biomes.has(biome) and !creature_data.excluded_tile_types.has(tile_type)
 		)
 
 		if valid_creatures.is_empty():
 			continue
 
-		creature.creature_data = valid_creatures.pick_random()
+		var picked_index = rng.rand_weighted(valid_creatures.map(func(creature_spawn_probability): return creature_spawn_probability[1]))
+
+		creature.creature_data = valid_creatures[picked_index][0]
 
 		var pos = Vector2(
 			world_x * ChunkManager.TILE_SIZE,
