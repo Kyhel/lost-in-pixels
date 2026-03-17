@@ -1,16 +1,9 @@
 class_name MovementRequest
 extends RefCounted
 
-enum MovementType {
-	SNEAK,
-	WALK,
-	RUN,
-	SPRINT
-}
-
 var target_position: Vector2
-var movement_type: MovementType
+var movement_type: CreatureData.MovementType
 
-func _init(pos: Vector2 = Vector2.ZERO, type: MovementType = MovementType.WALK) -> void:
+func _init(pos: Vector2 = Vector2.ZERO, type: CreatureData.MovementType = CreatureData.MovementType.WALK) -> void:
 	target_position = pos
 	movement_type = type

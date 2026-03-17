@@ -22,11 +22,11 @@ func tick(creature: Creature, _delta: float) -> State:
 		FollowState.STOPPED:
 			creature.movement.stop()
 		FollowState.WALKING:
-			creature.movement.request_movement(MovementRequest.new(player.global_position, MovementRequest.MovementType.WALK))
+			creature.movement.request_movement(MovementRequest.new(player.global_position, CreatureData.MovementType.WALK))
 		FollowState.RUNNING:
-			creature.movement.request_movement(MovementRequest.new(player.global_position, MovementRequest.MovementType.RUN))
+			creature.movement.request_movement(MovementRequest.new(player.global_position, CreatureData.MovementType.RUN))
 		FollowState.SPRINTING:
-			creature.movement.request_movement(MovementRequest.new(player.global_position, MovementRequest.MovementType.SPRINT))
+			creature.movement.request_movement(MovementRequest.new(player.global_position, CreatureData.MovementType.SPRINT))
 
 	return State.RUNNING
 

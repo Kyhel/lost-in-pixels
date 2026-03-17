@@ -11,6 +11,7 @@ enum CreatureSize {
 enum MovementType {
 	HOP,
 	FLY,
+	SNEAK,
 	WALK,
 	RUN,
 	SPRINT,
