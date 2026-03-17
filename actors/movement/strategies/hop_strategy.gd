@@ -21,11 +21,11 @@ func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 
 	var direction = (target_position - creature.global_position).normalized()
 	var target_angle := direction.angle()
-	var angle_diff := angle_difference(creature.rotation, target_angle)
+	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
 	var angle_diff_abs = abs(angle_diff)
 	var max_turn := creature.creature_data.rotating_speed * delta
 
-	creature.rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
+	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 
 	if angle_diff_abs >= NO_MOVEMENT_DIRECTION_THRESHOLD:
 		creature.velocity = Vector2.ZERO
@@ -37,7 +37,7 @@ func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 
 	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD
 
-	creature.velocity = Vector2.from_angle(creature.rotation).normalized() * speed * rotation_ratio
+	creature.velocity = Vector2.from_angle(creature.virtual_rotation).normalized() * speed * rotation_ratio
 
 func reset() -> void:
 	hop_timer = 0.0

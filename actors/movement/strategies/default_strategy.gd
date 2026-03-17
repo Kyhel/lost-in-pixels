@@ -10,10 +10,10 @@ func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 
 	var dir = (target_position - creature.global_position).normalized()
 	var target_angle := dir.angle()
-	var angle_diff := angle_difference(creature.rotation, target_angle)
+	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
 	var angle_diff_abs = abs(angle_diff)
 	var max_turn := creature.creature_data.rotating_speed * delta
-	creature.rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
+	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 
 	# if angle_diff_abs <= ROTATION_DONE_THRESHOLD:
 	# 	creature.velocity = dir * walking_speed

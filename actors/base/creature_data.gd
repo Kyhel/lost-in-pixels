@@ -31,4 +31,4 @@ enum MovementType {
 @export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
 @export var movement_types: Array[MovementType] = [MovementType.WALK]
 @export var needs_eating: bool = false
-@export var hunger_decay_rate: float = 2.0
+@export var hunger_decay_rate: float = 1.0

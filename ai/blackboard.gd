@@ -14,16 +14,30 @@ enum State {
 	EATING,
 }
 
+signal value_changed(key, value)
+
 var data := {}
 
 func set_value(key, value):
-    data[key] = value
+
+	if data.has(key) and data[key] == value:
+		return
+
+	data[key] = value
+	value_changed.emit(key, value)
 
 func get_value(key):
-    return data.get(key)
+	return data.get(key)
 
 func has(key):
-    return data.has(key)
+	return data.has(key)
 
 func clear(key):
-    data.erase(key)
+	data.erase(key)
+
+func watch(key, callable):
+	value_changed.connect(
+		func(k, v):
+			if k == key:
+				callable.call(v)
+	)

@@ -29,6 +29,11 @@ var ai_root : AIRoot
 var movement : MovementComponent
 var alpha_mask: Node2D
 
+var virtual_rotation: float = 0
+
+@onready var visualRoot: = $Visuals
+@onready var collisionShape: = $CollisionShape
+
 func _ready() -> void:
 
 	sensors_node = get_node("Sensors")
@@ -36,6 +41,7 @@ func _ready() -> void:
 	movement = get_node("Movement")
 	blackboard = Blackboard.new()
 	health = max_health
+	$UIRoot/NeedsDisplay.set_watch(self)
 
 	if creature_data != null:
 
@@ -52,17 +58,33 @@ func _ready() -> void:
 			goals.append(goal)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
-			$Sprite2D.texture = creature_data.sprite
-			var texture_size = $Sprite2D.texture.get_size()
-			$Sprite2D.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
+			$Visuals.texture = creature_data.sprite
+			var texture_size = $Visuals.texture.get_size()
+			$Visuals.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
 		_setup_sensors()
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
 		collision_layer = _get_collision_layer()
 		collision_mask = _get_collision_mask()
 		scale = Vector2.ONE * creature_data.scale_factor
-		$CollisionShape2D.scale = Vector2.ONE * creature_data.size / $CollisionShape2D.shape.radius / 2
+		$CollisionShape.scale = Vector2.ONE * creature_data.size / $CollisionShape.shape.radius / 2
 		if creature_data.can_fly:
 			z_index = 20
+
+func _process(_delta: float) -> void:
+	_update_visuals()
+
+func _physics_process(delta: float) -> void:
+	sensors_node.update_sensors(delta)
+	ai_root.update_ai(delta)
+	movement.update_movement(self, delta)
+	move_and_slide()
+	_update_hunger(delta)
+	#if is_big:  # BIG
+		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
+			
+func _update_visuals() -> void:
+	visualRoot.rotation = virtual_rotation
+	collisionShape.rotation = virtual_rotation
 
 func _get_collision_layer() -> int:
 
@@ -83,15 +105,6 @@ func _get_collision_mask() -> int:
 		return LAYER_TERRAIN | LAYER_BIG_CREATURES
 	else:
 		return LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES
-
-func _physics_process(delta: float) -> void:
-	sensors_node.update_sensors(delta)
-	ai_root.update_ai(delta)
-	movement.update_movement(self, delta)
-	move_and_slide()
-	_update_hunger(delta)
-	#if is_big:  # BIG
-		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 
 func _update_hunger(delta: float) -> void:
 
