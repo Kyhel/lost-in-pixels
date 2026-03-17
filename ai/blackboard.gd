@@ -6,6 +6,8 @@ const KEY_TARGET_FOOD := "target_food"
 const KEY_PREDATORS := "visible_predators"
 const KEY_STATE := "state"
 const KEY_HUNGER := "hunger"
+const KEY_TAMING := "taming"
+const KEY_TAMED := "tamed"
 
 const KEY_HUNGER_MAX := 100
 

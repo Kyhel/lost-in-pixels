@@ -33,6 +33,8 @@ func update(creature: Creature) -> void:
 			continue
 		if entity == creature:
 			continue
+		if entity.blackboard.get_value(Blackboard.KEY_TAMED) == true:
+			continue
 		if not _can_eat_creature(entity.creature_data):
 			continue
 		foods.append(entity)

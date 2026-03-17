@@ -8,4 +8,5 @@ script = ExtResource("1_6g0dw")
 id = &"carrot"
 display_name = "Carrot"
 texture = ExtResource("2_cmqf5")
+taming_value = 110
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

@@ -32,3 +32,5 @@ enum MovementType {
 @export var movement_types: Array[MovementType] = [MovementType.WALK]
 @export var needs_eating: bool = false
 @export var hunger_decay_rate: float = 5.0
+@export var taming_decay_rate: float = 5.0
+@export var taming_value_threshold: int = 100

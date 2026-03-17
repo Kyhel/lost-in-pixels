@@ -8,6 +8,7 @@ class_name ItemData
 
 @export var stackable: bool = false
 @export var max_stack: int = 1
+@export var taming_value: int = 0
 
 @export var spawn_definition: SpawnDefinition
 

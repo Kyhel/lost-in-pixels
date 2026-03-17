@@ -56,6 +56,9 @@ func _ready() -> void:
 
 		for goal in creature_data.goals:
 			goals.append(goal)
+		if creature_data.taming_value_threshold > 0:
+			blackboard.set_value(Blackboard.KEY_TAMING, 0)
+			blackboard.set_value(Blackboard.KEY_TAMED, false)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
 			$Visuals.texture = creature_data.sprite
@@ -79,6 +82,7 @@ func _physics_process(delta: float) -> void:
 	movement.update_movement(self, delta)
 	move_and_slide()
 	_update_hunger(delta)
+	_update_taming(delta)
 	#if is_big:  # BIG
 		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 			
@@ -118,6 +122,17 @@ func _update_hunger(delta: float) -> void:
 		blackboard.set_value(Blackboard.KEY_HUNGER, hunger)
 
 	blackboard.set_value(Blackboard.KEY_HUNGER, hunger - creature_data.hunger_decay_rate * delta)
+
+func _update_taming(delta: float) -> void:
+	if creature_data == null or creature_data.taming_value_threshold <= 0:
+		return
+	if blackboard.get_value(Blackboard.KEY_TAMED) == true:
+		return
+	var taming = blackboard.get_value(Blackboard.KEY_TAMING)
+	if taming == null:
+		taming = 0.0
+	taming = maxf(0.0, taming - creature_data.taming_decay_rate * delta)
+	blackboard.set_value(Blackboard.KEY_TAMING, taming)
 
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:

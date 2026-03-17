@@ -15,6 +15,7 @@ var attack_cooldown_timer: float = 0.0
 @onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
+	add_to_group("player")
 	_update_attack_hitbox_radius()
 
 func _physics_process(delta):
