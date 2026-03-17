@@ -15,9 +15,29 @@ func tick(creature: Creature, _delta: float) -> State:
 
 	if nodes.is_empty():
 		return State.FAILURE
-	
-	var closest_food = Node2DUtils.get_closest(creature.global_position, nodes)
 
+	var candidates: Array[Node2D] = _get_food_candidates(creature, nodes)
+	if candidates.is_empty():
+		return State.FAILURE
+
+	var closest_food = Node2DUtils.get_closest(creature.global_position, candidates)
 	creature.blackboard.set_value(Blackboard.KEY_TARGET_FOOD, closest_food)
 
 	return State.SUCCESS
+
+
+## Same logic as EatGoal: when hungry, any food; when not hungry, only food with taming value.
+func _get_food_candidates(creature: Creature, valid_foods: Array[Node2D]) -> Array[Node2D]:
+	var hunger = creature.blackboard.get_value(Blackboard.KEY_HUNGER)
+	if hunger != null and hunger <= 80:
+		return valid_foods
+
+	# Not hungry — we're only eating for taming, so only consider food with taming value
+	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0:
+		var taming_foods: Array[Node2D] = []
+		for f in valid_foods:
+			if f is WorldItem and f.item_data != null and f.item_data.taming_value > 0:
+				taming_foods.append(f)
+		return taming_foods
+
+	return []

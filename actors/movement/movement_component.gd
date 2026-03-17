@@ -64,7 +64,16 @@ func _resolve_strategy(creature: Creature, request_movement_type: int) -> Moveme
 					var strat = MovementStrategyDatabase.get_strategy(priority_type)
 					return strat.duplicate() if strat != null else _get_default_strategy_or_null()
 			return _get_default_strategy_or_null()
-		MovementRequest.MovementType.RUN, MovementRequest.MovementType.SPRINT:
+		MovementRequest.MovementType.RUN:
+			if CreatureData.MovementType.RUN in types:
+				var run_strat = MovementStrategyDatabase.get_strategy(CreatureData.MovementType.RUN)
+				return run_strat.duplicate() if run_strat != null else _get_default_strategy_or_null()
+			# Fall through to first available
+		MovementRequest.MovementType.SPRINT:
+			if CreatureData.MovementType.SPRINT in types:
+				var sprint_strat = MovementStrategyDatabase.get_strategy(CreatureData.MovementType.SPRINT)
+				if sprint_strat != null:
+					return sprint_strat.duplicate()
 			if CreatureData.MovementType.RUN in types:
 				var run_strat = MovementStrategyDatabase.get_strategy(CreatureData.MovementType.RUN)
 				return run_strat.duplicate() if run_strat != null else _get_default_strategy_or_null()

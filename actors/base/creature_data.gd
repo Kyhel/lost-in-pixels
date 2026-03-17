@@ -13,6 +13,7 @@ enum MovementType {
 	FLY,
 	WALK,
 	RUN,
+	SPRINT,
 	DEFAULT  ## Legacy/default movement strategy (same as walk speed, used for "first available" fallback).
 }
 
@@ -26,6 +27,7 @@ enum MovementType {
 @export var size: int = 16
 @export var base_speed: float = 40.0
 @export var running_multiplier: float = 2.0
+@export var sprinting_multiplier: float = 4.0  ## Default 2× running_multiplier; used when following at sprint distance.
 @export var hop_multiplier: float = 1.0
 @export var rotating_speed: float = TAU
 @export var biomes: Array[WorldGenerator.Biome] = [WorldGenerator.Biome.FOREST, WorldGenerator.Biome.PLAINS]
