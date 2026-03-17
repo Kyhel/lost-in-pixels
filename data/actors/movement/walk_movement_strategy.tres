@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="WalkStrategy" format=3]
+
+[ext_resource type="Script" path="res://actors/movement/strategies/walk_strategy.gd" id="1_walk"]
+
+[resource]
+script = ExtResource("1_walk")

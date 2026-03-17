@@ -12,7 +12,8 @@ enum MovementType {
 	HOP,
 	FLY,
 	WALK,
-	RUN
+	RUN,
+	DEFAULT  ## Legacy/default movement strategy (same as walk speed, used for "first available" fallback).
 }
 
 @export var display_name: String = ""
