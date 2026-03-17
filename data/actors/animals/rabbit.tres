@@ -16,4 +16,5 @@ size = 12
 hop_multiplier = 0.5
 movement_types = Array[int]([0])
 needs_eating = true
+hunger_decay_rate = 1.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"
