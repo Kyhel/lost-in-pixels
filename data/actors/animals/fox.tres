@@ -18,3 +18,4 @@ movement_types = Array[int]([2, 3])
 needs_eating = true
 hunger_decay_rate = 2.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"
+running_multiplier = 3.0

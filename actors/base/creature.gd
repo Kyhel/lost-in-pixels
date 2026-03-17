@@ -45,9 +45,6 @@ func _ready() -> void:
 
 	if creature_data != null:
 
-		if movement != null:
-			movement.set_strategy(self)
-
 		if !creature_data.can_fly:
 			var mask_world = get_tree().current_scene.find_child("MaskWorld")
 			alpha_mask = alpha_mask_scene.instantiate()
