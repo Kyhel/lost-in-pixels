@@ -18,8 +18,6 @@ func tick(creature: Creature, _delta: float) -> State:
 	
 	var closest_food = Node2DUtils.get_closest(creature.global_position, nodes)
 
-	# var closest_food = Node2DUtils.get_closest(creature.global_position, foods.map(func(f): return f as Node2D) as Array[Node2D])
-
 	creature.blackboard.set_value(Blackboard.KEY_TARGET_FOOD, closest_food)
 
 	return State.SUCCESS

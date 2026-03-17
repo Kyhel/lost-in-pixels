@@ -16,6 +16,8 @@ func _ready() -> void:
 func can_be_picked_up(by: Node) -> bool:
 	return true
 
+func be_eaten(by: Creature) -> void:
+	on_picked_up(by)
 
 func on_picked_up(by: Node) -> void:
 	if item_data and item_data.pickup_effect_script:

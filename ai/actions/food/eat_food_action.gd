@@ -22,11 +22,11 @@ func tick(creature: Creature, _delta: float) -> State:
 	if target_food == null:
 		return State.FAILURE
 
-	if target_food.global_position.distance_to(creature.global_position) > 10:
+	if not PushPriorityHelper.is_within_interaction_range(creature, target_food):
 		return State.FAILURE
 
-	# for item in ObjectsManager.get_nearby_items(creature.global_position, 10):
-	target_food.on_picked_up(self)
+	target_food.be_eaten(creature)
+
 	eating_timer = EATING_TIME
 	creature.blackboard.set_value(Blackboard.KEY_STATE, Blackboard.State.EATING)
 	creature.blackboard.set_value(Blackboard.KEY_HUNGER, Blackboard.KEY_HUNGER_MAX)

@@ -8,6 +8,24 @@ class_name PushPriorityHelper
 
 ## Returns the world-space radius of the first CircleShape2D on [param node], or 0.0 if none.
 ## Accounts for CollisionShape2D scale so push distance matches actual collision size.
+## Use this for distance checks (e.g. "close enough to interact").
+static func get_collision_radius(node: Node2D) -> float:
+	return _get_radius(node)
+
+
+## Returns true if [param actor] is close enough to [param target] to interact (e.g. eat, pick up).
+## Uses collision shape radii when both have a CircleShape2D; otherwise actor radius + margin.
+static func is_within_interaction_range(actor: Node2D, target: Node2D, margin: float = 4.0) -> bool:
+	var actor_radius: float = get_collision_radius(actor)
+	var target_radius: float = get_collision_radius(target)
+	var threshold: float
+	if target_radius > 0.0:
+		threshold = actor_radius + target_radius + margin
+	else:
+		threshold = actor_radius + margin
+	return actor.global_position.distance_to(target.global_position) < threshold
+
+
 static func _get_radius(node: Node2D) -> float:
 	for child in node.get_children():
 		if child is CollisionShape2D:
@@ -16,8 +34,8 @@ static func _get_radius(node: Node2D) -> float:
 			if shape is CircleShape2D:
 				var radius: float = (shape as CircleShape2D).radius
 				var scale_vec: Vector2 = shape_node.global_transform.get_scale()
-				var scale_avg: float = (scale_vec.x + scale_vec.y) / 2.0
-				return radius * scale_avg
+				var scale_max: float = max(scale_vec.x, scale_vec.y)
+				return radius * scale_max
 	return 0.0
 
 

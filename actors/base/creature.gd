@@ -135,6 +135,8 @@ func die() -> void:
 		alpha_mask.queue_free()
 	queue_free()
 
+func be_eaten(by: Creature) -> void:
+	die()
 
 ## Override in subclasses to run logic when this creature dies (e.g. drops, effects).
 func _on_die() -> void:
