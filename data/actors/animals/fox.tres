@@ -14,5 +14,5 @@ sensor_scenes = Array[PackedScene]([ExtResource("5_osjan")])
 goals = Array[ExtResource("1_t6a1h")]([ExtResource("2_4xntq"), ExtResource("3_n5fiy")])
 size = 32
 needs_eating = true
-hunger_decay_rate = 0.5
+hunger_decay_rate = 2.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

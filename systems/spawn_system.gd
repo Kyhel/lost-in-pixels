@@ -6,6 +6,13 @@ const SPAWN_INTERVAL = 10.0
 ## Tracks the last spawn cycle we ran for each chunk (so we only update once per interval).
 var _chunk_last_cycle: Dictionary = {}
 
+const RABBIT_MAX_PER_CHUNK = 3
+const RABBIT_SPAWN_INTERVAL = 5.0
+const RABBIT_MIN_CREATURE_DISTANCE = 2.0 * ChunkManager.TILE_SIZE
+const RABBIT_SPAWN_TRY_COUNT = 5
+## Tracks last time we spawned a rabbit in each chunk (for rate limiting).
+var _rabbit_last_spawn_time: Dictionary = {}
+
 func _get_chunk_phase(coords: Vector2i) -> float:
 	## Deterministic phase in [0, SPAWN_INTERVAL) so updates are spread over the interval.
 	var h := (coords.x * 73856093) ^ (coords.y * 19349663)
@@ -28,6 +35,7 @@ func _physics_process(delta: float) -> void:
 		if current_cycle > last_cycle:
 			_chunk_last_cycle[coords] = current_cycle
 			spawn_in_chunk(chunk)
+			spawn_creatures(chunk)
 	# Drop entries for unloaded chunks to avoid unbounded growth
 	var loaded_keys := ChunkManager.loaded_chunks.keys()
 	var to_remove: Array[Vector2i] = []
@@ -36,6 +44,7 @@ func _physics_process(delta: float) -> void:
 			to_remove.append(coords)
 	for coords in to_remove:
 		_chunk_last_cycle.erase(coords)
+		_rabbit_last_spawn_time.erase(coords)
 
 func spawn_in_chunk(chunk: Chunk) -> void:
 
@@ -80,3 +89,45 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 
 				if can_spawn:
 					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, world_pos)
+
+func spawn_creatures(chunk: Chunk) -> void:
+	var rabbit_count: int = EntitiesManager.get_creature_count_in_chunk(chunk.coords, EntitiesManager.rabbit_data)
+	if rabbit_count >= RABBIT_MAX_PER_CHUNK:
+		return
+
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _rabbit_last_spawn_time.get(chunk.coords, -999.0) < RABBIT_SPAWN_INTERVAL:
+		return
+
+	var plains_tiles: Array[Vector2i] = []
+	for local_y in ChunkManager.CHUNK_SIZE:
+		for local_x in ChunkManager.CHUNK_SIZE:
+			var tile_type := chunk.get_tile_type(local_x, local_y)
+			var biome := chunk.get_biome(local_x, local_y)
+			if biome != WorldGenerator.Biome.PLAINS:
+				continue
+			if EntitiesManager.rabbit_data.excluded_tile_types.has(tile_type):
+				continue
+			plains_tiles.append(Vector2i(local_x, local_y))
+
+	if plains_tiles.is_empty():
+		return
+
+	var plains_ratio := plains_tiles.size() / float(ChunkManager.CHUNK_AREA)
+	if randf() > plains_ratio:
+		return
+
+	for try in RABBIT_SPAWN_TRY_COUNT:
+		var idx := randi() % plains_tiles.size()
+		var local := plains_tiles[idx]
+		var world_tile_x: int = chunk.coords.x * ChunkManager.CHUNK_SIZE + local.x
+		var world_tile_y: int = chunk.coords.y * ChunkManager.CHUNK_SIZE + local.y
+		var world_pos := Vector2(
+			world_tile_x * ChunkManager.TILE_SIZE,
+			world_tile_y * ChunkManager.TILE_SIZE
+		)
+		var nearby: Array = EntitiesManager.get_nearby_entities(world_pos, RABBIT_MIN_CREATURE_DISTANCE)
+		if nearby.is_empty():
+			EntitiesManager.spawn_creature_at(chunk.coords, EntitiesManager.rabbit_data, world_pos)
+			_rabbit_last_spawn_time[chunk.coords] = now
+			return

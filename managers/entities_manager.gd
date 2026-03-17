@@ -25,54 +25,37 @@ func on_chunk_unloaded(chunk: Vector2i):
 
 	chunk_entities.erase(chunk)
 
-func spawn_entities(chunk:Chunk, chunk_position:Vector2i):
-
+func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 	if chunk_entities.has(chunk_position):
 		return
 
-	var rng = RandomNumberGenerator.new()
+	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y)
-
-	var entities = []
-
-	var entity_count = rng.randi_range(1, 5)
+	var entity_count := rng.randi_range(1, 5)
 
 	for i in range(entity_count):
-		var creature = creature_scene.instantiate()
+		var local_x := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
+		var local_y := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
+		var world_x: int = chunk_position.x * ChunkManager.CHUNK_SIZE + local_x
+		var world_y: int = chunk_position.y * ChunkManager.CHUNK_SIZE + local_y
+		var tile_type := chunk.get_tile_type(local_x, local_y)
+		var biome: WorldGenerator.Biome = ChunkManager.world_generator.get_biome(world_x, world_y)
 
-		var local_x = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
-		var local_y = rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
-
-		var world_x = chunk_position.x * ChunkManager.CHUNK_SIZE + local_x
-		var world_y = chunk_position.y * ChunkManager.CHUNK_SIZE + local_y
-
-		var tile_type = chunk.get_tile_type(local_x, local_y)
-		var biome = ChunkManager.world_generator.get_biome(world_x, world_y)
-
-		var valid_creatures = creature_spawn_probability_scores.filter(func(creature_spawn_probability):
-			var creature_data = creature_spawn_probability[0]
-			return creature_data.biomes.has(biome) and !creature_data.excluded_tile_types.has(tile_type)
+		var valid_creatures := creature_spawn_probability_scores.filter(func(entry):
+			var data: CreatureData = entry[0]
+			return data.biomes.has(biome) and !data.excluded_tile_types.has(tile_type)
 		)
 
 		if valid_creatures.is_empty():
 			continue
 
-		var picked_index = rng.rand_weighted(valid_creatures.map(func(creature_spawn_probability): return creature_spawn_probability[1]))
-
-		creature.creature_data = valid_creatures[picked_index][0]
-
-		var pos = Vector2(
+		var picked_index := rng.rand_weighted(valid_creatures.map(func(creature_spawn_probability): return creature_spawn_probability[1]))
+		var creature_data: CreatureData = valid_creatures[picked_index][0]
+		var pos := Vector2(
 			world_x * ChunkManager.TILE_SIZE,
 			world_y * ChunkManager.TILE_SIZE
 		)
-
-		creature.global_position = pos
-
-		add_child(creature)
-
-		entities.append(creature)
-
-	chunk_entities[chunk_position] = entities
+		spawn_creature_at(chunk_position, creature_data, pos)
 
 func move_monster(monster, old_chunk, new_chunk):
 
@@ -105,6 +88,24 @@ func is_monster_visible(world_pos:Vector2, player_pos:Vector2) -> bool:
 
 	return distance_sq < radius_px * radius_px
 
+
+func get_creature_count_in_chunk(chunk_coords: Vector2i, creature_data: CreatureData) -> int:
+	if !chunk_entities.has(chunk_coords):
+		return 0
+	var count := 0
+	for entity in chunk_entities[chunk_coords]:
+		if is_instance_valid(entity) and entity.get("creature_data") == creature_data:
+			count += 1
+	return count
+
+func spawn_creature_at(chunk_coords: Vector2i, creature_data: CreatureData, world_pos: Vector2) -> void:
+	var creature = creature_scene.instantiate()
+	creature.creature_data = creature_data
+	creature.global_position = world_pos
+	add_child(creature)
+	if !chunk_entities.has(chunk_coords):
+		chunk_entities[chunk_coords] = []
+	chunk_entities[chunk_coords].append(creature)
 
 func get_nearby_entities(origin: Vector2, radius: float) -> Array:
 	var results: Array = []
