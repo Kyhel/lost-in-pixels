@@ -1,18 +1,16 @@
-[gd_resource type="Resource" script_class="MovementDatabaseConfig" format=3 uid="uid://cctu4ewaeyxxj"]
+[gd_resource type="Resource" script_class="MovementDatabaseConfig" format=3 uid="uid://ctf70i2lui3s2"]
 
-[ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://actors/movement/movement_profile.gd" id="1_jhtp6"]
+[ext_resource type="Script" path="res://actors/movement/movement_profile.gd" id="1_jhtp6"]
 [ext_resource type="Script" uid="uid://chyur5txebx0n" path="res://actors/movement/movement_strategy.gd" id="2_4brqt"]
 [ext_resource type="Resource" uid="uid://cwv84b8qgyyb5" path="res://data/actors/movement/profiles/eat/eat_profile.tres" id="2_gl1w8"]
-[ext_resource type="Script" uid="uid://d0lioe3h1v0db" path="res://managers/movement_database_config.gd" id="3_1512q"]
+[ext_resource type="Script" path="res://managers/movement_database_config.gd" id="3_1512q"]
 [ext_resource type="Resource" uid="uid://o4wxqh5xlx6t" path="res://data/actors/movement/profiles/follow/follow_profile.tres" id="3_q7n22"]
 [ext_resource type="Resource" uid="uid://efyf302hbjwk" path="res://data/actors/movement/profiles/wander/wander_profile.tres" id="4_q7n22"]
 [ext_resource type="Resource" uid="uid://ccbjrv2e40uvo" path="res://data/actors/movement/hop_movement_strategy.tres" id="5_vtyhs"]
-[ext_resource type="Resource" uid="uid://dxsi4r6nsffk5" path="res://data/actors/movement/run_movement_strategy.tres" id="6_ydj4k"]
-[ext_resource type="Resource" uid="uid://dawp51cfmd6gq" path="res://data/actors/movement/walk_movement_strategy.tres" id="7_tgkui"]
-[ext_resource type="Resource" uid="uid://q2twpeofi5un" path="res://data/actors/movement/sprint_movement_strategy.tres" id="8_typu5"]
+[ext_resource type="Resource" path="res://data/actors/movement/run_movement_strategy.tres" id="6_ydj4k"]
 [ext_resource type="Resource" uid="uid://b3fknfw4st7n" path="res://data/actors/movement/default_movement_strategy.tres" id="9_reexi"]
 
 [resource]
 script = ExtResource("3_1512q")
 movement_profiles = Array[ExtResource("1_jhtp6")]([ExtResource("2_gl1w8"), ExtResource("3_q7n22"), ExtResource("4_q7n22")])
-movement_strategies = Array[ExtResource("2_4brqt")]([ExtResource("5_vtyhs"), ExtResource("6_ydj4k"), ExtResource("7_tgkui"), ExtResource("8_typu5"), ExtResource("9_reexi")])
+movement_strategies = Array[ExtResource("2_4brqt")]([ExtResource("5_vtyhs"), ExtResource("6_ydj4k"), ExtResource("9_reexi")])

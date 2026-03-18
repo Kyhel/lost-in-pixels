@@ -9,7 +9,6 @@ func _process(_delta: float):
 
 	ChunkManager.update_chunks(player.global_position)
 	EntitiesManager.update_entity_visibility(player.global_position)
-	# SpawnManager.update_chunks(delta)
 
 func _physics_process(delta: float) -> void:
 	EntitiesManager.update_entity_chunks(delta)

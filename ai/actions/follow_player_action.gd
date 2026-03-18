@@ -1,12 +1,17 @@
 class_name FollowPlayerAction
 extends BTNode
 
-enum FollowState { STOPPED, FOLLOWING }
+enum FollowState { STOPPED, FOLLOWING, ORBITING }
 
-const ZONE1_MAX: float = 50.0    # inner: don't move
-const HYSTERESIS: float = 5   # each side of boundary
+const ORBIT_ZONE_MIN: float = 40.0
+const ORBIT_ZONE_MAX: float = 100.0
+
+const ORBIT_NEW_TARGET_DISTANCE: float = 10.0
 
 var _follow_state: FollowState = FollowState.STOPPED
+
+var orbit_target_position: Vector2 = Vector2.ZERO
+var orbiting := false
 
 func tick(creature: Creature, _delta: float) -> State:
 	var player = creature.get_tree().get_first_node_in_group("player")
@@ -23,22 +28,45 @@ func tick(creature: Creature, _delta: float) -> State:
 			creature.movement.request_movement(
 				MovementRequest.new(
 					player.global_position,
-					MovementRequest.MovementContext.FOLLOW_PLAYER,
-					0.0,
-					0.0,
-					100,
-					distance))
-
+					1.0))
+					# clamp((distance - ORBIT_ZONE_MIN) / (ORBIT_ZONE_MAX - ORBIT_ZONE_MIN), 0.0, 1.0)))
+		FollowState.ORBITING:
+			if !orbiting or (player.global_position + orbit_target_position).distance_to(creature.global_position) < ORBIT_NEW_TARGET_DISTANCE:
+				orbit_target_position = _choose_orbit_target()
+				orbiting = true
+			creature.movement.request_movement(
+				MovementRequest.new(
+					player.global_position + orbit_target_position,
+					0))
+		_:
+			return State.FAILURE
 	return State.RUNNING
 
-func _update_follow_state(distance: float) -> void:
-	var leave_stop_threshold := ZONE1_MAX + HYSTERESIS
-	var enter_stop_threshold := ZONE1_MAX - HYSTERESIS
+# Selects a random position around the player, within the orbit zone
+func _choose_orbit_target() -> Vector2:
 
-	match _follow_state:
-		FollowState.STOPPED:
-			if distance > leave_stop_threshold:
-				_follow_state = FollowState.FOLLOWING
-		FollowState.FOLLOWING:
-			if distance < enter_stop_threshold:
-				_follow_state = FollowState.STOPPED
+	var rng := RandomNumberGenerator.new()
+
+	var angle = rng.randf_range(0.0, TAU)
+	var distance = rng.randf_range(ORBIT_ZONE_MIN, ORBIT_ZONE_MAX)
+
+	return Vector2.from_angle(angle) * distance
+
+func _update_follow_state(distance: float) -> void:
+
+	# If the player is too far away, run back to the player
+	if _follow_state == FollowState.ORBITING and distance > ORBIT_ZONE_MAX:
+		_follow_state = FollowState.FOLLOWING
+		return
+
+	# If the player is close enough, orbit around the player
+	if _follow_state == FollowState.FOLLOWING and distance < ORBIT_ZONE_MIN:
+		_follow_state = FollowState.ORBITING
+		return
+
+	_follow_state = FollowState.ORBITING
+
+func reset() -> void:
+	super.reset()
+	_follow_state = FollowState.STOPPED
+	orbit_target_position = Vector2.ZERO

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FollowPlayerGoal" format=3 uid="uid://c8fpl1yr5xkqn"]
 
-[ext_resource type="Script" path="res://ai/goals/follow_player_goal.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://igd4kwo35weg" path="res://ai/goals/follow_player_goal.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://b2fpl1yr5xkqm" path="res://ai/behaviors/trees/follow_player_bt.tscn" id="2_tree"]
 
 [resource]

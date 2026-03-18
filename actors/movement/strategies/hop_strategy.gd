@@ -1,19 +1,28 @@
 class_name HopStrategy
 extends MovementStrategy
 
-@export var rest_duration: float = 0.5
-@export var hop_duration: float = 0.2
+var rest_duration: float = 0
+var hop_duration: float = 0
+var hop_ratio: float = 0
+
+@export var rest_ratio: float = 0.5
+@export var hop_base_duration: float = 0.7
 
 var hop_timer: float = 0.0
 
 const NO_MOVEMENT_DIRECTION_THRESHOLD: float = PI / 2
 
-func move(creature: Creature, target_position: Vector2, delta: float) -> void:
+func _init() -> void:
+	hop_ratio = 1 - rest_ratio
+	hop_duration = hop_base_duration * hop_ratio
+	rest_duration = hop_base_duration * rest_ratio
+
+func move(creature: Creature, target_position: Vector2, delta: float, speed_desire: float) -> void:
 
 	hop_timer -= delta
 
-	if hop_timer < 0.0:
-		hop_timer = rest_duration + hop_duration
+	if hop_timer <= 0.0:
+		hop_timer = hop_base_duration
 
 	if hop_timer < rest_duration:
 		creature.velocity = Vector2.ZERO
@@ -31,9 +40,12 @@ func move(creature: Creature, target_position: Vector2, delta: float) -> void:
 		creature.velocity = Vector2.ZERO
 		return
 
-	var hop_time_ratio = (rest_duration + hop_duration) / hop_duration
+	var max_speed = creature.creature_data.base_speed * creature.creature_data.running_multiplier
+	var base_speed = creature.creature_data.base_speed
 
-	var speed = creature.creature_data.base_speed * creature.creature_data.hop_multiplier * hop_time_ratio
+	var relative_speed = lerp(base_speed, max_speed, speed_desire)
+
+	var speed = relative_speed * creature.creature_data.hop_multiplier / hop_ratio
 
 	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD
 

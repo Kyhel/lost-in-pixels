@@ -36,10 +36,11 @@ func update_movement(creature: Creature, delta: float) -> void:
 	if creature.creature_data == null:
 		return
 
-	var request_type := resolve_movement_type(
-		current_request,
-		creature.creature_data.movement_types,
-		MovementStrategyDatabase.get_profile(current_request.context))
+	# var request_type := resolve_movement_type(
+	# 	current_request,
+	# 	creature.creature_data.movement_types,
+	# 	MovementStrategyDatabase.get_profile(current_request.context))
+	var request_type := simple_resolve_movement_type(creature.creature_data.movement_types)
 
 	# Resolve strategy for this request type (reuse cached instance if we have one)
 	if _cached_strategy_for_type != request_type:
@@ -56,7 +57,7 @@ func update_movement(creature: Creature, delta: float) -> void:
 	if _strategy == null:
 		return
 
-	_strategy.move(creature, current_request.target_position, delta)
+	_strategy.move(creature, current_request.target_position, delta, current_request.speed_desire)
 
 ## Returns a duplicated strategy instance for the given request type and creature's available movement_types.
 ## Tries the strategy matching the request type; if the creature doesn't have it, uses first available type from
@@ -85,6 +86,15 @@ func _resolve_strategy(creature: Creature, request_movement_type: CreatureData.M
 func _get_default_strategy_or_null() -> MovementStrategy:
 	var s = MovementStrategyDatabase.get_strategy(CreatureData.MovementType.DEFAULT)
 	return s.duplicate() if s != null else null
+
+func simple_resolve_movement_type(available : Array[CreatureData.MovementType]) -> CreatureData.MovementType:
+	
+	var best_movement_type := CreatureData.MovementType.DEFAULT
+
+	for type in available:
+		return type
+
+	return best_movement_type
 
 func resolve_movement_type(request : MovementRequest, available : Array[CreatureData.MovementType], profile : MovementProfile) -> CreatureData.MovementType:
 

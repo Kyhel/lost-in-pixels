@@ -12,7 +12,7 @@ var rabbit_data: CreatureData = preload("res://data/actors/animals/rabbit.tres")
 var fox_data: CreatureData = preload("res://data/actors/animals/fox.tres") as CreatureData
 
 var creature_spawn_probability_scores := [
-	[wandering_bird_data, 0],
+	# [wandering_bird_data, 0],
 	[rabbit_data, 5],
 	[fox_data, 2],
 ]
@@ -29,12 +29,13 @@ func on_chunk_unloaded(chunk: Vector2i):
 	chunk_entities.erase(chunk)
 
 func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
+
 	if chunk_entities.has(chunk_position):
 		return
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y)
-	var entity_count := rng.randi_range(1, 5)
+	var entity_count := rng.randi_range(1, DebugManager.debug_config.max_creatures_per_chunk)
 
 	for i in range(entity_count):
 		var local_x := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
@@ -47,6 +48,8 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 		var valid_creatures := creature_spawn_probability_scores.filter(func(entry):
 			var data: CreatureData = entry[0]
 			return data.biomes.has(biome) and !data.excluded_tile_types.has(tile_type)
+		).filter(func(entry):
+			return DebugManager.debug_config.allowed_creatures.has(entry[0])
 		)
 
 		if valid_creatures.is_empty():

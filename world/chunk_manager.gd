@@ -17,6 +17,9 @@ var world_generator = preload("res://world/world_generator.gd").new()
 var tree_generator := TreeGenerator.new(world_generator.terrain_noise.seed)
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
+func get_load_radius() -> int:
+	return DebugManager.debug_config.chunk_load_radius
+
 func load_chunk(chunk_x, chunk_y):
 
 	var key: Vector2i = Vector2i(chunk_x, chunk_y)
@@ -65,8 +68,7 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 		Vector2i(chunk_x, chunk_y),
 		chunk,
 		CHUNK_SIZE,
-		world_generator,
-		ObjectsManager)
+		world_generator)
 
 func _spawn_world_items(chunk_x: int, chunk_y: int):
 
@@ -95,8 +97,8 @@ func update_chunks(player_pos:Vector2):
 
 	var chunk = get_chunk_from_position(player_pos)
 
-	for x in range(chunk.x-LOAD_RADIUS, chunk.x+LOAD_RADIUS+1):
-		for y in range(chunk.y-LOAD_RADIUS, chunk.y+LOAD_RADIUS+1):
+	for x in range(chunk.x-get_load_radius(), chunk.x+get_load_radius()+1):
+		for y in range(chunk.y-get_load_radius(), chunk.y+get_load_radius()+1):
 			load_chunk(x,y)
 
 	unload_far_chunks(player_pos)
@@ -200,7 +202,7 @@ func get_chunk_seed(chunk_x:int, chunk_y:int) -> int:
 func get_chunk_from_position(pos: Vector2) -> Vector2i:
 	return Vector2i(
 		int(floor(pos.x / float(CHUNK_SIZE * TILE_SIZE))),
-		int(floor(pos.y / float(CHUNK_SIZE* TILE_SIZE)))
+		int(floor(pos.y / float(CHUNK_SIZE * TILE_SIZE)))
 	)
 
 func get_tile_coords_from_world_pos(world_pos: Vector2) -> Vector2i:

@@ -19,7 +19,7 @@ func tick(creature: Creature, _delta: float) -> State:
 				target_position = null
 				return State.RUNNING
 		
-		creature.movement.request_movement(MovementRequest.new(target_position, MovementRequest.MovementContext.WANDER))
+		creature.movement.request_movement(MovementRequest.new(target_position, 0))
 
 	if creature.global_position.distance_to(target_position) < 10:
 

@@ -3,7 +3,7 @@ extends MovementStrategy
 
 const ROTATION_DONE_THRESHOLD: float = 0.01  ## Radians; consider rotation complete below this
 
-func move(creature: Creature, target_position: Vector2, delta: float) -> void:
+func move(creature: Creature, target_position: Vector2, delta: float, _speed_desire: float) -> void:
 
 	if creature.creature_data == null:
 		return

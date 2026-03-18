@@ -66,7 +66,7 @@ func _ready() -> void:
 		collision_layer = _get_collision_layer()
 		collision_mask = _get_collision_mask()
 		scale = Vector2.ONE * creature_data.scale_factor
-		$CollisionShape.scale = Vector2.ONE * creature_data.size / $CollisionShape.shape.radius / 2
+		$CollisionShape.scale = Vector2.ONE * creature_data.hitbox_size / $CollisionShape.shape.radius / 2
 		if creature_data.can_fly:
 			z_index = 20
 

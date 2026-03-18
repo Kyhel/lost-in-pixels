@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="MovementProfileEntry" format=3 uid="uid://dobxa047qok2y"]
-
-[ext_resource type="Script" uid="uid://bkowl4x2p0qwd" path="res://actors/movement/movement_profile_entry.gd" id="1_yloab"]
-
-[resource]
-script = ExtResource("1_yloab")
-movement_type = 3
-metadata/_custom_type_script = "uid://bkowl4x2p0qwd"

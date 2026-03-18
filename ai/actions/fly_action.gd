@@ -43,7 +43,7 @@ func tick(creature: Creature, delta: float) -> BTNode.State:
 
 
 	var target_position = creature.global_position + direction * fly_speed * delta
-	creature.movement.request_movement(MovementRequest.new(target_position, MovementRequest.MovementContext.FLY))
+	creature.movement.request_movement(MovementRequest.new(target_position, 0))
 
 	return BTNode.State.RUNNING
 

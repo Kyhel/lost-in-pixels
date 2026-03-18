@@ -25,8 +25,7 @@ func generate_trees_for_chunk(
 	chunk_position:Vector2i,
 	_chunk:Chunk,
 	chunk_size:int,
-	biome_generator:WorldGenerator,
-	objects_manager:ObjectsManager
+	biome_generator:WorldGenerator
 ) -> void:
 
 	for x:int in range(chunk_size):
@@ -36,7 +35,7 @@ func generate_trees_for_chunk(
 			var global_y:int = chunk_position.y * chunk_size + y
 			
 			if should_spawn_tree(global_x, global_y, biome_generator):
-				objects_manager.spawn_tree(chunk_position, Vector2i(global_x, global_y))
+				ObjectsManager.spawn_tree(chunk_position, Vector2i(global_x, global_y))
 
 ## True if this tile passes water/biome/noise/random rules (no adjacent-tree check). Deterministic.
 func _tile_passes_tree_rules(wx: int, wy: int, biome_generator: WorldGenerator) -> bool:
