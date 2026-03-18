@@ -7,14 +7,14 @@ var _strategy: MovementStrategy
 var _cached_strategy_for_type: int = -1  ## CreatureData.MovementType we cached for; -1 = none
 var _strategy_cache: Dictionary = {}  ## CreatureData.MovementType -> MovementStrategy (reuse instances per request type)
 
-## Priority order: default < sneak < walk < hop < run < sprint. Used to resolve strategy when exact match isn't available.
+## Priority order. Used to resolve strategy when exact match isn't available.
 var _movement_type_priority: Array[CreatureData.MovementType] = [
 	CreatureData.MovementType.DEFAULT,
-	CreatureData.MovementType.SNEAK,
 	CreatureData.MovementType.WALK,
 	CreatureData.MovementType.HOP,
 	CreatureData.MovementType.RUN,
-	CreatureData.MovementType.SPRINT
+	CreatureData.MovementType.SPRINT,
+	CreatureData.MovementType.SNEAK,
 ]
 
 func request_movement(request: MovementRequest) -> void:
@@ -36,8 +36,12 @@ func update_movement(creature: Creature, delta: float) -> void:
 	if creature.creature_data == null:
 		return
 
+	var request_type := resolve_movement_type(
+		current_request,
+		creature.creature_data.movement_types,
+		MovementStrategyDatabase.get_profile(current_request.context))
+
 	# Resolve strategy for this request type (reuse cached instance if we have one)
-	var request_type := current_request.movement_type
 	if _cached_strategy_for_type != request_type:
 		if _strategy_cache.has(request_type):
 			_strategy = _strategy_cache[request_type]
@@ -63,7 +67,7 @@ func _resolve_strategy(creature: Creature, request_movement_type: CreatureData.M
 		return _get_default_strategy_or_null()
 
 	if request_movement_type in types:
-		var strat := MovementStrategyDatabase.get_strategy(request_movement_type)
+		var strat = MovementStrategyDatabase.get_strategy(request_movement_type)
 		return strat.duplicate() if strat != null else _get_default_strategy_or_null()
 
 	# No exact match: use first type from priority list that the creature has (downgrade from requested level)
@@ -73,7 +77,7 @@ func _resolve_strategy(creature: Creature, request_movement_type: CreatureData.M
 	for i in range(requested_idx - 1, -1, -1):
 		var priority_type: CreatureData.MovementType = _movement_type_priority[i]
 		if priority_type in types:
-			var strat := MovementStrategyDatabase.get_strategy(priority_type)
+			var strat = MovementStrategyDatabase.get_strategy(priority_type)
 			return strat.duplicate() if strat != null else _get_default_strategy_or_null()
 
 	return _get_default_strategy_or_null()
@@ -81,3 +85,30 @@ func _resolve_strategy(creature: Creature, request_movement_type: CreatureData.M
 func _get_default_strategy_or_null() -> MovementStrategy:
 	var s = MovementStrategyDatabase.get_strategy(CreatureData.MovementType.DEFAULT)
 	return s.duplicate() if s != null else null
+
+func resolve_movement_type(request : MovementRequest, available : Array[CreatureData.MovementType], profile : MovementProfile) -> CreatureData.MovementType:
+
+	var best_score := -INF
+	var best_movement_type := CreatureData.MovementType.DEFAULT
+
+	if profile == null:
+		return best_movement_type
+
+	for entry in profile.entries:
+
+		# 🚫 skip if creature doesn't support it
+		if entry.movement_type not in available:
+			continue
+
+		var score := 0.0
+
+		score += request.urgency * entry.urgency_weight
+		score += request.energy_budget * entry.energy_weight
+		score += request.precision * entry.precision_weight
+		score += request.distance_to_target * entry.distance_weight
+
+		if score > best_score:
+			best_score = score
+			best_movement_type = entry.movement_type
+
+	return best_movement_type

@@ -13,7 +13,7 @@ func _ready() -> void:
 		var sprite := $Sprite2D
 		sprite.texture = item_data.texture
 
-func can_be_picked_up(by: Node) -> bool:
+func can_be_picked_up(_by: Node) -> bool:
 	return true
 
 func be_eaten(by: Creature) -> void:

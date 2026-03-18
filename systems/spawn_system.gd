@@ -71,6 +71,9 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, world_pos)
 
 func spawn_creatures(chunk: Chunk) -> void:
+
+	return
+
 	var rabbit_count: int = EntitiesManager.get_creature_count_in_chunk(chunk.coords, EntitiesManager.rabbit_data)
 	if rabbit_count >= RABBIT_MAX_PER_CHUNK:
 		return

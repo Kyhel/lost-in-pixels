@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MovementProfile" format=3 uid="uid://o4wxqh5xlx6t"]
+
+[ext_resource type="Script" path="res://actors/movement/movement_profile_entry.gd" id="1_gagnp"]
+[ext_resource type="Resource" uid="uid://iu2n6moyggti" path="res://data/actors/movement/profiles/follow/run_follow_entry.tres" id="2_mmalo"]
+[ext_resource type="Resource" uid="uid://6n776ttfj4fn" path="res://data/actors/movement/profiles/follow/walk_follow_entry.tres" id="3_4ckdg"]
+[ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://actors/movement/movement_profile.gd" id="4_vyajl"]
+
+[resource]
+script = ExtResource("4_vyajl")
+context = 2
+entries = Array[ExtResource("1_gagnp")]([ExtResource("2_mmalo"), ExtResource("3_4ckdg")])
+metadata/_custom_type_script = "uid://pf7il1knm7h2"

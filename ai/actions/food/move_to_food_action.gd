@@ -8,7 +8,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	if food == null:
 		return State.FAILURE
 
-	creature.movement.request_movement(MovementRequest.new(food.global_position, CreatureData.MovementType.WALK))
+	creature.movement.request_movement(MovementRequest.new(food.global_position, MovementRequest.MovementContext.EAT))
 
 	if PushPriorityHelper.is_within_interaction_range(creature, food):
 		return State.SUCCESS

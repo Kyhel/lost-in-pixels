@@ -9,13 +9,13 @@ enum CreatureSize {
 }
 
 enum MovementType {
+	DEFAULT,  ## Legacy/default movement strategy (same as walk speed, used for "first available" fallback).
 	HOP,
 	FLY,
 	SNEAK,
 	WALK,
 	RUN,
 	SPRINT,
-	DEFAULT  ## Legacy/default movement strategy (same as walk speed, used for "first available" fallback).
 }
 
 @export var display_name: String = ""

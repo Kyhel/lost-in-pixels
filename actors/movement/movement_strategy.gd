@@ -1,6 +1,8 @@
 class_name MovementStrategy
 extends Resource
 
+@export var movement_type: CreatureData.MovementType = CreatureData.MovementType.DEFAULT
+
 func move(_creature: Creature, _target_position: Vector2, _delta: float) -> void:
 	pass
 

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="WalkStrategy" format=3]
+[gd_resource type="Resource" script_class="WalkStrategy" format=3 uid="uid://dawp51cfmd6gq"]
 
-[ext_resource type="Script" path="res://actors/movement/strategies/walk_strategy.gd" id="1_walk"]
+[ext_resource type="Script" uid="uid://dr17y6xne21sx" path="res://actors/movement/strategies/walk_strategy.gd" id="1_walk"]
 
 [resource]
 script = ExtResource("1_walk")
+movement_type = 4
