@@ -6,8 +6,8 @@ extends Resource
 @export var separation_multiplier: float = 20
 @export var neighbor_radius: float = 80.0
 
-@export var avoid_distance: float = 100.0
-@export var avoid_force: float = 200.0
+@export var avoid_distance: float = 60.0
+@export var avoid_force: float = 100.0
 
 @export var max_force: float = 1000.0
 
@@ -31,21 +31,42 @@ func _move_toward_with_speed(creature: Creature, target_position: Vector2, delta
 
 	var desired_velocity = dir * speed
 
-	# desired_velocity = compute_velocity(creature, target_position, delta, speed, desired_velocity)
+	desired_velocity = compute_velocity(creature, target_position, speed, desired_velocity)
 
 	creature.velocity = desired_velocity
 
-func compute_velocity(creature, target_position: Vector2, delta: float, speed: float, velocity: Vector2) -> Vector2:
+func compute_velocity(creature, target_position: Vector2, speed: float, velocity: Vector2) -> Vector2:
 	
 	var seek = _seek(creature, target_position, speed)
 	var separation = _compute_separation(creature) * 1.5
 	var avoidance = _obstacle_avoidance(creature, velocity) * 2.0
 
-	var steering = seek + separation + avoidance
-	steering = steering.limit_length(max_force)
+	var steering = seek
+	steering += separation
+	steering += avoidance
 
-	velocity += steering * delta
+	# Clamp steering to `max_force` while keeping component ratios (seek/separation/avoidance)
+	# consistent with what actually gets applied to velocity.
+	# var steering_len := steering.length()
+	# if steering_len > 0.0 and steering_len > max_force:
+	# 	var scale := max_force / steering_len
+	# 	seek *= scale
+	# 	separation *= scale
+	# 	avoidance *= scale
+	# 	steering *= scale
+
+
+	# Debug values (drawn by the creature scene).
+	if creature != null:
+		creature.debug_seek = seek
+		creature.debug_separation = separation
+		creature.debug_avoidance = avoidance
+		creature.debug_steering = steering
+
+	velocity += steering
 	velocity = velocity.limit_length(speed)
+	if creature != null:
+		creature.debug_final_velocity = velocity
 
 	return velocity
 
@@ -122,13 +143,29 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 			if dist < closest_dist:
 				closest_dist = dist
 				
-				# steer away from surface
-				var normal = result.normal
+				# Side-step around the obstacle (use a consistent perpendicular direction
+				# relative to where we're currently moving, instead of relying on hit surface normals).
+				var hit_dir: Vector2 = (result.position - from)
+				if hit_dir.length_squared() == 0.0:
+					continue
+				hit_dir = hit_dir.normalized()
+				
+				# Perpendicular to the direction toward the hit point.
+				# 90deg rotation: (x, y) -> (-y, x)
+				var perp := Vector2(-hit_dir.y, hit_dir.x)
+				
+				# Decide left vs right relative to our forward direction.
+				# Godot's 2D "cross" is a scalar: + means "hit_dir is to the left of forward".
+				var side: float = sign(forward.cross(hit_dir))
+				if side == 0:
+					# If the hit is almost directly in front, fall back to a deterministic choice.
+					side = 1.0
 				
 				# stronger when closer
 				var strength = (avoid_distance - dist) / avoid_distance
 				
-				strongest_force = normal * strength * avoid_force
+				# Push to the side opposite the obstacle.
+				strongest_force = (-perp * side) * strength * avoid_force
 	
 	return strongest_force
 

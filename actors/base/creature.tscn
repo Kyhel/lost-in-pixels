@@ -35,6 +35,23 @@ script = ExtResource("1_script")
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=984625315]
 shape = SubResource("CircleShape2D_1")
 
+[node name="Debug" type="Node2D" parent="." unique_id=1675580170]
+
+[node name="SpeedLine" type="Line2D" parent="Debug" unique_id=1212800638]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="SeparationLine" type="Line2D" parent="Debug" unique_id=1394549359]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
+default_color = Color(0.2, 0.6, 1, 1)
+
+[node name="AvoidanceLine" type="Line2D" parent="Debug" unique_id=52317617]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
+default_color = Color(1, 0.2, 0.2, 1)
+
 [node name="AI" type="Node" parent="." unique_id=558838461]
 script = ExtResource("2_s2qhw")
 

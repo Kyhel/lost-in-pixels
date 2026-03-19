@@ -43,7 +43,8 @@ var biome_noise = FastNoiseLite.new()
 func _init():
 	# créer une seed aléatoire à chaque lancement
 	terrain_noise.frequency = 0.005
-	terrain_noise.seed = randi()
+	#terrain_noise.seed = randi()
+	terrain_noise.seed = 367317914
 	print("Seed : ", terrain_noise.seed)
 
 	biome_noise.frequency = terrain_noise.frequency / 3

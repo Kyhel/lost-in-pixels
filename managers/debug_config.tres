@@ -9,4 +9,5 @@ script = ExtResource("1_7gjkk")
 spawn_rabbits = false
 allowed_creatures = Array[ExtResource("1_vyoj0")]([ExtResource("2_y5vot")])
 chunk_load_radius = 0
+max_creatures_per_chunk = 3
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

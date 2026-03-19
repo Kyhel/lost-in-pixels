@@ -31,8 +31,21 @@ var alpha_mask: Node2D
 
 var virtual_rotation: float = 0
 
+## Debug vectors for movement (drawn by the creature scene's `Debug` node).
+## Units: the strategy computes these and they are visualized as "speed-like" vectors.
+var debug_seek: Vector2 = Vector2.ZERO
+var debug_separation: Vector2 = Vector2.ZERO
+var debug_avoidance: Vector2 = Vector2.ZERO
+var debug_steering: Vector2 = Vector2.ZERO
+var debug_final_velocity: Vector2 = Vector2.ZERO
+
 @onready var visualRoot: = $Visuals
 @onready var collisionShape: = $CollisionShape
+
+@onready var debug_root: Node2D = get_node_or_null("Debug")
+var debug_speed_line: Line2D = null
+var debug_separation_line: Line2D = null
+var debug_avoidance_line: Line2D = null
 
 func _ready() -> void:
 
@@ -40,6 +53,10 @@ func _ready() -> void:
 	ai_root = get_node("AI")
 	movement = get_node("Movement")
 	blackboard = Blackboard.new()
+	if debug_root != null:
+		debug_speed_line = debug_root.get_node_or_null("SpeedLine")
+		debug_separation_line = debug_root.get_node_or_null("SeparationLine")
+		debug_avoidance_line = debug_root.get_node_or_null("AvoidanceLine")
 	health = max_health
 	$UIRoot/NeedsDisplay.set_watch(self)
 
@@ -72,8 +89,16 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_visuals()
+	_update_debug_visuals()
 
 func _physics_process(delta: float) -> void:
+	# Clear debug values every physics tick so stale vectors don't linger.
+	debug_seek = Vector2.ZERO
+	debug_separation = Vector2.ZERO
+	debug_avoidance = Vector2.ZERO
+	debug_steering = Vector2.ZERO
+	debug_final_velocity = Vector2.ZERO
+
 	sensors_node.update_sensors(delta)
 	ai_root.update_ai(delta)
 	movement.update_movement(self, delta)
@@ -86,6 +111,38 @@ func _physics_process(delta: float) -> void:
 func _update_visuals() -> void:
 	visualRoot.rotation = virtual_rotation
 	collisionShape.rotation = virtual_rotation
+
+func _update_debug_visuals() -> void:
+	if debug_root == null:
+		return
+
+	debug_root.global_position = global_position
+
+	var is_debug_visible := debug_root.visible
+	if debug_speed_line != null:
+		debug_speed_line.visible = is_debug_visible
+	if debug_separation_line != null:
+		debug_separation_line.visible = is_debug_visible
+	if debug_avoidance_line != null:
+		debug_avoidance_line.visible = is_debug_visible
+
+	if not is_debug_visible:
+		return
+
+	# Speed: actual post-movement velocity (px/s-ish).
+	_update_line_points(debug_speed_line, Vector2.ZERO, velocity)
+	# Separation / avoidance: computed by movement_strategy.gd and integrated with delta.
+	# We visualize `force * delta` as an "equivalent px/s contribution".
+	_update_line_points(debug_separation_line, Vector2.ZERO, debug_separation * 10)
+	_update_line_points(debug_avoidance_line, Vector2.ZERO, debug_avoidance)
+
+func _update_line_points(line: Line2D, start: Vector2, end: Vector2) -> void:
+	if line == null:
+		return
+	var pts := PackedVector2Array()
+	pts.push_back(start)
+	pts.push_back(end)
+	line.points = pts
 
 func _get_collision_layer() -> int:
 
