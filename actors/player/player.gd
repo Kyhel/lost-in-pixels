@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 
 var base_speed = 200
@@ -11,14 +12,24 @@ var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
+@export var max_hunger: int = 100
+@export var hunger_decay_rate: int = 1 # per second
+@export var hunger: float = max_hunger
+
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var sprite: Sprite2D = $Sprite2D
+
+signal hunger_changed(hunger)
 
 func _ready() -> void:
 	add_to_group("player")
 	_update_attack_hitbox_radius()
 
 func _physics_process(delta):
+
+	hunger -= hunger_decay_rate * delta
+	hunger = clamp(hunger, 0, max_hunger)
+	hunger_changed.emit(hunger)
 
 	var dir = Vector2.ZERO
 
