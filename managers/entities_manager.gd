@@ -14,7 +14,7 @@ var fox_data: CreatureData = preload("res://data/actors/animals/fox.tres") as Cr
 var creature_spawn_probability_scores := [
 	# [wandering_bird_data, 0],
 	[rabbit_data, 5],
-	[fox_data, 2],
+	[fox_data, 5],
 ]
 
 func on_chunk_unloaded(chunk: Vector2i):
