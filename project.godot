@@ -28,7 +28,8 @@ DebugManager="*uid://de4qv4t7ch7cr"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/resizable=false
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [input]
 
