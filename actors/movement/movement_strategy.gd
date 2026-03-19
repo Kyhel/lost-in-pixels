@@ -6,8 +6,8 @@ extends Resource
 @export var separation_multiplier: float = 20
 @export var neighbor_radius: float = 80.0
 
-@export var avoid_distance: float = 60.0
-@export var avoid_force: float = 100.0
+@export var avoid_distance: float = 100.0
+@export var avoid_force: float = 70.0
 
 @export var max_force: float = 1000.0
 
@@ -19,21 +19,24 @@ func reset() -> void:
 
 ## Shared logic for directed movement: rotate toward target, then set velocity to direction × speed.
 ## Used by WalkStrategy, RunStrategy, and SprintStrategy.
-func _move_toward_with_speed(creature: Creature, target_position: Vector2, delta: float, speed: float) -> void:
+func _move_toward_with_speed(creature: Creature, target_position: Vector2, _delta: float, speed: float) -> void:
+	
 	if creature.creature_data == null:
 		return
-	var dir = (target_position - creature.global_position).normalized()
-	var target_angle := dir.angle()
-	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
-	var angle_diff_abs: float = abs(angle_diff)
-	var max_turn := creature.creature_data.rotating_speed * delta
-	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 
+	var dir = (target_position - creature.global_position).normalized()
 	var desired_velocity = dir * speed
 
 	desired_velocity = compute_velocity(creature, target_position, speed, desired_velocity)
+	
+	# Limit the rotation speed to the creature's rotating speed.
+	var target_angle := desired_velocity.angle()
+	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
+	var angle_diff_abs: float = abs(angle_diff)
+	var max_turn := creature.creature_data.rotating_speed * _delta
 
-	creature.velocity = desired_velocity
+	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
+	creature.velocity = Vector2.from_angle(creature.virtual_rotation) * desired_velocity.length();
 
 func compute_velocity(creature, target_position: Vector2, speed: float, velocity: Vector2) -> Vector2:
 	
@@ -112,62 +115,89 @@ func _compute_separation(creature: Creature) -> Vector2:
 	return force
 
 func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
-	
-	var space = creature.get_world_2d().direct_space_state
-	
-	if velocity.length() < 5:
+	# Sweep the creature's collision shape along [velocity] so we see every overlapping
+	# obstacle in that corridor (rays only return the single closest hit per ray).
+	var space: PhysicsDirectSpaceState2D = creature.get_world_2d().direct_space_state
+	if space == null:
 		return Vector2.ZERO
-	
-	var forward = velocity.normalized()
-	var right = forward.rotated(PI / 4)
-	var left  = forward.rotated(-PI / 4)
-	
-	var directions = [
-		forward,
-		(forward + right).normalized(),
-		(forward + left).normalized()
-	]
-	
-	var strongest_force = Vector2.ZERO
-	var closest_dist = INF
-	
-	for dir in directions:
-		var from = creature.global_position
-		var to = from + dir * avoid_distance
-		
-		var result = space.intersect_ray(PhysicsRayQueryParameters2D.create(from, to, creature.collision_mask, [creature]))
-		
-		if result:
-			var dist = from.distance_to(result.position)
-			
-			if dist < closest_dist:
-				closest_dist = dist
-				
-				# Side-step around the obstacle (use a consistent perpendicular direction
-				# relative to where we're currently moving, instead of relying on hit surface normals).
-				var hit_dir: Vector2 = (result.position - from)
-				if hit_dir.length_squared() == 0.0:
-					continue
-				hit_dir = hit_dir.normalized()
-				
-				# Perpendicular to the direction toward the hit point.
-				# 90deg rotation: (x, y) -> (-y, x)
-				var perp := Vector2(-hit_dir.y, hit_dir.x)
-				
-				# Decide left vs right relative to our forward direction.
-				# Godot's 2D "cross" is a scalar: + means "hit_dir is to the left of forward".
-				var side: float = sign(forward.cross(hit_dir))
-				if side == 0:
-					# If the hit is almost directly in front, fall back to a deterministic choice.
-					side = 1.0
-				
-				# stronger when closer
-				var strength = (avoid_distance - dist) / avoid_distance
-				
-				# Push to the side opposite the obstacle.
-				strongest_force = (-perp * side) * strength * avoid_force
-	
-	return strongest_force
+	if creature.creature_data == null:
+		return Vector2.ZERO
+	if velocity.length() < 5.0:
+		return Vector2.ZERO
+
+	var shape_node: CollisionShape2D = creature.collisionShape
+	if shape_node == null or shape_node.shape == null:
+		return Vector2.ZERO
+
+	var forward: Vector2 = velocity.normalized()
+	var sweep_len: float = avoid_distance
+
+	# Sample positions along the motion so the union of shape queries approximates a swept hitbox.
+	var min_step: float = maxf(8.0, creature.creature_data.hitbox_size * 0.25)
+	var step_count: int = maxi(3, ceili(sweep_len / min_step))
+	step_count = mini(step_count, 16)
+
+	var base_xform: Transform2D = shape_node.global_transform
+
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape_node.shape
+	params.collision_mask = creature.collision_mask
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+	params.exclude = [creature.get_rid()]
+
+	# instance_id -> closest distance (creature center to obstacle center) seen during sweep
+	var obstacle_best_dist: Dictionary = {}
+
+	for step in range(step_count):
+		var t: float = 0.0
+		if step_count > 1:
+			t = sweep_len * float(step) / float(step_count - 1)
+		var offset: Vector2 = forward * t
+		params.transform = Transform2D(base_xform.x, base_xform.y, base_xform.origin + offset)
+
+		var results: Array = space.intersect_shape(params, 32)
+		for res in results:
+			var collider: Object = res.get("collider", null)
+			if collider == null or not is_instance_valid(collider) or collider == creature:
+				continue
+			if not (collider is Node2D):
+				continue
+
+			var other: Node2D = collider as Node2D
+			var dist: float = creature.global_position.distance_to(other.global_position)
+			var cid: int = collider.get_instance_id()
+			if not obstacle_best_dist.has(cid):
+				obstacle_best_dist[cid] = dist
+			else:
+				obstacle_best_dist[cid] = minf(obstacle_best_dist[cid] as float, dist)
+
+	var total_force := Vector2.ZERO
+	for cid_key in obstacle_best_dist:
+		var cid: int = int(cid_key)
+		var collider: Object = instance_from_id(cid)
+		if collider == null or not is_instance_valid(collider) or not (collider is Node2D):
+			continue
+		var other: Node2D = collider as Node2D
+		var dist: float = obstacle_best_dist[cid_key] as float
+
+		var hit_dir: Vector2 = other.global_position - creature.global_position
+		if hit_dir.length_squared() < 0.0001:
+			continue
+		hit_dir = hit_dir.normalized()
+
+		var perp := Vector2(-hit_dir.y, hit_dir.x)
+		var side: float = sign(forward.cross(hit_dir))
+		if side == 0.0:
+			side = 1.0
+
+		var strength: float = clampf((avoid_distance - dist) / avoid_distance, 0.0, 1.0)
+		if strength <= 0.0:
+			continue
+
+		total_force += (-perp * side) * strength * avoid_force
+
+	return total_force
 
 func _compute_obstacle_avoidance(creature):
 	var space = creature.get_world_2d().direct_space_state
