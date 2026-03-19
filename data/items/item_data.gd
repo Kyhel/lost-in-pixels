@@ -10,6 +10,10 @@ class_name ItemData
 @export var max_stack: int = 1
 @export var taming_value: int = 0
 
+# Player
+@export var can_pickup: bool = false
+@export var player_food_value: int = 0
+
 @export var spawn_definition: SpawnDefinition
 
 # Optional effect scripts for modular behavior.

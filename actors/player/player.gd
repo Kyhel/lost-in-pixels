@@ -12,8 +12,8 @@ var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
-@export var max_hunger: int = 100
-@export var hunger_decay_rate: int = 1 # per second
+@export var max_hunger: float = 100.0
+@export var hunger_decay_rate: float = 0.5 # per second
 @export var hunger: float = max_hunger
 
 @onready var attack_hitbox: Area2D = $AttackHitbox
@@ -27,9 +27,7 @@ func _ready() -> void:
 
 func _physics_process(delta):
 
-	hunger -= hunger_decay_rate * delta
-	hunger = clamp(hunger, 0, max_hunger)
-	hunger_changed.emit(hunger)
+	_update_hunger(delta)
 
 	var dir = Vector2.ZERO
 
@@ -51,7 +49,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("spawn_carrot"):
 		_spawn_carrot()
 
-	# try_pickup_items()
+	try_pickup_items()
 
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)
 
@@ -110,4 +108,16 @@ func _spawn_carrot() -> void:
 
 func try_pickup_items():
 	for item in ObjectsManager.get_nearby_items(global_position, PICKUP_RADIUS):
+		if not item.item_data.can_pickup:
+			continue
 		item.on_picked_up(self)
+		if item.item_data.player_food_value > 0:
+			_increase_hunger(item.item_data.player_food_value)
+
+func _update_hunger(delta: float):
+	_increase_hunger(-hunger_decay_rate * delta)
+
+func _increase_hunger(amount: float):
+	hunger += amount
+	hunger = clamp(hunger, 0, max_hunger)
+	hunger_changed.emit(hunger)

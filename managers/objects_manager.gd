@@ -54,8 +54,8 @@ func on_chunk_unloaded(chunk: Vector2i) -> void:
 	chunk_items.erase(chunk)
 
 
-func get_nearby_items(origin: Vector2, radius: float) -> Array:
-	var results: Array = []
+func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
+	var results: Array[WorldItem] = []
 	var radius_sq := radius * radius
 
 	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)

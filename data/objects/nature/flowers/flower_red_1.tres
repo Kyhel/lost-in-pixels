@@ -9,5 +9,7 @@ script = ExtResource("1_3sdd3")
 id = &"flower_red_1"
 display_name = "Red Flower 1"
 texture = ExtResource("3_pievh")
+can_pickup = true
+player_food_value = 10
 spawn_definition = ExtResource("2_we0v4")
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
