@@ -18,4 +18,5 @@ hop_multiplier = 0.5
 movement_types = Array[int]([1, 5])
 needs_eating = true
 hunger_decay_rate = 1.0
+taming_value_threshold = 20
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"
