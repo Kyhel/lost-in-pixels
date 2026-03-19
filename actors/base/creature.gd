@@ -113,27 +113,12 @@ func _update_visuals() -> void:
 	collisionShape.rotation = virtual_rotation
 
 func _update_debug_visuals() -> void:
-	if debug_root == null:
+
+	if debug_root == null or not debug_root.visible:
 		return
 
-	debug_root.global_position = global_position
-
-	var is_debug_visible := debug_root.visible
-	if debug_speed_line != null:
-		debug_speed_line.visible = is_debug_visible
-	if debug_separation_line != null:
-		debug_separation_line.visible = is_debug_visible
-	if debug_avoidance_line != null:
-		debug_avoidance_line.visible = is_debug_visible
-
-	if not is_debug_visible:
-		return
-
-	# Speed: actual post-movement velocity (px/s-ish).
 	_update_line_points(debug_speed_line, Vector2.ZERO, velocity)
-	# Separation / avoidance: computed by movement_strategy.gd and integrated with delta.
-	# We visualize `force * delta` as an "equivalent px/s contribution".
-	_update_line_points(debug_separation_line, Vector2.ZERO, debug_separation * 10)
+	_update_line_points(debug_separation_line, Vector2.ZERO, debug_separation * 100)
 	_update_line_points(debug_avoidance_line, Vector2.ZERO, debug_avoidance)
 
 func _update_line_points(line: Line2D, start: Vector2, end: Vector2) -> void:

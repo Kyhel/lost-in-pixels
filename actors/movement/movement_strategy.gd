@@ -1,15 +1,17 @@
 class_name MovementStrategy
 extends Resource
 
+const NO_MOVEMENT_DIRECTION_THRESHOLD: float = PI / 2
+
 @export var movement_type: CreatureData.MovementType = CreatureData.MovementType.DEFAULT
 
-@export var separation_multiplier: float = 20
-@export var neighbor_radius: float = 80.0
+var separation_multiplier: float = 2
+var separation_force: float = 100.0
 
-@export var avoid_distance: float = 100.0
-@export var avoid_force: float = 70.0
+var avoid_distance: float = 100.0
+var avoid_force: float = 70.0
 
-@export var max_force: float = 1000.0
+var max_force: float = 1000.0
 
 func move(_creature: Creature, _target_position: Vector2, _delta: float, _speed_multiplier: float) -> void:
 	pass
@@ -20,7 +22,7 @@ func reset() -> void:
 ## Shared logic for directed movement: rotate toward target, then set velocity to direction × speed.
 ## Used by WalkStrategy, RunStrategy, and SprintStrategy.
 func _move_toward_with_speed(creature: Creature, target_position: Vector2, _delta: float, speed: float) -> void:
-	
+
 	if creature.creature_data == null:
 		return
 
@@ -35,8 +37,11 @@ func _move_toward_with_speed(creature: Creature, target_position: Vector2, _delt
 	var angle_diff_abs: float = abs(angle_diff)
 	var max_turn := creature.creature_data.rotating_speed * _delta
 
+	# Limit the speed based on the angle difference between the desired velocity and the creature's virtual rotation.
+	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD
+
 	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
-	creature.velocity = Vector2.from_angle(creature.virtual_rotation) * desired_velocity.length();
+	creature.velocity = Vector2.from_angle(creature.virtual_rotation) * desired_velocity.length() * rotation_ratio;
 
 func compute_velocity(creature, target_position: Vector2, speed: float, velocity: Vector2) -> Vector2:
 	
@@ -47,17 +52,6 @@ func compute_velocity(creature, target_position: Vector2, speed: float, velocity
 	var steering = seek
 	steering += separation
 	steering += avoidance
-
-	# Clamp steering to `max_force` while keeping component ratios (seek/separation/avoidance)
-	# consistent with what actually gets applied to velocity.
-	# var steering_len := steering.length()
-	# if steering_len > 0.0 and steering_len > max_force:
-	# 	var scale := max_force / steering_len
-	# 	seek *= scale
-	# 	separation *= scale
-	# 	avoidance *= scale
-	# 	steering *= scale
-
 
 	# Debug values (drawn by the creature scene).
 	if creature != null:
@@ -90,6 +84,8 @@ func _seek(creature: Creature, target_position: Vector2, max_speed: float) -> Ve
 	return desired
 
 func _compute_separation(creature: Creature) -> Vector2:
+
+	var separation_radius = separation_multiplier * creature.creature_data.hitbox_size
 	
 	var force = Vector2.ZERO
 	var count = 0
@@ -105,8 +101,9 @@ func _compute_separation(creature: Creature) -> Vector2:
 		var to = creature.global_position - other.global_position
 		var dist = to.length()
 
-		if dist > 0 and dist < separation_multiplier * creature.creature_data.hitbox_size:
-			force += to.normalized() / dist
+		if dist > 0 and dist < separation_radius:
+			var force_strength = (separation_radius - dist) / separation_radius
+			force += to.normalized() * force_strength
 			count += 1
 
 	if count > 0:
@@ -164,6 +161,10 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 			if not (collider is Node2D):
 				continue
 
+			# Dont try to avoid the target food.
+			if collider == creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD):
+				continue
+
 			var other: Node2D = collider as Node2D
 			var dist: float = creature.global_position.distance_to(other.global_position)
 			var cid: int = collider.get_instance_id()
@@ -198,20 +199,3 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 		total_force += (-perp * side) * strength * avoid_force
 
 	return total_force
-
-func _compute_obstacle_avoidance(creature):
-	var space = creature.get_world_2d().direct_space_state
-	
-	var result = space.intersect_ray(
-		PhysicsRayQueryParameters2D.create(
-		creature.global_position,
-		creature.global_position + creature.velocity.normalized() * creature.creature_data.hitbox_size * 2,
-		creature.collision_mask,
-		[creature]
-	))
-	
-	if result:
-		var normal = result.normal
-		return normal * 2.0
-	
-	return Vector2.ZERO

@@ -10,8 +10,6 @@ var hop_ratio: float = 0
 
 var hop_timer: float = 0.0
 
-const NO_MOVEMENT_DIRECTION_THRESHOLD: float = PI / 2
-
 func _init() -> void:
 	hop_ratio = 1 - rest_ratio
 	hop_duration = hop_base_duration * hop_ratio

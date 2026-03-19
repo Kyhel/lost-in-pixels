@@ -6,3 +6,4 @@
 [resource]
 script = ExtResource("1_script")
 behavior_tree = ExtResource("2_tree")
+tags = Array[String](["follow_player"])

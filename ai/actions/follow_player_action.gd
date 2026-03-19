@@ -53,6 +53,9 @@ func _choose_orbit_target() -> Vector2:
 	return Vector2.from_angle(angle) * distance
 
 func _update_follow_state(distance: float) -> void:
+		
+	if _follow_state == FollowState.STOPPED:
+		_follow_state = FollowState.FOLLOWING
 
 	# If the player is too far away, run back to the player
 	if _follow_state == FollowState.ORBITING and distance > ORBIT_ZONE_MAX:
@@ -63,8 +66,6 @@ func _update_follow_state(distance: float) -> void:
 	if _follow_state == FollowState.FOLLOWING and distance < ORBIT_ZONE_MIN:
 		_follow_state = FollowState.ORBITING
 		return
-
-	_follow_state = FollowState.ORBITING
 
 func reset() -> void:
 	super.reset()

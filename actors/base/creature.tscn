@@ -63,6 +63,7 @@ script = ExtResource("3_4w7f4")
 script = ExtResource("4_4w7f4")
 
 [node name="UIRoot" type="Marker2D" parent="." unique_id=1411216744]
+visible = false
 
 [node name="NeedsDisplay" type="Control" parent="UIRoot" unique_id=1812473158]
 layout_mode = 3
