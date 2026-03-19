@@ -29,7 +29,6 @@ func tick(creature: Creature, _delta: float) -> State:
 				MovementRequest.new(
 					player.global_position,
 					1.0))
-					# clamp((distance - ORBIT_ZONE_MIN) / (ORBIT_ZONE_MAX - ORBIT_ZONE_MIN), 0.0, 1.0)))
 		FollowState.ORBITING:
 			if !orbiting or (player.global_position + orbit_target_position).distance_to(creature.global_position) < ORBIT_NEW_TARGET_DISTANCE:
 				orbit_target_position = _choose_orbit_target()
