@@ -8,12 +8,10 @@ func tick(creature: Creature, _delta: float) -> State:
 	if food == null:
 		return State.FAILURE
 
-	var speed_desire := 0.0
-
 	if food is Creature:
-		speed_desire = 1.0
-
-	creature.movement.request_movement(MovementRequest.new(food.global_position, speed_desire))
+		creature.movement.request_movement(MovementRequest.to_eat_live_prey(food as Creature))
+	else:
+		creature.movement.request_movement(MovementRequest.to_world_position(food.global_position, 0.0))
 
 	if Node2DUtils.is_within_interaction_range(creature, food):
 		return State.SUCCESS

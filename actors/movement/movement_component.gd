@@ -36,10 +36,12 @@ func update_movement(creature: Creature, delta: float) -> void:
 	if creature.creature_data == null:
 		return
 
+	# var distance_to_target := _compute_distance_to_target(creature, current_request)
 	# var request_type := resolve_movement_type(
 	# 	current_request,
 	# 	creature.creature_data.movement_types,
-	# 	MovementStrategyDatabase.get_profile(current_request.context))
+	# 	MovementStrategyDatabase.get_profile(current_request.context),
+	# 	distance_to_target)
 	var request_type := simple_resolve_movement_type(creature.creature_data.movement_types)
 
 	# Resolve strategy for this request type (reuse cached instance if we have one)
@@ -58,6 +60,13 @@ func update_movement(creature: Creature, delta: float) -> void:
 		return
 
 	_strategy.move(creature, current_request, delta)
+
+
+func _compute_distance_to_target(creature: Creature, request: MovementRequest) -> float:
+	var approach: Node2D = request.approach_target
+	if approach != null and is_instance_valid(approach):
+		return creature.global_position.distance_to(approach.global_position)
+	return creature.global_position.distance_to(request.target_position)
 
 ## Returns a duplicated strategy instance for the given request type and creature's available movement_types.
 ## Tries the strategy matching the request type; if the creature doesn't have it, uses first available type from
@@ -96,7 +105,12 @@ func simple_resolve_movement_type(available : Array[CreatureData.MovementType]) 
 
 	return best_movement_type
 
-func resolve_movement_type(request : MovementRequest, available : Array[CreatureData.MovementType], profile : MovementProfile) -> CreatureData.MovementType:
+func resolve_movement_type(
+	request: MovementRequest,
+	available: Array[CreatureData.MovementType],
+	profile: MovementProfile,
+	distance_to_target: float = 0.0,
+) -> CreatureData.MovementType:
 
 	var best_score := -INF
 	var best_movement_type := CreatureData.MovementType.DEFAULT
@@ -115,7 +129,7 @@ func resolve_movement_type(request : MovementRequest, available : Array[Creature
 		score += request.urgency * entry.urgency_weight
 		score += request.energy_budget * entry.energy_weight
 		score += request.precision * entry.precision_weight
-		score += request.distance_to_target * entry.distance_weight
+		score += distance_to_target * entry.distance_weight
 
 		if score > best_score:
 			best_score = score

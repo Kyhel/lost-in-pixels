@@ -6,7 +6,7 @@ var current_goal
 
 var tree_cache := {}
 
-@export var update_interval := 0.2
+@export var update_interval := 0.1
 var _ai_elapsed := 0.0
 
 var creature: Creature

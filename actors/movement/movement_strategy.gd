@@ -19,27 +19,93 @@ func move(_creature: Creature, _request: MovementRequest, _delta: float) -> void
 func reset() -> void:
 	pass
 
-## Resolves navigation goal on the approach ring (hitbox-aware) or plain [target_position], and whether to translate.
-func _resolve_request_kinematics(creature: Creature, request: MovementRequest) -> Dictionary:
+
+const MAX_PREDICTION_TIME: float = 3.0
+
+
+func _estimate_chaser_speed(creature: Creature) -> float:
+	if creature.creature_data == null:
+		return 0.0
+	return creature.creature_data.base_speed * creature.creature_data.running_multiplier
+
+
+## Constant-velocity intercept: smallest positive [t] with |P + V*t - C| ≈ v_c * t (same-speed pursuit path).
+func _predict_approach_target_position(creature: Creature, approach: Node2D, chaser_speed: float) -> Vector2:
+	if not (approach is CharacterBody2D):
+		return approach.global_position
+	if chaser_speed < 1.0:
+		return approach.global_position
+	var target_body: CharacterBody2D = approach as CharacterBody2D
+	var v: Vector2 = target_body.velocity
+	if v.length_squared() < 0.04:
+		return approach.global_position
+	var P: Vector2 = approach.global_position
+	var C: Vector2 = creature.global_position
+	var R: Vector2 = P - C
+	var vv: float = v.dot(v)
+	var vcs: float = chaser_speed * chaser_speed
+	var a: float = vv - vcs
+	var b: float = 2.0 * R.dot(v)
+	var c: float = R.dot(R)
+	var t: float = -1.0
+	if absf(a) < 0.000001:
+		if absf(b) > 0.000001:
+			t = -c / b
+	else:
+		var disc: float = b * b - 4.0 * a * c
+		if disc >= 0.0:
+			var s: float = sqrt(disc)
+			var t0: float = (-b - s) / (2.0 * a)
+			var t1: float = (-b + s) / (2.0 * a)
+			var best_t: float = -1.0
+			for bt in [t0, t1]:
+				if bt > 0.0:
+					if best_t < 0.0 or bt < best_t:
+						best_t = bt
+			t = best_t
+	if t <= 0.0 or t > MAX_PREDICTION_TIME:
+		return P
+	return P + v * t
+
+
+## [chaser_speed] is the speed magnitude used for intercept math (pass strategy speed, or negative to estimate).
+func _resolve_request_kinematics(creature: Creature, request: MovementRequest, chaser_speed: float = -1.0) -> Dictionary:
+	if chaser_speed < 0.0:
+		chaser_speed = _estimate_chaser_speed(creature)
 	var move_goal: Vector2
 	var face_point: Vector2
 	var approach: Node2D = request.approach_target
+	var thr: float = request.completion_distance_threshold
+	var allow_translate: bool = true
+
 	if approach != null and is_instance_valid(approach):
-		face_point = approach.global_position
-		var to_center: Vector2 = face_point - creature.global_position
-		var dist: float = to_center.length()
-		var dirv: Vector2 = to_center / maxf(dist, 0.001)
+		var center_base: Vector2 = _predict_approach_target_position(creature, approach, chaser_speed)
 		var r_c: float = creature.get_hitbox_radius()
-		var r_t: float = 0.0
-		if approach.has_method("get_hitbox_radius"):
-			r_t = approach.get_hitbox_radius()
-		var sep: float = r_c + r_t + request.standoff_distance
-		move_goal = face_point - dirv * sep
+		var r_t: float = Node2DUtils.get_target_radius_for_interaction(approach)
+
+		var d_to_actual: float = creature.global_position.distance_to(approach.global_position)
+		var seek_center: Vector2 = center_base
+		if request.approach_spacing == MovementRequest.ApproachSpacing.INTERACTION:
+			if d_to_actual < Constants.INTERACTION_CLOSE_BLEND_DISTANCE:
+				seek_center = approach.global_position
+
+		var anchor: Vector2 = seek_center + request.target_offset
+		move_goal = anchor
+		face_point = anchor
+		match request.approach_spacing:
+			MovementRequest.ApproachSpacing.INTERACTION:
+				allow_translate = not Node2DUtils.is_within_interaction_range(creature, approach)
+				face_point = approach.global_position
+			MovementRequest.ApproachSpacing.COMBAT:
+				var d_act: float = creature.global_position.distance_to(approach.global_position)
+				allow_translate = d_act > r_c + r_t + Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
+				face_point = approach.global_position
+			_:
+				allow_translate = creature.global_position.distance_squared_to(move_goal) > thr * thr
 	else:
 		move_goal = request.target_position
 		face_point = request.target_position
-	var thr: float = request.completion_distance_threshold
-	var allow_translate: bool = creature.global_position.distance_squared_to(move_goal) > thr * thr
+		allow_translate = creature.global_position.distance_squared_to(move_goal) > thr * thr
 	return {
 		"move_goal": move_goal,
 		"face_point": face_point,
@@ -67,7 +133,7 @@ func _move_toward_with_speed(creature: Creature, request: MovementRequest, delta
 	if creature.creature_data == null:
 		return
 
-	var k: Dictionary = _resolve_request_kinematics(creature, request)
+	var k: Dictionary = _resolve_request_kinematics(creature, request, speed)
 	if not k["allow_translate"]:
 		creature.velocity = Vector2.ZERO
 		if request.face_target:

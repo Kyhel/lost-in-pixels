@@ -8,7 +8,7 @@ func move(creature: Creature, request: MovementRequest, delta: float) -> void:
 	if creature.creature_data == null:
 		return
 
-	var k: Dictionary = _resolve_request_kinematics(creature, request)
+	var k: Dictionary = _resolve_request_kinematics(creature, request, creature.creature_data.base_speed)
 	if not k["allow_translate"]:
 		creature.velocity = Vector2.ZERO
 		if request.face_target:

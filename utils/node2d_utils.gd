@@ -14,9 +14,22 @@ static func get_closest(point: Vector2, nodes: Array[Node2D]) -> Node2D:
 
 	return closest
 
-static func is_within_interaction_range(creature: Creature, target: Node2D, margin: float = 4.0) -> bool:
+
+## Radius used for interaction distance checks and movement hold distances. Matches [method Creature.get_hitbox_radius]
+## when available, otherwise the first circle [CollisionShape2D] on [param node].
+static func get_target_radius_for_interaction(node: Node2D) -> float:
+	if node.has_method("get_hitbox_radius"):
+		return node.get_hitbox_radius()
+	return get_collision_radius(node)
+
+
+static func is_within_interaction_range(
+	creature: Creature,
+	target: Node2D,
+	margin: float = Constants.DEFAULT_INTERACTION_MARGIN,
+) -> bool:
 	var actor_radius: float = creature.get_hitbox_radius()
-	var target_radius: float = get_collision_radius(target)
+	var target_radius: float = get_target_radius_for_interaction(target)
 	var threshold: float
 	if target_radius > 0.0:
 		threshold = actor_radius + target_radius + margin
