@@ -11,12 +11,14 @@ var big_wandering_data: CreatureData = preload("res://data/actors/animals/big_wa
 var rabbit_data: CreatureData = preload("res://data/actors/animals/rabbit.tres") as CreatureData
 var fox_data: CreatureData = preload("res://data/actors/animals/fox.tres") as CreatureData
 var beaver_data: CreatureData = preload("res://data/actors/animals/beaver.tres") as CreatureData
+var ogre_data: CreatureData = preload("res://data/actors/creatures/ogre.tres") as CreatureData
 
 var creature_spawn_probability_scores := [
 	# [wandering_bird_data, 0],
-	[rabbit_data, 5],
+	[rabbit_data, 3],
 	[fox_data, 1],
 	[beaver_data, 1],
+	[ogre_data, 1],
 ]
 
 func on_chunk_unloaded(chunk: Vector2i):

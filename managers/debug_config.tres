@@ -5,8 +5,9 @@
 [ext_resource type="Resource" uid="uid://mok3qihbyai6" path="res://data/actors/animals/fox.tres" id="2_y5vot"]
 [ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://data/actors/animals/rabbit.tres" id="3_y5vot"]
 [ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://data/actors/animals/beaver.tres" id="4_u3q7j"]
+[ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://data/actors/creatures/ogre.tres" id="5_yunm3"]
 
 [resource]
 script = ExtResource("1_7gjkk")
-allowed_creatures = Array[ExtResource("1_vyoj0")]([ExtResource("2_y5vot"), ExtResource("3_y5vot"), ExtResource("4_u3q7j")])
+allowed_creatures = Array[ExtResource("1_vyoj0")]([ExtResource("2_y5vot"), ExtResource("3_y5vot"), ExtResource("4_u3q7j"), ExtResource("5_yunm3")])
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

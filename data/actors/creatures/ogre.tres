@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://c4iehlhcuxu2t"]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_r6fma"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_g5kge"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_vncba"]
+[ext_resource type="Texture2D" uid="uid://dbxsejnfss52t" path="res://assets/creatures/ogre.png" id="4_l5rue"]
+
+[resource]
+script = ExtResource("2_vncba")
+sprite = ExtResource("4_l5rue")
+goals = Array[ExtResource("1_r6fma")]([ExtResource("2_g5kge")])
+size_type = 1
+size = 40
+hitbox_size = 36
+rotating_speed = 3.142
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"
