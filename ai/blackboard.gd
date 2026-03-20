@@ -8,6 +8,7 @@ const KEY_STATE := "state"
 const KEY_HUNGER := "hunger"
 const KEY_TAMING := "taming"
 const KEY_TAMED := "tamed"
+const KEY_SEES_PLAYER := "sees_player"
 
 const KEY_HUNGER_MAX := 100
 
