@@ -21,7 +21,7 @@ func tick(creature: Creature, _delta: float) -> State:
 		
 		creature.movement.request_movement(MovementRequest.new(target_position, 0))
 
-	if creature.global_position.distance_to(target_position) < 10:
+	if creature.global_position.distance_to(target_position) < 15:
 
 		creature.movement.stop()
 		target_position = null

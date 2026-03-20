@@ -1,7 +1,7 @@
 class_name ChasePlayerAction
 extends BTNode
 
-const SAFE_DISTANCE: float = 2
+const SAFE_DISTANCE: float = 5
 
 func tick(creature: Creature, _delta: float) -> State:
 
