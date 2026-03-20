@@ -57,7 +57,7 @@ func update_movement(creature: Creature, delta: float) -> void:
 	if _strategy == null:
 		return
 
-	_strategy.move(creature, current_request.target_position, delta, current_request.speed_desire)
+	_strategy.move(creature, current_request, delta)
 
 ## Returns a duplicated strategy instance for the given request type and creature's available movement_types.
 ## Tries the strategy matching the request type; if the creature doesn't have it, uses first available type from

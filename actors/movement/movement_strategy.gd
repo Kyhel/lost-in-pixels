@@ -13,29 +13,85 @@ var avoid_force: float = 70.0
 
 var max_force: float = 1000.0
 
-func move(_creature: Creature, _target_position: Vector2, _delta: float, _speed_multiplier: float) -> void:
+func move(_creature: Creature, _request: MovementRequest, _delta: float) -> void:
 	pass
 
 func reset() -> void:
 	pass
 
+## Resolves navigation goal on the approach ring (hitbox-aware) or plain [target_position], and whether to translate.
+func _resolve_request_kinematics(creature: Creature, request: MovementRequest) -> Dictionary:
+	var move_goal: Vector2
+	var face_point: Vector2
+	var approach: Node2D = request.approach_target
+	if approach != null and is_instance_valid(approach):
+		face_point = approach.global_position
+		var to_center: Vector2 = face_point - creature.global_position
+		var dist: float = to_center.length()
+		var dirv: Vector2 = to_center / maxf(dist, 0.001)
+		var r_c: float = creature.get_hitbox_radius()
+		var r_t: float = 0.0
+		if approach.has_method("get_hitbox_radius"):
+			r_t = approach.get_hitbox_radius()
+		var sep: float = r_c + r_t + request.standoff_distance
+		move_goal = face_point - dirv * sep
+	else:
+		move_goal = request.target_position
+		face_point = request.target_position
+	var thr: float = request.completion_distance_threshold
+	var allow_translate: bool = creature.global_position.distance_squared_to(move_goal) > thr * thr
+	return {
+		"move_goal": move_goal,
+		"face_point": face_point,
+		"allow_translate": allow_translate,
+	}
+
+func _rotate_toward_angle(creature: Creature, target_angle: float, delta: float) -> void:
+	if creature.creature_data == null:
+		return
+	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
+	var angle_diff_abs: float = abs(angle_diff)
+	var max_turn := creature.creature_data.rotating_speed * delta
+	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
+
+func _rotate_toward_world_point(creature: Creature, world_point: Vector2, delta: float) -> void:
+	var to_t: Vector2 = world_point - creature.global_position
+	if to_t.length_squared() < 0.0001:
+		return
+	_rotate_toward_angle(creature, to_t.angle(), delta)
+
 ## Shared logic for directed movement: rotate toward target, then set velocity to direction × speed.
-## Used by WalkStrategy, RunStrategy, and SprintStrategy.
-func _move_toward_with_speed(creature: Creature, target_position: Vector2, _delta: float, speed: float) -> void:
+## Used by RunStrategy and similar.
+func _move_toward_with_speed(creature: Creature, request: MovementRequest, delta: float, speed: float) -> void:
 
 	if creature.creature_data == null:
 		return
 
-	var dir = (target_position - creature.global_position).normalized()
+	var k: Dictionary = _resolve_request_kinematics(creature, request)
+	if not k["allow_translate"]:
+		creature.velocity = Vector2.ZERO
+		if request.face_target:
+			_rotate_toward_world_point(creature, k["face_point"], delta)
+		return
+
+	var move_goal: Vector2 = k["move_goal"]
+	var dir: Vector2 = move_goal - creature.global_position
+	if dir.length_squared() < 0.0001:
+		creature.velocity = Vector2.ZERO
+		if request.face_target:
+			_rotate_toward_world_point(creature, k["face_point"], delta)
+		return
+
+	dir = dir.normalized()
 	var desired_velocity = dir * speed
 
-	desired_velocity = compute_velocity(creature, target_position, speed, desired_velocity)
+	desired_velocity = compute_velocity(creature, move_goal, speed, desired_velocity)
 	
 	# Limit the rotation speed to the creature's rotating speed.
 	var target_angle := desired_velocity.angle()
 	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
 	var angle_diff_abs: float = abs(angle_diff)
-	var max_turn := creature.creature_data.rotating_speed * _delta
+	var max_turn: float = creature.creature_data.rotating_speed * delta
 
 	# Limit the speed based on the angle difference between the desired velocity and the creature's virtual rotation.
 	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD

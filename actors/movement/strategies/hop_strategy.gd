@@ -15,18 +15,32 @@ func _init() -> void:
 	hop_duration = hop_base_duration * hop_ratio
 	rest_duration = hop_base_duration * rest_ratio
 
-func move(creature: Creature, target_position: Vector2, delta: float, speed_desire: float) -> void:
+func move(creature: Creature, request: MovementRequest, delta: float) -> void:
 
 	hop_timer -= delta
 
 	if hop_timer <= 0.0:
 		hop_timer = hop_base_duration
 
+	var k: Dictionary = _resolve_request_kinematics(creature, request)
+	if not k["allow_translate"]:
+		creature.velocity = Vector2.ZERO
+		if request.face_target:
+			_rotate_toward_world_point(creature, k["face_point"], delta)
+		return
+
 	if hop_timer < rest_duration:
 		creature.velocity = Vector2.ZERO
 		return
 
-	var direction = (target_position - creature.global_position).normalized()
+	var move_goal: Vector2 = k["move_goal"]
+	var direction: Vector2 = (move_goal - creature.global_position)
+	if direction.length_squared() < 0.0001:
+		creature.velocity = Vector2.ZERO
+		if request.face_target:
+			_rotate_toward_world_point(creature, k["face_point"], delta)
+		return
+	direction = direction.normalized()
 	var target_angle := direction.angle()
 	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
 	var angle_diff_abs = abs(angle_diff)
@@ -41,7 +55,7 @@ func move(creature: Creature, target_position: Vector2, delta: float, speed_desi
 	var max_speed = creature.creature_data.base_speed * creature.creature_data.running_multiplier
 	var base_speed = creature.creature_data.base_speed
 
-	var relative_speed = lerp(base_speed, max_speed, speed_desire)
+	var relative_speed = lerp(base_speed, max_speed, request.speed_desire)
 
 	var speed = relative_speed * creature.creature_data.hop_multiplier / hop_ratio
 

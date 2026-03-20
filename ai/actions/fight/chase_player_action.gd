@@ -1,7 +1,8 @@
 class_name ChasePlayerAction
 extends BTNode
 
-const SAFE_DISTANCE: float = 5
+const STANDOFF_DISTANCE: float = 5.0
+const COMPLETION_DISTANCE: float = 4.0
 
 func tick(creature: Creature, _delta: float) -> State:
 
@@ -9,20 +10,11 @@ func tick(creature: Creature, _delta: float) -> State:
 	if player == null:
 		return State.FAILURE
 
-	var to_player: Vector2 = player.global_position - creature.global_position
-	var distance: float = to_player.length()
-	var contact_distance: float = creature.get_hitbox_radius() + player.get_hitbox_radius() + SAFE_DISTANCE
-
-	if distance <= contact_distance:
-		creature.movement.stop()
-		return State.RUNNING
-
-	var direction := to_player / maxf(distance, 0.001)
-	var target_position: Vector2 = player.global_position - direction * contact_distance
-
-	creature.movement.request_movement(
-		MovementRequest.new(
-			target_position,
-			1.0))
+	var chase_req := MovementRequest.new(player.global_position, 1.0)
+	chase_req.face_target = true
+	chase_req.completion_distance_threshold = COMPLETION_DISTANCE
+	chase_req.approach_target = player
+	chase_req.standoff_distance = STANDOFF_DISTANCE
+	creature.movement.request_movement(chase_req)
 
 	return State.RUNNING

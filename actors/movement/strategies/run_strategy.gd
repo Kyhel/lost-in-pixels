@@ -1,7 +1,7 @@
 class_name RunStrategy
 extends MovementStrategy
 
-func move(creature: Creature, target_position: Vector2, delta: float, speed_desire: float) -> void:
+func move(creature: Creature, request: MovementRequest, delta: float) -> void:
 
 	if creature.creature_data == null:
 		return
@@ -9,6 +9,6 @@ func move(creature: Creature, target_position: Vector2, delta: float, speed_desi
 	var max_speed = creature.creature_data.base_speed * creature.creature_data.running_multiplier
 	var base_speed = creature.creature_data.base_speed
 
-	var speed = lerp(base_speed, max_speed, speed_desire)
+	var speed = lerp(base_speed, max_speed, request.speed_desire)
 
-	_move_toward_with_speed(creature, target_position, delta, speed)
+	_move_toward_with_speed(creature, request, delta, speed)
