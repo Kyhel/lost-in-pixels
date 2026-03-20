@@ -74,6 +74,18 @@ func _update_attack_hitbox_radius() -> void:
 	if shape is CircleShape2D:
 		shape.radius = radius
 
+## Approximate the player's collision "radius" based on its `CollisionShape2D`.
+## Used for AI contact/approach logic (e.g. stop when the creature is close enough).
+func get_hitbox_radius() -> float:
+
+	var shape_radius: float = $CollisionShape2D.shape.radius
+
+	var shape_scale: Vector2 = $CollisionShape2D.global_scale
+
+	var max_scale := maxf(absf(shape_scale.x), absf(shape_scale.y))
+
+	return shape_radius * max_scale
+
 func attack():
 	var attack_range: float = ATTACK_RANGE
 	var damage: int = ATTACK_DAMAGE

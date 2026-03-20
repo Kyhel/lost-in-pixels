@@ -172,6 +172,13 @@ func _update_taming(delta: float) -> void:
 	taming = maxf(0.0, taming - creature_data.taming_decay_rate * delta)
 	blackboard.set_value(Blackboard.KEY_TAMING, taming)
 
+## Approximate this creature's collision "radius" based on its configured hitbox size.
+## Used by AI contact/approach logic (e.g. stop when the creature is close enough).
+func get_hitbox_radius() -> float:
+	if creature_data == null:
+		return 0.0
+	return creature_data.hitbox_size * 0.5
+
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:
 		return
