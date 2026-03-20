@@ -151,6 +151,30 @@ func is_area_walkable_for_creature(creature: Creature, center: Vector2, size_pix
 				return false
 	return true
 
+## Returns true if [creature] would collide with any environment collider when centered at [world_pos].
+func is_environment_blocking_creature(creature: Creature, world_pos: Vector2) -> bool:
+	if creature == null:
+		return false
+	var space: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	if space == null:
+		return false
+	if creature.collisionShape == null or creature.collisionShape.shape == null:
+		return false
+
+	var shape_node: CollisionShape2D = creature.collisionShape
+	var params := PhysicsShapeQueryParameters2D.new()
+	params.shape = shape_node.shape
+	params.collision_mask = Layers.ENVIRONMENT
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+
+	# Reuse the creature's collision shape and place it at the tested world position.
+	var base_xform: Transform2D = shape_node.global_transform
+	params.transform = Transform2D(base_xform.x, base_xform.y, world_pos)
+
+	var results: Array = space.intersect_shape(params, 1)
+	return not results.is_empty()
+
 func reveal_around_player(player_pos):
 
 	var tile_pos = Vector2i(

@@ -187,14 +187,18 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 			continue
 		hit_dir = hit_dir.normalized()
 
-		var perp := Vector2(-hit_dir.y, hit_dir.x)
-		var side: float = sign(forward.cross(hit_dir))
-		if side == 0.0:
-			side = 1.0
+		var cross = forward.cross(hit_dir)
+
+		# Default chose right side, only pick left side if cross is sufficiently negative.
+		var side := 1.0
+		if cross < -0.035:
+			side = -1.0
 
 		var strength: float = clampf((avoid_distance - dist) / avoid_distance, 0.0, 1.0)
 		if strength <= 0.0:
 			continue
+
+		var perp := Vector2(-hit_dir.y, hit_dir.x)
 
 		total_force += (-perp * side) * strength * avoid_force
 
