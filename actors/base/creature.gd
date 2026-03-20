@@ -92,15 +92,12 @@ func _physics_process(delta: float) -> void:
 	debug_steering = Vector2.ZERO
 	debug_final_velocity = Vector2.ZERO
 
-	# sensors_node.update_sensors(delta)
-	sensors_node.update_sensors_2(delta, creature_data.sensors)
+	sensors_node.update_sensors(delta, creature_data.sensors)
 	ai_root.update_ai(delta)
 	movement.update_movement(self, delta)
 	move_and_slide()
 	_update_hunger(delta)
 	_update_taming(delta)
-	#if is_big:  # BIG
-		#PushPriorityHelper.push_away_overlapping(self, LAYER_SMALL_CREATURES | LAYER_PLAYER)
 			
 func _update_visuals() -> void:
 	visualRoot.rotation = virtual_rotation

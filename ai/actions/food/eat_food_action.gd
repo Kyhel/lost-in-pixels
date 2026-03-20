@@ -22,7 +22,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	if target_food == null:
 		return State.FAILURE
 
-	if not PushPriorityHelper.is_within_interaction_range(creature, target_food):
+	if not Node2DUtils.is_within_interaction_range(creature, target_food):
 		return State.FAILURE
 
 	if target_food is WorldItem:

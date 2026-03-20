@@ -15,7 +15,7 @@ func tick(creature: Creature, _delta: float) -> State:
 
 	creature.movement.request_movement(MovementRequest.new(food.global_position, speed_desire))
 
-	if PushPriorityHelper.is_within_interaction_range(creature, food):
+	if Node2DUtils.is_within_interaction_range(creature, food):
 		return State.SUCCESS
 
 	return State.RUNNING

@@ -11,7 +11,7 @@ func _ready() -> void:
 	var phase: float = CreatureUtils.get_stagger_phase_offset(creature, update_interval)
 	_sensor_elapsed = -phase
 
-func update_sensors_2(delta: float, sensors: Array[Sensor]) -> void:
+func update_sensors(delta: float, sensors: Array[Sensor]) -> void:
 
 	if not _should_update(delta):
 		return

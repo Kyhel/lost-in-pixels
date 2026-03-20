@@ -60,7 +60,6 @@ func _physics_process(delta):
 		sprite.rotation = dir.angle() + TAU / 4.0  # TAU/4 = PI/2, maps up (0,-1) to 0
 
 	move_and_slide()
-	# PushPriorityHelper.push_away_overlapping(self, Creature.LAYER_SMALL_CREATURES)
 
 	ChunkManager.reveal_around_player(global_position)
 
