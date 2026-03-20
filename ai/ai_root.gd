@@ -43,13 +43,36 @@ func _run_ai(delta: float) -> void:
 		current_tree.tick(self.get_parent(), delta)
 
 func switch_behavior_tree(tree_scene: PackedScene):
+	if tree_scene == null:
+		return
 
 	if current_tree:
-		current_tree.queue_free()
+		if current_tree.get_parent() == self:
+			remove_child(current_tree)
 
-	current_tree = tree_scene.instantiate()
+	var cache_key: String = _get_tree_cache_key(tree_scene)
+	var cached_tree = tree_cache.get(cache_key, null)
+	var is_reused := false
 
-	add_child(current_tree)
+	if cached_tree != null and is_instance_valid(cached_tree):
+		current_tree = cached_tree
+		is_reused = true
+	else:
+		current_tree = tree_scene.instantiate()
+		tree_cache[cache_key] = current_tree
+
+	if current_tree.get_parent() != self:
+		add_child(current_tree)
+
+	if is_reused and current_tree.has_method("reset"):
+		current_tree.reset()
+
+func _get_tree_cache_key(tree_scene: PackedScene) -> String:
+	var path: String = tree_scene.resource_path
+	if path.is_empty():
+		# Fallback for in-memory scenes with no resource path.
+		return "instance_%s" % tree_scene.get_instance_id()
+	return path
 
 func on_goal_changed(old_goal: Goal, new_goal: Goal):
 
