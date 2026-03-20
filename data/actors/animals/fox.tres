@@ -6,18 +6,18 @@
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://ai/goals/eat_goal.tres" id="3_n5fiy"]
 [ext_resource type="Texture2D" uid="uid://dmi7t3bssgqpn" path="res://assets/creatures/fox.png" id="3_ovces"]
 [ext_resource type="Resource" uid="uid://c8fpl1yr5xkqn" path="res://ai/goals/follow_player_goal.tres" id="4_follow"]
-[ext_resource type="PackedScene" uid="uid://cirsccqr5f68d" path="res://ai/sensors/fox_food_sensor.tscn" id="5_osjan"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://ai/sensors/sensor.gd" id="6_6fm8k"]
+[ext_resource type="Resource" uid="uid://cx515ivlndp8b" path="res://ai/sensors/fox_food_sensor.tres" id="7_sf35n"]
 
 [resource]
 script = ExtResource("2_ovces")
 sprite = ExtResource("3_ovces")
-sensor_scenes = Array[PackedScene]([ExtResource("5_osjan")])
 goals = Array[ExtResource("1_t6a1h")]([ExtResource("2_4xntq"), ExtResource("3_n5fiy"), ExtResource("4_follow")])
+sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_sf35n")])
 size = 32
 hitbox_size = 20
 base_speed = 50.0
 running_multiplier = 3.0
-movement_types = Array[int]([5])
 needs_eating = true
 hunger_decay_rate = 2.0
 taming_value_threshold = 100

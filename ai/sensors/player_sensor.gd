@@ -9,7 +9,7 @@ func update(creature: Creature) -> void:
 		print("Blackboard is null")
 		return
 
-	var player: Player = get_tree().get_first_node_in_group("player")
+	var player: Player = creature.get_tree().get_first_node_in_group("player")
 
 	if player == null:
 		return

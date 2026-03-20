@@ -1,7 +1,7 @@
 class_name EatGoal
 extends Goal
 
-func get_score(creature):
+func get_score(creature: Creature) -> float:
 
 	if creature.blackboard.get_value(Blackboard.KEY_STATE) == Blackboard.State.EATING:
 		return 10

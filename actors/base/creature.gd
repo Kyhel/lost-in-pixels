@@ -72,7 +72,6 @@ func _ready() -> void:
 			$Visuals.texture = creature_data.sprite
 			var texture_size = $Visuals.texture.get_size()
 			$Visuals.scale = Vector2.ONE * (float(creature_data.size) / max(texture_size.x, texture_size.y))
-		_setup_sensors()
 		# Assign layer and mask from creature size (Small = layer 4, Big = layer 5).
 		collision_layer = _get_collision_layer()
 		collision_mask = _get_collision_mask()
@@ -93,7 +92,8 @@ func _physics_process(delta: float) -> void:
 	debug_steering = Vector2.ZERO
 	debug_final_velocity = Vector2.ZERO
 
-	sensors_node.update_sensors(delta)
+	# sensors_node.update_sensors(delta)
+	sensors_node.update_sensors_2(delta, creature_data.sensors)
 	ai_root.update_ai(delta)
 	movement.update_movement(self, delta)
 	move_and_slide()
@@ -199,18 +199,3 @@ func _on_die() -> void:
 ## Override in subclasses to react to damage (e.g. knockback, invincibility frames).
 func _on_damage_taken(_amount: int, _source: Node) -> void:
 	pass
-
-
-func _setup_sensors() -> void:
-
-	if creature_data.sensor_scenes.is_empty():
-		return
-
-	for scene in creature_data.sensor_scenes:
-		if scene == null:
-			continue
-		var sensor_node: Node = scene.instantiate()
-		if sensor_node is Sensor:
-			sensors_node.add_child(sensor_node)
-		else:
-			sensor_node.queue_free()

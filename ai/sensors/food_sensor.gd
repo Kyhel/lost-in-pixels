@@ -1,3 +1,4 @@
+class_name FoodSensor
 extends Sensor
 
 ## Scans the surroundings for food the creature can eat and stores found positions in the creature's blackboard under [constant BLACKBOARD_KEY_FOOD].
