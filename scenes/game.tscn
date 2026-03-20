@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
 [ext_resource type="Script" uid="uid://buon80ox32fe5" path="res://systems/spawn_system.gd" id="8_dinhu"]
 [ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/player_mask.gdshader" id="9_kvpfn"]
+[ext_resource type="Script" uid="uid://nck1ef4xhudm" path="res://scenes/alpha_mask_viewport.gd" id="9_trtic"]
 [ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/follow_node.gd" id="9_vtaks"]
 [ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="10_dinhu"]
 [ext_resource type="Script" uid="uid://d0328u5hju28x" path="res://scenes/mask_camera.gd" id="11_kvpfn"]
@@ -99,6 +100,7 @@ metadata/_custom_type_script = "uid://buon80ox32fe5"
 transparent_bg = true
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
+script = ExtResource("9_trtic")
 
 [node name="MaskWorld" type="Node2D" parent="AlphaMaskViewport" unique_id=1339888612]
 
@@ -116,6 +118,8 @@ main_camera = NodePath("../../World/Entities/Player/Camera")
 
 [node name="DebugLayer" type="CanvasLayer" parent="." unique_id=132201771]
 visible = false
+scale = Vector2(4, 4)
+transform = Transform2D(4, 0, 0, 4, 0, 0)
 
 [node name="DebugAlphaTexture" type="Sprite2D" parent="DebugLayer" unique_id=668197287]
 texture = SubResource("ViewportTexture_vtaks")
