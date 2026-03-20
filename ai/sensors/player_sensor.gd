@@ -12,6 +12,7 @@ func update(creature: Creature) -> void:
 	var player: Player = creature.get_tree().get_first_node_in_group("player")
 
 	if player == null:
+		creature.blackboard.set_value(Blackboard.KEY_SEES_PLAYER, false)
 		return
 
 	var distance = creature.global_position.distance_to(player.global_position)

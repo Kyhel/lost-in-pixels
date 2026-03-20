@@ -43,3 +43,7 @@ func pick_wander_target(creature: Creature) -> Vector2:
 	var wander_distance = (randf() + 1) / 2 * wander_radius;
 
 	return creature.global_position + target_rotation_vector * wander_distance
+
+func reset() -> void:
+	super.reset()
+	target_position = null

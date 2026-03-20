@@ -19,3 +19,8 @@ func tick(_creature: Creature, _delta: float) -> State:
 
 	timer -= _delta
 	return State.RUNNING
+
+func reset() -> void:
+	super.reset()
+	timer = 0.0
+	is_waiting = false

@@ -46,5 +46,5 @@ func tick(creature: Creature, _delta: float) -> State:
 
 
 func reset():
-	eating_timer = 0.0
 	super.reset()
+	eating_timer = 0.0
