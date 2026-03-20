@@ -80,7 +80,7 @@ debug_color = Color(0.97346765, 0, 0.43715099, 0.41960785)
 [node name="AttackHitbox" type="Area2D" parent="World/Entities/Player" unique_id=1792221363]
 visible = false
 collision_layer = 0
-collision_mask = 4
+collision_mask = 24
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Entities/Player/AttackHitbox" unique_id=560303145]
