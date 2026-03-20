@@ -67,13 +67,15 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 		)
 		spawn_creature_at(chunk_position, creature_data, pos)
 
-func move_monster(monster, old_chunk, new_chunk):
+func move_monster(monster: Creature, old_chunk: Vector2i, new_chunk: Vector2i):
 
 	if old_chunk in chunk_entities:
 		chunk_entities[old_chunk].erase(monster)
 
-	if not chunk_entities.has(new_chunk):
-		chunk_entities[new_chunk] = []
+	if !chunk_entities.has(new_chunk):
+		if is_instance_valid(monster):
+			monster.queue_free()
+		return
 
 	chunk_entities[new_chunk].append(monster)
 
@@ -85,7 +87,7 @@ func update_entity_chunks(delta: float) -> void:
 		if !chunk_entities.has(coords):
 			continue
 
-		var monsters: Array = chunk_entities[coords]
+		var monsters: Array = chunk_entities[coords].duplicate()
 		for monster in monsters:
 			if !is_instance_valid(monster):
 				continue
@@ -93,6 +95,8 @@ func update_entity_chunks(delta: float) -> void:
 			var new_chunk: Vector2i = ChunkManager.get_chunk_from_position(monster.global_position)
 			if new_chunk != coords:
 				move_monster(monster, coords, new_chunk)
+				
+		chunk_entities[coords] = ArrayUtils.cleanup_invalid_entries(chunk_entities[coords])
 
 func update_entity_visibility(player_pos:Vector2):
 

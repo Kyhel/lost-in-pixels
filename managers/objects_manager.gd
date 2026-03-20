@@ -5,11 +5,26 @@ var occlusion_mask_viewport: SubViewport
 var chunk_items: Dictionary[Vector2i, Array] = {}
 var chunk_trees: Dictionary[Vector2i, Array] = {}
 
+const CHUNK_UPDATE_INTERVAL: float = 10.0
+var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
+
 var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
 
 func _ready() -> void:
 	occlusion_mask_viewport = get_tree().current_scene.find_child("AlphaMaskViewport")
+
+func update_chunks(delta: float) -> void:
+
+	var result: Dictionary = _chunk_stagger.update(delta)
+	var chunks_to_check: Array[Vector2i] = result["chunks"]
+
+	# Cleanup invalid items
+	for coords in chunks_to_check:
+		if chunk_items.has(coords):
+			chunk_items[coords] = ArrayUtils.cleanup_invalid_entries(chunk_items[coords])
+		if chunk_trees.has(coords):
+			chunk_trees[coords] = ArrayUtils.cleanup_invalid_entries(chunk_trees[coords])
 
 func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantity: int = 1):
 	var item = world_item_scene.instantiate()
@@ -44,15 +59,22 @@ func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
 	chunk_trees[chunk].append(tree)
 
 func on_chunk_unloaded(chunk: Vector2i) -> void:
-	if !chunk_items.has(chunk):
-		return
 
-	for item in chunk_items[chunk]:
-		if is_instance_valid(item):
-			item.queue_free()
+	if chunk_items.has(chunk):
 
-	chunk_items.erase(chunk)
+		for item in chunk_items[chunk]:
+			if is_instance_valid(item):
+				item.queue_free()
 
+		chunk_items.erase(chunk)
+
+	if chunk_trees.has(chunk):
+
+		for tree in chunk_trees[chunk]:
+			if is_instance_valid(tree):
+				tree.queue_free()	
+
+		chunk_trees.erase(chunk)
 
 func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []

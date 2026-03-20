@@ -6,21 +6,31 @@ var current_goal
 
 var tree_cache := {}
 
-@export var update_interval := 0.3
-var timer := 0.0
+@export var update_interval := 0.2
+var _ai_elapsed := 0.0
 
 var creature: Creature
 
 func _ready():
 	creature = get_parent()
+	# Stagger AI updates so creatures do not all tick on the same frame.
+	var phase: float = CreatureUtils.get_stagger_phase_offset(creature, update_interval)
+	_ai_elapsed = -phase
 
 func update_ai(delta: float):
+	if update_interval <= 0.0:
+		_run_ai(delta)
+		return
 
-	# timer -= delta
-	# if timer > 0:
-	# 	return
+	_ai_elapsed += delta
+	if _ai_elapsed < update_interval:
+		return
 
-	# timer = update_interval
+	var ai_delta := _ai_elapsed
+	_ai_elapsed = fmod(_ai_elapsed, update_interval)
+	_run_ai(ai_delta)
+
+func _run_ai(delta: float) -> void:
 
 	var new_goal = UtilityAI.choose_goal(creature)
 
