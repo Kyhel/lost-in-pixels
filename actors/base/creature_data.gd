@@ -24,6 +24,7 @@ enum MovementType {
 @export var goals: Array[Goal] = []
 @export var size_type: CreatureSize = CreatureSize.SMALL
 @export var can_fly: bool = false
+@export var can_swim: bool = false
 @export var scale_factor: float = 1.0
 @export var size: int = 16
 @export var hitbox_size: int = 16
@@ -33,7 +34,7 @@ enum MovementType {
 @export var rotating_speed: float = TAU
 @export var biomes: Array[WorldGenerator.Biome] = [WorldGenerator.Biome.FOREST, WorldGenerator.Biome.PLAINS]
 @export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
-@export var movement_types: Array[MovementType] = [MovementType.WALK]
+@export var movement_types: Array[MovementType] = [MovementType.RUN]
 @export var needs_eating: bool = false
 @export var hunger_decay_rate: float = 5.0
 @export var taming_decay_rate: float = 5.0

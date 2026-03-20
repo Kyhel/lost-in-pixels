@@ -26,8 +26,8 @@ DebugManager="*uid://de4qv4t7ch7cr"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
@@ -82,7 +82,7 @@ spawn_carrot={
 2d_render/layer_2="Occlusion"
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Terrain"
-2d_physics/layer_3="Enemies"
+2d_physics/layer_3="Water"
 2d_physics/layer_4="Small creatures"
 2d_physics/layer_5="Big creatures"
 2d_physics/layer_6="Environment"

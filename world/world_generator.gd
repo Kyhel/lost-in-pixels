@@ -12,21 +12,25 @@ const TILE_DEFS = {
 	TileType.WATER: {
 		"atlas": Vector2i(3, 0),
 		"walkable": false,
-		"walk_speed": 0.0,
+		"swimmable": true,
+		"walk_speed": 0.5,
 	},
 	TileType.SAND: {
 		"atlas": Vector2i(1, 0),
 		"walkable": true,
+		"swimmable": true,
 		"walk_speed": 0.6,
 	},
 	TileType.GRASS: {
 		"atlas": Vector2i(2, 0),
 		"walkable": true,
+		"swimmable": true,
 		"walk_speed": 1.0,
 	},
 	TileType.DARK_GRASS: {
 		"atlas": Vector2i(2, 1),
 		"walkable": true,
+		"swimmable": true,
 		"walk_speed": 1.0,
 	},
 }

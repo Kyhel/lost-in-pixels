@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="1_vyoj0"]
 [ext_resource type="Resource" uid="uid://mok3qihbyai6" path="res://data/actors/animals/fox.tres" id="2_y5vot"]
 [ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://data/actors/animals/rabbit.tres" id="3_y5vot"]
+[ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://data/actors/animals/beaver.tres" id="4_u3q7j"]
 
 [resource]
 script = ExtResource("1_7gjkk")
-allowed_creatures = Array[ExtResource("1_vyoj0")]([ExtResource("2_y5vot"), ExtResource("3_y5vot")])
+allowed_creatures = Array[ExtResource("1_vyoj0")]([ExtResource("2_y5vot"), ExtResource("3_y5vot"), ExtResource("4_u3q7j")])
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

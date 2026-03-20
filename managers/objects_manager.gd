@@ -5,7 +5,7 @@ var occlusion_mask_viewport: SubViewport
 var chunk_items: Dictionary[Vector2i, Array] = {}
 var chunk_trees: Dictionary[Vector2i, Array] = {}
 
-var world_item_scene := preload("res://objects/world_item.tscn")
+var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
 
 func _ready() -> void:

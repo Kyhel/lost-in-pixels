@@ -123,14 +123,18 @@ func get_walk_speed_at_world_pos(world_pos: Vector2) -> float:
 	var def := get_tile_def_from_world_pos(world_pos)
 	return def.get("walk_speed", 1.0)
 
-func is_walkable(world_pos: Vector2) -> bool:
+func can_creature_moveat_tile(creature: Creature, world_pos: Vector2) -> bool:
 	var def := get_tile_def_from_world_pos(world_pos)
-	return def.get("walkable", false)
+
+	var can_walk = def.get("walkable", false)
+	var can_swim = def.get("swimmable", false) and creature.creature_data.can_swim
+
+	return can_walk or can_swim
 
 ## Returns true if every tile within [size_pixels] of [center] is walkable (uses [method is_walkable] per tile).
-func is_area_walkable_for_creature(center: Vector2, size_pixels: float) -> bool:
+func is_area_walkable_for_creature(creature: Creature, center: Vector2, size_pixels: float) -> bool:
 	if size_pixels <= 0.0:
-		return is_walkable(center)
+		return can_creature_moveat_tile(creature, center)
 	var radius := size_pixels
 	var base_tile := get_tile_coords_from_world_pos(center)
 	var tile_radius := ceili(radius / TILE_SIZE)
@@ -143,7 +147,7 @@ func is_area_walkable_for_creature(center: Vector2, size_pixels: float) -> bool:
 			)
 			if center.distance_to(tile_center) > radius:
 				continue
-			if not is_walkable(tile_center):
+			if not can_creature_moveat_tile(creature, tile_center):
 				return false
 	return true
 

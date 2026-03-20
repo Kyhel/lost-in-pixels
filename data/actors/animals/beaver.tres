@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://0x6ua5yre7y1"]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_56npc"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_27jme"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_yyua3"]
+[ext_resource type="PackedScene" uid="uid://t3fl73nnvosx" path="res://ai/sensors/rabbit_food_sensor.tscn" id="3_sas3b"]
+[ext_resource type="Texture2D" uid="uid://biu286a1d7wjw" path="res://assets/creatures/beaver.png" id="4_27jme"]
+
+[resource]
+script = ExtResource("2_yyua3")
+sprite = ExtResource("4_27jme")
+sensor_scenes = Array[PackedScene]([ExtResource("3_sas3b")])
+goals = Array[ExtResource("1_56npc")]([ExtResource("2_27jme")])
+can_swim = true
+size = 30
+hitbox_size = 12
+excluded_tile_types = Array[int]([])
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"

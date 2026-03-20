@@ -6,12 +6,6 @@ class_name Creature
 ## [method _on_damage_taken] in subclasses to customize behavior.
 
 ## Physics layer bits (project: 1=Player, 2=Terrain, 3=Enemies, 4=Small creatures, 5=Big creatures).
-const LAYER_PLAYER := 1
-const LAYER_TERRAIN := 2
-const LAYER_ENNEMIES := 4
-const LAYER_SMALL_CREATURES := 8   # layer 4
-const LAYER_BIG_CREATURES := 16   # layer 5
-const LAYER_FLYING_CREATURES := 64   # layer 6
 
 signal damage_taken(amount: int, source: Node)
 signal died
@@ -132,22 +126,27 @@ func _update_line_points(line: Line2D, start: Vector2, end: Vector2) -> void:
 func _get_collision_layer() -> int:
 
 	if creature_data.can_fly:
-		return LAYER_FLYING_CREATURES | LAYER_ENNEMIES
+		return Layers.FLYING_CREATURES
 
 	if is_big:
-		return LAYER_BIG_CREATURES | LAYER_ENNEMIES
+		return Layers.BIG_CREATURES
 	else:
-		return LAYER_SMALL_CREATURES | LAYER_ENNEMIES
+		return Layers.SMALL_CREATURES
 
 func _get_collision_mask() -> int:
 
 	if creature_data.can_fly:
 		return 0
-	
-	if is_big:
-		return LAYER_TERRAIN | LAYER_BIG_CREATURES
-	else:
-		return LAYER_TERRAIN | LAYER_PLAYER | LAYER_SMALL_CREATURES | LAYER_BIG_CREATURES
+
+	var mask = Layers.TERRAIN | Layers.BIG_CREATURES | Layers.ENVIRONMENT | Layers.WATER
+
+	if not is_big:
+		mask |= Layers.PLAYER | Layers.SMALL_CREATURES
+
+	if creature_data.can_swim:
+		mask &= ~Layers.WATER
+
+	return mask
 
 func _update_hunger(delta: float) -> void:
 
