@@ -11,7 +11,6 @@ const ORBIT_NEW_TARGET_DISTANCE: float = 10.0
 var _follow_state: FollowState = FollowState.STOPPED
 
 var orbit_target_position: Vector2 = Vector2.ZERO
-var orbiting := false
 
 func tick(creature: Creature, _delta: float) -> State:
 	var player = creature.get_tree().get_first_node_in_group("player") as Node2D
@@ -27,9 +26,8 @@ func tick(creature: Creature, _delta: float) -> State:
 		FollowState.FOLLOWING:
 			creature.movement.request_movement(MovementRequest.to_follow_moving(player, 1.0))
 		FollowState.ORBITING:
-			if !orbiting or (player.global_position + orbit_target_position).distance_to(creature.global_position) < ORBIT_NEW_TARGET_DISTANCE:
+			if orbit_target_position == Vector2.ZERO or (player.global_position + orbit_target_position).distance_to(creature.global_position) < ORBIT_NEW_TARGET_DISTANCE:
 				orbit_target_position = _choose_orbit_target()
-				orbiting = true
 			creature.movement.request_movement(
 				MovementRequest.to_orbit_around(player, orbit_target_position, 0.0))
 		_:
