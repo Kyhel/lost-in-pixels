@@ -12,7 +12,26 @@ var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
 
 func _ready() -> void:
-	occlusion_mask_viewport = get_tree().current_scene.find_child("AlphaMaskViewport")
+	refresh_scene_references()
+
+
+func refresh_scene_references() -> void:
+	var scene := get_tree().current_scene
+	if scene:
+		occlusion_mask_viewport = scene.find_child("AlphaMaskViewport", true, false) as SubViewport
+
+
+func clear_all_objects() -> void:
+	for k in chunk_items.keys():
+		for item in chunk_items[k]:
+			if is_instance_valid(item):
+				item.queue_free()
+	chunk_items.clear()
+	for k in chunk_trees.keys():
+		for tree in chunk_trees[k]:
+			if is_instance_valid(tree):
+				tree.queue_free()
+	chunk_trees.clear()
 
 func update_chunks(delta: float) -> void:
 
@@ -41,10 +60,14 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	return item
 
 func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
+	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
+		refresh_scene_references()
 	var tree := tree_scene.instantiate()
-	var mask_texture = occlusion_mask_viewport.get_texture()
 	var foliage_material = tree.get_node("Foliage").material
-	foliage_material.set_shader_parameter("mask_tex", mask_texture)
+	if occlusion_mask_viewport != null:
+		foliage_material.set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
+	else:
+		push_warning("ObjectsManager: AlphaMaskViewport missing; tree spawned without mask.")
 
 	tree.global_position = Vector2(
 		tile_position.x * ChunkManager.TILE_SIZE,

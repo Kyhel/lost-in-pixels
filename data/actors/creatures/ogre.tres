@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_r6fma"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_g5kge"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_vncba"]
-[ext_resource type="Resource" uid="uid://b6unlk8m478g1" path="res://ai/goals/attack_player_goal.tres" id="3_1vhlf"]
+[ext_resource type="Resource" path="res://ai/goals/attack_player_goal.tres" id="3_1vhlf"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://ai/sensors/sensor.gd" id="4_5ttwk"]
 [ext_resource type="Texture2D" uid="uid://dbxsejnfss52t" path="res://assets/creatures/ogre.png" id="4_l5rue"]
-[ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://ai/sensors/player_sensor.tres" id="5_5ttwk"]
+[ext_resource type="Resource" path="res://ai/sensors/player_sensor.tres" id="5_5ttwk"]
 
 [resource]
 script = ExtResource("2_vncba")

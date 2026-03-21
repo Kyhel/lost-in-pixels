@@ -7,12 +7,83 @@ const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 const TERRAIN_VISION_RADIUS = 20
 const MONSTER_VISION_RADIUS = 200
 
-var loaded_chunks:Dictionary[Vector2i, Node] = {}
+var loaded_chunks: Dictionary[Vector2i, Node] = {}
 
 var chunk_scene = preload("res://world/chunk.tscn")
-var world_generator = preload("res://world/world_generator.gd").new()
-var tree_generator := TreeGenerator.new(world_generator.terrain_noise.seed)
+var world_generator: WorldGenerator
+var tree_generator: TreeGenerator
 var fog_memory: Dictionary[Vector2i, Array] = {}
+
+
+func _ready() -> void:
+	_apply_world_seed(GameSession.get_active_world_seed())
+
+
+func _apply_world_seed(p_seed: int) -> void:
+	world_generator = preload("res://world/world_generator.gd").new()
+	world_generator.setup_seed(p_seed)
+	tree_generator = TreeGenerator.new(world_generator.terrain_noise.seed)
+
+
+func set_world_seed(p_seed: int) -> void:
+	GameSession.set_active_world_seed(p_seed)
+	_apply_world_seed(p_seed)
+
+
+func get_world_seed() -> int:
+	if world_generator == null:
+		return 0
+	return world_generator.terrain_noise.seed
+
+
+func reset_world_state(clear_fog_memory: bool = true) -> void:
+	for key in loaded_chunks.keys():
+		var ch = loaded_chunks[key]
+		if is_instance_valid(ch):
+			ch.queue_free()
+	loaded_chunks.clear()
+	if clear_fog_memory:
+		fog_memory.clear()
+
+
+func merge_fog_from_save(entries: Array) -> void:
+	for e in entries:
+		if typeof(e) != TYPE_DICTIONARY:
+			continue
+		var cx: int = int(e.get("cx", 0))
+		var cy: int = int(e.get("cy", 0))
+		var grid = e.get("grid", null)
+		if grid == null:
+			continue
+		fog_memory[Vector2i(cx, cy)] = grid as Array
+
+
+func build_fog_save_payload() -> Array:
+	var merged: Dictionary = {}
+	for k in fog_memory.keys():
+		merged[k] = fog_memory[k]
+	for k in loaded_chunks.keys():
+		var ch: Node = loaded_chunks[k]
+		if is_instance_valid(ch) and ch is Chunk:
+			merged[k] = (ch as Chunk).fog_grid
+	var out: Array = []
+	for k in merged.keys():
+		out.append({
+			"cx": k.x,
+			"cy": k.y,
+			"grid": _duplicate_fog_grid(merged[k]),
+		})
+	return out
+
+
+func _duplicate_fog_grid(grid: Variant) -> Array:
+	var out: Array = []
+	for row in grid as Array:
+		var row_arr: Array = []
+		for cell in row as Array:
+			row_arr.append(cell)
+		out.append(row_arr)
+	return out
 
 func get_load_radius() -> int:
 	return DebugManager.debug_config.chunk_load_radius

@@ -21,6 +21,14 @@ var creature_spawn_probability_scores := [
 	[ogre_data, 1],
 ]
 
+func clear_all_entities() -> void:
+	for chunk in chunk_entities.keys():
+		for entity in chunk_entities[chunk]:
+			if is_instance_valid(entity):
+				entity.queue_free()
+	chunk_entities.clear()
+
+
 func on_chunk_unloaded(chunk: Vector2i):
 
 	if !chunk_entities.has(chunk):

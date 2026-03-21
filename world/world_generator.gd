@@ -41,18 +41,17 @@ enum Biome {
 	DESERT
 }
 
-var terrain_noise = FastNoiseLite.new()
-var biome_noise = FastNoiseLite.new()
+var terrain_noise := FastNoiseLite.new()
+var biome_noise := FastNoiseLite.new()
 
-func _init():
-	# créer une seed aléatoire à chaque lancement
+func _init() -> void:
 	terrain_noise.frequency = 0.005
-	#terrain_noise.seed = randi()
-	terrain_noise.seed = 367317914
-	print("Seed : ", terrain_noise.seed)
-
 	biome_noise.frequency = terrain_noise.frequency / 3
-	biome_noise.seed = terrain_noise.seed + 1000
+
+
+func setup_seed(p_seed: int) -> void:
+	terrain_noise.seed = p_seed
+	biome_noise.seed = p_seed + 1000
 
 func get_tile_type(world_x: int, world_y: int) -> TileType:
 

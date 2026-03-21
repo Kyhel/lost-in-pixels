@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="10_dinhu"]
 [ext_resource type="Script" uid="uid://d0328u5hju28x" path="res://scenes/mask_camera.gd" id="11_kvpfn"]
 [ext_resource type="Script" uid="uid://cr322prb20pyg" path="res://ui/hud_root.gd" id="13_kvuet"]
+[ext_resource type="Script" uid="uid://p5us3m3nu8w2r" path="res://ui/pause_menu.gd" id="14_pause"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -149,3 +150,71 @@ grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
 theme_override_styles/fill = SubResource("StyleBoxFlat_dinhu")
 value = 50.0
+
+[node name="PauseMenuRoot" type="CanvasLayer" parent="."]
+layer = 50
+script = ExtResource("14_pause")
+
+[node name="Panel" type="Control" parent="PauseMenuRoot"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="PauseMenuRoot/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenuRoot/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -140.0
+offset_right = 120.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Resume" type="Button" parent="PauseMenuRoot/Panel/VBox"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Save" type="Button" parent="PauseMenuRoot/Panel/VBox"]
+layout_mode = 2
+text = "Save"
+
+[node name="Restore" type="Button" parent="PauseMenuRoot/Panel/VBox"]
+layout_mode = 2
+text = "Restore"
+
+[node name="NewGame" type="Button" parent="PauseMenuRoot/Panel/VBox"]
+layout_mode = 2
+text = "New game"
+
+[node name="Quit" type="Button" parent="PauseMenuRoot/Panel/VBox"]
+layout_mode = 2
+text = "Quit"
+
+[node name="ConfirmNewGame" type="AcceptDialog" parent="PauseMenuRoot"]
+title = "New game"
+dialog_text = "Start a new world? Unsaved progress will be lost."
+
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Resume" to="PauseMenuRoot" method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Save" to="PauseMenuRoot" method="_on_save_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Restore" to="PauseMenuRoot" method="_on_restore_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/NewGame" to="PauseMenuRoot" method="_on_new_game_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Quit" to="PauseMenuRoot" method="_on_quit_pressed"]
+[connection signal="confirmed" from="PauseMenuRoot/ConfirmNewGame" to="PauseMenuRoot" method="_on_confirm_new_confirmed"]
