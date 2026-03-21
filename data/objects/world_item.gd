@@ -9,9 +9,20 @@ signal used(user, target)
 signal destroyed(reason)
 
 func _ready() -> void:
-	if item_data and item_data.texture:
+	if item_data == null:
+		return
+	if item_data.texture:
 		var sprite := $Sprite2D
 		sprite.texture = item_data.texture
+		var tex_size: Vector2 = sprite.texture.get_size()
+		var target_dim: float = item_data.hitbox_radius * 2.0
+		sprite.scale = Vector2.ONE * (target_dim / maxf(tex_size.x, tex_size.y))
+	var cs: CollisionShape2D = $CollisionShape2D
+	var base_shape: Shape2D = cs.shape
+	if base_shape is CircleShape2D:
+		var base_r: float = (base_shape as CircleShape2D).radius
+		if base_r > 0.0:
+			cs.scale = Vector2.ONE * (item_data.hitbox_radius / base_r)
 
 func can_be_picked_up(_by: Node) -> bool:
 	return true

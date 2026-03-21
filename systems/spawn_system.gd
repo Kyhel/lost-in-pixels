@@ -74,7 +74,7 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 
 				if can_spawn:
 					var centered := world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
-					if _is_small_spawnable_item(item) and ObjectsManager.is_small_item_spawn_blocked(centered):
+					if _is_small_spawnable_item(item) and ObjectsManager.is_small_item_spawn_blocked(centered, item):
 						continue
 					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, centered)
 

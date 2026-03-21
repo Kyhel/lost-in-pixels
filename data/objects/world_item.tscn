@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c832tocieksip" path="res://data/objects/world_item.gd" id="1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3s8yu"]
+radius = 1.0
 
 [node name="WorldItem" type="Area2D" unique_id=818993668]
 script = ExtResource("1")

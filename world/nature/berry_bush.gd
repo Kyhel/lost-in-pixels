@@ -1,10 +1,10 @@
 class_name BerryBush
-extends Node2D
+extends Vegetation
 
 const SLOT_COUNT := 5
 const BUSH_SEED_SALT := 0x70415252
 
-@export var regrow_chance: float = 0.05
+@export var regrow_chance: float = 0.1
 
 var chunk_coords: Vector2i = Vector2i.ZERO
 var world_tile: Vector2i = Vector2i.ZERO
@@ -14,10 +14,11 @@ var _slot_offsets: Array[Vector2] = []
 var _slot_refs: Array = []
 
 var _regrow_elapsed: float = 0.0
-const REGROW_INTERVAL := 1.0
+const REGROW_INTERVAL := 5.0
 
 
 func _ready() -> void:
+	super._ready()
 	_regrow_elapsed = -CreatureUtils.get_stagger_phase_offset(self, REGROW_INTERVAL)
 	_berry_data = ItemDatabase.get_item(&"berry")
 	if _berry_data == null:

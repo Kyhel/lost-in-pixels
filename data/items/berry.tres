@@ -10,4 +10,5 @@ display_name = "Berry"
 texture = ExtResource("2_tex")
 can_pickup = true
 player_food_value = 10
+hitbox_radius = 1.0
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

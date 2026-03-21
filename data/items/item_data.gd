@@ -14,6 +14,9 @@ class_name ItemData
 @export var can_pickup: bool = false
 @export var player_food_value: int = 0
 
+## World pickup radius (pixels); drives [WorldItem] sprite and collision scale (base circle radius 1 in scene).
+@export var hitbox_radius: float = 4.0
+
 @export var spawn_definition: SpawnDefinition
 
 # Optional effect scripts for modular behavior.

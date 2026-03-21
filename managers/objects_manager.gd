@@ -9,11 +9,8 @@ var chunk_bushes: Dictionary[Vector2i, Array] = {}
 ## World tile anchors for trees and berry bushes only (not small world items).
 var _environment_tile_occupied: Dictionary = {}
 
-const SMALL_ITEM_RADIUS := 4.0
+const FALLBACK_WORLD_ITEM_RADIUS := 4.0
 const PLACEMENT_MARGIN := 4.0
-const ENV_TILE_CENTER := Vector2(8, 8)
-const TREE_PROP_RADIUS := 10.0
-const BUSH_PROP_RADIUS := 10.0
 const OVERLAP_SEARCH_RADIUS := 64.0
 
 const CHUNK_UPDATE_INTERVAL: float = 10.0
@@ -136,24 +133,44 @@ func clear_environment_tiles_for_chunk(chunk_coords: Vector2i) -> void:
 
 func is_small_item_spawn_blocked(
 	world_pos: Vector2,
-	self_radius: float = SMALL_ITEM_RADIUS,
+	self_item_data: ItemData,
 	margin: float = PLACEMENT_MARGIN,
 ) -> bool:
+	var self_radius: float = FALLBACK_WORLD_ITEM_RADIUS
+	if self_item_data != null:
+		self_radius = self_item_data.hitbox_radius
 	for item in get_nearby_items(world_pos, OVERLAP_SEARCH_RADIUS):
-		var r: float = Node2DUtils.get_collision_radius(item)
-		if r <= 0.0:
-			r = SMALL_ITEM_RADIUS
+		var r: float = FALLBACK_WORLD_ITEM_RADIUS
+		if item.item_data != null:
+			r = item.item_data.hitbox_radius
+		else:
+			r = Node2DUtils.get_collision_radius(item)
+			if r <= 0.0:
+				r = FALLBACK_WORLD_ITEM_RADIUS
 		if world_pos.distance_to(item.global_position) < self_radius + r + margin:
 			return true
 	for tree in get_nearby_trees(world_pos, OVERLAP_SEARCH_RADIUS):
-		var center: Vector2 = tree.global_position + ENV_TILE_CENTER
-		if world_pos.distance_to(center) < self_radius + TREE_PROP_RADIUS + margin:
+		if _vegetation_blocks_point(world_pos, self_radius, margin, tree as Node2D):
 			return true
 	for bush in get_nearby_bushes(world_pos, OVERLAP_SEARCH_RADIUS):
-		var center: Vector2 = bush.global_position + ENV_TILE_CENTER
-		if world_pos.distance_to(center) < self_radius + BUSH_PROP_RADIUS + margin:
+		if _vegetation_blocks_point(world_pos, self_radius, margin, bush):
 			return true
 	return false
+
+
+func _vegetation_blocks_point(world_pos: Vector2, self_radius: float, margin: float, node: Vegetation) -> bool:
+	var r: Variant = node.get("hitbox_radius")
+	var c: Variant = node.get("hitbox_center_world")
+	if r == null or c == null:
+		return false
+	if not (r is float or r is int):
+		return false
+	if not c is Vector2:
+		return false
+	var rf: float = float(r)
+	if rf <= 0.0:
+		return false
+	return world_pos.distance_to(c as Vector2) < self_radius + rf + margin
 
 
 func on_chunk_unloaded(chunk: Vector2i) -> void:
@@ -207,8 +224,8 @@ func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 
 	return results
 
-func get_nearby_trees(origin: Vector2, radius: float) -> Array:
-	var results: Array = []
+func get_nearby_trees(origin: Vector2, radius: float) -> Array[Vegetation]:
+	var results: Array[Vegetation] = []
 	var radius_sq := radius * radius
 
 	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
@@ -228,13 +245,13 @@ func get_nearby_trees(origin: Vector2, radius: float) -> Array:
 				var dist_sq: float = dx * dx + dy * dy
 
 				if dist_sq <= radius_sq:
-					results.append(tree)
+					results.append(tree as Vegetation)
 
 	return results
 
 
-func get_nearby_bushes(origin: Vector2, radius: float) -> Array[Node2D]:
-	var results: Array[Node2D] = []
+func get_nearby_bushes(origin: Vector2, radius: float) -> Array[Vegetation]:
+	var results: Array[Vegetation] = []
 	var radius_sq := radius * radius
 
 	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
@@ -254,6 +271,6 @@ func get_nearby_bushes(origin: Vector2, radius: float) -> Array[Node2D]:
 				var dist_sq: float = dx * dx + dy * dy
 
 				if dist_sq <= radius_sq:
-					results.append(bush)
+					results.append(bush as Vegetation)
 
 	return results

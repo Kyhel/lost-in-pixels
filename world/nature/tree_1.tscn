@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bvppki1eganqm"]
 
 [ext_resource type="Texture2D" uid="uid://cu270wwko7jdg" path="res://assets/nature/tree_trunk_1.png" id="1_60lgh"]
+[ext_resource type="Script" uid="uid://ca5ph3myugs7g" path="res://world/nature/vegetation.gd" id="1_veg"]
 [ext_resource type="Shader" uid="uid://dlue02v0rg8pc" path="res://world/nature/tree_1.gdshader" id="2_4elwb"]
 [ext_resource type="Texture2D" uid="uid://mg1udp0cxmj" path="res://assets/nature/tree_foliage_1.png" id="2_dfk1a"]
 
@@ -12,6 +13,7 @@ shader_parameter/alpha_amount = 0.5
 radius = 8.0
 
 [node name="Tree1" type="Node2D" unique_id=1438693898]
+script = ExtResource("1_veg")
 
 [node name="Trunk" type="Sprite2D" parent="." unique_id=762256068]
 texture = ExtResource("1_60lgh")
