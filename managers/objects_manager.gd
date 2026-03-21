@@ -139,7 +139,7 @@ func clear_environment_tiles_for_chunk(chunk_coords: Vector2i) -> void:
 			_environment_tile_occupied.erase(Vector2i(wx, wy))
 
 
-func is_small_item_spawn_blocked(
+func is_item_spawn_blocked(
 	world_pos: Vector2,
 	self_item_data: ItemData,
 	margin: float = PLACEMENT_MARGIN,
