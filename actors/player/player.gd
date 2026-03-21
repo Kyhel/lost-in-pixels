@@ -16,10 +16,17 @@ var attack_cooldown_timer: float = 0.0
 @export var hunger_decay_rate: float = 0.5 # per second
 @export var hunger: float = max_hunger
 
+@export var max_health: float = 100.0
+@export var health: float = 100.0
+
+var _dead: bool = false
+
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var sprite: Sprite2D = $Sprite2D
 
 signal hunger_changed(hunger)
+signal health_changed(health)
+signal died()
 
 func _ready() -> void:
 	add_to_group("player")
@@ -27,7 +34,13 @@ func _ready() -> void:
 
 func _physics_process(delta):
 
-	_update_hunger(delta)
+	if _dead:
+		return
+
+	_apply_metabolic_drain(delta)
+
+	if _dead:
+		return
 
 	var dir = Vector2.ZERO
 
@@ -62,6 +75,28 @@ func _physics_process(delta):
 	move_and_slide()
 
 	ChunkManager.reveal_around_player(global_position)
+
+func _apply_metabolic_drain(delta: float) -> void:
+	var drain := hunger_decay_rate * delta
+	var remaining := drain
+	if hunger > 0.0:
+		var take := minf(hunger, remaining)
+		hunger -= take
+		remaining -= take
+		hunger_changed.emit(hunger)
+	if remaining > 0.0:
+		var prev_health := health
+		health = maxf(0.0, health - remaining)
+		if health != prev_health:
+			health_changed.emit(health)
+		if health <= 0.0:
+			_die()
+
+func _die() -> void:
+	if _dead:
+		return
+	_dead = true
+	died.emit()
 
 func _update_attack_hitbox_radius() -> void:
 	if not is_node_ready() or attack_hitbox == null:
@@ -123,12 +158,19 @@ func try_pickup_items():
 			continue
 		item.on_picked_up(self)
 		if item.item_data.player_food_value > 0:
-			_increase_hunger(item.item_data.player_food_value)
+			_apply_food_value(item.item_data.player_food_value)
 
-func _update_hunger(delta: float):
-	_increase_hunger(-hunger_decay_rate * delta)
-
-func _increase_hunger(amount: float):
-	hunger += amount
-	hunger = clamp(hunger, 0, max_hunger)
-	hunger_changed.emit(hunger)
+func _apply_food_value(amount: float) -> void:
+	if amount <= 0.0 or _dead:
+		return
+	var room := max_hunger - hunger
+	var to_hunger := minf(amount, room)
+	if to_hunger > 0.0:
+		hunger += to_hunger
+		hunger_changed.emit(hunger)
+	var overflow := amount - to_hunger
+	if overflow > 0.0:
+		var prev_health := health
+		health = minf(max_health, health + overflow)
+		if health != prev_health:
+			health_changed.emit(health)

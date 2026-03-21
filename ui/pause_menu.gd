@@ -67,7 +67,7 @@ func _on_quit_pressed() -> void:
 
 
 func _get_player() -> Player:
-	var scene := get_tree().current_scene
-	if scene == null:
+	var player := get_tree().get_first_node_in_group(Constants.GROUP_PLAYER)
+	if player == null:
 		return null
-	return scene.find_child("Player", true, false) as Player
+	return player as Player

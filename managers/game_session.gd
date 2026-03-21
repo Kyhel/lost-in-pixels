@@ -2,7 +2,7 @@ extends Node
 ## Holds run-wide state that survives scene reloads (autoload). World seed, pending save/load apply.
 
 const SAVE_PATH := "user://save_slot_0.json"
-const SAVE_FORMAT_VERSION := 1
+const SAVE_FORMAT_VERSION := 2
 
 ## Current terrain seed used by ChunkManager (noise + chunk RNG).
 var active_world_seed: int = 0

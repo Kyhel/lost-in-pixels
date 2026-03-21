@@ -1,6 +1,7 @@
 extends Node
 ## Save/load JSON to user://.
-## v1 persists world seed, player position/hunger/weapon, and fog grids only.
+## v1: world seed, player position/hunger/weapon, fog grids.
+## v2: adds player health (loads v1 with full health default).
 ## Creatures, dropped items, and trees are not serialized; they follow procedural rules when chunks reload.
 
 func reset_autoload_world_state(clear_fog: bool) -> void:
@@ -19,6 +20,7 @@ func save_to_disk(player: Player) -> bool:
 		"player": {
 			"position": [player.global_position.x, player.global_position.y],
 			"hunger": player.hunger,
+			"health": player.health,
 			"weapon_path": weapon_path,
 		},
 		"fog_memory": ChunkManager.build_fog_save_payload(),
@@ -47,8 +49,9 @@ func load_save_into_pending() -> bool:
 		push_error("SaveGame: invalid save file")
 		return false
 	var d: Dictionary = parsed
-	if int(d.get("format_version", 0)) != GameSession.SAVE_FORMAT_VERSION:
-		push_warning("SaveGame: format_version mismatch")
+	var ver := int(d.get("format_version", 0))
+	if ver < 1 or ver > GameSession.SAVE_FORMAT_VERSION:
+		push_warning("SaveGame: unsupported format_version %s" % ver)
 		return false
 	GameSession.set_pending_apply(d)
 	return true
