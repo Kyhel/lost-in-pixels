@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cwv6lfvkmnxtg"]
+
+[ext_resource type="Script" path="res://world/nature/water_lily.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cywrukpxtekcg" path="res://assets/nature/water_lilly.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lily"]
+radius = 6.0
+
+[node name="WaterLily" type="Node2D"]
+script = ExtResource("1_script")
+vegetation_kind = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+centered = true
+offset = Vector2(8, 8)
+
+[node name="TrunkBody" type="StaticBody2D" parent="."]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody"]
+position = Vector2(8, 8)
+shape = SubResource("CircleShape2D_lily")

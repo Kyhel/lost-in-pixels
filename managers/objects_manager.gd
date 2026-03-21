@@ -3,10 +3,9 @@ extends Node
 var occlusion_mask_viewport: SubViewport
 
 var chunk_items: Dictionary[Vector2i, Array] = {}
-var chunk_trees: Dictionary[Vector2i, Array] = {}
-var chunk_bushes: Dictionary[Vector2i, Array] = {}
+var chunk_vegetation: Dictionary[Vector2i, Array] = {}
 
-## World tile anchors for trees and berry bushes only (not small world items).
+## World tile anchors for trees, berry bushes, water lilies, etc. (not small world items).
 var _environment_tile_occupied: Dictionary = {}
 
 const FALLBACK_WORLD_ITEM_RADIUS := 4.0
@@ -19,6 +18,7 @@ var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
 var berry_bush_scene := preload("res://world/nature/berry_bush.tscn")
+var water_lily_scene: PackedScene = preload("res://world/nature/water_lily.tscn")
 
 func _ready() -> void:
 	refresh_scene_references()
@@ -36,16 +36,11 @@ func clear_all_objects() -> void:
 			if is_instance_valid(item):
 				item.queue_free()
 	chunk_items.clear()
-	for k in chunk_trees.keys():
-		for tree in chunk_trees[k]:
-			if is_instance_valid(tree):
-				tree.queue_free()
-	chunk_trees.clear()
-	for k in chunk_bushes.keys():
-		for bush in chunk_bushes[k]:
-			if is_instance_valid(bush):
-				bush.queue_free()
-	chunk_bushes.clear()
+	for k in chunk_vegetation.keys():
+		for veg in chunk_vegetation[k]:
+			if is_instance_valid(veg):
+				veg.queue_free()
+	chunk_vegetation.clear()
 	_environment_tile_occupied.clear()
 
 func update_chunks(delta: float) -> void:
@@ -57,10 +52,8 @@ func update_chunks(delta: float) -> void:
 	for coords in chunks_to_check:
 		if chunk_items.has(coords):
 			chunk_items[coords] = ArrayUtils.cleanup_invalid_entries(chunk_items[coords])
-		if chunk_trees.has(coords):
-			chunk_trees[coords] = ArrayUtils.cleanup_invalid_entries(chunk_trees[coords])
-		if chunk_bushes.has(coords):
-			chunk_bushes[coords] = ArrayUtils.cleanup_invalid_entries(chunk_bushes[coords])
+		if chunk_vegetation.has(coords):
+			chunk_vegetation[coords] = ArrayUtils.cleanup_invalid_entries(chunk_vegetation[coords])
 
 func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantity: int = 1):
 	var item = world_item_scene.instantiate()
@@ -93,10 +86,10 @@ func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
 	
 	add_child(tree)
 
-	if !chunk_trees.has(chunk):
-		chunk_trees[chunk] = []
+	if !chunk_vegetation.has(chunk):
+		chunk_vegetation[chunk] = []
 
-	chunk_trees[chunk].append(tree)
+	chunk_vegetation[chunk].append(tree)
 	register_environment_tile(tile_position)
 
 
@@ -109,9 +102,24 @@ func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
 		world_tile.y * ChunkManager.TILE_SIZE
 	)
 	add_child(bush)
-	if not chunk_bushes.has(chunk):
-		chunk_bushes[chunk] = []
-	chunk_bushes[chunk].append(bush)
+	if not chunk_vegetation.has(chunk):
+		chunk_vegetation[chunk] = []
+	chunk_vegetation[chunk].append(bush)
+	register_environment_tile(world_tile)
+
+
+func spawn_water_lily(chunk: Vector2i, world_tile: Vector2i) -> void:
+	var lily: Node2D = water_lily_scene.instantiate() as Node2D
+	lily.set("chunk_coords", chunk)
+	lily.set("world_tile", world_tile)
+	lily.global_position = Vector2(
+		world_tile.x * ChunkManager.TILE_SIZE,
+		world_tile.y * ChunkManager.TILE_SIZE
+	)
+	add_child(lily)
+	if not chunk_vegetation.has(chunk):
+		chunk_vegetation[chunk] = []
+	chunk_vegetation[chunk].append(lily)
 	register_environment_tile(world_tile)
 
 
@@ -149,11 +157,8 @@ func is_small_item_spawn_blocked(
 				r = FALLBACK_WORLD_ITEM_RADIUS
 		if world_pos.distance_to(item.global_position) < self_radius + r + margin:
 			return true
-	for tree in get_nearby_trees(world_pos, OVERLAP_SEARCH_RADIUS):
-		if _vegetation_blocks_point(world_pos, self_radius, margin, tree as Node2D):
-			return true
-	for bush in get_nearby_bushes(world_pos, OVERLAP_SEARCH_RADIUS):
-		if _vegetation_blocks_point(world_pos, self_radius, margin, bush):
+	for veg in get_nearby_vegetation(world_pos, OVERLAP_SEARCH_RADIUS):
+		if _vegetation_blocks_point(world_pos, self_radius, margin, veg):
 			return true
 	return false
 
@@ -185,19 +190,13 @@ func on_chunk_unloaded(chunk: Vector2i) -> void:
 
 		chunk_items.erase(chunk)
 
-	if chunk_trees.has(chunk):
+	if chunk_vegetation.has(chunk):
 
-		for tree in chunk_trees[chunk]:
-			if is_instance_valid(tree):
-				tree.queue_free()	
+		for veg in chunk_vegetation[chunk]:
+			if is_instance_valid(veg):
+				veg.queue_free()
 
-		chunk_trees.erase(chunk)
-
-	if chunk_bushes.has(chunk):
-		for bush in chunk_bushes[chunk]:
-			if is_instance_valid(bush):
-				bush.queue_free()
-		chunk_bushes.erase(chunk)
+		chunk_vegetation.erase(chunk)
 
 func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []
@@ -224,53 +223,35 @@ func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 
 	return results
 
+func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
+	var results: Array[Vegetation] = []
+	var radius_sq := radius * radius
+
+	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
+
+	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
+		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
+			var key: Vector2i = Vector2i(cx, cy)
+			if not chunk_vegetation.has(key):
+				continue
+
+			for veg in chunk_vegetation[key]:
+				if not is_instance_valid(veg):
+					continue
+
+				var dx: float = veg.global_position.x - origin.x
+				var dy: float = veg.global_position.y - origin.y
+				var dist_sq: float = dx * dx + dy * dy
+
+				if dist_sq <= radius_sq:
+					results.append(veg as Vegetation)
+
+	return results
+
+
 func get_nearby_trees(origin: Vector2, radius: float) -> Array[Vegetation]:
-	var results: Array[Vegetation] = []
-	var radius_sq := radius * radius
-
-	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
-
-	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
-		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
-			var key: Vector2i = Vector2i(cx, cy)
-			if !chunk_trees.has(key):
-				continue
-
-			for tree in chunk_trees[key]:
-				if !is_instance_valid(tree):
-					continue
-
-				var dx: float = tree.global_position.x - origin.x
-				var dy: float = tree.global_position.y - origin.y
-				var dist_sq: float = dx * dx + dy * dy
-
-				if dist_sq <= radius_sq:
-					results.append(tree as Vegetation)
-
-	return results
-
-
-func get_nearby_bushes(origin: Vector2, radius: float) -> Array[Vegetation]:
-	var results: Array[Vegetation] = []
-	var radius_sq := radius * radius
-
-	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
-
-	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
-		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
-			var key: Vector2i = Vector2i(cx, cy)
-			if not chunk_bushes.has(key):
-				continue
-
-			for bush in chunk_bushes[key]:
-				if not is_instance_valid(bush):
-					continue
-
-				var dx: float = bush.global_position.x - origin.x
-				var dy: float = bush.global_position.y - origin.y
-				var dist_sq: float = dx * dx + dy * dy
-
-				if dist_sq <= radius_sq:
-					results.append(bush as Vegetation)
-
-	return results
+	var out: Array[Vegetation] = []
+	for veg in get_nearby_vegetation(origin, radius):
+		if veg.is_tree():
+			out.append(veg)
+	return out

@@ -1,6 +1,14 @@
 class_name Vegetation
 extends Node2D
 
+enum VegetationKind {
+	TREE,
+	BERRY_BUSH,
+	WATER_LILY,
+}
+
+@export var vegetation_kind: VegetationKind = VegetationKind.TREE
+
 ## World-space radius of the primary [CollisionShape2D] under the first [StaticBody2D] (circle, after scale).
 var hitbox_radius: float = 0.0
 ## World-space center of that collision shape (for overlap tests).
@@ -24,6 +32,14 @@ func _ready() -> void:
 	hitbox_radius = Node2DUtils.get_collision_radius(body)
 	if hitbox_radius <= 0.0:
 		hitbox_radius = 8.0
+
+
+func is_tree() -> bool:
+	return vegetation_kind == VegetationKind.TREE
+
+
+func is_water_lily() -> bool:
+	return vegetation_kind == VegetationKind.WATER_LILY
 
 
 func _find_first_static_body(node: Node) -> StaticBody2D:
