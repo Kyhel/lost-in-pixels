@@ -36,6 +36,10 @@ var debug_final_velocity: Vector2 = Vector2.ZERO
 @onready var visualRoot: = $Visuals
 @onready var collisionShape: = $CollisionShape
 
+## Cached obstacle-avoidance query (per creature so shared [MovementStrategy] resources stay thread-safe).
+var _obstacle_avoid_query_params: PhysicsShapeQueryParameters2D
+var _obstacle_avoid_rect_shape: RectangleShape2D
+
 @onready var debug_root: Node2D = get_node_or_null("Debug")
 var debug_speed_line: Line2D = null
 var debug_separation_line: Line2D = null
@@ -175,6 +179,21 @@ func get_hitbox_radius() -> float:
 	if creature_data == null:
 		return 0.0
 	return creature_data.hitbox_size * 0.5
+
+
+func get_obstacle_avoidance_shape_query() -> PhysicsShapeQueryParameters2D:
+	if _obstacle_avoid_query_params == null:
+		_obstacle_avoid_rect_shape = RectangleShape2D.new()
+		_obstacle_avoid_query_params = PhysicsShapeQueryParameters2D.new()
+		_obstacle_avoid_query_params.shape = _obstacle_avoid_rect_shape
+		_obstacle_avoid_query_params.collide_with_bodies = true
+		_obstacle_avoid_query_params.collide_with_areas = false
+	return _obstacle_avoid_query_params
+
+
+func get_obstacle_avoidance_rectangle_shape() -> RectangleShape2D:
+	get_obstacle_avoidance_shape_query()
+	return _obstacle_avoid_rect_shape
 
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:
