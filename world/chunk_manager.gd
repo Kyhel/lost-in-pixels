@@ -162,7 +162,8 @@ func _spawn_world_items(chunk_x: int, chunk_y: int):
 		var chunk_key: Vector2i = Vector2i(chunk_x, chunk_y)
 		var item_data = ItemDatabase.get_item(&"coin")
 		if item_data:
-			ObjectsManager.spawn_item_in_chunk(chunk_key, item_data, world_pos)
+			var centered := world_pos + Vector2.ONE * TILE_SIZE / 2.0
+			ObjectsManager.spawn_item_in_chunk(chunk_key, item_data, centered)
 
 func update_chunks(player_pos:Vector2):
 

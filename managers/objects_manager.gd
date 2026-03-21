@@ -49,7 +49,7 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	var item = world_item_scene.instantiate()
 	item.item_data = item_data
 	item.quantity = quantity
-	item.global_position = world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
+	item.global_position = world_pos
 
 	add_child(item)
 

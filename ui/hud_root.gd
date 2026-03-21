@@ -2,8 +2,8 @@ extends Control
 
 @export var player: Player
 
-@onready var health_bar = $HealthBar
-@onready var hunger_bar = $HungerBar
+@onready var health_bar: ProgressBar = $BottomCenterPanel/StatsRow/HealthBar
+@onready var hunger_bar: ProgressBar = $BottomCenterPanel/StatsRow/HungerBar
 
 func _ready() -> void:
 	player.hunger_changed.connect(_on_hunger_changed)

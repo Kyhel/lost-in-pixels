@@ -22,7 +22,6 @@ static func get_target_radius_for_interaction(node: Node2D) -> float:
 		return node.get_hitbox_radius()
 	return get_collision_radius(node)
 
-
 static func is_within_interaction_range(
 	creature: Creature,
 	target: Node2D,

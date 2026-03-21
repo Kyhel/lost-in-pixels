@@ -1,5 +1,6 @@
 extends HBoxContainer
 
+const MAX_SLOTS := 10
 const SLOT_SIZE := Vector2(52, 52)
 
 
@@ -12,14 +13,16 @@ func _ready() -> void:
 func _rebuild() -> void:
 	for c in get_children():
 		c.queue_free()
-	for id in AbilityManager.discovered_order:
-		var ability := AbilityManager.get_ability(id)
-		if ability == null:
-			continue
+	for i in MAX_SLOTS:
 		var btn := TextureButton.new()
 		btn.ignore_texture_size = true
 		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		btn.custom_minimum_size = SLOT_SIZE
-		if ability.icon != null:
-			btn.texture_normal = ability.icon
+		btn.disabled = true
+		if i < AbilityManager.discovered_order.size():
+			var id: StringName = AbilityManager.discovered_order[i]
+			var ability: AbilityData = AbilityManager.get_ability(id)
+			if ability != null and ability.icon != null:
+				btn.texture_normal = ability.icon
+			btn.disabled = false
 		add_child(btn)

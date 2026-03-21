@@ -68,7 +68,8 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 						break
 
 				if can_spawn:
-					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, world_pos)
+					var centered := world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
+					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, centered)
 
 func spawn_creatures(chunk: Chunk) -> void:
 

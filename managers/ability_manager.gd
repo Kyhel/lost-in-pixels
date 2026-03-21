@@ -49,6 +49,8 @@ func _discover(ability: AbilityData) -> void:
 		return
 	_discovered_set[ability.id] = true
 	discovered_order.append(ability.id)
+	if not ability.discover_log_message.strip_edges().is_empty():
+		GameLog.log_message(ability.discover_log_message)
 	ability_unlocked.emit(ability)
 	discoveries_changed.emit()
 
@@ -66,6 +68,8 @@ func try_activate_slot(slot_index: int) -> void:
 	var inst: Variant = ability.effect_script.new()
 	if inst != null and inst.has_method("execute"):
 		inst.execute(player)
+		if not ability.use_log_message.strip_edges().is_empty():
+			GameLog.log_message(ability.use_log_message)
 
 
 func apply_discovered_from_save(ids: Variant) -> void:

@@ -16,7 +16,8 @@
 [ext_resource type="Script" uid="uid://cr322prb20pyg" path="res://ui/hud_root.gd" id="13_kvuet"]
 [ext_resource type="Script" uid="uid://o8cqffnmgf1p" path="res://ui/pause_menu.gd" id="14_pause"]
 [ext_resource type="Script" uid="uid://btgnvradaiwwp" path="res://ui/death_overlay.gd" id="15_death"]
-[ext_resource type="Script" path="res://ui/abilities_bar.gd" id="16_abbar"]
+[ext_resource type="Script" uid="uid://b5u1v60qgyuj4" path="res://ui/abilities_bar.gd" id="16_abbar"]
+[ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -40,11 +41,11 @@ viewport_path = NodePath("AlphaMaskViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvuet"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
-bg_color = Color(0.82, 0.12, 0.12, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dinhu"]
 bg_color = Color(0.8358334, 0.85, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.82, 0.12, 0.12, 1)
 
 [node name="Game" type="Node2D" unique_id=839376987]
 script = ExtResource("1_uwrxv")
@@ -142,48 +143,70 @@ grow_vertical = 2
 script = ExtResource("13_kvuet")
 player = NodePath("../../World/Entities/Player")
 
-[node name="HealthBar" type="ProgressBar" parent="HUDLayer/HUDRoot" unique_id=1409321149]
+[node name="BottomCenterPanel" type="VBoxContainer" parent="HUDLayer/HUDRoot" unique_id=990011001]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -56.0
-offset_right = 210.0
-offset_bottom = -33.0
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
-theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
-value = 100.0
-
-[node name="HungerBar" type="ProgressBar" parent="HUDLayer/HUDRoot" unique_id=1409321148]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = -27.0
-offset_right = 210.0
-offset_bottom = -4.0
-grow_vertical = 0
-theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
-theme_override_styles/fill = SubResource("StyleBoxFlat_dinhu")
-value = 50.0
-
-[node name="AbilitiesBar" type="HBoxContainer" parent="HUDLayer/HUDRoot" unique_id=1827364510]
-layout_mode = 1
-anchors_preset = 12
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -72.0
-offset_right = 280.0
+offset_left = -305.0
+offset_top = -132.0
+offset_right = 305.0
 offset_bottom = -8.0
 grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="AbilitiesBar" type="HBoxContainer" parent="HUDLayer/HUDRoot/BottomCenterPanel" unique_id=1827364510]
+custom_minimum_size = Vector2(610, 52)
+layout_mode = 2
+size_flags_horizontal = 4
 alignment = 1
 script = ExtResource("16_abbar")
+
+[node name="StatsRow" type="HBoxContainer" parent="HUDLayer/HUDRoot/BottomCenterPanel" unique_id=990011002]
+custom_minimum_size = Vector2(610, 22)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HungerBar" type="ProgressBar" parent="HUDLayer/HUDRoot/BottomCenterPanel/StatsRow" unique_id=1409321148]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dinhu")
+value = 50.0
+
+[node name="HealthBar" type="ProgressBar" parent="HUDLayer/HUDRoot/BottomCenterPanel/StatsRow" unique_id=1409321149]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+
+[node name="ChatLogPanel" type="PanelContainer" parent="HUDLayer/HUDRoot" unique_id=990011003]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("17_chat")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HUDLayer/HUDRoot/ChatLogPanel" unique_id=990011004]
+custom_minimum_size = Vector2(360, 168)
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
 
 [node name="PauseMenuRoot" type="CanvasLayer" parent="." unique_id=1776983684]
 layer = 50
