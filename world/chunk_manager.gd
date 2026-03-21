@@ -4,9 +4,6 @@ const TILE_SIZE = 16
 const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
-const LOAD_RADIUS = 4  # nombre de chunks à charger autour du joueur
-const UNLOAD_RADIUS = 6 # au delà de ce rayon, les chunks sont déchargés
-
 const TERRAIN_VISION_RADIUS = 20
 const MONSTER_VISION_RADIUS = 200
 
@@ -19,6 +16,9 @@ var fog_memory: Dictionary[Vector2i, Array] = {}
 
 func get_load_radius() -> int:
 	return DebugManager.debug_config.chunk_load_radius
+
+func get_unload_radius() -> int:
+	return get_load_radius() + 4
 
 func load_chunk(chunk_x, chunk_y):
 
@@ -111,7 +111,7 @@ func unload_far_chunks(player_pos:Vector2):
 		var dx = abs(key.x - player_chunk.x)
 		var dy = abs(key.y - player_chunk.y)
 
-		if dx > UNLOAD_RADIUS or dy > UNLOAD_RADIUS:
+		if dx > get_unload_radius() or dy > get_unload_radius():
 			var chunk = loaded_chunks[key]
 			fog_memory[key] = chunk.fog_grid
 			chunk.queue_free()  # supprime du tree
