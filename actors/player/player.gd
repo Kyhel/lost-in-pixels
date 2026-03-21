@@ -62,6 +62,17 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("spawn_carrot"):
 		_spawn_carrot()
 
+	if Input.is_action_just_pressed("ability_1"):
+		AbilityManager.try_activate_slot(0)
+	if Input.is_action_just_pressed("ability_2"):
+		AbilityManager.try_activate_slot(1)
+	if Input.is_action_just_pressed("ability_3"):
+		AbilityManager.try_activate_slot(2)
+	if Input.is_action_just_pressed("ability_4"):
+		AbilityManager.try_activate_slot(3)
+	if Input.is_action_just_pressed("ability_5"):
+		AbilityManager.try_activate_slot(4)
+
 	try_pickup_items()
 
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)

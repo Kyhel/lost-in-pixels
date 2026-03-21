@@ -2,6 +2,7 @@ extends Node
 ## Save/load JSON to user://.
 ## v1: world seed, player position/hunger/weapon, fog grids.
 ## v2: adds player health (loads v1 with full health default).
+## v3: adds discovered_abilities (StringName ids).
 ## Creatures, dropped items, and trees are not serialized; they follow procedural rules when chunks reload.
 
 func reset_autoload_world_state(clear_fog: bool) -> void:
@@ -14,6 +15,9 @@ func save_to_disk(player: Player) -> bool:
 	var weapon_path := ""
 	if player.weapon != null:
 		weapon_path = player.weapon.resource_path
+	var ability_ids: Array = []
+	for aid in AbilityManager.discovered_order:
+		ability_ids.append(String(aid))
 	var data := {
 		"format_version": GameSession.SAVE_FORMAT_VERSION,
 		"world_seed": ChunkManager.get_world_seed(),
@@ -24,6 +28,7 @@ func save_to_disk(player: Player) -> bool:
 			"weapon_path": weapon_path,
 		},
 		"fog_memory": ChunkManager.build_fog_save_payload(),
+		"discovered_abilities": ability_ids,
 	}
 	var json_text := JSON.stringify(data)
 	var path := GameSession.SAVE_PATH

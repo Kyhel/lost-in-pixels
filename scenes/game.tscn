@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cr322prb20pyg" path="res://ui/hud_root.gd" id="13_kvuet"]
 [ext_resource type="Script" uid="uid://o8cqffnmgf1p" path="res://ui/pause_menu.gd" id="14_pause"]
 [ext_resource type="Script" uid="uid://btgnvradaiwwp" path="res://ui/death_overlay.gd" id="15_death"]
+[ext_resource type="Script" path="res://ui/abilities_bar.gd" id="16_abbar"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -168,6 +169,21 @@ grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_kvuet")
 theme_override_styles/fill = SubResource("StyleBoxFlat_dinhu")
 value = 50.0
+
+[node name="AbilitiesBar" type="HBoxContainer" parent="HUDLayer/HUDRoot" unique_id=1827364510]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -72.0
+offset_right = 280.0
+offset_bottom = -8.0
+grow_horizontal = 2
+alignment = 1
+script = ExtResource("16_abbar")
 
 [node name="PauseMenuRoot" type="CanvasLayer" parent="." unique_id=1776983684]
 layer = 50

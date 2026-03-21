@@ -24,6 +24,7 @@ func _apply_session_to_player() -> void:
 		player.hunger_changed.emit(player.hunger)
 		player.health_changed.emit(player.health)
 		player._update_attack_hitbox_radius()
+		AbilityManager.apply_discovered_from_save([])
 	elif GameSession.has_pending_apply():
 		var data: Dictionary = GameSession.take_pending_apply()
 		var pd: Variant = data.get("player", {})
@@ -40,3 +41,8 @@ func _apply_session_to_player() -> void:
 			player.hunger_changed.emit(player.hunger)
 			player.health_changed.emit(player.health)
 			player._update_attack_hitbox_radius()
+		var discovered: Variant = data.get("discovered_abilities", [])
+		if discovered is Array:
+			AbilityManager.apply_discovered_from_save(discovered)
+		else:
+			AbilityManager.apply_discovered_from_save([])

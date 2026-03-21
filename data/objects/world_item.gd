@@ -17,6 +17,7 @@ func can_be_picked_up(_by: Node) -> bool:
 	return true
 
 func be_eaten(by: Creature) -> void:
+	AbilityManager.notify_creature_ate_item(by, self)
 	on_picked_up(by)
 
 func on_picked_up(by: Node) -> void:
