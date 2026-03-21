@@ -18,7 +18,7 @@ static func get_closest(point: Vector2, nodes: Array[Node2D]) -> Node2D:
 ## Radius used for interaction distance checks and movement hold distances. Matches [method Creature.get_hitbox_radius]
 ## when available, otherwise the first circle [CollisionShape2D] on [param node].
 static func get_target_radius_for_interaction(node: Node2D) -> float:
-	if node.has_method("get_hitbox_radius"):
+	if node is Creature or node is Player:
 		return node.get_hitbox_radius()
 	return get_collision_radius(node)
 

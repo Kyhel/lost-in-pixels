@@ -97,8 +97,7 @@ func _resolve_request_kinematics(creature: Creature, request: MovementRequest, c
 				allow_translate = not Node2DUtils.is_within_interaction_range(creature, approach, Constants.INTERACTION_APPROACH_STOP_MARGIN)
 				face_point = approach.global_position
 			MovementRequest.ApproachSpacing.COMBAT:
-				var d_act: float = creature.global_position.distance_to(approach.global_position)
-				allow_translate = d_act > r_c + r_t + Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
+				allow_translate = d_to_actual > r_c + r_t + Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
 				face_point = approach.global_position
 			_:
 				allow_translate = creature.global_position.distance_squared_to(move_goal) > thr * thr
@@ -190,28 +189,24 @@ func compute_velocity(creature, target_position: Vector2, speed: float, velocity
 	return velocity
 
 func _seek(creature: Creature, target_position: Vector2, max_speed: float) -> Vector2:
-	var desired = target_position - creature.global_position
-	var distance = desired.length()
-	
-	if distance == 0:
+	var desired: Vector2 = target_position - creature.global_position
+	var dist_sq: float = desired.length_squared()
+	if dist_sq < 1e-12:
 		return Vector2.ZERO
-	
-	# Arrival behavior (important!)
-	var speed := max_speed
-	if distance < 50:
+	var distance: float = sqrt(dist_sq)
+	var speed: float = max_speed
+	if dist_sq < 2500.0:
 		speed *= distance / 50.0
-	
-	desired = desired.normalized() * speed
-
-	return desired
+	return desired * (speed / distance)
 
 func _compute_separation(creature: Creature) -> Vector2:
 
-	var separation_radius = separation_multiplier * creature.creature_data.hitbox_size
-	
-	var force = Vector2.ZERO
-	var count = 0
-	
+	var separation_radius: float = separation_multiplier * creature.creature_data.hitbox_size
+	var radius_sq: float = separation_radius * separation_radius
+
+	var force := Vector2.ZERO
+	var count := 0
+
 	for other in creature.get_tree().get_nodes_in_group(Constants.GROUP_FOLLOWING_CREATURES):
 
 		if !is_instance_valid(other):
@@ -220,17 +215,17 @@ func _compute_separation(creature: Creature) -> Vector2:
 		if other == creature:
 			continue
 
-		var to = creature.global_position - other.global_position
-		var dist = to.length()
-
-		if dist > 0 and dist < separation_radius:
-			var force_strength = (separation_radius - dist) / separation_radius
-			force += to.normalized() * force_strength
+		var to: Vector2 = creature.global_position - other.global_position
+		var dist_sq: float = to.length_squared()
+		if dist_sq > 0.0 and dist_sq < radius_sq:
+			var dist: float = sqrt(dist_sq)
+			var force_strength: float = (separation_radius - dist) / separation_radius
+			force += (to / dist) * force_strength
 			count += 1
 
 	if count > 0:
 		force /= count
-	
+
 	return force
 
 func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
@@ -241,7 +236,7 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 		return Vector2.ZERO
 	if creature.creature_data == null:
 		return Vector2.ZERO
-	if velocity.length() < 5.0:
+	if velocity.length_squared() < 25.0:
 		return Vector2.ZERO
 
 	var shape_node: CollisionShape2D = creature.collisionShape
@@ -265,8 +260,9 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 	params.collide_with_areas = false
 	params.exclude = [creature.get_rid()]
 
-	# instance_id -> closest distance (creature center to obstacle center) seen during sweep
-	var obstacle_best_dist: Dictionary = {}
+	# instance_id -> { "dist": float, "node": Node2D } (closest hit per collider during sweep)
+	var obstacle_best: Dictionary = {}
+	var ignore_food: Variant = creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD)
 
 	for step in range(step_count):
 		var t: float = 0.0
@@ -283,26 +279,26 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 			if not (collider is Node2D):
 				continue
 
-			# Dont try to avoid the target food.
-			if collider == creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD):
+			if collider == ignore_food:
 				continue
 
 			var other: Node2D = collider as Node2D
 			var dist: float = creature.global_position.distance_to(other.global_position)
 			var cid: int = collider.get_instance_id()
-			if not obstacle_best_dist.has(cid):
-				obstacle_best_dist[cid] = dist
+			if not obstacle_best.has(cid):
+				obstacle_best[cid] = {"dist": dist, "node": other}
 			else:
-				obstacle_best_dist[cid] = minf(obstacle_best_dist[cid] as float, dist)
+				var prev: float = obstacle_best[cid]["dist"] as float
+				if dist < prev:
+					obstacle_best[cid]["dist"] = dist
 
 	var total_force := Vector2.ZERO
-	for cid_key in obstacle_best_dist:
-		var cid: int = int(cid_key)
-		var collider: Object = instance_from_id(cid)
-		if collider == null or not is_instance_valid(collider) or not (collider is Node2D):
+	for cid_key in obstacle_best:
+		var entry: Dictionary = obstacle_best[cid_key] as Dictionary
+		var other: Node2D = entry["node"] as Node2D
+		if other == null or not is_instance_valid(other):
 			continue
-		var other: Node2D = collider as Node2D
-		var dist: float = obstacle_best_dist[cid_key] as float
+		var dist: float = entry["dist"] as float
 
 		var hit_dir: Vector2 = other.global_position - creature.global_position
 		if hit_dir.length_squared() < 0.0001:
