@@ -8,7 +8,9 @@ enum MovementContext {
 	FLY,
 }
 
-## How close is "done" when [member approach_target] is set: INTERACTION uses [method Node2DUtils.is_within_interaction_range];
+## How close is "done" when [member approach_target] is set: INTERACTION stops translation at
+## [constant Constants.INTERACTION_APPROACH_STOP_MARGIN] (tighter) while actual interaction checks use
+## [constant Constants.DEFAULT_INTERACTION_MARGIN] (wider so interact can succeed before the hold);
 ## COMBAT uses combined radii + [constant Constants.DEFAULT_COMBAT_APPROACH_STANDOFF]; CUSTOM uses distance to move goal + [member completion_distance_threshold].
 enum ApproachSpacing {
 	CUSTOM,

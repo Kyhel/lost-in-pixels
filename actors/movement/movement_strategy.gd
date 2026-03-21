@@ -94,7 +94,7 @@ func _resolve_request_kinematics(creature: Creature, request: MovementRequest, c
 		face_point = anchor
 		match request.approach_spacing:
 			MovementRequest.ApproachSpacing.INTERACTION:
-				allow_translate = not Node2DUtils.is_within_interaction_range(creature, approach)
+				allow_translate = not Node2DUtils.is_within_interaction_range(creature, approach, Constants.INTERACTION_APPROACH_STOP_MARGIN)
 				face_point = approach.global_position
 			MovementRequest.ApproachSpacing.COMBAT:
 				var d_act: float = creature.global_position.distance_to(approach.global_position)
