@@ -3,20 +3,25 @@
 [ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_56npc"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_27jme"]
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://ai/goals/eat_goal.tres" id="2_eat"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="2_rmriv"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_yyua3"]
 [ext_resource type="Texture2D" uid="uid://biu286a1d7wjw" path="res://assets/creatures/beaver.png" id="4_27jme"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://ai/sensors/sensor.gd" id="4_djyqf"]
-[ext_resource type="Resource" uid="uid://buc163bqsuj5g" path="res://ai/sensors/vegetarian_food_sensor.tres" id="5_nn8gk"]
+[ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://ai/sensors/food_sensor.tres" id="5_food"]
+[ext_resource type="Resource" path="res://data/items/water_lily_flower.tres" id="5_jkmdi"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://data/items/carrot.tres" id="6_carrot"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://data/items/berry.tres" id="8_berry"]
 
 [resource]
 script = ExtResource("2_yyua3")
 sprite = ExtResource("4_27jme")
 goals = Array[ExtResource("1_56npc")]([ExtResource("2_27jme"), ExtResource("2_eat")])
-sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_nn8gk")])
+sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 can_swim = true
 size = 30
 hitbox_size = 12
 excluded_tile_types = Array[int]([])
 needs_eating = true
+edible_items = Array[ExtResource("2_rmriv")]([ExtResource("6_carrot"), ExtResource("8_berry"), ExtResource("5_jkmdi")])
 hunger_decay_rate = 1.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

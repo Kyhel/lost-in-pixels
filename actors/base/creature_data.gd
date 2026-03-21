@@ -36,6 +36,10 @@ enum MovementType {
 @export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
 @export var movement_types: Array[MovementType] = [MovementType.RUN]
 @export var needs_eating: bool = false
+## Item types this species can eat; used by [FoodSensor] when [member needs_eating] is true.
+@export var edible_items: Array[ItemData] = []
+## Prey species ([CreatureData]) this species can eat; used by [FoodSensor].
+@export var edible_creatures: Array[CreatureData] = []
 @export var hunger_decay_rate: float = 5.0
 @export var taming_decay_rate: float = 5.0
 @export var taming_value_threshold: int = 0
