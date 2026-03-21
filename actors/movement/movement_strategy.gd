@@ -251,15 +251,13 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 	var forward: Vector2 = velocity / speed_mag
 	var hitbox: float = creature.creature_data.hitbox_size
 
-	var rect_shape: RectangleShape2D = creature.get_obstacle_avoidance_rectangle_shape()
-	rect_shape.size = Vector2(sweep_len, hitbox)
-
 	var corridor_origin: Vector2 = shape_node.global_position
 	var center: Vector2 = corridor_origin + forward * (sweep_len * 0.5)
 	var basis_y: Vector2 = Vector2(-forward.y, forward.x)
 	var corridor_xform: Transform2D = Transform2D(forward, basis_y, center)
 
 	var params: PhysicsShapeQueryParameters2D = creature.get_obstacle_avoidance_shape_query()
+	params.shape.size = Vector2(sweep_len, hitbox)
 	params.transform = corridor_xform
 	params.collision_mask = creature.collision_mask
 	params.exclude = [creature.get_rid()]

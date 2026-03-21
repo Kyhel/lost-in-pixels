@@ -190,11 +190,6 @@ func get_obstacle_avoidance_shape_query() -> PhysicsShapeQueryParameters2D:
 		_obstacle_avoid_query_params.collide_with_areas = false
 	return _obstacle_avoid_query_params
 
-
-func get_obstacle_avoidance_rectangle_shape() -> RectangleShape2D:
-	get_obstacle_avoidance_shape_query()
-	return _obstacle_avoid_rect_shape
-
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:
 		return
