@@ -13,6 +13,10 @@ func _init(p_seed: int) -> void:
 	bush_noise.fractal_gain = 0.55
 
 
+const MAX_BUSHES_PER_CHUNK := 2
+const CHUNK_SHUFFLE_SALT := 0xBEE3
+
+
 func generate_berry_bushes_for_chunk(
 	chunk_position: Vector2i,
 	_chunk: Chunk,
@@ -20,12 +24,24 @@ func generate_berry_bushes_for_chunk(
 	biome_generator: WorldGenerator,
 	tree_generator: TreeGenerator,
 ) -> void:
+	var candidates: Array[Vector2i] = []
 	for x in range(chunk_size):
 		for y in range(chunk_size):
 			var wx: int = chunk_position.x * chunk_size + x
 			var wy: int = chunk_position.y * chunk_size + y
 			if should_spawn_bush(wx, wy, biome_generator, tree_generator):
-				ObjectsManager.spawn_berry_bush(chunk_position, Vector2i(wx, wy))
+				candidates.append(Vector2i(wx, wy))
+
+	if candidates.is_empty():
+		return
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y) ^ CHUNK_SHUFFLE_SALT
+	candidates.shuffle()
+
+	var n: int = mini(MAX_BUSHES_PER_CHUNK, candidates.size())
+	for i in n:
+		ObjectsManager.spawn_berry_bush(chunk_position, candidates[i])
 
 
 func should_spawn_bush(

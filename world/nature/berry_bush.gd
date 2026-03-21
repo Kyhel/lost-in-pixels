@@ -13,11 +13,12 @@ var _berry_data: ItemData
 var _slot_offsets: Array[Vector2] = []
 var _slot_refs: Array = []
 
-var _regrow_accum: float = 0.0
+var _regrow_elapsed: float = 0.0
 const REGROW_INTERVAL := 1.0
 
 
 func _ready() -> void:
+	_regrow_elapsed = -CreatureUtils.get_stagger_phase_offset(self, REGROW_INTERVAL)
 	_berry_data = ItemDatabase.get_item(&"berry")
 	if _berry_data == null:
 		push_error("BerryBush: berry item not in ItemDatabase")
@@ -28,10 +29,12 @@ func _ready() -> void:
 
 	var half_tile: float = ChunkManager.TILE_SIZE * 0.5
 	var center := Vector2(half_tile, half_tile)
+	var base_angle: float = rng.randf_range(0.0, TAU)
+	var ring_base: float = half_tile * 0.8
 	for i in SLOT_COUNT:
-		var ox: float = rng.randf_range(-half_tile + 2.0, half_tile - 2.0)
-		var oy: float = rng.randf_range(-half_tile + 2.0, half_tile - 2.0)
-		_slot_offsets.append(center + Vector2(ox, oy))
+		var angle: float = base_angle + float(i) * TAU / float(SLOT_COUNT) + rng.randf_range(-0.12, 0.12)
+		var r: float = ring_base * rng.randf_range(0.5, 1.0)
+		_slot_offsets.append(center + Vector2.from_angle(angle) * r)
 		_slot_refs.append(null)
 
 	for slot_i in SLOT_COUNT:
@@ -41,9 +44,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if _berry_data == null:
 		return
-	_regrow_accum += delta
-	while _regrow_accum >= REGROW_INTERVAL:
-		_regrow_accum -= REGROW_INTERVAL
+	_regrow_elapsed += delta
+	while _regrow_elapsed >= REGROW_INTERVAL:
+		_regrow_elapsed -= REGROW_INTERVAL
 		_tick_regrow()
 
 

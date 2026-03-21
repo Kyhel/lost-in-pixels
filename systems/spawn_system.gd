@@ -11,6 +11,11 @@ const RABBIT_SPAWN_TRY_COUNT = 5
 ## Tracks last time we spawned a rabbit in each chunk (for rate limiting).
 var _rabbit_last_spawn_time: Dictionary = {}
 
+
+func _is_small_spawnable_item(item: ItemData) -> bool:
+	return item.id == &"flower_red_1" or item.id == &"carrot"
+
+
 func _physics_process(delta: float) -> void:
 	var result: Dictionary = _stagger.update(delta)
 	var chunks_to_update: Array[Vector2i] = result["chunks"]
@@ -69,6 +74,8 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 
 				if can_spawn:
 					var centered := world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
+					if _is_small_spawnable_item(item) and ObjectsManager.is_small_item_spawn_blocked(centered):
+						continue
 					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, centered)
 
 func spawn_creatures(chunk: Chunk) -> void:

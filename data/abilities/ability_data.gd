@@ -8,3 +8,4 @@ extends Resource
 @export var effect_script: Script
 @export_multiline var discover_log_message: String = ""
 @export_multiline var use_log_message: String = ""
+@export_multiline var failure_log_message: String = ""

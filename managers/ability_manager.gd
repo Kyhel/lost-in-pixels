@@ -67,9 +67,16 @@ func try_activate_slot(slot_index: int) -> void:
 		return
 	var inst: Variant = ability.effect_script.new()
 	if inst != null and inst.has_method("execute"):
-		inst.execute(player)
-		if not ability.use_log_message.strip_edges().is_empty():
-			GameLog.log_message(ability.use_log_message)
+		var result: Variant = inst.execute(player)
+		var success: bool = true
+		if result is bool:
+			success = result as bool
+		if success:
+			if not ability.use_log_message.strip_edges().is_empty():
+				GameLog.log_message(ability.use_log_message)
+		else:
+			if not ability.failure_log_message.strip_edges().is_empty():
+				GameLog.log_message(ability.failure_log_message)
 
 
 func apply_discovered_from_save(ids: Variant) -> void:

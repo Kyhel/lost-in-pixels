@@ -6,6 +6,16 @@ var chunk_items: Dictionary[Vector2i, Array] = {}
 var chunk_trees: Dictionary[Vector2i, Array] = {}
 var chunk_bushes: Dictionary[Vector2i, Array] = {}
 
+## World tile anchors for trees and berry bushes only (not small world items).
+var _environment_tile_occupied: Dictionary = {}
+
+const SMALL_ITEM_RADIUS := 4.0
+const PLACEMENT_MARGIN := 4.0
+const ENV_TILE_CENTER := Vector2(8, 8)
+const TREE_PROP_RADIUS := 10.0
+const BUSH_PROP_RADIUS := 10.0
+const OVERLAP_SEARCH_RADIUS := 64.0
+
 const CHUNK_UPDATE_INTERVAL: float = 10.0
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
@@ -39,6 +49,7 @@ func clear_all_objects() -> void:
 			if is_instance_valid(bush):
 				bush.queue_free()
 	chunk_bushes.clear()
+	_environment_tile_occupied.clear()
 
 func update_chunks(delta: float) -> void:
 
@@ -89,6 +100,7 @@ func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
 		chunk_trees[chunk] = []
 
 	chunk_trees[chunk].append(tree)
+	register_environment_tile(tile_position)
 
 
 func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
@@ -103,9 +115,50 @@ func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
 	if not chunk_bushes.has(chunk):
 		chunk_bushes[chunk] = []
 	chunk_bushes[chunk].append(bush)
+	register_environment_tile(world_tile)
+
+
+func register_environment_tile(world_tile: Vector2i) -> void:
+	_environment_tile_occupied[world_tile] = true
+
+
+func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
+	return _environment_tile_occupied.has(world_tile)
+
+
+func clear_environment_tiles_for_chunk(chunk_coords: Vector2i) -> void:
+	for ly in ChunkManager.CHUNK_SIZE:
+		for lx in ChunkManager.CHUNK_SIZE:
+			var wx: int = chunk_coords.x * ChunkManager.CHUNK_SIZE + lx
+			var wy: int = chunk_coords.y * ChunkManager.CHUNK_SIZE + ly
+			_environment_tile_occupied.erase(Vector2i(wx, wy))
+
+
+func is_small_item_spawn_blocked(
+	world_pos: Vector2,
+	self_radius: float = SMALL_ITEM_RADIUS,
+	margin: float = PLACEMENT_MARGIN,
+) -> bool:
+	for item in get_nearby_items(world_pos, OVERLAP_SEARCH_RADIUS):
+		var r: float = Node2DUtils.get_collision_radius(item)
+		if r <= 0.0:
+			r = SMALL_ITEM_RADIUS
+		if world_pos.distance_to(item.global_position) < self_radius + r + margin:
+			return true
+	for tree in get_nearby_trees(world_pos, OVERLAP_SEARCH_RADIUS):
+		var center: Vector2 = tree.global_position + ENV_TILE_CENTER
+		if world_pos.distance_to(center) < self_radius + TREE_PROP_RADIUS + margin:
+			return true
+	for bush in get_nearby_bushes(world_pos, OVERLAP_SEARCH_RADIUS):
+		var center: Vector2 = bush.global_position + ENV_TILE_CENTER
+		if world_pos.distance_to(center) < self_radius + BUSH_PROP_RADIUS + margin:
+			return true
+	return false
 
 
 func on_chunk_unloaded(chunk: Vector2i) -> void:
+
+	clear_environment_tiles_for_chunk(chunk)
 
 	if chunk_items.has(chunk):
 
@@ -176,5 +229,31 @@ func get_nearby_trees(origin: Vector2, radius: float) -> Array:
 
 				if dist_sq <= radius_sq:
 					results.append(tree)
+
+	return results
+
+
+func get_nearby_bushes(origin: Vector2, radius: float) -> Array[Node2D]:
+	var results: Array[Node2D] = []
+	var radius_sq := radius * radius
+
+	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
+
+	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
+		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
+			var key: Vector2i = Vector2i(cx, cy)
+			if not chunk_bushes.has(key):
+				continue
+
+			for bush in chunk_bushes[key]:
+				if not is_instance_valid(bush):
+					continue
+
+				var dx: float = bush.global_position.x - origin.x
+				var dy: float = bush.global_position.y - origin.y
+				var dist_sq: float = dx * dx + dy * dy
+
+				if dist_sq <= radius_sq:
+					results.append(bush)
 
 	return results

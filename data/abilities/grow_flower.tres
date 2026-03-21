@@ -14,3 +14,4 @@ unlock_rule = ExtResource("2_rule")
 effect_script = ExtResource("3_effect")
 discover_log_message = "By watching rabbits eat flowers you have developed the ability to grow flowers."
 use_log_message = "You grew a flower."
+failure_log_message = "You can't grow a flower here"
