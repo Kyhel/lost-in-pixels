@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://ai/goals/goal.gd" id="1_56npc"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://ai/goals/wander_goal.tres" id="2_27jme"]
+[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://ai/goals/eat_goal.tres" id="2_eat"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://actors/base/creature_data.gd" id="2_yyua3"]
 [ext_resource type="Texture2D" uid="uid://biu286a1d7wjw" path="res://assets/creatures/beaver.png" id="4_27jme"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://ai/sensors/sensor.gd" id="4_djyqf"]
@@ -10,10 +11,12 @@
 [resource]
 script = ExtResource("2_yyua3")
 sprite = ExtResource("4_27jme")
-goals = Array[ExtResource("1_56npc")]([ExtResource("2_27jme")])
+goals = Array[ExtResource("1_56npc")]([ExtResource("2_27jme"), ExtResource("2_eat")])
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_nn8gk")])
 can_swim = true
 size = 30
 hitbox_size = 12
 excluded_tile_types = Array[int]([])
+needs_eating = true
+hunger_decay_rate = 1.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

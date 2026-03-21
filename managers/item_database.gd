@@ -8,6 +8,7 @@ func _ready() -> void:
 
 func _register_defaults() -> void:
 	_register_item(load("res://data/items/health_potion.tres"))
+	_register_item(load("res://data/items/berry.tres"))
 	_register_item(load("res://data/items/coin.tres"))
 	_register_item(load("res://data/objects/nature/flowers/flower_red_1.tres"))
 

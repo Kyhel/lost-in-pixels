@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://crtq7g0dtrud8" path="res://ai/sensors/food_sensor.gd" id="1_6hpia"]
 [ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://data/items/carrot.tres" id="1_dte6d"]
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://data/objects/nature/flowers/flower_red_1.tres" id="2_3d3ah"]
+[ext_resource type="Resource" uid="uid://c7k2bm9xryw1p" path="res://data/items/berry.tres" id="3_berry"]
 
 [resource]
 script = ExtResource("1_6hpia")
-edible_items = Array[Resource]([ExtResource("1_dte6d"), ExtResource("2_3d3ah")])
+edible_items = Array[Resource]([ExtResource("1_dte6d"), ExtResource("2_3d3ah"), ExtResource("3_berry")])
 metadata/_custom_type_script = "uid://crtq7g0dtrud8"

@@ -6,6 +6,8 @@ var base_speed = 200
 const ATTACK_RANGE = 20 # fallback if no weapon equipped
 const ATTACK_DAMAGE = 1 # fallback if no weapon equipped
 const PICKUP_RADIUS = 16
+const FRONT_PICKUP_RADIUS = 22.0
+const PICKUP_CONE_HALF_ANGLE := PI / 4.0
 
 var AttackEffectScene := preload("res://actors/player/attack_effect.tscn")
 var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
@@ -66,7 +68,8 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("ability_" + str(abi)):
 			AbilityManager.try_activate_slot(abi - 1)
 
-	try_pickup_items()
+	if Input.is_action_just_pressed("interact"):
+		try_pickup_in_front()
 
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)
 
@@ -156,13 +159,35 @@ func _spawn_carrot() -> void:
 	ObjectsManager.spawn_item_in_chunk(chunk, carrot_data, spawn_pos, 1)
 
 
-func try_pickup_items():
-	for item in ObjectsManager.get_nearby_items(global_position, PICKUP_RADIUS):
-		if not item.item_data.can_pickup:
+func try_pickup_in_front() -> void:
+	var forward := Vector2.UP.rotated(sprite.rotation)
+	if forward.is_zero_approx():
+		forward = Vector2.UP
+	var cos_threshold: float = cos(PICKUP_CONE_HALF_ANGLE)
+	var scored: Array[Dictionary] = []
+	for item in ObjectsManager.get_nearby_items(global_position, FRONT_PICKUP_RADIUS):
+		if item.item_data == null or not item.item_data.can_pickup:
 			continue
-		item.on_picked_up(self)
-		if item.item_data.player_food_value > 0:
-			_apply_food_value(item.item_data.player_food_value)
+		var to_item: Vector2 = item.global_position - global_position
+		var dist_sq: float = to_item.length_squared()
+		if dist_sq < 0.0001:
+			scored.append({"item": item, "dist_sq": dist_sq})
+			continue
+		var dir: Vector2 = to_item / sqrt(dist_sq)
+		if forward.dot(dir) >= cos_threshold:
+			scored.append({"item": item, "dist_sq": dist_sq})
+	scored.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return (a["dist_sq"] as float) < (b["dist_sq"] as float)
+	)
+	for entry in scored:
+		var it: WorldItem = entry["item"] as WorldItem
+		if not is_instance_valid(it) or it.item_data == null:
+			continue
+		var food_val: float = it.item_data.player_food_value
+		it.on_picked_up(self)
+		if food_val > 0.0:
+			_apply_food_value(food_val)
+		break
 
 func _apply_food_value(amount: float) -> void:
 	if amount <= 0.0 or _dead:

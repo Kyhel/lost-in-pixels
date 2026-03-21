@@ -4,12 +4,14 @@ var occlusion_mask_viewport: SubViewport
 
 var chunk_items: Dictionary[Vector2i, Array] = {}
 var chunk_trees: Dictionary[Vector2i, Array] = {}
+var chunk_bushes: Dictionary[Vector2i, Array] = {}
 
 const CHUNK_UPDATE_INTERVAL: float = 10.0
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
 var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_scene := preload("res://world/nature/tree_1.tscn")
+var berry_bush_scene := preload("res://world/nature/berry_bush.tscn")
 
 func _ready() -> void:
 	refresh_scene_references()
@@ -32,6 +34,11 @@ func clear_all_objects() -> void:
 			if is_instance_valid(tree):
 				tree.queue_free()
 	chunk_trees.clear()
+	for k in chunk_bushes.keys():
+		for bush in chunk_bushes[k]:
+			if is_instance_valid(bush):
+				bush.queue_free()
+	chunk_bushes.clear()
 
 func update_chunks(delta: float) -> void:
 
@@ -44,6 +51,8 @@ func update_chunks(delta: float) -> void:
 			chunk_items[coords] = ArrayUtils.cleanup_invalid_entries(chunk_items[coords])
 		if chunk_trees.has(coords):
 			chunk_trees[coords] = ArrayUtils.cleanup_invalid_entries(chunk_trees[coords])
+		if chunk_bushes.has(coords):
+			chunk_bushes[coords] = ArrayUtils.cleanup_invalid_entries(chunk_bushes[coords])
 
 func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantity: int = 1):
 	var item = world_item_scene.instantiate()
@@ -81,6 +90,21 @@ func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
 
 	chunk_trees[chunk].append(tree)
 
+
+func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
+	var bush: Node2D = berry_bush_scene.instantiate() as Node2D
+	bush.set("chunk_coords", chunk)
+	bush.set("world_tile", world_tile)
+	bush.global_position = Vector2(
+		world_tile.x * ChunkManager.TILE_SIZE,
+		world_tile.y * ChunkManager.TILE_SIZE
+	)
+	add_child(bush)
+	if not chunk_bushes.has(chunk):
+		chunk_bushes[chunk] = []
+	chunk_bushes[chunk].append(bush)
+
+
 func on_chunk_unloaded(chunk: Vector2i) -> void:
 
 	if chunk_items.has(chunk):
@@ -98,6 +122,12 @@ func on_chunk_unloaded(chunk: Vector2i) -> void:
 				tree.queue_free()	
 
 		chunk_trees.erase(chunk)
+
+	if chunk_bushes.has(chunk):
+		for bush in chunk_bushes[chunk]:
+			if is_instance_valid(bush):
+				bush.queue_free()
+		chunk_bushes.erase(chunk)
 
 func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []

@@ -12,6 +12,7 @@ var loaded_chunks: Dictionary[Vector2i, Node] = {}
 var chunk_scene = preload("res://world/chunk.tscn")
 var world_generator: WorldGenerator
 var tree_generator: TreeGenerator
+var berry_bush_generator: Variant
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
 
@@ -22,7 +23,9 @@ func _ready() -> void:
 func _apply_world_seed(p_seed: int) -> void:
 	world_generator = preload("res://world/world_generator.gd").new()
 	world_generator.setup_seed(p_seed)
-	tree_generator = TreeGenerator.new(world_generator.terrain_noise.seed)
+	var wseed: int = world_generator.terrain_noise.seed
+	tree_generator = TreeGenerator.new(wseed)
+	berry_bush_generator = load("res://world/nature/berry_bush_generator.gd").new(wseed)
 
 
 func set_world_seed(p_seed: int) -> void:
@@ -140,6 +143,13 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 		chunk,
 		CHUNK_SIZE,
 		world_generator)
+
+	berry_bush_generator.generate_berry_bushes_for_chunk(
+		Vector2i(chunk_x, chunk_y),
+		chunk,
+		CHUNK_SIZE,
+		world_generator,
+		tree_generator)
 
 func _spawn_world_items(chunk_x: int, chunk_y: int):
 
