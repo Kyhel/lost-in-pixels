@@ -5,3 +5,7 @@ extends Resource
 @export var allowed_creatures : Array[CreatureData] = []
 @export var chunk_load_radius := 4
 @export var max_creatures_per_chunk := 5
+@export var spawn_trees := true
+@export var spawn_bushes := true
+@export var spawn_water_lilies := true
+@export var spawn_items := true

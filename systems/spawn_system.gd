@@ -20,14 +20,18 @@ func _physics_process(delta: float) -> void:
 		var chunk: Chunk = ChunkManager.loaded_chunks.get(coords, null)
 		if chunk == null:
 			continue
-		spawn_in_chunk(chunk)
-		spawn_creatures(chunk)
+
+		if DebugManager.debug_config.spawn_items:
+			spawn_items(chunk)
+			
+		if DebugManager.debug_config.spawn_rabbits:
+			spawn_rabbits(chunk)
 
 	var removed: Array[Vector2i] = result["removed"]
 	for coords in removed:
 		_rabbit_last_spawn_time.erase(coords)
 
-func spawn_in_chunk(chunk: Chunk) -> void:
+func spawn_items(chunk: Chunk) -> void:
 
 	var items: Array = ItemDatabase.get_items()
 
@@ -74,7 +78,7 @@ func spawn_in_chunk(chunk: Chunk) -> void:
 						continue
 					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, centered)
 
-func spawn_creatures(chunk: Chunk) -> void:
+func spawn_rabbits(chunk: Chunk) -> void:
 
 	if !DebugManager.debug_config.spawn_rabbits:
 		return

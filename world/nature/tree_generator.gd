@@ -2,13 +2,23 @@ class_name TreeGenerator
 extends RefCounted
 
 ## Tiles from tree center in each direction reserved (no other tree). 1 = 3x3, 2 = 5x5, etc.
-const TREE_SPACING_RADIUS := 3
+const TREE_SPACING_RADIUS := 5.
+const TREE_2_SPACING_RADIUS := 3
 ## Within each spacing cell, the tree can spawn in a smaller inner square (center ± this). 0 = center only, 1 = 3x3, etc. Must be <= TREE_SPACING_RADIUS.
 const TREE_INNER_RADIUS := 2
 
+enum TreeType {
+	TREE_1,
+	TREE_2
+}
+
 ## One tile per spacing cell is allowed to have a tree; this is the outer cell side length.
-func _get_spacing_cell_size() -> int:
-	return 2 * TREE_SPACING_RADIUS + 1
+func _get_spacing_cell_size(biome: WorldGenerator.Biome) -> int:
+	match biome:
+		WorldGenerator.Biome.FOREST:
+			return 2 * TREE_2_SPACING_RADIUS + 1
+		_:
+			return 2 * TREE_SPACING_RADIUS + 1
 
 var tree_noise := FastNoiseLite.new()
 var world_seed : int
@@ -34,15 +44,34 @@ func generate_trees_for_chunk(
 			var global_x:int = chunk_position.x * chunk_size + x
 			var global_y:int = chunk_position.y * chunk_size + y
 			
-			if should_spawn_tree(global_x, global_y, biome_generator):
-				ObjectsManager.spawn_tree(chunk_position, Vector2i(global_x, global_y))
+			var tile_type := biome_generator.get_tile_type(global_x, global_y)
+			var biome := biome_generator.get_biome(global_x, global_y)
+			
+			if should_spawn_tree(global_x, global_y, tile_type, biome):
+				var tree_type = get_tree_type(biome)
+				ObjectsManager.spawn_tree(chunk_position, Vector2i(global_x, global_y), tree_type)
+
+
+func should_spawn_tree(x: int, y: int, tile_type: WorldGenerator.TileType, biome: WorldGenerator.Biome) -> bool:
+	if !_tile_passes_tree_rules(x, y, tile_type, biome):
+		return false
+	# Only one tile per spacing cell may have a tree; this tile must be the chosen one (deterministic).
+	return _is_spacing_winner(x, y, biome)
+
+
+func get_tree_type(biome: WorldGenerator.Biome) -> TreeType:
+	match biome:
+		WorldGenerator.Biome.PLAINS:
+			return TreeType.TREE_1
+		WorldGenerator.Biome.FOREST:
+			return TreeType.TREE_2
+		_:
+			return TreeType.TREE_1
 
 ## True if this tile passes water/biome/noise/random rules (no adjacent-tree check). Deterministic.
-func _tile_passes_tree_rules(wx: int, wy: int, biome_generator: WorldGenerator) -> bool:
-	var tile_type: WorldGenerator.TileType = biome_generator.get_tile_type(wx, wy)
+func _tile_passes_tree_rules(wx: int, wy: int, tile_type: WorldGenerator.TileType, biome: WorldGenerator.Biome) -> bool:
 	if tile_type == WorldGenerator.TileType.WATER:
 		return false
-	var biome: WorldGenerator.Biome = biome_generator.get_biome(wx, wy)
 	if biome != WorldGenerator.Biome.FOREST and biome != WorldGenerator.Biome.PLAINS:
 		return false
 	if tree_noise.get_noise_2d(wx, wy) < 0.1:
@@ -51,16 +80,11 @@ func _tile_passes_tree_rules(wx: int, wy: int, biome_generator: WorldGenerator) 
 		return false
 	return true
 
-func should_spawn_tree(x: int, y: int, biome_generator: WorldGenerator) -> bool:
-	if !_tile_passes_tree_rules(x, y, biome_generator):
-		return false
-	# Only one tile per spacing cell may have a tree; this tile must be the chosen one (deterministic).
-	return _is_spacing_winner(x, y)
 
 ## True if (wx, wy) is the deterministically chosen tile in its spacing cell (inner region only).
 ## Outer cell enforces spacing; inner region gives deterministic randomness.
-func _is_spacing_winner(wx: int, wy: int) -> bool:
-	var cell_size: int = _get_spacing_cell_size()
+func _is_spacing_winner(wx: int, wy: int, biome: WorldGenerator.Biome) -> bool:
+	var cell_size: int = _get_spacing_cell_size(biome)
 	var cell_x: int = int(floor(wx / float(cell_size)))
 	var cell_y: int = int(floor(wy / float(cell_size)))
 	var local_x: int = posmod(wx, cell_size)

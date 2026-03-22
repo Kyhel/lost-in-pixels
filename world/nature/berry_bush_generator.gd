@@ -50,12 +50,12 @@ func should_spawn_bush(
 	biome_generator: WorldGenerator,
 	tree_generator: TreeGenerator,
 ) -> bool:
-	if tree_generator.should_spawn_tree(wx, wy, biome_generator):
-		return false
 	var tile_type: WorldGenerator.TileType = biome_generator.get_tile_type(wx, wy)
+	var biome: WorldGenerator.Biome = biome_generator.get_biome(wx, wy)
+	if tree_generator.should_spawn_tree(wx, wy, tile_type, biome):
+		return false
 	if tile_type == WorldGenerator.TileType.WATER:
 		return false
-	var biome: WorldGenerator.Biome = biome_generator.get_biome(wx, wy)
 	if biome != WorldGenerator.Biome.FOREST and biome != WorldGenerator.Biome.PLAINS:
 		return false
 	if bush_noise.get_noise_2d(wx, wy) < 0.12:

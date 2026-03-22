@@ -16,7 +16,8 @@ const CHUNK_UPDATE_INTERVAL: float = 10.0
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
 var world_item_scene := preload("res://data/objects/world_item.tscn")
-var tree_scene := preload("res://world/nature/tree_1.tscn")
+var tree_1_scene := preload("res://world/nature/trees/tree_1.tscn")
+var tree_2_scene := preload("res://world/nature/trees/tree_2.tscn")
 var berry_bush_scene := preload("res://world/nature/berry_bush.tscn")
 var water_lily_scene: PackedScene = preload("res://world/nature/water_lily.tscn")
 
@@ -69,58 +70,50 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	chunk_items[chunk].append(item)
 	return item
 
-func spawn_tree(chunk: Vector2i, tile_position:Vector2i) -> void:
+func spawn_tree(chunk: Vector2i, tile_position:Vector2i, tree_type: TreeGenerator.TreeType) -> void:
+
 	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
 		refresh_scene_references()
-	var tree := tree_scene.instantiate()
+
+	var tree := spawn_vegetation(chunk, tile_position, get_tree_scene(tree_type))
 	var foliage_material = tree.get_node("Foliage").material
 	if occlusion_mask_viewport != null:
 		foliage_material.set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
 	else:
 		push_warning("ObjectsManager: AlphaMaskViewport missing; tree spawned without mask.")
 
-	tree.global_position = Vector2(
-		tile_position.x * ChunkManager.TILE_SIZE,
-		tile_position.y * ChunkManager.TILE_SIZE
+
+func get_tree_scene(tree_type: TreeGenerator.TreeType) -> PackedScene:
+	match tree_type:
+		TreeGenerator.TreeType.TREE_1:
+			return tree_1_scene
+		TreeGenerator.TreeType.TREE_2:
+			return tree_2_scene
+		_:
+			return tree_1_scene
+
+
+func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
+	var vegetation: Node2D = vegetation_scene.instantiate() as Node2D
+	vegetation.set("chunk_coords", chunk)
+	vegetation.set("world_tile", world_tile)
+	vegetation.global_position = Vector2(
+		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_SIZE / 2.0,
+		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_SIZE / 2.0
 	)
-	
-	add_child(tree)
-
-	if !chunk_vegetation.has(chunk):
-		chunk_vegetation[chunk] = []
-
-	chunk_vegetation[chunk].append(tree)
-	register_environment_tile(tile_position)
-
-
-func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
-	var bush: Node2D = berry_bush_scene.instantiate() as Node2D
-	bush.set("chunk_coords", chunk)
-	bush.set("world_tile", world_tile)
-	bush.global_position = Vector2(
-		world_tile.x * ChunkManager.TILE_SIZE,
-		world_tile.y * ChunkManager.TILE_SIZE
-	)
-	add_child(bush)
+	add_child(vegetation)
 	if not chunk_vegetation.has(chunk):
 		chunk_vegetation[chunk] = []
-	chunk_vegetation[chunk].append(bush)
+	chunk_vegetation[chunk].append(vegetation)
 	register_environment_tile(world_tile)
+	return vegetation as Vegetation
+
+func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
+	spawn_vegetation(chunk, world_tile, berry_bush_scene)
 
 
 func spawn_water_lily(chunk: Vector2i, world_tile: Vector2i) -> void:
-	var lily: Node2D = water_lily_scene.instantiate() as Node2D
-	lily.set("chunk_coords", chunk)
-	lily.set("world_tile", world_tile)
-	lily.global_position = Vector2(
-		world_tile.x * ChunkManager.TILE_SIZE,
-		world_tile.y * ChunkManager.TILE_SIZE
-	)
-	add_child(lily)
-	if not chunk_vegetation.has(chunk):
-		chunk_vegetation[chunk] = []
-	chunk_vegetation[chunk].append(lily)
-	register_environment_tile(world_tile)
+	spawn_vegetation(chunk, world_tile, water_lily_scene)
 
 
 func register_environment_tile(world_tile: Vector2i) -> void:

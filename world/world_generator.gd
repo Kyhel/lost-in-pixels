@@ -44,8 +44,10 @@ enum Biome {
 var terrain_noise := FastNoiseLite.new()
 var biome_noise := FastNoiseLite.new()
 
+var noise_wavelength := 400.0
+
 func _init() -> void:
-	terrain_noise.frequency = 0.005
+	terrain_noise.frequency = 1 / noise_wavelength
 	biome_noise.frequency = terrain_noise.frequency / 3
 
 

@@ -42,11 +42,15 @@ func on_chunk_unloaded(chunk: Vector2i):
 
 func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 
+	if DebugManager.debug_config.max_creatures_per_chunk <= 0:
+		return
+
 	if chunk_entities.has(chunk_position):
 		return
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y)
+
 	var entity_count := rng.randi_range(1, DebugManager.debug_config.max_creatures_per_chunk)
 
 	for i in range(entity_count):
