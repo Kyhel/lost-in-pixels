@@ -98,8 +98,8 @@ func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: P
 	vegetation.set("chunk_coords", chunk)
 	vegetation.set("world_tile", world_tile)
 	vegetation.global_position = Vector2(
-		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_SIZE / 2.0,
-		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_SIZE / 2.0
+		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE,
+		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE
 	)
 	add_child(vegetation)
 	if not chunk_vegetation.has(chunk):

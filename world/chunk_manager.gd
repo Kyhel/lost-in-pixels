@@ -1,6 +1,7 @@
 extends Node2D
 
 const TILE_SIZE = 16
+const TILE_HALF_SIZE = TILE_SIZE / 2.0
 const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 

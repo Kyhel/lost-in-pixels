@@ -29,13 +29,12 @@ func _ready() -> void:
 	rng.seed = ChunkManager.get_world_seed() ^ hash(world_tile) ^ LILY_SEED_SALT
 
 	var half_tile: float = ChunkManager.TILE_SIZE * 0.5
-	var center := Vector2(half_tile, half_tile)
 	var base_angle: float = rng.randf_range(0.0, TAU)
 	var ring_base: float = half_tile * 0.8
 	for i in SLOT_COUNT:
 		var angle: float = base_angle + float(i) * TAU / float(SLOT_COUNT) + rng.randf_range(-0.12, 0.12)
 		var r: float = ring_base * rng.randf_range(0.5, 1.0)
-		_slot_offsets.append(center + Vector2.from_angle(angle) * r)
+		_slot_offsets.append(Vector2.from_angle(angle) * r)
 		_slot_refs.append(null)
 
 	for slot_i in SLOT_COUNT:

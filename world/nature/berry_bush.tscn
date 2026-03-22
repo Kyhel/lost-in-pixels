@@ -1,24 +1,21 @@
 [gd_scene format=3 uid="uid://d2h8w4laberry"]
 
-[ext_resource type="Script" path="res://world/nature/berry_bush.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bcawi5mb81k4c" path="res://world/nature/berry_bush.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://fy4x38l37mvg" path="res://assets/nature/berry_bush.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bush"]
 radius = 6.0
 
-[node name="BerryBush" type="Node2D"]
+[node name="BerryBush" type="Node2D" unique_id=1850220754]
 script = ExtResource("1_script")
 vegetation_kind = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=145393283]
 texture = ExtResource("2_tex")
-centered = true
-offset = Vector2(8, 8)
 
-[node name="TrunkBody" type="StaticBody2D" parent="."]
+[node name="TrunkBody" type="StaticBody2D" parent="." unique_id=1295876856]
 collision_layer = 32
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody"]
-position = Vector2(8, 8)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody" unique_id=297864290]
 shape = SubResource("CircleShape2D_bush")
