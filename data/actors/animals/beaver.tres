@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://biu286a1d7wjw" path="res://assets/creatures/beaver.png" id="4_27jme"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://ai/sensors/sensor.gd" id="4_djyqf"]
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://ai/sensors/food_sensor.tres" id="5_food"]
-[ext_resource type="Resource" path="res://data/items/water_lily_flower.tres" id="5_jkmdi"]
+[ext_resource type="Resource" uid="uid://iwatdajc18p8" path="res://data/items/water_lily_flower.tres" id="5_jkmdi"]
 [ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://data/items/carrot.tres" id="6_carrot"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://data/items/berry.tres" id="8_berry"]
 
@@ -20,6 +20,7 @@ sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 can_swim = true
 size = 30
 hitbox_size = 12
+biomes = Array[int]([0, 1, 6])
 excluded_tile_types = Array[int]([])
 needs_eating = true
 edible_items = Array[ExtResource("2_rmriv")]([ExtResource("6_carrot"), ExtResource("8_berry"), ExtResource("5_jkmdi")])

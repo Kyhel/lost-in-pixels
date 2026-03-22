@@ -230,15 +230,6 @@ func _get_tile_raw(x: float, y: float) -> WorldGenerator.TileType:
 	else:
 		return pick_tiletype(compute_safe_biome_weights(temperature, moisture))
 
-	# # 4. Compute biome weights
-	# var weights = compute_biome_weights(temperature, moisture)
-
-	# # 5. Select biome
-	# var biome = pick_biome_category(weights)
-
-	# # 6. Convert biome → tile
-	# return biome_to_tile(biome, danger)
-
 
 func get_height(x: float, y: float) -> float:
 	return height_noise.get_noise_2d(x, y)
@@ -284,8 +275,8 @@ func compute_safe_biome_weights(temp: float, moist: float) -> Dictionary:
 	var weights = {}
 
 	# 5 biome categories
-	weights[WorldGenerator.TileType.SWAMP] = 1.1 * moist * (1.0 - temp)
-	weights[WorldGenerator.TileType.TUNDRA] = 0.7 * (1.0 - moist) * (1.0 - temp)
+	# weights[WorldGenerator.TileType.SWAMP] = 1.1 * moist * (1.0 - temp)
+	# weights[WorldGenerator.TileType.TUNDRA] = 0.7 * (1.0 - moist) * (1.0 - temp)
 	weights[WorldGenerator.TileType.DARK_GRASS] = 1.5 * moist * temp
 	weights[WorldGenerator.TileType.SAND] = (1.0 - moist) * temp
 	weights[WorldGenerator.TileType.GRASS] = 0.5 * (1.0 - abs(moist - 0.5)) * (1.0 - abs(temp - 0.5))
