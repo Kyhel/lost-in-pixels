@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Config" format=3 uid="uid://c77fhrxe52xwa"]
+
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_ndyc7"]
+[ext_resource type="Resource" uid="uid://mok3qihbyai6" path="res://features/creatures/data/animals/fox.tres" id="2_wm4lb"]
+[ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="3_yq3s8"]
+[ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://features/creatures/data/animals/beaver.tres" id="4_w2q5h"]
+[ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_4nmm5"]
+[ext_resource type="Script" uid="uid://dx3c2xv76tb7s" path="res://config/config.gd" id="6_3l0t6"]
+
+[resource]
+script = ExtResource("6_3l0t6")
+allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("2_wm4lb"), ExtResource("3_yq3s8"), ExtResource("4_w2q5h"), ExtResource("5_4nmm5")])
+chunk_load_radius = 3
+max_creatures_per_chunk = 3
+metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

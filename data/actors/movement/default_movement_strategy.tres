@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="DefaultStrategy" format=3 uid="uid://b3fknfw4st7n"]
-
-[ext_resource type="Script" uid="uid://wumoutf5vwrd" path="res://actors/movement/strategies/default_strategy.gd" id="1_xv7s2"]
-
-[resource]
-script = ExtResource("1_xv7s2")
-metadata/_custom_type_script = "uid://wumoutf5vwrd"

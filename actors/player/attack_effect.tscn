@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://b6rnl5roa1hdm"]
-
-[ext_resource type="Script" uid="uid://b6h8nlrnyv2b7" path="res://actors/player/attack_effect.gd" id="1"]
-
-[node name="AttackEffect" type="Node2D"]
-script = ExtResource("1")
-

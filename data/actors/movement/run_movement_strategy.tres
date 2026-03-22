@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="RunStrategy" format=3 uid="uid://dxsi4r6nsffk5"]
-
-[ext_resource type="Script" uid="uid://bsacwrt04x8dp" path="res://actors/movement/strategies/run_strategy.gd" id="1_run"]
-
-[resource]
-script = ExtResource("1_run")
-movement_type = 5

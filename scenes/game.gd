@@ -3,17 +3,17 @@ extends Node2D
 const OCCLUSION_LAYER = 2
 
 ## Spawn position after "New game" (scene default used on first cold start).
-const NEW_GAME_PLAYER_POSITION := Vector2(480, 270)
+const NEW_GAME_PLAYER_POSITION := Vector2.ZERO
 
 
 func _ready() -> void:
 	print("Game started")
 	ObjectsManager.refresh_scene_references()
-	call_deferred("_apply_session_to_player")
+	call_deferred(&"_apply_session_to_player")
 
 
 func _apply_session_to_player() -> void:
-	var player: Player = get_node_or_null("World/Entities/Player") as Player
+	var player: Player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
 	if player == null:
 		return
 

@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="AttackPlayerGoal" format=3 uid="uid://b6unlk8m478g1"]
-
-[ext_resource type="PackedScene" uid="uid://bsh1q061b8ff5" path="res://ai/behaviors/trees/attack_player.tscn" id="1_u32pf"]
-[ext_resource type="Script" uid="uid://ysp20olsffw4" path="res://ai/goals/attack_player_goal.gd" id="2_fyepb"]
-
-[resource]
-script = ExtResource("2_fyepb")
-behavior_tree = ExtResource("1_u32pf")

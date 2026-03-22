@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MovementProfileEntry" format=3 uid="uid://bpxwnn3sxsl3c"]
+
+[ext_resource type="Script" uid="uid://bkowl4x2p0qwd" path="res://features/creatures/movement/movement_profile_entry.gd" id="1_qr6fx"]
+
+[resource]
+script = ExtResource("1_qr6fx")
+movement_type = 5
+precision_weight = 1.0

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://06r8vifs4yfn"]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_dp7fp"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_dtyic"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="2_pg6mr"]
+[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="3_a2dy0"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="4_247ax"]
+[ext_resource type="Resource" uid="uid://c8fpl1yr5xkqn" path="res://features/creatures/ai/goals/follow_player_goal.tres" id="4_follow"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="6_a2dy0"]
+[ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/rabbit.png" id="6_bg2f0"]
+[ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="7_food"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://data/items/carrot.tres" id="8_carrot"]
+[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://data/objects/nature/flowers/flower_red_1.tres" id="9_flower"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://data/items/berry.tres" id="10_berry"]
+
+[resource]
+script = ExtResource("4_247ax")
+sprite = ExtResource("6_bg2f0")
+goals = Array[ExtResource("1_dp7fp")]([ExtResource("2_dtyic"), ExtResource("3_a2dy0"), ExtResource("4_follow")])
+sensors = Array[ExtResource("6_a2dy0")]([ExtResource("7_food")])
+size = 12
+hop_multiplier = 0.5
+movement_types = Array[int]([1, 5])
+needs_eating = true
+edible_items = Array[ExtResource("2_pg6mr")]([ExtResource("8_carrot"), ExtResource("9_flower"), ExtResource("10_berry")])
+hunger_decay_rate = 1.0
+taming_value_threshold = 20
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"

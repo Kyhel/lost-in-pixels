@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dohegmysonbui"]
 
 [ext_resource type="Script" uid="uid://cxhr115mkusyh" path="res://scenes/follow_node.gd" id="1_lk5b4"]
-[ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/player_mask.gdshader" id="1_stli8"]
+[ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/alpha_spot_mask.gdshader" id="1_stli8"]
 [ext_resource type="Texture2D" uid="uid://3mncudya254l" path="res://assets/PlayerTransparencyMask.png" id="2_ft1qj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qatsr"]

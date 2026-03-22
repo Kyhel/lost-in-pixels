@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="HopStrategy" format=3 uid="uid://ccbjrv2e40uvo"]
+
+[ext_resource type="Script" uid="uid://b5ia1e1umxxyw" path="res://features/creatures/movement/strategies/hop_strategy.gd" id="1_eypvh"]
+
+[resource]
+script = ExtResource("1_eypvh")
+movement_type = 1
+metadata/_custom_type_script = "uid://b5ia1e1umxxyw"

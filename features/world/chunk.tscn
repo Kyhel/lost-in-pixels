@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://3x0aoneuyjnq"]
+
+[ext_resource type="Script" uid="uid://cx5271h541bf3" path="res://features/world/chunk.gd" id="1_jbmh0"]
+[ext_resource type="TileSet" uid="uid://cj11y0p1byxuo" path="res://features/world/terrain_tileset.tres" id="2_uc5gi"]
+
+[node name="Chunk" type="Node2D" unique_id=799622310]
+script = ExtResource("1_jbmh0")
+
+[node name="Terrain" type="TileMapLayer" parent="." unique_id=1947697095]
+tile_set = ExtResource("2_uc5gi")
+
+[node name="Fog" type="TileMapLayer" parent="." unique_id=316407783]
+visible = false
+tile_set = ExtResource("2_uc5gi")

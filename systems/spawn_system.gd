@@ -21,10 +21,10 @@ func _physics_process(delta: float) -> void:
 		if chunk == null:
 			continue
 
-		if DebugManager.debug_config.spawn_items:
+		if ConfigManager.debug_config.spawn_items:
 			spawn_items(chunk)
 			
-		if DebugManager.debug_config.spawn_rabbits:
+		if ConfigManager.debug_config.spawn_rabbits:
 			spawn_rabbits(chunk)
 
 	var removed: Array[Vector2i] = result["removed"]
@@ -80,7 +80,7 @@ func spawn_items(chunk: Chunk) -> void:
 
 func spawn_rabbits(chunk: Chunk) -> void:
 
-	if !DebugManager.debug_config.spawn_rabbits:
+	if !ConfigManager.debug_config.spawn_rabbits:
 		return
 
 	var rabbit_count: int = EntitiesManager.get_creature_count_in_chunk(chunk.coords, EntitiesManager.rabbit_data)
