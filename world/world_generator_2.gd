@@ -6,7 +6,7 @@ extends Node
 # ============================================================
 
 # World settings
-var world_scale : float = 20.0
+var world_scale : float = 30.0
 var max_danger_radius : float = 10.0 * world_scale
 var safe_radius_ratio : float = 0.2  # 20% safe zone
 

@@ -148,17 +148,12 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 			CHUNK_SIZE)
 
 	if DebugManager.debug_config.spawn_bushes:
-		berry_bush_generator.generate_berry_bushes_for_chunk(
-			Vector2i(chunk_x, chunk_y),
-			chunk,
-			CHUNK_SIZE,
-			tree_generator)
+		berry_bush_generator.generate_for_chunk(
+			Vector2i(chunk_x, chunk_y), chunk)
 
 	if DebugManager.debug_config.spawn_water_lilies:
-		water_lily_generator.generate_water_lilies_for_chunk(
-			Vector2i(chunk_x, chunk_y),
-			chunk,
-			CHUNK_SIZE)
+		water_lily_generator.generate_for_chunk(
+			Vector2i(chunk_x, chunk_y), chunk)
 
 func _spawn_world_items(chunk_x: int, chunk_y: int):
 

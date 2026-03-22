@@ -1,12 +1,11 @@
 class_name BerryBushGenerator
-extends RefCounted
+extends VegetationGenerator
 
 var bush_noise := FastNoiseLite.new()
-var world_seed: int
-
 
 func _init(p_seed: int) -> void:
-	world_seed = p_seed
+	super(p_seed)
+	salt = 0xBEE3
 	bush_noise.seed = p_seed + 482917
 	bush_noise.frequency = 0.012
 	bush_noise.fractal_octaves = 2
@@ -14,54 +13,61 @@ func _init(p_seed: int) -> void:
 
 
 const MAX_BUSHES_PER_CHUNK := 2
-const CHUNK_SHUFFLE_SALT := 0xBEE3
+const MIN_BUSH_TILE_SPACING := 4
 
 
-func generate_berry_bushes_for_chunk(
-	chunk_position: Vector2i,
-	_chunk: Chunk,
-	chunk_size: int,
-	tree_generator: TreeGenerator,
-) -> void:
-	var candidates: Array[Vector2i] = []
-	for x in range(chunk_size):
-		for y in range(chunk_size):
-			var wx: int = chunk_position.x * chunk_size + x
-			var wy: int = chunk_position.y * chunk_size + y
-			if should_spawn_bush(wx, wy, _chunk, x, y, tree_generator):
-				candidates.append(Vector2i(wx, wy))
-
-	if candidates.is_empty():
-		return
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y) ^ CHUNK_SHUFFLE_SALT
-	candidates.shuffle()
-
-	var n: int = mini(MAX_BUSHES_PER_CHUNK, candidates.size())
-	for i in n:
-		ObjectsManager.spawn_berry_bush(chunk_position, candidates[i])
+func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
+	ObjectsManager.spawn_berry_bush(_chunk, _world_tile)
 
 
-func should_spawn_bush(
+func get_max_vegetation_for_chunk(_chunk: Chunk) -> int:
+	return MAX_BUSHES_PER_CHUNK
+
+func filter_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vector2i]:
+	var picked: Array[Vector2i] = []
+	var tile_size: float = float(ChunkManager.TILE_SIZE)
+	for c: Vector2i in candidates:
+		if picked.size() >= max_count:
+			break
+		if _conflicts_with_picked(c, picked, MIN_BUSH_TILE_SPACING):
+			continue
+		if _conflicts_with_existing_berry_bushes(c, tile_size):
+			continue
+		picked.append(c)
+	return picked
+	
+
+func _conflicts_with_existing_berry_bushes(tile: Vector2i, tile_size: float) -> bool:
+	var center := Vector2(
+		float(tile.x) * tile_size + tile_size * 0.5,
+		float(tile.y) * tile_size + tile_size * 0.5,
+	)
+	var search_r: float = float(MIN_BUSH_TILE_SPACING) * tile_size
+	for veg in ObjectsManager.get_nearby_vegetation(center, search_r):
+		if not veg.is_water_lily():
+			continue
+		var ox: int = int(floor(veg.global_position.x / tile_size))
+		var oy: int = int(floor(veg.global_position.y / tile_size))
+		if _chebyshev_tile(tile, Vector2i(ox, oy)) < MIN_BUSH_TILE_SPACING:
+			return true
+	return false
+
+func should_spawn_vegetation(
 	wx: int,
 	wy: int,
-	chunk: Chunk,
 	local_x: int,
 	local_y: int,
-	tree_generator: TreeGenerator,
+	chunk: Chunk
 ) -> bool:
 	var tile_type: WorldGenerator.TileType = chunk.get_tile_type(local_x, local_y)
 	var biome: WorldGenerator.Biome = chunk.get_biome(local_x, local_y)
-	if tree_generator.should_spawn_tree(wx, wy, tile_type, biome):
+	if ObjectsManager.is_environment_tile_occupied(Vector2i(wx, wy)):
 		return false
 	if tile_type == WorldGenerator.TileType.WATER:
 		return false
 	if biome != WorldGenerator.Biome.FOREST and biome != WorldGenerator.Biome.PLAINS:
 		return false
-	if bush_noise.get_noise_2d(wx, wy) < 0.12:
-		return false
-	if _tile_random(wx, wy) < 0.93:
+	if bush_noise.get_noise_2d(wx, wy) < 0.1:
 		return false
 	return true
 

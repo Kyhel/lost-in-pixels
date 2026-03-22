@@ -19,7 +19,7 @@ var world_item_scene := preload("res://data/objects/world_item.tscn")
 var tree_1_scene := preload("res://world/nature/trees/tree_1.tscn")
 var tree_2_scene := preload("res://world/nature/trees/tree_2.tscn")
 var berry_bush_scene := preload("res://world/nature/berry_bush.tscn")
-var water_lily_scene: PackedScene = preload("res://world/nature/water_lily.tscn")
+var water_lily_scene := preload("res://world/nature/water_lily.tscn")
 
 func _ready() -> void:
 	refresh_scene_references()

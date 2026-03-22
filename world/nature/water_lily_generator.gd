@@ -1,69 +1,32 @@
 class_name WaterLilyGenerator
-extends RefCounted
-
-var world_seed: int
+extends VegetationGenerator
 
 
 func _init(p_seed: int) -> void:
-	world_seed = p_seed
+	super(p_seed)
+	salt = 0xE1E70001
 
-
-const SHORE_DISTANCE := 3
-const CHUNK_SHUFFLE_SALT := 0xE1E70001
+const SHORE_DISTANCE := 2
 ## Minimum Chebyshev distance (in tiles) between any two water lilies so they do not form tight clusters.
 const MIN_LILY_TILE_SPACING := 4
 
 
-func generate_water_lilies_for_chunk(
-	chunk_position: Vector2i,
-	_chunk: Chunk,
-	chunk_size: int,
-) -> void:
+func get_max_vegetation_for_chunk(_chunk: Chunk) -> int:
 	var water_tiles: int = 0
-	for x in range(chunk_size):
-		for y in range(chunk_size):
+	for x in range(ChunkManager.CHUNK_SIZE):
+		for y in range(ChunkManager.CHUNK_SIZE):
 			if _chunk.get_tile_type(x, y) == WorldGenerator.TileType.WATER:
 				water_tiles += 1
-
-	var max_lilies:= floori(water_tiles / 60.0)
-	if max_lilies <= 0:
-		return
-
-	var candidates: Array[Vector2i] = []
-	for x in range(chunk_size):
-		for y in range(chunk_size):
-			var wx: int = chunk_position.x * chunk_size + x
-			var wy: int = chunk_position.y * chunk_size + y
-			if should_spawn_water_lily(wx, wy, x, y, _chunk):
-				candidates.append(Vector2i(wx, wy))
-
-	if candidates.is_empty():
-		return
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y) ^ CHUNK_SHUFFLE_SALT
-	_shuffle_vec2i_with_rng(candidates, rng)
-
-	var picked: Array[Vector2i] = _pick_spaced_candidates(candidates, max_lilies)
-	for tile: Vector2i in picked:
-		ObjectsManager.spawn_water_lily(chunk_position, tile)
+	return water_tiles
 
 
-func _shuffle_vec2i_with_rng(arr: Array[Vector2i], rng: RandomNumberGenerator) -> void:
-	for i in range(arr.size() - 1, 0, -1):
-		var j: int = rng.randi_range(0, i)
-		var tmp: Vector2i = arr[i]
-		arr[i] = arr[j]
-		arr[j] = tmp
-
-
-func _pick_spaced_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vector2i]:
+func filter_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vector2i]:
 	var picked: Array[Vector2i] = []
 	var tile_size: float = float(ChunkManager.TILE_SIZE)
 	for c: Vector2i in candidates:
 		if picked.size() >= max_count:
 			break
-		if _conflicts_with_picked(c, picked):
+		if _conflicts_with_picked(c, picked, MIN_LILY_TILE_SPACING):
 			continue
 		if _conflicts_with_existing_water_lilies(c, tile_size):
 			continue
@@ -71,11 +34,8 @@ func _pick_spaced_candidates(candidates: Array[Vector2i], max_count: int) -> Arr
 	return picked
 
 
-func _conflicts_with_picked(tile: Vector2i, picked: Array[Vector2i]) -> bool:
-	for p: Vector2i in picked:
-		if _chebyshev_tile(tile, p) < MIN_LILY_TILE_SPACING:
-			return true
-	return false
+func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
+	ObjectsManager.spawn_water_lily(_chunk, _world_tile)
 
 
 func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> bool:
@@ -94,11 +54,7 @@ func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> 
 	return false
 
 
-func _chebyshev_tile(a: Vector2i, b: Vector2i) -> int:
-	return max(abs(a.x - b.x), abs(a.y - b.y))
-
-
-func should_spawn_water_lily(wx: int, wy: int, local_x: int, local_y: int, chunk: Chunk) -> bool:
+func should_spawn_vegetation(wx: int, wy: int, local_x: int, local_y: int, chunk: Chunk) -> bool:
 	if chunk.get_tile_type(local_x, local_y) != WorldGenerator.TileType.WATER:
 		return false
 	if not _water_is_near_non_water(wx, wy):
