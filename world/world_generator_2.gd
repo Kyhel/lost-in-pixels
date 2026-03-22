@@ -29,6 +29,11 @@ var directional_noise_strength : float = 0.2
 # Domain warp
 var warp_strength : float = 100.0
 
+# Speckle removal: 3×3 majority over raw tiles (deterministic, chunk-boundary safe)
+var smoothing_enabled: bool = true
+## 1 = one majority pass; 2 = second pass over the first pass (stronger, ~9× more samples per tile)
+var smoothing_passes: int = 2
+
 # ============================================================
 # 🌊 NOISE GENERATORS
 # ============================================================
@@ -76,6 +81,51 @@ func setup_seed(p_seed: int):
 # ============================================================
 
 func get_tile(x: float, y: float) -> WorldGenerator.TileType:
+	var wx := int(floor(x))
+	var wy := int(floor(y))
+	if not smoothing_enabled:
+		return _get_tile_raw(float(wx), float(wy))
+	var passes: int = clampi(smoothing_passes, 1, 2)
+	var t: WorldGenerator.TileType = _tile_majority_3x3(Callable(self, "_sample_raw_tile"), wx, wy)
+	if passes >= 2:
+		t = _tile_majority_3x3(Callable(self, "_get_tile_pass1"), wx, wy)
+	return t
+
+
+func _sample_raw_tile(tx: int, ty: int) -> WorldGenerator.TileType:
+	return _get_tile_raw(float(tx), float(ty))
+
+
+func _get_tile_pass1(tx: int, ty: int) -> WorldGenerator.TileType:
+	return _tile_majority_3x3(Callable(self, "_sample_raw_tile"), tx, ty)
+
+
+func _tile_majority_3x3(sample: Callable, wx: int, wy: int) -> WorldGenerator.TileType:
+	var center: WorldGenerator.TileType = sample.call(wx, wy)
+	var counts: Dictionary = {}
+	for dy in range(-1, 2):
+		for dx in range(-1, 2):
+			var t: WorldGenerator.TileType = sample.call(wx + dx, wy + dy)
+			counts[t] = int(counts.get(t, 0)) + 1
+	var best_count := -1
+	for c in counts.values():
+		if c > best_count:
+			best_count = c
+	var winners: Array[WorldGenerator.TileType] = []
+	for k in counts.keys():
+		if counts[k] == best_count:
+			winners.append(k)
+	if winners.size() == 1:
+		return winners[0]
+	for w in winners:
+		if w == center:
+			return center
+	winners.sort_custom(func(a: WorldGenerator.TileType, b: WorldGenerator.TileType) -> bool:
+		return int(a) < int(b))
+	return winners[0]
+
+
+func _get_tile_raw(x: float, y: float) -> WorldGenerator.TileType:
 	# 1. Height check (water / land separation)
 	var height = get_height(x, y)
 
@@ -178,7 +228,7 @@ func compute_safe_biome_weights(temp: float, moist: float) -> Dictionary:
 
 	return normalize_weights(weights)
 
-func compute_danger_biome_weights(temp: float, moist: float) -> Dictionary:
+func compute_danger_biome_weights(temp: float, _moist: float) -> Dictionary:
 	var weights = {}
 
 	# 5 biome categories
