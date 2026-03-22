@@ -2,7 +2,7 @@ class_name TreeGenerator
 extends RefCounted
 
 ## Tiles from tree center in each direction reserved (no other tree). 1 = 3x3, 2 = 5x5, etc.
-const TREE_SPACING_RADIUS := 5.
+const TREE_SPACING_RADIUS := 5
 const TREE_2_SPACING_RADIUS := 3
 ## Within each spacing cell, the tree can spawn in a smaller inner square (center ± this). 0 = center only, 1 = 3x3, etc. Must be <= TREE_SPACING_RADIUS.
 const TREE_INNER_RADIUS := 2
@@ -35,7 +35,7 @@ func generate_trees_for_chunk(
 	chunk_position:Vector2i,
 	_chunk:Chunk,
 	chunk_size:int,
-	biome_generator:WorldGenerator
+	_biome_generator:WorldGenerator
 ) -> void:
 
 	for x:int in range(chunk_size):
@@ -43,10 +43,14 @@ func generate_trees_for_chunk(
 			
 			var global_x:int = chunk_position.x * chunk_size + x
 			var global_y:int = chunk_position.y * chunk_size + y
-			
-			var tile_type := biome_generator.get_tile_type(global_x, global_y)
-			var biome := biome_generator.get_biome(global_x, global_y)
-			
+
+			var tile_coords: Vector2i = ChunkManager.get_tile_coords_in_chunk_from_world_pos(
+				Vector2(global_x, global_y)
+			)
+
+			var biome := _chunk.get_biome(tile_coords.x, tile_coords.y)
+			var tile_type := _chunk.get_tile_type(tile_coords.x, tile_coords.y)
+
 			if should_spawn_tree(global_x, global_y, tile_type, biome):
 				var tree_type = get_tree_type(biome)
 				ObjectsManager.spawn_tree(chunk_position, Vector2i(global_x, global_y), tree_type)

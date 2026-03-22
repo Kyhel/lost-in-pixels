@@ -28,7 +28,7 @@ func generate_water_lilies_for_chunk(
 			if biome_generator.get_tile_type(wx, wy) == WorldGenerator.TileType.WATER:
 				water_tiles += 1
 
-	var max_lilies: int = water_tiles / 60
+	var max_lilies:= floori(water_tiles / 60.0)
 	if max_lilies <= 0:
 		return
 

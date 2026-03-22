@@ -337,3 +337,9 @@ func get_tile_coords_relative_to_chunk(tile_coords: Vector2i) -> Vector2i:
 		posmod(tile_coords.x, CHUNK_SIZE),
 		posmod(tile_coords.y, CHUNK_SIZE)
 	)
+
+func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
+	return Vector2i(
+		posmod(int(floor(world_pos.x / float(TILE_SIZE))), CHUNK_SIZE),
+		posmod(int(floor(world_pos.y / float(TILE_SIZE))), CHUNK_SIZE)
+	)
