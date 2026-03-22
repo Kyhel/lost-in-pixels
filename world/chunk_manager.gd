@@ -126,16 +126,16 @@ func load_chunk(chunk_x, chunk_y):
 
 func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 
+	var tile_types: Array[WorldGenerator.TileType] = world_generator.compute_chunk_tile_types(
+		chunk_x, chunk_y, CHUNK_SIZE
+	)
+	var ti := 0
 	for x in range(CHUNK_SIZE):
 		for y in range(CHUNK_SIZE):
-
-			var world_x = chunk_x * CHUNK_SIZE + x
-			var world_y = chunk_y * CHUNK_SIZE + y
-
-			var tile_type = world_generator.get_tile_type(world_x, world_y)
-			var biome = world_generator.get_biome(world_x, world_y)
-
-			chunk.set_tile(x,y,world_generator.TILE_DEFS[tile_type]["atlas"])
+			var tile_type: WorldGenerator.TileType = tile_types[ti]
+			ti += 1
+			var biome: WorldGenerator.Biome = world_generator.biome_from_tile_type(tile_type)
+			chunk.set_tile(x, y, world_generator.TILE_DEFS[tile_type]["atlas"])
 			chunk.set_tile_type(x, y, tile_type)
 			chunk.set_biome(x, y, biome)
 
@@ -145,23 +145,20 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 		tree_generator.generate_trees_for_chunk(
 			Vector2i(chunk_x, chunk_y),
 			chunk,
-			CHUNK_SIZE,
-			world_generator)
+			CHUNK_SIZE)
 
 	if DebugManager.debug_config.spawn_bushes:
 		berry_bush_generator.generate_berry_bushes_for_chunk(
 			Vector2i(chunk_x, chunk_y),
 			chunk,
 			CHUNK_SIZE,
-			world_generator,
 			tree_generator)
 
 	if DebugManager.debug_config.spawn_water_lilies:
 		water_lily_generator.generate_water_lilies_for_chunk(
 			Vector2i(chunk_x, chunk_y),
 			chunk,
-			CHUNK_SIZE,
-			world_generator)
+			CHUNK_SIZE)
 
 func _spawn_world_items(chunk_x: int, chunk_y: int):
 
@@ -344,3 +341,29 @@ func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
 		posmod(int(floor(world_pos.x / float(TILE_SIZE))), CHUNK_SIZE),
 		posmod(int(floor(world_pos.y / float(TILE_SIZE))), CHUNK_SIZE)
 	)
+
+
+func get_tile_type_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.TileType:
+	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
+	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
+	var key := Vector2i(chunk_x, chunk_y)
+	if loaded_chunks.has(key):
+		var ch: Node = loaded_chunks[key]
+		if is_instance_valid(ch) and ch is Chunk:
+			var local_x: int = world_x - chunk_x * CHUNK_SIZE
+			var local_y: int = world_y - chunk_y * CHUNK_SIZE
+			return (ch as Chunk).get_tile_type(local_x, local_y)
+	return world_generator.get_tile_type(world_x, world_y)
+
+
+func get_biome_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.Biome:
+	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
+	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
+	var key := Vector2i(chunk_x, chunk_y)
+	if loaded_chunks.has(key):
+		var ch: Node = loaded_chunks[key]
+		if is_instance_valid(ch) and ch is Chunk:
+			var local_x: int = world_x - chunk_x * CHUNK_SIZE
+			var local_y: int = world_y - chunk_y * CHUNK_SIZE
+			return (ch as Chunk).get_biome(local_x, local_y)
+	return world_generator.get_biome(world_x, world_y)

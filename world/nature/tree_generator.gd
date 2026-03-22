@@ -32,10 +32,9 @@ func _init(p_seed:int) -> void:
 	tree_noise.fractal_gain = 0.5
 
 func generate_trees_for_chunk(
-	chunk_position:Vector2i,
-	_chunk:Chunk,
-	chunk_size:int,
-	_biome_generator:WorldGenerator
+	chunk_position: Vector2i,
+	_chunk: Chunk,
+	chunk_size: int,
 ) -> void:
 
 	for x:int in range(chunk_size):

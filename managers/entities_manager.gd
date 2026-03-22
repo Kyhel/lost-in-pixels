@@ -59,7 +59,7 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 		var world_x: int = chunk_position.x * ChunkManager.CHUNK_SIZE + local_x
 		var world_y: int = chunk_position.y * ChunkManager.CHUNK_SIZE + local_y
 		var tile_type := chunk.get_tile_type(local_x, local_y)
-		var biome: WorldGenerator.Biome = ChunkManager.world_generator.get_biome(world_x, world_y)
+		var biome: WorldGenerator.Biome = chunk.get_biome(local_x, local_y)
 
 		var valid_creatures := creature_spawn_probability_scores.filter(func(entry):
 			var data: CreatureData = entry[0]

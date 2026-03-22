@@ -107,6 +107,10 @@ func _tile_majority_3x3(sample: Callable, wx: int, wy: int) -> WorldGenerator.Ti
 		for dx in range(-1, 2):
 			var t: WorldGenerator.TileType = sample.call(wx + dx, wy + dy)
 			counts[t] = int(counts.get(t, 0)) + 1
+	return _resolve_majority_tie(center, counts)
+
+
+func _resolve_majority_tie(center: WorldGenerator.TileType, counts: Dictionary) -> WorldGenerator.TileType:
 	var best_count := -1
 	for c in counts.values():
 		if c > best_count:
@@ -123,6 +127,66 @@ func _tile_majority_3x3(sample: Callable, wx: int, wy: int) -> WorldGenerator.Ti
 	winners.sort_custom(func(a: WorldGenerator.TileType, b: WorldGenerator.TileType) -> bool:
 		return int(a) < int(b))
 	return winners[0]
+
+
+func _majority_flat9(raw: PackedInt32Array, pw: int, px: int, py: int) -> WorldGenerator.TileType:
+	var counts: Dictionary = {}
+	for j in range(3):
+		for i in range(3):
+			var t: WorldGenerator.TileType = raw[(py + j) * pw + (px + i)] as WorldGenerator.TileType
+			counts[t] = int(counts.get(t, 0)) + 1
+	var center: WorldGenerator.TileType = raw[(py + 1) * pw + (px + 1)] as WorldGenerator.TileType
+	return _resolve_majority_tie(center, counts)
+
+
+## Smoothed tile types for one chunk; order matches Chunk flat index [x * chunk_size + y].
+func compute_chunk_tile_types(chunk_x: int, chunk_y: int, chunk_size: int) -> Array[WorldGenerator.TileType]:
+	var out: Array[WorldGenerator.TileType] = []
+	out.resize(chunk_size * chunk_size)
+	if not smoothing_enabled:
+		var i := 0
+		for x in range(chunk_size):
+			for y in range(chunk_size):
+				out[i] = _get_tile_raw(float(chunk_x * chunk_size + x), float(chunk_y * chunk_size + y))
+				i += 1
+		return out
+	var passes: int = clampi(smoothing_passes, 1, 2)
+	if passes == 1:
+		var pw: int = chunk_size + 2
+		var raw: PackedInt32Array = PackedInt32Array()
+		raw.resize(pw * pw)
+		for py in range(pw):
+			for px in range(pw):
+				var wx: int = chunk_x * chunk_size + px - 1
+				var wy: int = chunk_y * chunk_size + py - 1
+				raw[py * pw + px] = int(_get_tile_raw(float(wx), float(wy)))
+		var o := 0
+		for x in range(chunk_size):
+			for y in range(chunk_size):
+				out[o] = _majority_flat9(raw, pw, x, y)
+				o += 1
+		return out
+	# Two passes: larger raw halo so pass1 exists on a (chunk_size+2) grid
+	var pw2: int = chunk_size + 4
+	var raw2: PackedInt32Array = PackedInt32Array()
+	raw2.resize(pw2 * pw2)
+	for py in range(pw2):
+		for px in range(pw2):
+			var wx2: int = chunk_x * chunk_size + px - 2
+			var wy2: int = chunk_y * chunk_size + py - 2
+			raw2[py * pw2 + px] = int(_get_tile_raw(float(wx2), float(wy2)))
+	var p1w: int = chunk_size + 2
+	var pass1: PackedInt32Array = PackedInt32Array()
+	pass1.resize(p1w * p1w)
+	for j in range(p1w):
+		for i in range(p1w):
+			pass1[j * p1w + i] = int(_majority_flat9(raw2, pw2, i, j))
+	var o2 := 0
+	for x in range(chunk_size):
+		for y in range(chunk_size):
+			out[o2] = _majority_flat9(pass1, p1w, x, y)
+			o2 += 1
+	return out
 
 
 func _get_tile_raw(x: float, y: float) -> WorldGenerator.TileType:

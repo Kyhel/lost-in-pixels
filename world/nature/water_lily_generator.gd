@@ -18,14 +18,11 @@ func generate_water_lilies_for_chunk(
 	chunk_position: Vector2i,
 	_chunk: Chunk,
 	chunk_size: int,
-	biome_generator: WorldGenerator,
 ) -> void:
 	var water_tiles: int = 0
 	for x in range(chunk_size):
 		for y in range(chunk_size):
-			var wx: int = chunk_position.x * chunk_size + x
-			var wy: int = chunk_position.y * chunk_size + y
-			if biome_generator.get_tile_type(wx, wy) == WorldGenerator.TileType.WATER:
+			if _chunk.get_tile_type(x, y) == WorldGenerator.TileType.WATER:
 				water_tiles += 1
 
 	var max_lilies:= floori(water_tiles / 60.0)
@@ -37,7 +34,7 @@ func generate_water_lilies_for_chunk(
 		for y in range(chunk_size):
 			var wx: int = chunk_position.x * chunk_size + x
 			var wy: int = chunk_position.y * chunk_size + y
-			if should_spawn_water_lily(wx, wy, biome_generator):
+			if should_spawn_water_lily(wx, wy, x, y, _chunk):
 				candidates.append(Vector2i(wx, wy))
 
 	if candidates.is_empty():
@@ -101,21 +98,21 @@ func _chebyshev_tile(a: Vector2i, b: Vector2i) -> int:
 	return max(abs(a.x - b.x), abs(a.y - b.y))
 
 
-func should_spawn_water_lily(wx: int, wy: int, biome_generator: WorldGenerator) -> bool:
-	if biome_generator.get_tile_type(wx, wy) != WorldGenerator.TileType.WATER:
+func should_spawn_water_lily(wx: int, wy: int, local_x: int, local_y: int, chunk: Chunk) -> bool:
+	if chunk.get_tile_type(local_x, local_y) != WorldGenerator.TileType.WATER:
 		return false
-	if not _water_is_near_non_water(wx, wy, biome_generator):
+	if not _water_is_near_non_water(wx, wy):
 		return false
 	if ObjectsManager.is_environment_tile_occupied(Vector2i(wx, wy)):
 		return false
 	return true
 
 
-func _water_is_near_non_water(wx: int, wy: int, biome_generator: WorldGenerator) -> bool:
+func _water_is_near_non_water(wx: int, wy: int) -> bool:
 	for dx in range(-SHORE_DISTANCE, SHORE_DISTANCE + 1):
 		for dy in range(-SHORE_DISTANCE, SHORE_DISTANCE + 1):
 			var tx: int = wx + dx
 			var ty: int = wy + dy
-			if biome_generator.get_tile_type(tx, ty) != WorldGenerator.TileType.WATER:
+			if ChunkManager.get_tile_type_at_world_tile(tx, ty) != WorldGenerator.TileType.WATER:
 				return true
 	return false

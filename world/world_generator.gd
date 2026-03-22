@@ -130,39 +130,44 @@ func setup_seed(p_seed: int) -> void:
 
 
 func get_tile_type(world_x: int, world_y: int) -> TileType:
-
 	return world_generator_2.get_tile(world_x, world_y)
 
 
-func get_biome(world_x: int, world_y: int) -> Biome:
-
-	var tile_type = world_generator_2.get_tile(world_x, world_y)
-
+## Use this when you already have a tile type (e.g. from Chunk tile data) instead of calling get_biome / get_tile_type again.
+func biome_from_tile_type(tile_type: TileType) -> Biome:
 	match tile_type:
-		WorldGenerator.TileType.WATER:
+		TileType.WATER:
 			return Biome.WATER
-		WorldGenerator.TileType.BEACH:
+		TileType.BEACH:
 			return Biome.WATER
-		WorldGenerator.TileType.GRASS:
+		TileType.GRASS:
 			return Biome.PLAINS
-		WorldGenerator.TileType.DARK_GRASS:
+		TileType.DARK_GRASS:
 			return Biome.FOREST
-		WorldGenerator.TileType.SAND:
+		TileType.SAND:
 			return Biome.DESERT
-		WorldGenerator.TileType.SNOW:
+		TileType.SNOW:
 			return Biome.MOUNTAIN
-		WorldGenerator.TileType.LAVA:
+		TileType.LAVA:
 			return Biome.LAVA
-		WorldGenerator.TileType.TOXIC:
+		TileType.TOXIC:
 			return Biome.TOXIC
-		WorldGenerator.TileType.DEAD:
+		TileType.DEAD:
 			return Biome.DEAD
-		WorldGenerator.TileType.SWAMP:
+		TileType.SWAMP:
 			return Biome.SWAMP
-		WorldGenerator.TileType.TUNDRA:
+		TileType.TUNDRA:
 			return Biome.TUNDRA
 		_:
 			return Biome.PLAINS
+
+
+func get_biome(world_x: int, world_y: int) -> Biome:
+	return biome_from_tile_type(get_tile_type(world_x, world_y))
+
+
+func compute_chunk_tile_types(chunk_x: int, chunk_y: int, chunk_size: int) -> Array[TileType]:
+	return world_generator_2.compute_chunk_tile_types(chunk_x, chunk_y, chunk_size)
 
 
 func get_walk_speed(tile_type: int) -> float:

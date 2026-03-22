@@ -21,7 +21,6 @@ func generate_berry_bushes_for_chunk(
 	chunk_position: Vector2i,
 	_chunk: Chunk,
 	chunk_size: int,
-	biome_generator: WorldGenerator,
 	tree_generator: TreeGenerator,
 ) -> void:
 	var candidates: Array[Vector2i] = []
@@ -29,7 +28,7 @@ func generate_berry_bushes_for_chunk(
 		for y in range(chunk_size):
 			var wx: int = chunk_position.x * chunk_size + x
 			var wy: int = chunk_position.y * chunk_size + y
-			if should_spawn_bush(wx, wy, biome_generator, tree_generator):
+			if should_spawn_bush(wx, wy, _chunk, x, y, tree_generator):
 				candidates.append(Vector2i(wx, wy))
 
 	if candidates.is_empty():
@@ -47,11 +46,13 @@ func generate_berry_bushes_for_chunk(
 func should_spawn_bush(
 	wx: int,
 	wy: int,
-	biome_generator: WorldGenerator,
+	chunk: Chunk,
+	local_x: int,
+	local_y: int,
 	tree_generator: TreeGenerator,
 ) -> bool:
-	var tile_type: WorldGenerator.TileType = biome_generator.get_tile_type(wx, wy)
-	var biome: WorldGenerator.Biome = biome_generator.get_biome(wx, wy)
+	var tile_type: WorldGenerator.TileType = chunk.get_tile_type(local_x, local_y)
+	var biome: WorldGenerator.Biome = chunk.get_biome(local_x, local_y)
 	if tree_generator.should_spawn_tree(wx, wy, tile_type, biome):
 		return false
 	if tile_type == WorldGenerator.TileType.WATER:
