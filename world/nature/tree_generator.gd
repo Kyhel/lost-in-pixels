@@ -44,12 +44,10 @@ func generate_trees_for_chunk(
 			var global_x:int = chunk_position.x * chunk_size + x
 			var global_y:int = chunk_position.y * chunk_size + y
 
-			var tile_coords: Vector2i = ChunkManager.get_tile_coords_in_chunk_from_world_pos(
-				Vector2(global_x, global_y)
-			)
-
-			var biome := _chunk.get_biome(tile_coords.x, tile_coords.y)
-			var tile_type := _chunk.get_tile_type(tile_coords.x, tile_coords.y)
+			# Local chunk indices (x, y); do not use get_tile_coords_in_chunk_from_world_pos here —
+			# that helper expects pixel positions, while global_* are world tile coordinates.
+			var biome := _chunk.get_biome(x, y)
+			var tile_type := _chunk.get_tile_type(x, y)
 
 			if should_spawn_tree(global_x, global_y, tile_type, biome):
 				var tree_type = get_tree_type(biome)

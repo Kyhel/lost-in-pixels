@@ -106,7 +106,9 @@ enum Biome {
 	LAVA,
 	TOXIC,
 	WATER,
-	DEAD
+	DEAD,
+	SWAMP,
+	TUNDRA,
 }
 
 var terrain_noise := FastNoiseLite.new()
@@ -155,6 +157,10 @@ func get_biome(world_x: int, world_y: int) -> Biome:
 			return Biome.TOXIC
 		WorldGenerator.TileType.DEAD:
 			return Biome.DEAD
+		WorldGenerator.TileType.SWAMP:
+			return Biome.SWAMP
+		WorldGenerator.TileType.TUNDRA:
+			return Biome.TUNDRA
 		_:
 			return Biome.PLAINS
 
