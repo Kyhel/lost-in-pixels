@@ -179,13 +179,34 @@ func _spawn_world_items(chunk_x: int, chunk_y: int):
 			var centered := world_pos + Vector2.ONE * TILE_SIZE / 2.0
 			ObjectsManager.spawn_item_in_chunk(chunk_key, item_data, centered)
 
+func _chebyshev_to_player_chunk(player_chunk: Vector2i, key: Vector2i) -> int:
+	return maxi(abs(key.x - player_chunk.x), abs(key.y - player_chunk.y))
+
+
 func update_chunks(player_pos:Vector2):
 
-	var chunk = get_chunk_from_position(player_pos)
+	var player_chunk := get_chunk_from_position(player_pos)
+	var required: Dictionary = {}
 
-	for x in range(chunk.x-get_load_radius(), chunk.x+get_load_radius()+1):
-		for y in range(chunk.y-get_load_radius(), chunk.y+get_load_radius()+1):
-			load_chunk(x,y)
+	for x in range(player_chunk.x - get_load_radius(), player_chunk.x + get_load_radius() + 1):
+		for y in range(player_chunk.y - get_load_radius(), player_chunk.y + get_load_radius() + 1):
+			required[Vector2i(x, y)] = true
+
+	var needed: Array[Vector2i] = []
+	for key in required.keys():
+		if not loaded_chunks.has(key):
+			needed.append(key)
+
+	if not needed.is_empty():
+		var best: Vector2i = needed[0]
+		var best_d: int = _chebyshev_to_player_chunk(player_chunk, best)
+		for i in range(1, needed.size()):
+			var k: Vector2i = needed[i]
+			var d: int = _chebyshev_to_player_chunk(player_chunk, k)
+			if d < best_d or (d == best_d and (k.x < best.x or (k.x == best.x and k.y < best.y))):
+				best = k
+				best_d = d
+		load_chunk(best.x, best.y)
 
 	unload_far_chunks(player_pos)
 
