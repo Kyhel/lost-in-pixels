@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://bww6ohk217c5l"]
+
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_asytb"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="2_h7l62"]
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="3_jw7xv"]
+[ext_resource type="Resource" uid="uid://b6unlk8m478g1" path="res://features/creatures/ai/goals/attack_player_goal.tres" id="4_48xot"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="4_nj323"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="5_48xot"]
+[ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://features/creatures/ai/sensors/player_sensor.tres" id="5_jw7xv"]
+[ext_resource type="Texture2D" uid="uid://bg8oc2mdbqihn" path="res://assets/creatures/aggressive/unnamed_1.png" id="6_nj323"]
+
+[resource]
+script = ExtResource("1_asytb")
+sprite = ExtResource("6_nj323")
+goals = Array[ExtResource("3_jw7xv")]([ExtResource("4_48xot"), ExtResource("5_48xot")])
+sensors = Array[ExtResource("4_nj323")]([ExtResource("5_jw7xv")])
+can_swim = true
+size = 32
+hitbox_size = 26
+running_multiplier = 3.0
+biomes = Array[int]([0])
+excluded_tile_types = Array[int]([])
+hit_damage = 10
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"
