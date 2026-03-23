@@ -153,7 +153,7 @@ func _move_toward_with_speed(creature: Creature, request: MovementRequest, delta
 	dir = dir.normalized()
 	var desired_velocity = dir * speed
 
-	desired_velocity = compute_velocity(creature, pos_to_target, speed, desired_velocity)
+	desired_velocity = compute_velocity(creature, request, pos_to_target, speed, desired_velocity)
 	
 	# Limit the rotation speed to the creature's rotating speed.
 	var target_angle := desired_velocity.angle()
@@ -167,11 +167,17 @@ func _move_toward_with_speed(creature: Creature, request: MovementRequest, delta
 	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
 	creature.velocity = Vector2.from_angle(creature.virtual_rotation) * desired_velocity.length() * rotation_ratio;
 
-func compute_velocity(creature, pos_to_target: Vector2, speed: float, velocity: Vector2) -> Vector2:
+func compute_velocity(
+	creature: Creature,
+	request: MovementRequest,
+	pos_to_target: Vector2,
+	speed: float,
+	velocity: Vector2
+) -> Vector2:
 	
 	var seek = _seek(pos_to_target, speed)
 	var separation = _compute_separation(creature) * 1.5
-	var avoidance = _obstacle_avoidance(creature, velocity) * 2.0
+	var avoidance = _obstacle_avoidance(creature, request, velocity) * 2.0
 
 	var steering = seek
 	steering += separation
@@ -230,7 +236,7 @@ func _compute_separation(creature: Creature) -> Vector2:
 
 	return force
 
-func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
+func _obstacle_avoidance(creature: Creature, request: MovementRequest, velocity: Vector2) -> Vector2:
 	# Single oriented rectangle along intended velocity: length ≈ speed×lookahead (capped), width ≈ hitbox.
 	var space: PhysicsDirectSpaceState2D = creature.get_world_2d().direct_space_state
 	if space == null:
@@ -274,6 +280,8 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 			continue
 		if collider == ignore_food:
 			continue
+		if _should_ignore_chase_target_player(collider, request):
+			continue
 
 		var other: Node2D = collider as Node2D
 		var dist: float = creature.global_position.distance_to(other.global_position)
@@ -313,3 +321,14 @@ func _obstacle_avoidance(creature: Creature, velocity: Vector2) -> Vector2:
 		total_force += (-perp * side) * strength * avoid_force
 
 	return total_force
+
+func _should_ignore_chase_target_player(collider: Object, request: MovementRequest) -> bool:
+	if request == null:
+		return false
+	if request.approach_target == null or request.approach_target != collider:
+		return false
+	if request.approach_spacing != MovementRequest.ApproachSpacing.COMBAT:
+		return false
+	if not (collider is Node):
+		return false
+	return (collider as Node).is_in_group(Constants.GROUP_PLAYER)

@@ -36,6 +36,7 @@ script = ExtResource("1_script")
 shape = SubResource("CircleShape2D_1")
 
 [node name="Debug" type="Node2D" parent="." unique_id=1675580170]
+visible = false
 
 [node name="SpeedLine" type="Line2D" parent="Debug" unique_id=1212800638]
 points = PackedVector2Array(0, 0, 0, 0)
