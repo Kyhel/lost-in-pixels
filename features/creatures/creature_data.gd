@@ -43,3 +43,6 @@ enum MovementType {
 @export var hunger_decay_rate: float = 5.0
 @export var taming_decay_rate: float = 5.0
 @export var taming_value_threshold: int = 0
+@export var hit_damage: int = 1
+@export var attack_range: float = Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
+@export var attack_cooldown: float = 0.8

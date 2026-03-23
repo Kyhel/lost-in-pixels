@@ -12,6 +12,13 @@ func tick(creature: Creature, _delta: float) -> State:
 		creature.movement.stop()
 		return State.FAILURE
 
+	if Node2DUtils.is_within_interaction_range(
+		creature,
+		player,
+		creature.creature_data.attack_range
+	):
+		return State.SUCCESS
+
 	creature.movement.request_movement(MovementRequest.to_combat_engage(player, 1.0))
 
 	return State.RUNNING

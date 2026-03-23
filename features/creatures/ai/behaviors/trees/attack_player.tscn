@@ -1,11 +1,20 @@
 [gd_scene format=3 uid="uid://bsh1q061b8ff5"]
 
 [ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/behaviors/base/behavior_tree.gd" id="1_fo7ny"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/behaviors/base/bt_sequence.gd" id="2_seq"]
 [ext_resource type="Script" uid="uid://bu2c5tx42746j" path="res://features/creatures/ai/actions/fight/chase_player_action.gd" id="2_163jy"]
+[ext_resource type="Script" path="res://features/creatures/ai/actions/fight/attack_player_action.gd" id="3_attack"]
 
 [node name="AttackPlayer" type="Node" unique_id=918593038]
 script = ExtResource("1_fo7ny")
 
-[node name="ChasePlayerAction" type="Node" parent="." unique_id=280595553]
+[node name="BTSequence" type="Node" parent="." unique_id=1126425843]
+script = ExtResource("2_seq")
+metadata/_custom_type_script = "uid://dg12bfp1f47bf"
+
+[node name="ChasePlayerAction" type="Node" parent="BTSequence" unique_id=280595553]
 script = ExtResource("2_163jy")
 metadata/_custom_type_script = "uid://bu2c5tx42746j"
+
+[node name="AttackPlayerAction" type="Node" parent="BTSequence" unique_id=1462814454]
+script = ExtResource("3_attack")

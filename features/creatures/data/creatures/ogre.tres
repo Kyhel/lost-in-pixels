@@ -17,4 +17,7 @@ size_type = 1
 size = 40
 hitbox_size = 36
 rotating_speed = 3.142
+hit_damage = 8
+attack_range = 4.0
+attack_cooldown = 1.2
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

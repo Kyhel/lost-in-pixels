@@ -105,6 +105,16 @@ func _die() -> void:
 	_dead = true
 	died.emit()
 
+func take_damage(amount: int, _source: Node = null) -> void:
+	if _dead or amount <= 0:
+		return
+	var previous_health := health
+	health = maxf(0.0, health - amount)
+	if health != previous_health:
+		health_changed.emit(health)
+	if health <= 0.0:
+		_die()
+
 func _update_attack_hitbox_radius() -> void:
 	if not is_node_ready() or attack_hitbox == null:
 		return
@@ -155,7 +165,7 @@ func attack():
 
 func _spawn_carrot() -> void:
 	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
-	var chunk := ChunkManager.get_chunk_from_position(spawn_pos)
+	var chunk = ChunkManager.get_chunk_from_position(spawn_pos)
 	ObjectsManager.spawn_item_in_chunk(chunk, carrot_data, spawn_pos, 1)
 
 
