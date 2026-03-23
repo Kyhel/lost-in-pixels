@@ -225,6 +225,7 @@ func unload_far_chunks(player_pos:Vector2):
 			loaded_chunks.erase(key)
 			EntitiesManager.on_chunk_unloaded(key)
 			ObjectsManager.on_chunk_unloaded(key)
+			VegetationManager.on_chunk_unloaded(key)
 
 func get_walk_speed_at_world_pos(world_pos: Vector2) -> float:
 	var def := get_tile_def_from_world_pos(world_pos)

@@ -50,7 +50,7 @@ func generate_trees_for_chunk(
 
 			if should_spawn_tree(global_x, global_y, tile_type, biome):
 				var tree_type = get_tree_type(biome)
-				ObjectsManager.spawn_tree(chunk_position, Vector2i(global_x, global_y), tree_type)
+				VegetationManager.spawn_tree(chunk_position, Vector2i(global_x, global_y), tree_type)
 
 
 func should_spawn_tree(x: int, y: int, tile_type: WorldGenerator.TileType, biome: WorldGenerator.Biome) -> bool:

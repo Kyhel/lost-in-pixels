@@ -35,7 +35,7 @@ func filter_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vec
 
 
 func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
-	ObjectsManager.spawn_water_lily(_chunk, _world_tile)
+	VegetationManager.spawn_water_lily(_chunk, _world_tile)
 
 
 func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> bool:
@@ -44,7 +44,7 @@ func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> 
 		float(tile.y) * tile_size + tile_size * 0.5,
 	)
 	var search_r: float = float(MIN_LILY_TILE_SPACING) * tile_size
-	for veg in ObjectsManager.get_nearby_vegetation(center, search_r):
+	for veg in VegetationManager.get_nearby_vegetation(center, search_r):
 		if not veg.is_water_lily():
 			continue
 		var ox: int = int(floor(veg.global_position.x / tile_size))
@@ -59,7 +59,7 @@ func should_spawn_vegetation(wx: int, wy: int, local_x: int, local_y: int, chunk
 		return false
 	if not _water_is_near_non_water(wx, wy):
 		return false
-	if ObjectsManager.is_environment_tile_occupied(Vector2i(wx, wy)):
+	if VegetationManager.is_environment_tile_occupied(Vector2i(wx, wy)):
 		return false
 	return true
 

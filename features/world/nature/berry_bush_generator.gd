@@ -17,7 +17,7 @@ const MIN_BUSH_TILE_SPACING := 4
 
 
 func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
-	ObjectsManager.spawn_berry_bush(_chunk, _world_tile)
+	VegetationManager.spawn_berry_bush(_chunk, _world_tile)
 
 
 func get_max_vegetation_for_chunk(_chunk: Chunk) -> int:
@@ -43,7 +43,7 @@ func _conflicts_with_existing_berry_bushes(tile: Vector2i, tile_size: float) -> 
 		float(tile.y) * tile_size + tile_size * 0.5,
 	)
 	var search_r: float = float(MIN_BUSH_TILE_SPACING) * tile_size
-	for veg in ObjectsManager.get_nearby_vegetation(center, search_r):
+	for veg in VegetationManager.get_nearby_vegetation(center, search_r):
 		if not veg.is_water_lily():
 			continue
 		var ox: int = int(floor(veg.global_position.x / tile_size))
@@ -61,7 +61,7 @@ func should_spawn_vegetation(
 ) -> bool:
 	var tile_type: WorldGenerator.TileType = chunk.get_tile_type(local_x, local_y)
 	var biome: WorldGenerator.Biome = chunk.get_biome(local_x, local_y)
-	if ObjectsManager.is_environment_tile_occupied(Vector2i(wx, wy)):
+	if VegetationManager.is_environment_tile_occupied(Vector2i(wx, wy)):
 		return false
 	if tile_type == WorldGenerator.TileType.WATER:
 		return false

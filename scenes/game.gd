@@ -8,7 +8,7 @@ const NEW_GAME_PLAYER_POSITION := Vector2.ZERO
 
 func _ready() -> void:
 	print("Game started")
-	ObjectsManager.refresh_scene_references()
+	VegetationManager.refresh_scene_references()
 	call_deferred(&"_apply_session_to_player")
 
 

@@ -9,6 +9,7 @@ func reset_autoload_world_state(clear_fog: bool) -> void:
 	ChunkManager.reset_world_state(clear_fog)
 	EntitiesManager.clear_all_entities()
 	ObjectsManager.clear_all_objects()
+	VegetationManager.clear_all_vegetation()
 
 
 func save_to_disk(player: Player) -> bool:
