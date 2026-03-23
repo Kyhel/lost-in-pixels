@@ -50,7 +50,13 @@ func _discover(ability: AbilityData) -> void:
 	_discovered_set[ability.id] = true
 	discovered_order.append(ability.id)
 	if not ability.discover_log_message.strip_edges().is_empty():
-		GameLog.log_message(ability.discover_log_message)
+		var slot_number := discovered_order.size()
+		var action_name := StringName("ability_" + str(slot_number))
+		var prompt := _get_action_prompt(action_name)
+		var message := ability.discover_log_message
+		if not prompt.is_empty():
+			message += " (Press %s)" % prompt
+		GameLog.log_message(message)
 	ability_unlocked.emit(ability)
 	discoveries_changed.emit()
 
@@ -101,3 +107,10 @@ func _get_player() -> Player:
 		return null
 	var n := tree.get_first_node_in_group("player")
 	return n as Player
+
+
+func _get_action_prompt(action_name: StringName) -> String:
+	var events := InputMap.action_get_events(action_name)
+	if events.is_empty():
+		return ""
+	return (events[0] as InputEvent).as_text().strip_edges()
