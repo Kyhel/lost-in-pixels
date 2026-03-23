@@ -1,6 +1,7 @@
 class_name AttackPlayerAction
 extends BTNode
 
+var creature_hit_player_effect_scene := preload("res://features/creatures/effects/creature_hit_player_effect.tscn")
 var attack_cooldown_timer: float = 0.0
 
 func tick(creature: Creature, delta: float) -> State:
@@ -24,6 +25,7 @@ func tick(creature: Creature, delta: float) -> State:
 		return State.RUNNING
 
 	player.take_damage(creature.creature_data.hit_damage, creature)
+	_spawn_hit_player_effect(creature, player)
 	attack_cooldown_timer = creature.creature_data.attack_cooldown
 	return State.RUNNING
 
@@ -37,3 +39,17 @@ func _is_player_in_attack_range(creature: Creature, player: Player) -> bool:
 		player,
 		creature.creature_data.attack_range
 	)
+
+
+func _spawn_hit_player_effect(creature: Creature, player: Player) -> void:
+	var to_creature := creature.global_position - player.global_position
+	if to_creature.is_zero_approx():
+		to_creature = Vector2.UP
+	var hit_direction := to_creature.normalized()
+	var hit_distance := player.get_hitbox_radius()
+	var spawn_pos := player.global_position + hit_direction * hit_distance
+
+	var fx := creature_hit_player_effect_scene.instantiate() as Node2D
+	fx.global_position = spawn_pos
+	fx.rotation = hit_direction.angle()
+	creature.get_tree().current_scene.add_child(fx)
