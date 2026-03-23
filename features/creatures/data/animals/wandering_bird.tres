@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://l3jujd554n0k"]
 
 [ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_tfc83"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="2_b3o3b"]
 [ext_resource type="Resource" uid="uid://lid6ossrt48q" path="res://features/creatures/ai/goals/fly_goal.tres" id="2_natbx"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="3_5ln18"]
 [ext_resource type="Texture2D" uid="uid://bvek2ki4p8hcc" path="res://assets/FlyingMonster_1.png" id="4_eh5x5"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="5_q2hkp"]
 
 [resource]
 script = ExtResource("3_5ln18")

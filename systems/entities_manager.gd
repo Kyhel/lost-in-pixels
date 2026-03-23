@@ -6,20 +6,15 @@ const CHUNK_UPDATE_INTERVAL: float = 0.5
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
 var creature_scene = preload("res://features/creatures/creature.tscn")
-var wandering_bird_data: CreatureData = preload("res://features/creatures/data/animals/wandering_bird.tres") as CreatureData
-var big_wandering_data: CreatureData = preload("res://features/creatures/data/animals/big_wandering.tres") as CreatureData
-var rabbit_data: CreatureData = preload("res://features/creatures/data/animals/rabbit.tres") as CreatureData
-var fox_data: CreatureData = preload("res://features/creatures/data/animals/fox.tres") as CreatureData
-var beaver_data: CreatureData = preload("res://features/creatures/data/animals/beaver.tres") as CreatureData
-var ogre_data: CreatureData = preload("res://features/creatures/data/creatures/ogre.tres") as CreatureData
 
-var creature_spawn_probability_scores := [
-	# [wandering_bird_data, 0],
-	[rabbit_data, 3],
-	[fox_data, 1],
-	[beaver_data, 1],
-	[ogre_data, 1],
-]
+var creature_spawn_probability_scores := []
+
+func _ready() -> void:
+	for creature_spawn_data in ConfigManager.config.allowed_creatures:
+		creature_spawn_probability_scores.append([
+			creature_spawn_data,
+			ConfigManager.config.allowed_creatures[creature_spawn_data]
+			])
 
 func clear_all_entities() -> void:
 	for chunk in chunk_entities.keys():
@@ -42,7 +37,7 @@ func on_chunk_unloaded(chunk: Vector2i):
 
 func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 
-	if ConfigManager.debug_config.max_creatures_per_chunk <= 0:
+	if ConfigManager.config.max_creatures_per_chunk <= 0:
 		return
 
 	if chunk_entities.has(chunk_position):
@@ -51,7 +46,7 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_chunk_seed(chunk_position.x, chunk_position.y)
 
-	var entity_count := rng.randi_range(1, ConfigManager.debug_config.max_creatures_per_chunk)
+	var entity_count := rng.randi_range(1, ConfigManager.config.max_creatures_per_chunk)
 
 	for i in range(entity_count):
 		var local_x := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
@@ -65,7 +60,7 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 			var data: CreatureData = entry[0]
 			return data.biomes.has(biome) and !data.excluded_tile_types.has(tile_type)
 		).filter(func(entry):
-			return ConfigManager.debug_config.allowed_creatures.has(entry[0])
+			return ConfigManager.config.allowed_creatures.has(entry[0])
 		)
 
 		if valid_creatures.is_empty():

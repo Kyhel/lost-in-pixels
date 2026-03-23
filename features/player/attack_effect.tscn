@@ -2,6 +2,5 @@
 
 [ext_resource type="Script" uid="uid://b6h8nlrnyv2b7" path="res://features/player/attack_effect.gd" id="1"]
 
-[node name="AttackEffect" type="Node2D"]
+[node name="AttackEffect" type="Node2D" unique_id=1593009435]
 script = ExtResource("1")
-

@@ -1,6 +1,6 @@
 extends Node
 
-var debug_config: Config
+var config: Config
 
-func _ready() -> void:
-	debug_config = load("res://config/config.tres")
+func _init() -> void:
+	config = load("res://config/config.tres")

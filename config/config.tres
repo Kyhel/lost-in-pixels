@@ -9,7 +9,12 @@
 
 [resource]
 script = ExtResource("6_3l0t6")
-allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("2_wm4lb"), ExtResource("3_yq3s8"), ExtResource("4_w2q5h"), ExtResource("5_4nmm5")])
+allowed_creatures = Dictionary[ExtResource("1_ndyc7"), int]({
+ExtResource("3_yq3s8"): 2,
+ExtResource("2_wm4lb"): 1,
+ExtResource("4_w2q5h"): 1,
+ExtResource("5_4nmm5"): 1,
+})
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

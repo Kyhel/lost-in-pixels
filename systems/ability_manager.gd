@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 func _register_abilities() -> void:
-	_register(load("res://data/abilities/grow_flower.tres") as AbilityData)
+	_register(load("res://features/player/abilities/grow_flower.tres") as AbilityData)
 
 
 func _register(ability: AbilityData) -> void:

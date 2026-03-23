@@ -92,7 +92,7 @@ func _duplicate_fog_grid(grid: Variant) -> Array:
 	return out
 
 func get_load_radius() -> int:
-	return ConfigManager.debug_config.chunk_load_radius
+	return ConfigManager.config.chunk_load_radius
 
 func get_unload_radius() -> int:
 	return get_load_radius() + 4
@@ -141,17 +141,17 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 
 	# _spawn_world_items(chunk_x, chunk_y)
 
-	if ConfigManager.debug_config.spawn_trees:
+	if ConfigManager.config.spawn_trees:
 		tree_generator.generate_trees_for_chunk(
 			Vector2i(chunk_x, chunk_y),
 			chunk,
 			CHUNK_SIZE)
 
-	if ConfigManager.debug_config.spawn_bushes:
+	if ConfigManager.config.spawn_bushes:
 		berry_bush_generator.generate_for_chunk(
 			Vector2i(chunk_x, chunk_y), chunk)
 
-	if ConfigManager.debug_config.spawn_water_lilies:
+	if ConfigManager.config.spawn_water_lilies:
 		water_lily_generator.generate_for_chunk(
 			Vector2i(chunk_x, chunk_y), chunk)
 
