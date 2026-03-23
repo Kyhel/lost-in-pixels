@@ -7,12 +7,11 @@ A 2D pixel-style game built with **Godot 4.6**. You explore a chunk-based world,
 ## Getting Godot
 
 1. **Download Godot 4.6** (or the latest 4.x that matches the project):
-   - [godotengine.org/download](https://godotengine.org/download)
-   - Choose the **Standard** version for your OS (e.g. Windows, Linux, macOS).
-
-2. **Install / run**  
-   - Windows: extract the ZIP and run `Godot_v4.x_*.exe`.  
-   - No system-wide install required; the editor runs from the folder.
+  - [godotengine.org/download](https://godotengine.org/download)
+  - Choose the **Standard** version for your OS (e.g. Windows, Linux, macOS).
+2. **Install / run**
+  - Windows: extract the ZIP and run `Godot_v4.x_*.exe`.  
+  - No system-wide install required; the editor runs from the folder.
 
 ---
 
@@ -22,29 +21,31 @@ A 2D pixel-style game built with **Godot 4.6**. You explore a chunk-based world,
 2. **Import** or **Open** the project: point to the folder that contains `project.godot` (this repo’s root).
 3. In the editor, press **F5** or click the **Play** (▶) button to run the main scene.
 
-The game runs at **1920×1080** and is not resizable from the project settings.
-
 ---
 
 ## What the game does
 
-- **World**: A procedurally generated, chunk-based 2D world. The area around the player is revealed as you move (fog-of-war style).
+- **World**: A procedurally generated, chunk-based 2D world.
 - **Creatures**: Animals (e.g. rabbits) with simple AI: they get hungry, seek food (e.g. carrots), wander, and can flee. Some creatures can fly. They have health and can be damaged or eaten.
-- **You**: You control a character that can move, attack nearby creatures, and spawn carrots. Creatures may react to you (e.g. eating carrots you drop).
+- **You**: You control a character that can move, attack nearby creatures, interact with the world.
 
 ---
 
 ## What you can do (controls)
 
-| Action           | Input                          |
-|------------------|---------------------------------|
+
+| Action           | Input                                        |
+| ---------------- | -------------------------------------------- |
 | **Move**         | **WASD** or **Arrow keys** or **left stick** |
-| **Attack**       | **F**                          |
-| **Spawn carrot** | **Q** (or **A** on AZERTY)     |
+| **Attack**       | **F**                                        |
+| **Spawn carrot** | **Q** (or **A** on AZERTY)                   |
+| **Interact**     | **E**                                        |
+
 
 - **Move**: Walk around the world; your movement speed can be modified by the terrain (e.g. different chunk types).
-- **Attack**: Hit enemies/creatures in a short range. Damage and range depend on your equipped weapon (or default values if none).
-- **Spawn carrot**: Places a carrot in the world (e.g. in front of you). Creatures that eat food will go for it.
+- **Attack**: Hit enemies/creatures in a short range, instantly killing them.
+- **Spawn carrot**: Places a carrot in the world (e.g. in front of you). Creatures that eat food will go for it, and they might follow you afterwards
+- **Interact**: Try, and find out what happens
 
 ---
 
