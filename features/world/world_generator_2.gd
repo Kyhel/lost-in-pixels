@@ -199,8 +199,8 @@ func _get_tile_raw(x: float, y: float) -> WorldGenerator.TileType:
 	if height < water_level + beach_margin:
 		return WorldGenerator.TileType.BEACH
 
-	if height > mountain_level:
-		return WorldGenerator.TileType.SNOW
+	#if height > mountain_level:
+		#return WorldGenerator.TileType.SNOW
 
 	# 2. Distance & danger computation
 	var safe_factor = get_safe_factor(x, y)
