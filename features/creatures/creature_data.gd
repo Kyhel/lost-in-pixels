@@ -18,6 +18,7 @@ enum MovementType {
 	SPRINT,
 }
 
+@export var id: StringName = ""
 @export var display_name: String = ""
 @export var sprite: Texture2D
 @export var goals: Array[Goal] = []

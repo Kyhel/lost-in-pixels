@@ -11,6 +11,8 @@
 
 [resource]
 script = ExtResource("1_asytb")
+id = &"unnamed_1"
+display_name = "Unnamed 1"
 sprite = ExtResource("6_nj323")
 goals = Array[ExtResource("3_jw7xv")]([ExtResource("4_48xot"), ExtResource("5_48xot")])
 sensors = Array[ExtResource("4_nj323")]([ExtResource("5_jw7xv")])

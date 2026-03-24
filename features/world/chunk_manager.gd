@@ -122,7 +122,7 @@ func load_chunk(chunk_x, chunk_y):
 
 	generate_chunk(chunk_x, chunk_y, chunk)
 
-	EntitiesManager.spawn_entities(chunk, key)
+	CreatureManager.spawn_entities(chunk, key)
 
 func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 
@@ -223,7 +223,7 @@ func unload_far_chunks(player_pos:Vector2):
 			fog_memory[key] = chunk.fog_grid
 			chunk.queue_free()  # supprime du tree
 			loaded_chunks.erase(key)
-			EntitiesManager.on_chunk_unloaded(key)
+			CreatureManager.on_chunk_unloaded(key)
 			ObjectsManager.on_chunk_unloaded(key)
 			VegetationManager.on_chunk_unloaded(key)
 

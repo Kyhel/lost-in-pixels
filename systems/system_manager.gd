@@ -21,9 +21,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(_delta: float):
 
 	ChunkManager.update_chunks(player.global_position)
-	EntitiesManager.update_entity_visibility(player.global_position)
+	CreatureManager.update_entity_visibility(player.global_position)
 
 func _physics_process(delta: float) -> void:
-	EntitiesManager.update_entity_chunks(delta)
+	CreatureManager.update_entity_chunks(delta)
 	ObjectsManager.update_chunks(delta)
 	VegetationManager.update_chunks(delta)

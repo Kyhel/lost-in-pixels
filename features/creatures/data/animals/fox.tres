@@ -15,6 +15,7 @@
 
 [resource]
 script = ExtResource("2_ovces")
+id = &"fox"
 sprite = ExtResource("3_ovces")
 goals = Array[ExtResource("1_t6a1h")]([ExtResource("2_4xntq"), ExtResource("3_n5fiy"), ExtResource("4_follow")])
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])

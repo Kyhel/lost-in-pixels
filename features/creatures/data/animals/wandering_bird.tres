@@ -9,6 +9,7 @@
 
 [resource]
 script = ExtResource("3_5ln18")
+id = &"wandering_bird"
 display_name = "Wandering Bird"
 sprite = ExtResource("4_eh5x5")
 goals = Array[ExtResource("1_tfc83")]([ExtResource("2_natbx")])

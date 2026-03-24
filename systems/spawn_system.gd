@@ -11,7 +11,6 @@ const RABBIT_SPAWN_TRY_COUNT = 5
 ## Tracks last time we spawned a rabbit in each chunk (for rate limiting).
 var _rabbit_last_spawn_time: Dictionary = {}
 
-var rabbit_data := preload("res://features/creatures/data/animals/rabbit.tres")
 
 func _physics_process(delta: float) -> void:
 	var result: Dictionary = _stagger.update(delta)
@@ -84,7 +83,9 @@ func spawn_rabbits(chunk: Chunk) -> void:
 	if !ConfigManager.config.spawn_rabbits:
 		return
 
-	var rabbit_count: int = EntitiesManager.get_creature_count_in_chunk(chunk.coords, rabbit_data)
+	var rabbit_data := CreatureDatabase.get_creature_data(&"rabbit")
+
+	var rabbit_count: int = CreatureManager.get_creature_count_in_chunk(chunk.coords, rabbit_data)
 	if rabbit_count >= RABBIT_MAX_PER_CHUNK:
 		return
 
@@ -119,8 +120,8 @@ func spawn_rabbits(chunk: Chunk) -> void:
 			world_tile_x * ChunkManager.TILE_SIZE,
 			world_tile_y * ChunkManager.TILE_SIZE
 		)
-		var nearby: Array = EntitiesManager.get_nearby_entities(world_pos, RABBIT_MIN_CREATURE_DISTANCE)
+		var nearby: Array = CreatureManager.get_nearby_entities(world_pos, RABBIT_MIN_CREATURE_DISTANCE)
 		if nearby.is_empty():
-			EntitiesManager.spawn_creature_at(chunk.coords, rabbit_data, world_pos)
+			CreatureManager.spawn_creature_at(chunk.coords, rabbit_data, world_pos)
 			_rabbit_last_spawn_time[chunk.coords] = now
 			return

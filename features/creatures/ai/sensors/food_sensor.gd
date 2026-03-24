@@ -30,7 +30,7 @@ func update(creature: Creature) -> void:
 			continue
 		foods.append(world_item)
 
-	var nearby_entities = EntitiesManager.get_nearby_entities(creature.global_position, scan_radius)
+	var nearby_entities = CreatureManager.get_nearby_entities(creature.global_position, scan_radius)
 
 	for entity in nearby_entities:
 		if not entity is Creature:

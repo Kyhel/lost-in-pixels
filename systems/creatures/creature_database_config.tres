@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CreatureDatabaseConfig" format=3 uid="uid://c703dcyv2368p"]
+
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_782i1"]
+[ext_resource type="Script" uid="uid://bs5vqmy33q48t" path="res://systems/creatures/creature_database_config.gd" id="2_8g27w"]
+[ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="2_u4bk2"]
+[ext_resource type="Resource" uid="uid://mok3qihbyai6" path="res://features/creatures/data/animals/fox.tres" id="3_d2p64"]
+[ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://features/creatures/data/animals/beaver.tres" id="4_rswok"]
+[ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_w2wff"]
+[ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1.tres" id="6_58cbe"]
+
+[resource]
+script = ExtResource("2_8g27w")
+creatures = Array[ExtResource("1_782i1")]([ExtResource("2_u4bk2"), ExtResource("3_d2p64"), ExtResource("4_rswok"), ExtResource("5_w2wff"), ExtResource("6_58cbe")])
+metadata/_custom_type_script = "uid://bs5vqmy33q48t"

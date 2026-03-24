@@ -5,7 +5,7 @@ var chunk_entities: Dictionary[Vector2i, Array] = {}
 const CHUNK_UPDATE_INTERVAL: float = 0.5
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
-var creature_scene = preload("res://features/creatures/creature.tscn")
+var creature_scene := preload("res://features/creatures/creature.tscn")
 
 var creature_spawn_probability_scores := []
 
