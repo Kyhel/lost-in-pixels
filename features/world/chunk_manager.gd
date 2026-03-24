@@ -25,11 +25,10 @@ func _ready() -> void:
 
 
 func _apply_world_seed(p_seed: int) -> void:
-	world_generator = preload("res://features/world/world_generator.gd").new()
+	world_generator = WorldGenerator.new()
 	world_generator.setup_seed(p_seed)
 	var wseed: int = world_generator.terrain_noise.seed
 	tree_generator = TreeGenerator.new(wseed)
-	tree_generator.world_generator = world_generator
 	berry_bush_generator = load("res://features/world/nature/berry_bush_generator.gd").new(wseed)
 	water_lily_generator = load("res://features/world/nature/water_lily_generator.gd").new(wseed)
 
@@ -105,12 +104,28 @@ func _duplicate_fog_grid(grid: Variant) -> Array:
 		out.append(row_arr)
 	return out
 
+
+## R: full generation (terrain + vegetation + creatures) Chebyshev radius from player chunk.
 func get_load_radius() -> int:
 	return ConfigManager.config.chunk_load_radius
 
-func get_unload_radius() -> int:
-	return get_load_radius() + 4
 
+func get_full_generation_radius() -> int:
+	return get_load_radius()
+
+
+## R+1: terrain + vegetation; no creatures beyond this toward the outer shell.
+func get_vegetation_stream_radius() -> int:
+	return get_full_generation_radius() + 1
+
+
+## R+2: stream terrain only for the outer ring (chunk still gets full terrain on create).
+func get_terrain_only_stream_radius() -> int:
+	return get_full_generation_radius() + 2
+
+
+func get_unload_radius() -> int:
+	return get_terrain_only_stream_radius() + 2
 
 func get_loaded_chunk(chunk_coords: Vector2i) -> Chunk:
 	var node: Node = loaded_chunks.get(chunk_coords, null)
@@ -118,32 +133,8 @@ func get_loaded_chunk(chunk_coords: Vector2i) -> Chunk:
 		return node as Chunk
 	return null
 
-func load_chunk(chunk_x, chunk_y):
 
-	var key: Vector2i = Vector2i(chunk_x, chunk_y)
-
-	if loaded_chunks.has(key):
-		return
-
-	# print("loading chunk ", key)
-
-	var chunk = chunk_scene.instantiate()
-	chunk.coords = key
-
-	add_child(chunk)
-
-	chunk.position = chunk_coords_to_world_pos(key)
-
-	loaded_chunks[key] = chunk
-
-	chunk.init_fog(fog_memory.get(key, null))
-
-	generate_chunk(chunk_x, chunk_y, chunk)
-
-	CreatureManager.spawn_entities(chunk, key)
-
-func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
-
+func _generate_chunk_terrain(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 	var tile_types: Array[WorldGenerator.TileType] = world_generator.compute_chunk_tile_types(
 		chunk_x, chunk_y, CHUNK_SIZE
 	)
@@ -157,6 +148,8 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 			chunk.set_tile_type(x, y, tile_type)
 			chunk.set_biome(x, y, biome)
 
+
+func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 	if ConfigManager.config.spawn_trees:
 		tree_generator.generate_trees_for_chunk(
 			Vector2i(chunk_x, chunk_y),
@@ -171,40 +164,108 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 		water_lily_generator.generate_for_chunk(
 			Vector2i(chunk_x, chunk_y), chunk)
 
+	chunk.vegetation_generated = true
+
+
+func _create_chunk_with_terrain(chunk_x: int, chunk_y: int) -> void:
+	var key: Vector2i = Vector2i(chunk_x, chunk_y)
+	if loaded_chunks.has(key):
+		return
+
+	var chunk: Chunk = chunk_scene.instantiate() as Chunk
+	chunk.coords = key
+	add_child(chunk)
+	chunk.position = Vector2i(
+		chunk_x * CHUNK_SIZE * TILE_SIZE,
+		chunk_y * CHUNK_SIZE * TILE_SIZE
+	)
+	loaded_chunks[key] = chunk
+	chunk.init_fog(fog_memory.get(key, null))
+	_generate_chunk_terrain(chunk_x, chunk_y, chunk)
+
+
+func _spawn_chunk_creatures(chunk: Chunk, key: Vector2i) -> void:
+	CreatureManager.spawn_entities(chunk, key)
+	chunk.creatures_generated = true
+
 
 func _chebyshev_to_player_chunk(player_chunk: Vector2i, key: Vector2i) -> int:
 	return maxi(abs(key.x - player_chunk.x), abs(key.y - player_chunk.y))
 
 
-func update_chunks(player_pos:Vector2):
+func _pick_closest_chunk_key(candidates: Array[Vector2i], player_chunk: Vector2i) -> Vector2i:
+	var best: Vector2i = candidates[0]
+	var best_d: int = _chebyshev_to_player_chunk(player_chunk, best)
+	for i in range(1, candidates.size()):
+		var k: Vector2i = candidates[i]
+		var d: int = _chebyshev_to_player_chunk(player_chunk, k)
+		if d < best_d or (d == best_d and (k.x < best.x or (k.x == best.x and k.y < best.y))):
+			best = k
+			best_d = d
+	return best
 
-	var player_chunk := get_chunk_from_position(player_pos)
+
+func _vegetation_neighbours_ready(key: Vector2i, required: Dictionary) -> bool:
+	for dx: int in range(-1, 2):
+		for dy: int in range(-1, 2):
+			var nk: Vector2i = Vector2i(key.x + dx, key.y + dy)
+			if not required.has(nk):
+				return false
+			if not loaded_chunks.has(nk):
+				return false
+	return true
+
+
+func _build_required_chunks(player_chunk: Vector2i, stream_radius: int) -> Dictionary:
 	var required: Dictionary = {}
-
-	for x in range(player_chunk.x - get_load_radius(), player_chunk.x + get_load_radius() + 1):
-		for y in range(player_chunk.y - get_load_radius(), player_chunk.y + get_load_radius() + 1):
+	for x in range(player_chunk.x - stream_radius, player_chunk.x + stream_radius + 1):
+		for y in range(player_chunk.y - stream_radius, player_chunk.y + stream_radius + 1):
 			required[Vector2i(x, y)] = true
+	return required
 
-	var needed: Array[Vector2i] = []
-	for key in required.keys():
+
+func update_chunks(player_pos: Vector2) -> void:
+	var player_chunk: Vector2i = get_chunk_from_position(player_pos)
+	var stream_r: int = get_terrain_only_stream_radius()
+	var required: Dictionary = _build_required_chunks(player_chunk, stream_r)
+	var full_r: int = get_full_generation_radius()
+	var veg_r: int = get_vegetation_stream_radius()
+
+	var creature_candidates: Array[Vector2i] = []
+	var veg_candidates: Array[Vector2i] = []
+	var missing_chunks: Array[Vector2i] = []
+
+	for key: Vector2i in required.keys():
 		if not loaded_chunks.has(key):
-			needed.append(key)
+			missing_chunks.append(key)
+			continue
+		var ch: Node = loaded_chunks[key]
+		if not is_instance_valid(ch) or not (ch is Chunk):
+			continue
+		var chunk: Chunk = ch as Chunk
+		var d: int = _chebyshev_to_player_chunk(player_chunk, key)
 
-	if not needed.is_empty():
-		var best: Vector2i = needed[0]
-		var best_d: int = _chebyshev_to_player_chunk(player_chunk, best)
-		for i in range(1, needed.size()):
-			var k: Vector2i = needed[i]
-			var d: int = _chebyshev_to_player_chunk(player_chunk, k)
-			if d < best_d or (d == best_d and (k.x < best.x or (k.x == best.x and k.y < best.y))):
-				best = k
-				best_d = d
-		load_chunk(best.x, best.y)
+		if d <= full_r and chunk.vegetation_generated and not chunk.creatures_generated:
+			creature_candidates.append(key)
+
+		if d <= veg_r and not chunk.vegetation_generated and _vegetation_neighbours_ready(key, required):
+			veg_candidates.append(key)
+
+	if not creature_candidates.is_empty():
+		var pick: Vector2i = _pick_closest_chunk_key(creature_candidates, player_chunk)
+		_spawn_chunk_creatures(loaded_chunks[pick] as Chunk, pick)
+	elif not veg_candidates.is_empty():
+		var pick2: Vector2i = _pick_closest_chunk_key(veg_candidates, player_chunk)
+		var c2: Chunk = loaded_chunks[pick2] as Chunk
+		_generate_chunk_vegetation(pick2.x, pick2.y, c2)
+	elif not missing_chunks.is_empty():
+		var pick3: Vector2i = _pick_closest_chunk_key(missing_chunks, player_chunk)
+		_create_chunk_with_terrain(pick3.x, pick3.y)
 
 	unload_far_chunks(player_pos)
 
-func unload_far_chunks(player_pos:Vector2):
 
+func unload_far_chunks(player_pos: Vector2) -> void:
 	var player_chunk = get_chunk_from_position(player_pos)
 
 	for key in loaded_chunks.keys():
@@ -384,3 +445,33 @@ func get_tile_coords_relative_to_chunk(tile_coords: Vector2i) -> Vector2i:
 
 func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
 	return world_tile_to_local_tile(world_pos_to_world_tile(world_pos))
+
+
+## Runtime / save queries: falls back to [WorldGenerator] when the chunk is not loaded.
+func get_tile_type_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.TileType:
+	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
+	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
+	var key := Vector2i(chunk_x, chunk_y)
+	if loaded_chunks.has(key):
+		var ch: Node = loaded_chunks[key]
+		if is_instance_valid(ch) and ch is Chunk:
+			var local_x: int = world_x - chunk_x * CHUNK_SIZE
+			var local_y: int = world_y - chunk_y * CHUNK_SIZE
+			return (ch as Chunk).get_tile_type(local_x, local_y)
+	return world_generator.get_tile_type(world_x, world_y)
+
+
+## Vegetation generation only: loaded chunk tile data, no world generator fallback.
+func get_tile_type_for_generation(world_x: int, world_y: int) -> WorldGenerator.TileType:
+	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
+	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
+	var key := Vector2i(chunk_x, chunk_y)
+	if not loaded_chunks.has(key):
+		push_error("ChunkManager.get_tile_type_for_generation: chunk not loaded %s" % str(key))
+		return WorldGenerator.TileType.NONE
+	var ch: Node = loaded_chunks[key]
+	if not is_instance_valid(ch) or not (ch is Chunk):
+		return WorldGenerator.TileType.WATER
+	var local_x: int = world_x - chunk_x * CHUNK_SIZE
+	var local_y: int = world_y - chunk_y * CHUNK_SIZE
+	return (ch as Chunk).get_tile_type(local_x, local_y)

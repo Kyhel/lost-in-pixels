@@ -23,7 +23,6 @@ enum TreeType {
 
 var tree_noise := FastNoiseLite.new()
 var world_seed: int
-var world_generator: WorldGenerator
 
 func _init(p_seed: int) -> void:
 	world_seed = p_seed
@@ -91,18 +90,18 @@ func _should_spawn_forest_tree(
 	return true
 
 
+func _forest_priority(wx: int, wy: int) -> int:
+	return int(hash(Vector2i(wx, wy)) ^ world_seed ^ FOREST_PRIORITY_SALT)
+
+
 func _forest_base_eligible(wx: int, wy: int, tile_type: WorldGenerator.TileType) -> bool:
 	if tile_type != WorldGenerator.TileType.DARK_GRASS:
 		return false
-	if tree_noise.get_noise_2d(wx, wy) < 0.05:
-		return false
-	if _tile_random(wx, wy, 0) < 0.12:
-		return false
+	# if tree_noise.get_noise_2d(wx, wy) < 0.05:
+	# 	return false
+	# if _tile_random(wx, wy, 0) < 0.12:
+	# 	return false
 	return true
-
-
-func _forest_priority(wx: int, wy: int) -> int:
-	return int(hash(Vector2i(wx, wy)) ^ world_seed ^ FOREST_PRIORITY_SALT)
 
 
 func _get_tile_type_world(
@@ -115,7 +114,7 @@ func _get_tile_type_world(
 ) -> WorldGenerator.TileType:
 	if local_x >= 0 and local_x < chunk_size and local_y >= 0 and local_y < chunk_size:
 		return _chunk.get_tile_type(local_x, local_y)
-	return world_generator.get_tile_type(wx, wy)
+	return ChunkManager.get_tile_type_for_generation(wx, wy)
 
 
 func _spawn_plains_grove_trees_for_chunk(chunk_position: Vector2i, _chunk: Chunk, chunk_size: int) -> void:
@@ -158,7 +157,7 @@ func _plains_grove_tree_positions(mcx: int, mcy: int) -> Array[Vector2i]:
 	var grass_tiles: Array[Vector2i] = []
 	for gx: int in range(x0, x1 + 1):
 		for gy: int in range(y0, y1 + 1):
-			if world_generator.get_tile_type(gx, gy) == WorldGenerator.TileType.GRASS:
+			if ChunkManager.get_tile_type_for_generation(gx, gy) == WorldGenerator.TileType.GRASS:
 				grass_tiles.append(Vector2i(gx, gy))
 	if grass_tiles.is_empty():
 		return empty

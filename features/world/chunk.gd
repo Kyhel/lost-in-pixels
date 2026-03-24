@@ -14,6 +14,10 @@ var world_items: Array[WorldItem] = []
 
 var coords: Vector2i
 
+## Staged generation: terrain is always completed before the chunk is registered in ChunkManager.loaded_chunks.
+var vegetation_generated := false
+var creatures_generated := false
+
 @onready var tilemap : TileMapLayer = $Terrain
 @onready var fog : TileMapLayer = $Fog
 @onready var creatures_container: Node2D = $Creatures
