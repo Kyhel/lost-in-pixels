@@ -59,6 +59,20 @@ static func to_eat_live_prey(prey: Creature, desire: float = 1.0) -> MovementReq
 	return r
 
 
+## Approach [param target] until interaction range; face target while holding. Use [param movement_context] to tag intent (e.g. [constant MovementContext.EAT] for static food).
+static func to_interact_target(
+	target: Node2D,
+	desire: float = 1.0,
+	movement_context: MovementContext = MovementContext.EAT,
+) -> MovementRequest:
+	var r := MovementRequest.new(target.global_position, desire)
+	r.context = movement_context
+	r.approach_target = target
+	r.approach_spacing = ApproachSpacing.INTERACTION
+	r.face_target = true
+	return r
+
+
 ## Chase / hold at combat distance (combined radii + combat spacing).
 static func to_combat_engage(target: Node2D, desire: float = 1.0) -> MovementRequest:
 	var r := MovementRequest.new(target.global_position, desire)

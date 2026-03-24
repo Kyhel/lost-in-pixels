@@ -270,7 +270,6 @@ func _obstacle_avoidance(creature: Creature, request: MovementRequest, velocity:
 
 	var results: Array = space.intersect_shape(params, 32)
 	var obstacle_best: Dictionary = {}
-	var ignore_food: Variant = creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD)
 
 	for res in results:
 		var collider: Object = res.get("collider", null)
@@ -278,9 +277,7 @@ func _obstacle_avoidance(creature: Creature, request: MovementRequest, velocity:
 			continue
 		if not (collider is Node2D):
 			continue
-		if collider == ignore_food:
-			continue
-		if _should_ignore_chase_target_player(collider, request):
+		if _should_ignore_obstacle_for_current_target(collider, request, creature):
 			continue
 
 		var other: Node2D = collider as Node2D
@@ -321,6 +318,35 @@ func _obstacle_avoidance(creature: Creature, request: MovementRequest, velocity:
 		total_force += (-perp * side) * strength * avoid_force
 
 	return total_force
+
+
+## Max center distance from [param eat_target] to [param obstacle] such that avoidance is skipped during [constant MovementRequest.MovementContext.EAT].
+## Matches [method Node2DUtils.is_within_interaction_range] band (actor + target radii + [constant Constants.DEFAULT_INTERACTION_MARGIN]) plus obstacle extent so we do not steer away from things in the interaction neighborhood.
+func _eat_interaction_neighborhood_max_dist(creature: Creature, eat_target: Node2D, obstacle: Node2D) -> float:
+	var actor_r: float = creature.get_hitbox_radius()
+	var target_r: float = Node2DUtils.get_target_radius_for_interaction(eat_target)
+	var obstacle_r: float = Node2DUtils.get_target_radius_for_interaction(obstacle)
+	return actor_r + target_r + Constants.DEFAULT_INTERACTION_MARGIN + obstacle_r
+
+
+func _should_ignore_obstacle_for_current_target(collider: Object, request: MovementRequest, creature: Creature) -> bool:
+	if request == null:
+		return false
+	if _should_ignore_chase_target_player(collider, request):
+		return true
+	var target: Node2D = request.approach_target
+	if target == null or not is_instance_valid(target):
+		return false
+	if collider == target:
+		return true
+	if request.context != MovementRequest.MovementContext.EAT:
+		return false
+	if not (collider is Node2D):
+		return false
+	var obstacle: Node2D = collider as Node2D
+	var max_d: float = _eat_interaction_neighborhood_max_dist(creature, target, obstacle)
+	return target.global_position.distance_to(obstacle.global_position) <= max_d
+
 
 func _should_ignore_chase_target_player(collider: Object, request: MovementRequest) -> bool:
 	if request == null:
