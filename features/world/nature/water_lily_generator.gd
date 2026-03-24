@@ -69,6 +69,17 @@ func _water_is_near_non_water(wx: int, wy: int) -> bool:
 		for dy in range(-SHORE_DISTANCE, SHORE_DISTANCE + 1):
 			var tx: int = wx + dx
 			var ty: int = wy + dy
-			if ChunkManager.get_tile_type_at_world_tile(tx, ty) != WorldGenerator.TileType.WATER:
+			var chunk_x := int(floor(float(tx) / float(ChunkManager.CHUNK_SIZE)))
+			var chunk_y := int(floor(float(ty) / float(ChunkManager.CHUNK_SIZE)))
+			var chunk_coords := Vector2i(chunk_x, chunk_y)
+			var local_x := posmod(tx, ChunkManager.CHUNK_SIZE)
+			var local_y := posmod(ty, ChunkManager.CHUNK_SIZE)
+			var chunk := ChunkManager.get_loaded_chunk(chunk_coords)
+			var tile_type := WorldGenerator.TileType.WATER
+			if chunk != null:
+				tile_type = chunk.get_tile_type(local_x, local_y)
+			else:
+				tile_type = ChunkManager.world_generator.get_tile_type(tx, ty)
+			if tile_type != WorldGenerator.TileType.WATER:
 				return true
 	return false

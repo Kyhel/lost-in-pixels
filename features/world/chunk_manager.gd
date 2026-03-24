@@ -354,27 +354,3 @@ func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
 	)
 
 
-func get_tile_type_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.TileType:
-	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
-	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
-	var key := Vector2i(chunk_x, chunk_y)
-	if loaded_chunks.has(key):
-		var ch: Node = loaded_chunks[key]
-		if is_instance_valid(ch) and ch is Chunk:
-			var local_x: int = world_x - chunk_x * CHUNK_SIZE
-			var local_y: int = world_y - chunk_y * CHUNK_SIZE
-			return (ch as Chunk).get_tile_type(local_x, local_y)
-	return world_generator.get_tile_type(world_x, world_y)
-
-
-func get_biome_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.Biome:
-	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
-	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
-	var key := Vector2i(chunk_x, chunk_y)
-	if loaded_chunks.has(key):
-		var ch: Node = loaded_chunks[key]
-		if is_instance_valid(ch) and ch is Chunk:
-			var local_x: int = world_x - chunk_x * CHUNK_SIZE
-			var local_y: int = world_y - chunk_y * CHUNK_SIZE
-			return (ch as Chunk).get_biome(local_x, local_y)
-	return world_generator.get_biome(world_x, world_y)
