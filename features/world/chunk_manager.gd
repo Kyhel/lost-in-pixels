@@ -131,10 +131,7 @@ func load_chunk(chunk_x, chunk_y):
 
 	add_child(chunk)
 
-	chunk.position = Vector2i(
-		chunk_x * CHUNK_SIZE * TILE_SIZE,
-		chunk_y * CHUNK_SIZE * TILE_SIZE
-	)
+	chunk.position = chunk_coords_to_world_pos(key)
 
 	loaded_chunks[key] = chunk
 
@@ -279,10 +276,7 @@ func is_environment_blocking_creature(creature: Creature, world_pos: Vector2) ->
 
 func reveal_around_player(player_pos):
 
-	var tile_pos = Vector2i(
-		floor(player_pos.x / TILE_SIZE),
-		floor(player_pos.y / TILE_SIZE)
-	)
+	var tile_pos: Vector2i = world_pos_to_world_tile(player_pos)
 
 	var radius = TERRAIN_VISION_RADIUS
 
@@ -298,59 +292,94 @@ func reveal_around_player(player_pos):
 
 func get_tile_def_from_world_pos(world_pos: Vector2) -> Dictionary:
 	# 1) convert from pixels to world tile coords
-	var world_tile_coords = get_tile_coords_from_world_pos(world_pos)
+	var world_tile_coords: Vector2i = world_pos_to_world_tile(world_pos)
 
-	var chunk_coords := get_chunk_from_position(world_pos)
+	var chunk_coords: Vector2i = world_pos_to_chunk_coords(world_pos)
 
 	if !loaded_chunks.has(chunk_coords):
 		return {}  # or some safe default
 	var chunk := loaded_chunks[chunk_coords]
 	# 3) local tile coordinates inside the chunk
-	var local := get_tile_coords_relative_to_chunk(world_tile_coords)
+	var local: Vector2i = world_tile_to_local_tile(world_tile_coords)
 	# 4) return the stored def (atlas, walk_speed, walkable, …)
 	return world_generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
 
 func reveal_tile(world_x, world_y):
 
-	var chunk_x = int(floor(world_x / float(CHUNK_SIZE)))
-	var chunk_y = int(floor(world_y / float(CHUNK_SIZE)))
-
-	var key: Vector2i = Vector2i(chunk_x, chunk_y)
+	var world_tile: Vector2i = Vector2i(world_x, world_y)
+	var key: Vector2i = world_tile_to_chunk_coords(world_tile)
 
 	if !loaded_chunks.has(key):
 		return
 	var chunk = loaded_chunks[key]
 
-	var local_x = posmod(world_x, CHUNK_SIZE)
-	var local_y = posmod(world_y, CHUNK_SIZE)
+	var local_tile: Vector2i = world_tile_to_local_tile(world_tile)
 
-	chunk.reveal(local_x,local_y)
+	chunk.reveal(local_tile.x, local_tile.y)
 
 func get_chunk_seed(chunk_x:int, chunk_y:int) -> int:
 	return world_generator.terrain_noise.seed ^ (chunk_x * 73856093) ^ (chunk_y * 19349663)
 
-func get_chunk_from_position(pos: Vector2) -> Vector2i:
-	return Vector2i(
-		int(floor(pos.x / float(CHUNK_SIZE * TILE_SIZE))),
-		int(floor(pos.y / float(CHUNK_SIZE * TILE_SIZE)))
-	)
-
-func get_tile_coords_from_world_pos(world_pos: Vector2) -> Vector2i:
+func world_pos_to_world_tile(world_pos: Vector2) -> Vector2i:
 	return Vector2i(
 		int(floor(world_pos.x / float(TILE_SIZE))),
 		int(floor(world_pos.y / float(TILE_SIZE)))
 	)
 
-func get_tile_coords_relative_to_chunk(tile_coords: Vector2i) -> Vector2i:
-	return Vector2i(
-		posmod(tile_coords.x, CHUNK_SIZE),
-		posmod(tile_coords.y, CHUNK_SIZE)
+func world_tile_to_world_pos(world_tile: Vector2i) -> Vector2:
+	return Vector2(
+		world_tile.x * TILE_SIZE,
+		world_tile.y * TILE_SIZE
 	)
+
+func world_tile_to_world_center(world_tile: Vector2i) -> Vector2:
+	var origin: Vector2 = world_tile_to_world_pos(world_tile)
+	return Vector2(
+		origin.x + TILE_HALF_SIZE,
+		origin.y + TILE_HALF_SIZE
+	)
+
+func world_pos_to_chunk_coords(pos: Vector2) -> Vector2i:
+	return Vector2i(
+		int(floor(pos.x / float(CHUNK_SIZE * TILE_SIZE))),
+		int(floor(pos.y / float(CHUNK_SIZE * TILE_SIZE)))
+	)
+
+func world_tile_to_chunk_coords(world_tile: Vector2i) -> Vector2i:
+	return Vector2i(
+		int(floor(world_tile.x / float(CHUNK_SIZE))),
+		int(floor(world_tile.y / float(CHUNK_SIZE)))
+	)
+
+func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
+	return Vector2i(
+		posmod(world_tile.x, CHUNK_SIZE),
+		posmod(world_tile.y, CHUNK_SIZE)
+	)
+
+func world_tile_to_local_tile_in_chunk(world_tile: Vector2i, chunk_coords: Vector2i) -> Vector2i:
+	return Vector2i(
+		world_tile.x - chunk_coords.x * CHUNK_SIZE,
+		world_tile.y - chunk_coords.y * CHUNK_SIZE
+	)
+
+func chunk_and_local_to_world_tile(chunk_coords: Vector2i, local_tile: Vector2i) -> Vector2i:
+	return Vector2i(
+		chunk_coords.x * CHUNK_SIZE + local_tile.x,
+		chunk_coords.y * CHUNK_SIZE + local_tile.y
+	)
+
+func chunk_coords_to_world_pos(chunk_coords: Vector2i) -> Vector2:
+	return world_tile_to_world_pos(chunk_and_local_to_world_tile(chunk_coords, Vector2i.ZERO))
+
+func get_chunk_from_position(pos: Vector2) -> Vector2i:
+	return world_pos_to_chunk_coords(pos)
+
+func get_tile_coords_from_world_pos(world_pos: Vector2) -> Vector2i:
+	return world_pos_to_world_tile(world_pos)
+
+func get_tile_coords_relative_to_chunk(tile_coords: Vector2i) -> Vector2i:
+	return world_tile_to_local_tile(tile_coords)
 
 func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
-	return Vector2i(
-		posmod(int(floor(world_pos.x / float(TILE_SIZE))), CHUNK_SIZE),
-		posmod(int(floor(world_pos.y / float(TILE_SIZE))), CHUNK_SIZE)
-	)
-
-
+	return world_tile_to_local_tile(world_pos_to_world_tile(world_pos))

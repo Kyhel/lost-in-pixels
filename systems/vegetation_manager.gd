@@ -45,8 +45,9 @@ func get_tree_scene(tree_type: TreeGenerator.TreeType) -> PackedScene:
 			return tree_1_scene
 
 
-func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
-	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
+func spawn_vegetation(_chunk: Vector2i, world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
+	var resolved_chunk: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(resolved_chunk)
 	if chunk_node == null:
 		return null
 	var target_container: Node2D = chunk_node.get_vegetation_container()
@@ -54,21 +55,12 @@ func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: P
 		return null
 
 	var vegetation: Node2D = vegetation_scene.instantiate() as Node2D
-	vegetation.set("chunk_coords", chunk)
+	vegetation.set("chunk_coords", resolved_chunk)
 	vegetation.set("world_tile", world_tile)
-	vegetation.global_position = Vector2(
-		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE,
-		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE
-	)
 	target_container.add_child(vegetation)
-	vegetation.global_position = Vector2(
-		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE,
-		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE
-	)
-	var local_tile: Vector2i = Vector2i(
-		world_tile.x - chunk.x * ChunkManager.CHUNK_SIZE,
-		world_tile.y - chunk.y * ChunkManager.CHUNK_SIZE
-	)
+	# Set global position only after parenting to avoid chunk transform offset.
+	vegetation.global_position = ChunkManager.world_tile_to_world_center(world_tile)
+	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile_in_chunk(world_tile, resolved_chunk)
 	chunk_node.register_environment_tile(local_tile)
 	return vegetation as Vegetation
 
@@ -82,17 +74,11 @@ func spawn_water_lily(chunk: Vector2i, world_tile: Vector2i) -> void:
 
 
 func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
-	var chunk_coords := Vector2i(
-		int(floor(float(world_tile.x) / float(ChunkManager.CHUNK_SIZE))),
-		int(floor(float(world_tile.y) / float(ChunkManager.CHUNK_SIZE)))
-	)
+	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk_node == null:
 		return false
-	var local_tile: Vector2i = Vector2i(
-		world_tile.x - chunk_coords.x * ChunkManager.CHUNK_SIZE,
-		world_tile.y - chunk_coords.y * ChunkManager.CHUNK_SIZE
-	)
+	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile_in_chunk(world_tile, chunk_coords)
 	return chunk_node.is_environment_tile_occupied(local_tile)
 
 

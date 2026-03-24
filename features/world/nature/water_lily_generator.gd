@@ -39,17 +39,13 @@ func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
 
 
 func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> bool:
-	var center := Vector2(
-		float(tile.x) * tile_size + tile_size * 0.5,
-		float(tile.y) * tile_size + tile_size * 0.5,
-	)
+	var center: Vector2 = ChunkManager.world_tile_to_world_center(tile)
 	var search_r: float = float(MIN_LILY_TILE_SPACING) * tile_size
 	for veg in VegetationManager.get_nearby_vegetation(center, search_r):
 		if not veg.is_water_lily():
 			continue
-		var ox: int = int(floor(veg.global_position.x / tile_size))
-		var oy: int = int(floor(veg.global_position.y / tile_size))
-		if _chebyshev_tile(tile, Vector2i(ox, oy)) < MIN_LILY_TILE_SPACING:
+		var other_tile: Vector2i = ChunkManager.world_pos_to_world_tile(veg.global_position)
+		if _chebyshev_tile(tile, other_tile) < MIN_LILY_TILE_SPACING:
 			return true
 	return false
 
@@ -69,15 +65,13 @@ func _water_is_near_non_water(wx: int, wy: int) -> bool:
 		for dy in range(-SHORE_DISTANCE, SHORE_DISTANCE + 1):
 			var tx: int = wx + dx
 			var ty: int = wy + dy
-			var chunk_x := int(floor(float(tx) / float(ChunkManager.CHUNK_SIZE)))
-			var chunk_y := int(floor(float(ty) / float(ChunkManager.CHUNK_SIZE)))
-			var chunk_coords := Vector2i(chunk_x, chunk_y)
-			var local_x := posmod(tx, ChunkManager.CHUNK_SIZE)
-			var local_y := posmod(ty, ChunkManager.CHUNK_SIZE)
+			var world_tile: Vector2i = Vector2i(tx, ty)
+			var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+			var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
 			var chunk := ChunkManager.get_loaded_chunk(chunk_coords)
 			var tile_type := WorldGenerator.TileType.WATER
 			if chunk != null:
-				tile_type = chunk.get_tile_type(local_x, local_y)
+				tile_type = chunk.get_tile_type(local_tile.x, local_tile.y)
 			else:
 				tile_type = ChunkManager.world_generator.get_tile_type(tx, ty)
 			if tile_type != WorldGenerator.TileType.WATER:

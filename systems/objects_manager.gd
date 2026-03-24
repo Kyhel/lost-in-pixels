@@ -31,7 +31,7 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	return item
 
 
-func spawn_item_at(item_data, world_pos: Vector2, quantity: int = 1):
+func spawn_item_at(item_data: ItemData, world_pos: Vector2, quantity: int = 1):
 	var chunk: Vector2i = ChunkManager.get_chunk_from_position(world_pos)
 	return spawn_item_in_chunk(chunk, item_data, world_pos, quantity)
 

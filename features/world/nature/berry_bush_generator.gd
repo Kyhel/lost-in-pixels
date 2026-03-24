@@ -38,17 +38,13 @@ func filter_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vec
 	
 
 func _conflicts_with_existing_berry_bushes(tile: Vector2i, tile_size: float) -> bool:
-	var center := Vector2(
-		float(tile.x) * tile_size + tile_size * 0.5,
-		float(tile.y) * tile_size + tile_size * 0.5,
-	)
+	var center: Vector2 = ChunkManager.world_tile_to_world_center(tile)
 	var search_r: float = float(MIN_BUSH_TILE_SPACING) * tile_size
 	for veg in VegetationManager.get_nearby_vegetation(center, search_r):
-		if not veg.is_water_lily():
+		if veg == null or veg.is_water_lily():
 			continue
-		var ox: int = int(floor(veg.global_position.x / tile_size))
-		var oy: int = int(floor(veg.global_position.y / tile_size))
-		if _chebyshev_tile(tile, Vector2i(ox, oy)) < MIN_BUSH_TILE_SPACING:
+		var other_tile: Vector2i = ChunkManager.world_pos_to_world_tile(veg.global_position)
+		if _chebyshev_tile(tile, other_tile) < MIN_BUSH_TILE_SPACING:
 			return true
 	return false
 
