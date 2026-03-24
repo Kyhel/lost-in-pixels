@@ -2,6 +2,7 @@ extends Node
 class_name WorldGenerator
 
 enum TileType {
+	NONE,
 	WATER,
 	SAND,
 	GRASS,
@@ -18,6 +19,12 @@ enum TileType {
 }
 
 const TILE_DEFS = {
+	TileType.NONE: {
+		"atlas": Vector2i(0, 0),
+		"walkable": false,
+		"swimmable": false,
+		"walk_speed": 0,
+	},
 	TileType.WATER: {
 		"atlas": Vector2i(2, 0),
 		"walkable": false,
@@ -99,6 +106,7 @@ const TILE_DEFS = {
 }
 
 enum Biome {
+	NONE,
 	FOREST,
 	PLAINS,
 	DESERT,
@@ -136,6 +144,8 @@ func get_tile_type(world_x: int, world_y: int) -> TileType:
 ## Use this when you already have a tile type (e.g. from Chunk tile data) instead of calling get_biome / get_tile_type again.
 func biome_from_tile_type(tile_type: TileType) -> Biome:
 	match tile_type:
+		TileType.NONE:
+			return Biome.NONE
 		TileType.WATER:
 			return Biome.WATER
 		TileType.BEACH:

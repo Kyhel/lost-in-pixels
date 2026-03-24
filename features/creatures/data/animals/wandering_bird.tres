@@ -16,5 +16,5 @@ goals = Array[ExtResource("1_tfc83")]([ExtResource("2_natbx")])
 can_fly = true
 size = 24
 base_speed = 80.0
-biomes = Array[int]([0, 1, 2])
+biomes = Array[int]([1, 2, 3])
 movement_types = Array[int]([2])

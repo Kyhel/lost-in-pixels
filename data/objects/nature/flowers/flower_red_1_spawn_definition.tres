@@ -11,7 +11,7 @@ metadata/_custom_type_script = "uid://ihk51y7nqyh1"
 
 [resource]
 script = ExtResource("1_pe13g")
-biomes = Array[int]([1])
-excluded_tile_types = Array[int]([0])
+biomes = Array[int]([2])
+excluded_tile_types = Array[int]([1])
 spawn_rules = Array[ExtResource("2_7mgeo")]([SubResource("Resource_lbroo"), ExtResource("4_ujfjm")])
 metadata/_custom_type_script = "uid://bmemkokxjo2af"

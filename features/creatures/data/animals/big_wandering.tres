@@ -15,4 +15,4 @@ sprite = ExtResource("4_6v0ai")
 goals = Array[ExtResource("1_6nug8")]([ExtResource("2_llims")])
 size_type = 1
 size = 64
-biomes = Array[int]([1, 0])
+biomes = Array[int]([2, 1])
