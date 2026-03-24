@@ -2,7 +2,7 @@ class_name FoodSensor
 extends Sensor
 
 ## Scans the surroundings for food the creature can eat and stores found positions in the creature's blackboard under [constant BLACKBOARD_KEY_FOOD].
-## Edible types are configured on [member CreatureData.edible_object_data] and [member CreatureData.edible_creatures].
+## Edible types are configured on [member CreatureData.edible_objects] and [member CreatureData.edible_creatures].
 
 @export var scan_radius: float = 300.0
 
@@ -46,7 +46,7 @@ func update(creature: Creature) -> void:
 	creature.blackboard.set_value(Blackboard.KEY_FOOD, foods)
 
 func _can_eat(data: CreatureData, object_data: ObjectData) -> bool:
-	for edible in data.edible_object_data:
+	for edible in data.edible_objects:
 		if edible != null and edible.id == object_data.id:
 			return true
 	return false

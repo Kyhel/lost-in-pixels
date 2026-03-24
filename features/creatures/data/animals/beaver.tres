@@ -23,6 +23,6 @@ hitbox_size = 12
 biomes = Array[int]([1, 2, 7])
 excluded_tile_types = Array[int]([])
 needs_eating = true
-edible_object_data = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResource("4_0t3oh")])
+edible_objects = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResource("4_0t3oh")])
 hunger_decay_rate = 1.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

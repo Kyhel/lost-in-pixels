@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ObjectDatabaseConfig" format=3 uid="uid://d88yn5enqgjy"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_objscr"]
-[ext_resource type="Script" path="res://systems/objects/object_database_config.gd" id="2_cfgscr"]
+[ext_resource type="Script" uid="uid://byak2md7pq81w" path="res://systems/objects/object_database_config.gd" id="2_cfgscr"]
 [ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="3_apple"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="4_berry"]
 [ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="5_carrot"]

@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="6_5newe"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="7_37s47"]
+[ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="8_bt5mj"]
 [ext_resource type="Script" uid="uid://buon80ox32fe5" path="res://systems/spawn_system.gd" id="8_dinhu"]
 [ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/alpha_spot_mask.gdshader" id="9_kvpfn"]
 [ext_resource type="Script" uid="uid://nck1ef4xhudm" path="res://scenes/alpha_mask_viewport.gd" id="9_trtic"]
@@ -73,6 +76,7 @@ collision_mask = 50
 motion_mode = 1
 script = ExtResource("3_iywne")
 weapon = ExtResource("6_0tnpc")
+edible_objects = Array[ExtResource("6_5newe")]([ExtResource("7_37s47"), ExtResource("8_bt5mj")])
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Entities/Player" unique_id=1558994929]
 texture = ExtResource("4_iywne")

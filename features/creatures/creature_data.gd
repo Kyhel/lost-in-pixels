@@ -38,7 +38,7 @@ enum MovementType {
 @export var movement_types: Array[MovementType] = [MovementType.RUN]
 @export var needs_eating: bool = false
 ## Item types this species can eat; used by [FoodSensor] when [member needs_eating] is true.
-@export var edible_object_data: Array[ObjectData] = []
+@export var edible_objects: Array[ObjectData] = []
 ## Prey species ([CreatureData]) this species can eat; used by [FoodSensor].
 @export var edible_creatures: Array[CreatureData] = []
 @export var hunger_decay_rate: float = 5.0

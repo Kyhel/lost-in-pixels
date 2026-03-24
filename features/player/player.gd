@@ -20,6 +20,8 @@ var attack_cooldown_timer: float = 0.0
 @export var max_health: float = 100.0
 @export var health: float = 100.0
 
+@export var edible_objects: Array[ObjectData] = []
+
 var _dead: bool = false
 
 @onready var attack_hitbox: Area2D = $AttackHitbox
@@ -195,7 +197,7 @@ func try_pickup_in_front() -> void:
 			continue
 		var food_val: float = it.object_data.player_food_value
 		it.on_picked_up(self)
-		if food_val > 0.0:
+		if food_val > 0.0 and it.object_data in edible_objects:
 			_apply_food_value(food_val)
 		break
 
