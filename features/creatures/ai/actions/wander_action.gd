@@ -38,7 +38,7 @@ func pick_wander_target(creature: Creature) -> Vector2:
 
 	var target_angle = PI * pow(randf(), 5) * signf(randf() - 0.5)
 
-	var target_rotation_vector = Vector2.from_angle(target_angle + creature.rotation)
+	var target_rotation_vector = Vector2.from_angle(target_angle + creature.virtual_rotation)
 
 	var wander_distance = (randf() + 1) / 2 * wander_radius;
 
