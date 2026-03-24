@@ -164,7 +164,7 @@ func _update_hunger(delta: float) -> void:
 	var hunger = blackboard.get_value(Blackboard.KEY_HUNGER)
 
 	if hunger == null:
-		hunger = Blackboard.KEY_HUNGER_MAX
+		hunger = randf_range(Blackboard.KEY_HUNGER_MAX * 0.8 , Blackboard.KEY_HUNGER_MAX)
 		blackboard.set_value(Blackboard.KEY_HUNGER, hunger)
 
 	blackboard.set_value(Blackboard.KEY_HUNGER, hunger - creature_data.hunger_decay_rate * delta)

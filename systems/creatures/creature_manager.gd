@@ -154,6 +154,7 @@ func spawn_creature_at(chunk_coords: Vector2i, creature_data: CreatureData, worl
 	var creature = creature_scene.instantiate()
 	creature.creature_data = creature_data
 	creature.global_position = world_pos
+	creature.virtual_rotation = randf() * TAU
 	target_container.add_child(creature)
 	creature.global_position = world_pos
 
