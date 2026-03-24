@@ -23,6 +23,7 @@ func _ready() -> void:
 		var base_r: float = (base_shape as CircleShape2D).radius
 		if base_r > 0.0:
 			cs.scale = Vector2.ONE * (item_data.hitbox_radius / base_r)
+	z_index = Constants.Z_INDEX_OBJECTS
 
 func can_be_picked_up(_by: Node) -> bool:
 	return true

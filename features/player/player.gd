@@ -33,6 +33,7 @@ signal died()
 func _ready() -> void:
 	add_to_group("player")
 	_update_attack_hitbox_radius()
+	z_index = Constants.Z_INDEX_PLAYER
 
 func _physics_process(delta):
 

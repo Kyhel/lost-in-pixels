@@ -81,12 +81,19 @@ func _ready() -> void:
 		collision_mask = _get_collision_mask()
 		scale = Vector2.ONE * creature_data.scale_factor
 		$CollisionShape.scale = Vector2.ONE * creature_data.hitbox_size / $CollisionShape.shape.radius / 2
-		if creature_data.can_fly:
-			z_index = 20
+		z_index = _get_z_index()
 
 func _process(_delta: float) -> void:
 	_update_visuals()
 	_update_debug_visuals()
+
+func _get_z_index() -> int:
+	if creature_data.can_fly:
+		return Constants.Z_INDEX_FLYING_CREATURES
+	if is_big:
+		return Constants.Z_INDEX_BIG_CREATURES
+	else:
+		return Constants.Z_INDEX_SMALL_CREATURES
 
 func _physics_process(delta: float) -> void:
 	# Clear debug values every physics tick so stale vectors don't linger.

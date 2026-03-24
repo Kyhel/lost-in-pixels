@@ -20,7 +20,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_o07k1")
 
 [node name="Foliage" type="Sprite2D" parent="." unique_id=1153816047]
-z_index = 2
+z_index = 500
 material = SubResource("ShaderMaterial_7hbmc")
 scale = Vector2(4, 4)
 texture = ExtResource("4_66pj1")

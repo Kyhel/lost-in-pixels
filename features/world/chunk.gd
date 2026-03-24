@@ -16,6 +16,7 @@ var coords: Vector2i
 @onready var fog : TileMapLayer = $Fog
 
 func _ready() -> void:
+	z_index = Constants.Z_INDEX_TERRAIN
 	tile_types.resize(CHUNK_AREA);
 	biomes.resize(CHUNK_AREA);
 

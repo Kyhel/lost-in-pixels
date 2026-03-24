@@ -19,7 +19,7 @@ script = ExtResource("1_veg")
 texture = ExtResource("1_60lgh")
 
 [node name="Foliage" type="Sprite2D" parent="." unique_id=1153816047]
-z_index = 2
+z_index = 500
 material = SubResource("ShaderMaterial_7hbmc")
 scale = Vector2(4, 4)
 texture = ExtResource("2_dfk1a")

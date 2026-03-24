@@ -17,3 +17,12 @@ const DEFAULT_COMBAT_APPROACH_STANDOFF: float = 2.0
 
 ## When closer than this (center distance, world units), seek the target's actual position instead of the intercept prediction to reduce jitter with fleeing prey.
 const INTERACTION_CLOSE_BLEND_DISTANCE: float = 56.0
+
+const Z_INDEX_TERRAIN := 0
+const Z_INDEX_VEGETATION := 10
+const Z_INDEX_OBJECTS := 20
+const Z_INDEX_SMALL_CREATURES := 100
+const Z_INDEX_PLAYER := 200
+const Z_INDEX_BIG_CREATURES := 300
+const Z_INDEX_FOLIAGE := 500
+const Z_INDEX_FLYING_CREATURES := 1000
