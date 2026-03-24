@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b8k2floweritem01"]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cpw8xv4np1rrg"]
 
-[ext_resource type="Script" path="res://features/items/item_data.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="2_tex"]
 
 [resource]

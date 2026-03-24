@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_k32ns"]
 [ext_resource type="Resource" uid="uid://dw85y1x483uiv" path="res://features/objects/data/flowers/flower_red_1_spawn_definition.tres" id="2_66toi"]
 [ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="3_voq16"]
-[ext_resource type="Resource" uid="uid://b8k2floweritem01" path="res://features/items/data/flower_red_1.tres" id="4_flower_item"]
+[ext_resource type="Resource" uid="uid://cpw8xv4np1rrg" path="res://features/items/data/flower_red_1.tres" id="4_flower_item"]
 
 [resource]
 script = ExtResource("1_k32ns")
@@ -12,6 +12,6 @@ display_name = "Red Flower 1"
 texture = ExtResource("3_voq16")
 can_pickup = true
 player_food_value = 10
-spawn_definition = ExtResource("2_66toi")
 on_pickup_item = ExtResource("4_flower_item")
+spawn_definition = ExtResource("2_66toi")
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
