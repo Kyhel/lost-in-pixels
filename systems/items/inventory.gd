@@ -49,3 +49,53 @@ func get_slot(slot_index: int) -> Variant:
 	if slot_index < 0 or slot_index >= SLOT_COUNT:
 		return null
 	return _slots[slot_index]
+
+
+func reset() -> void:
+	_slots.resize(SLOT_COUNT)
+	_slots.fill(null)
+	inventory_changed.emit()
+
+
+func serialize_for_save() -> Array:
+	var out: Array = []
+	out.resize(SLOT_COUNT)
+	for i in SLOT_COUNT:
+		var e: Variant = _slots[i]
+		if e == null:
+			out[i] = null
+		elif e is Dictionary:
+			var d: Dictionary = e
+			out[i] = {"id": String(d.get("id", "")), "count": int(d.get("count", 0))}
+		else:
+			out[i] = null
+	return out
+
+
+func apply_from_save(saved: Variant) -> void:
+	_slots.resize(SLOT_COUNT)
+	_slots.fill(null)
+	if not saved is Array:
+		inventory_changed.emit()
+		return
+	var arr: Array = saved
+	var n: int = mini(SLOT_COUNT, arr.size())
+	for i in n:
+		var entry: Variant = arr[i]
+		if entry == null:
+			continue
+		if not entry is Dictionary:
+			continue
+		var d: Dictionary = entry
+		var id_str: String = str(d.get("id", ""))
+		if id_str.is_empty():
+			continue
+		var id: StringName = StringName(id_str)
+		var cnt: int = int(d.get("count", 0))
+		if cnt <= 0:
+			continue
+		if ItemDatabase.get_item_data(id) == null:
+			push_warning("Inventory: save references unknown item '%s'; skipping slot" % id_str)
+			continue
+		_slots[i] = {"id": id, "count": cnt}
+	inventory_changed.emit()
