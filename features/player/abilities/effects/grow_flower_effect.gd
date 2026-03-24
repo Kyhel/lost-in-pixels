@@ -12,5 +12,5 @@ func execute(player: Player) -> bool:
 	var spawn_pos := player.global_position + forward * distance
 	if ObjectsManager.is_object_spawn_blocked(spawn_pos, flower_data):
 		return false
-	ObjectsManager.spawn_object_at(flower_data, spawn_pos, 1)
+	ObjectsManager.spawn_object_at(flower_data, spawn_pos)
 	return true

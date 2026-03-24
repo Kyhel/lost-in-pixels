@@ -3,16 +3,16 @@ extends Resource
 
 @export var id: StringName
 @export var display_name: String = ""
-@export var description: String = ""
 @export var texture: Texture2D
 
-@export var stackable: bool = false
-@export var max_stack: int = 1
 @export var taming_value: int = 0
 
 # Player
 @export var can_pickup: bool = false
 @export var player_food_value: int = 0
+
+## Item granted to the player inventory when this object is picked up (player only).
+@export var on_pickup_item: ItemData
 
 ## World pickup radius (pixels); drives [WorldObject] sprite and collision scale (base circle radius 1 in scene).
 @export var hitbox_radius: float = 4.0

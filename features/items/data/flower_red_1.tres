@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b8k2floweritem01"]
+
+[ext_resource type="Script" path="res://features/items/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"flower_red_1"
+display_name = "Red Flower"
+description = "A lovely red flower. It smells sweet."
+texture = ExtResource("2_tex")

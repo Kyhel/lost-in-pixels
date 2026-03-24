@@ -2,7 +2,6 @@ extends Area2D
 class_name WorldObject
 
 @export var object_data: ObjectData
-@export var quantity: int = 1
 
 signal picked_up(by)
 signal used(user, target)

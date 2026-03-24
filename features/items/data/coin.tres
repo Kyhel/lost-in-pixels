@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://djv3immofhr8w"]
+
+[ext_resource type="Script" path="res://features/items/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bybgxotfpjafy" path="res://assets/objects/coin.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"coin"
+display_name = "Coin"
+description = "A shiny coin."
+texture = ExtResource("2_tex")

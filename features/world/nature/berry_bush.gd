@@ -75,7 +75,6 @@ func _spawn_berry_at_slot(slot_i: int) -> void:
 		_berry_data,
 		self,
 		_slot_offsets[slot_i],
-		1
 	)
 	if spawned == null or not spawned is WorldObject:
 		return
