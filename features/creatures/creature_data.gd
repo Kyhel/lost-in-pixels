@@ -35,6 +35,8 @@ enum MovementType {
 @export var rotating_speed: float = TAU
 @export var biomes: Array[WorldGenerator.Biome] = [WorldGenerator.Biome.FOREST, WorldGenerator.Biome.PLAINS]
 @export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
+## If non-empty, wander destination tiles must be one of these and not in [member excluded_tile_types]. If empty, only exclusions apply.
+@export var allowed_wander_tiles: Array[WorldGenerator.TileType] = []
 @export var movement_types: Array[MovementType] = [MovementType.RUN]
 @export var needs_eating: bool = false
 ## Item types this species can eat; used by [FoodSensor] when [member needs_eating] is true.
@@ -47,3 +49,5 @@ enum MovementType {
 @export var hit_damage: int = 1
 @export var attack_range: float = Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
 @export var attack_cooldown: float = 0.8
+## Per second toward 100 while the player is seen; 0 = attack as soon as the player is visible (no meter).
+@export var aggressiveness_buildup_rate: float = 0.0

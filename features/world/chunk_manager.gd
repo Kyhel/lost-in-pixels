@@ -367,6 +367,18 @@ func get_tile_def_from_world_pos(world_pos: Vector2) -> Dictionary:
 	# 4) return the stored def (atlas, walk_speed, walkable, …)
 	return world_generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
 
+## Tile type at a world pixel position using loaded chunk data (same coordinate path as [method get_tile_def_from_world_pos]).
+func get_tile_type_at_world_pos(world_pos: Vector2) -> WorldGenerator.TileType:
+	var world_tile_coords: Vector2i = world_pos_to_world_tile(world_pos)
+	var chunk_coords: Vector2i = world_pos_to_chunk_coords(world_pos)
+	if not loaded_chunks.has(chunk_coords):
+		return WorldGenerator.TileType.NONE
+	var chunk: Chunk = loaded_chunks[chunk_coords] as Chunk
+	if not is_instance_valid(chunk):
+		return WorldGenerator.TileType.NONE
+	var local: Vector2i = world_tile_to_local_tile(world_tile_coords)
+	return chunk.get_tile_type(local.x, local.y)
+
 func reveal_tile(world_x, world_y):
 
 	var world_tile: Vector2i = Vector2i(world_x, world_y)

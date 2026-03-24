@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Unnamed1AttackPlayerGoal" format=3 uid="uid://cq7n2k8w4m1at"]
+
+[ext_resource type="PackedScene" uid="uid://bsh1q061b8ff5" path="res://features/creatures/ai/behaviors/trees/attack_player.tscn" id="1_lqss3"]
+[ext_resource type="Script" uid="uid://bofsy08lwkhld" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1_attack_player_goal.gd" id="2_qtqfe"]
+
+[resource]
+script = ExtResource("2_qtqfe")
+behavior_tree = ExtResource("1_lqss3")
+metadata/_custom_type_script = "uid://bofsy08lwkhld"

@@ -9,6 +9,9 @@ const KEY_HUNGER := "hunger"
 const KEY_TAMING := "taming"
 const KEY_TAMED := "tamed"
 const KEY_SEES_PLAYER := "sees_player"
+const KEY_AGGRESSIVENESS := "aggressiveness"
+## When true, aggressiveness does not build up; cleared only when aggressiveness reaches 0.
+const KEY_AGGRESSIVENESS_RECOVERING := "aggressiveness_recovering"
 
 const KEY_HUNGER_MAX := 100
 

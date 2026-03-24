@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cxujp0khnwvg2"]
 
 [ext_resource type="Script" uid="uid://ci1y3aa2wv1le" path="res://ui/inventory_panel.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://ui/inventory_slot.tscn" id="2_slot"]
+[ext_resource type="PackedScene" uid="uid://er6y5ucc7m53" path="res://ui/inventory_slot.tscn" id="2_slot"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 content_margin_left = 4.0

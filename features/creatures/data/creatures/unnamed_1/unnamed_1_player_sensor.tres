@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PlayerSensor" format=3 uid="uid://bqm8k2p7vx4nw"]
+
+[ext_resource type="Script" uid="uid://08ccf1h4vvj8" path="res://features/creatures/ai/sensors/player_sensor.gd" id="1_usyx0"]
+
+[resource]
+script = ExtResource("1_usyx0")
+scan_radius = 400.0
+metadata/_custom_type_script = "uid://08ccf1h4vvj8"

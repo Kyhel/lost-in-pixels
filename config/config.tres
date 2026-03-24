@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://features/creatures/data/animals/beaver.tres" id="4_w2q5h"]
 [ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_4nmm5"]
 [ext_resource type="Script" uid="uid://dx3c2xv76tb7s" path="res://config/config.gd" id="6_3l0t6"]
-[ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1.tres" id="6_wm4lb"]
+[ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1.tres" id="6_wm4lb"]
 
 [resource]
 script = ExtResource("6_3l0t6")
