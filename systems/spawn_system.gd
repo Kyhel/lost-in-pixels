@@ -4,7 +4,7 @@ extends Node
 const SPAWN_INTERVAL: float = 10.0
 var _stagger: ChunkStagger = ChunkStagger.new(SPAWN_INTERVAL)
 
-const RABBIT_MAX_PER_CHUNK = 3
+const RABBIT_MAX_PER_CHUNK = 2
 const RABBIT_SPAWN_INTERVAL = 5.0
 const RABBIT_MIN_CREATURE_DISTANCE = 2.0 * ChunkManager.TILE_SIZE
 const RABBIT_SPAWN_TRY_COUNT = 5
