@@ -125,6 +125,10 @@ func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 		chunk_vegetation.erase(chunk)
 
 
+func _on_world_reset(_clear_fog_memory: bool) -> void:
+	clear_all_vegetation()
+
+
 func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
 	var results: Array[Vegetation] = []
 	var radius_sq := radius * radius

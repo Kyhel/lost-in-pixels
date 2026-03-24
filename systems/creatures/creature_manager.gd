@@ -35,6 +35,10 @@ func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 
 	chunk_entities.erase(chunk)
 
+
+func _on_world_reset(_clear_fog_memory: bool) -> void:
+	clear_all_entities()
+
 func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 
 	if ConfigManager.config.max_creatures_per_chunk <= 0:

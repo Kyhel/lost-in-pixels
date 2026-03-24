@@ -6,10 +6,15 @@ extends Node
 ## Creatures, dropped items, and trees are not serialized; they follow procedural rules when chunks reload.
 
 func reset_autoload_world_state(clear_fog: bool) -> void:
-	ChunkManager.reset_world_state(clear_fog)
-	CreatureManager.clear_all_entities()
-	ObjectsManager.clear_all_objects()
-	VegetationManager.clear_all_vegetation()
+	var scene := get_tree().current_scene
+	if scene == null:
+		push_error("SaveGame: no current_scene; cannot emit SystemManager world reset.")
+		return
+	var system_manager := scene.find_child("SystemManager", true, false)
+	if system_manager != null and system_manager.has_method("reset_world_state"):
+		system_manager.reset_world_state(clear_fog)
+	else:
+		push_error("SaveGame: SystemManager missing; cannot emit world reset.")
 
 
 func save_to_disk(player: Player) -> bool:

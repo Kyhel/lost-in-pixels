@@ -47,12 +47,15 @@ func get_world_seed() -> int:
 func reset_world_state(clear_fog_memory: bool = true) -> void:
 	for key in loaded_chunks.keys():
 		var ch: Node = loaded_chunks[key]
-		_emit_chunk_unloaded(key, ch)
 		if is_instance_valid(ch):
 			ch.queue_free()
 	loaded_chunks.clear()
 	if clear_fog_memory:
 		fog_memory.clear()
+
+
+func _on_world_reset(clear_fog_memory: bool) -> void:
+	reset_world_state(clear_fog_memory)
 
 
 func _emit_chunk_unloaded(chunk_coords: Vector2i, chunk_node: Node) -> void:

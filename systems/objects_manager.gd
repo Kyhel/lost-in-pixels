@@ -75,6 +75,10 @@ func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 
 		chunk_items.erase(chunk)
 
+
+func _on_world_reset(_clear_fog_memory: bool) -> void:
+	clear_all_objects()
+
 func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []
 	var radius_sq := radius * radius
