@@ -24,10 +24,32 @@ func spawn_item_in_chunk(chunk: Vector2i, item_data, world_pos: Vector2, quantit
 	var item = world_item_scene.instantiate()
 	item.item_data = item_data
 	item.quantity = quantity
-	item.global_position = world_pos
 
 	target_container.add_child(item)
 	item.global_position = world_pos
+	_register_item_in_chunk(chunk_node, item)
+	return item
+
+
+func spawn_item_attached_in_chunk(
+	chunk: Vector2i,
+	item_data,
+	parent: Node2D,
+	local_pos: Vector2,
+	quantity: int = 1
+):
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
+	if chunk_node == null:
+		return null
+	if parent == null or not is_instance_valid(parent):
+		return null
+
+	var item = world_item_scene.instantiate()
+	item.item_data = item_data
+	item.quantity = quantity
+	parent.add_child(item)
+	item.position = local_pos
+	_register_item_in_chunk(chunk_node, item)
 	return item
 
 
@@ -65,6 +87,39 @@ func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
 func _on_world_reset(_clear_fog_memory: bool) -> void:
 	clear_all_objects()
 
+
+func _register_item_in_chunk(chunk_node: Chunk, item: WorldItem) -> void:
+	if chunk_node == null or item == null:
+		return
+	chunk_node.register_world_item(item)
+	item.set_meta("chunk_coords", chunk_node.coords)
+	var on_destroyed := Callable(self, "_on_item_destroyed").bind(item)
+	if not item.destroyed.is_connected(on_destroyed):
+		item.destroyed.connect(on_destroyed)
+	var on_tree_exiting := Callable(self, "_on_item_tree_exiting").bind(item)
+	if not item.tree_exiting.is_connected(on_tree_exiting):
+		item.tree_exiting.connect(on_tree_exiting)
+
+
+func _unregister_item(item: WorldItem) -> void:
+	if item == null:
+		return
+	var chunk_meta: Variant = item.get_meta("chunk_coords", null)
+	if chunk_meta == null or not chunk_meta is Vector2i:
+		return
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_meta as Vector2i)
+	if chunk_node == null:
+		return
+	chunk_node.unregister_world_item(item)
+
+
+func _on_item_destroyed(_reason: String, item: WorldItem) -> void:
+	_unregister_item(item)
+
+
+func _on_item_tree_exiting(item: WorldItem) -> void:
+	_unregister_item(item)
+
 func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []
 	var radius_sq := radius * radius
@@ -77,11 +132,7 @@ func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
 			if chunk == null:
 				continue
-			var objects_container: Node2D = chunk.get_objects_container()
-			if objects_container == null:
-				continue
-			for item_node in objects_container.get_children():
-				var item: WorldItem = item_node as WorldItem
+			for item in chunk.get_world_items():
 				if item == null or !is_instance_valid(item):
 					continue
 

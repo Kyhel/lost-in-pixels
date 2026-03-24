@@ -70,8 +70,13 @@ func _slot_occupied(slot_i: int) -> bool:
 func _spawn_flower_at_slot(slot_i: int) -> void:
 	if _flower_data == null:
 		return
-	var world_pos: Vector2 = global_position + _slot_offsets[slot_i]
-	var spawned = ObjectsManager.spawn_item_in_chunk(chunk_coords, _flower_data, world_pos, 1)
+	var spawned = ObjectsManager.spawn_item_attached_in_chunk(
+		chunk_coords,
+		_flower_data,
+		self,
+		_slot_offsets[slot_i],
+		1
+	)
 	if spawned == null or not spawned is WorldItem:
 		return
 	var item: WorldItem = spawned as WorldItem
