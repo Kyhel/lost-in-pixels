@@ -11,11 +11,11 @@ var max_danger_radius : float = 10.0 * world_scale
 var safe_radius_ratio : float = 0.2  # 20% safe zone
 
 # Noise settings
-var height_wavelength = 5.0 * world_scale
-var temperature_wavelength = 8.0 * world_scale
-var moisture_wavelength = 8.0 * world_scale
-var large_scale_wavelength = 20.0 * world_scale
-var biome_wavelength = 30.0 * world_scale
+var height_wavelength = 10.0 * world_scale
+var temperature_wavelength = 20.0 * world_scale
+var moisture_wavelength = 20.0 * world_scale
+var large_scale_wavelength = 40.0 * world_scale
+# var biome_wavelength = 30.0 * world_scale
 var danger_wavelength = 20.0 * world_scale
 # Terrain thresholds
 var water_level : float = -0.2
@@ -42,7 +42,7 @@ var height_noise := FastNoiseLite.new()
 var temperature_noise := FastNoiseLite.new()
 var moisture_noise := FastNoiseLite.new()
 var large_scale_noise := FastNoiseLite.new()
-var biome_noise := FastNoiseLite.new()
+# var biome_noise := FastNoiseLite.new()
 var danger_noise := FastNoiseLite.new()
 
 # ============================================================
@@ -64,7 +64,7 @@ func _init():
 	large_scale_noise.frequency = 1.0 / large_scale_wavelength
 
 	# Biome noise
-	biome_noise.frequency = 1.0 / biome_wavelength
+	# biome_noise.frequency = 1.0 / biome_wavelength
 
 	# Danger noise
 	danger_noise.frequency = 1.0 / danger_wavelength
@@ -74,7 +74,7 @@ func setup_seed(p_seed: int):
 	temperature_noise.seed = p_seed + 1000
 	moisture_noise.seed = p_seed + 2000
 	large_scale_noise.seed = p_seed + 3000
-	biome_noise.seed = p_seed + 4000
+	# biome_noise.seed = p_seed + 4000
 	danger_noise.seed = p_seed + 5000
 # ============================================================
 # 🧭 MAIN ENTRY POINT
