@@ -4,6 +4,7 @@ signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
 
 const TILE_SIZE = 16
 const TILE_HALF_SIZE = TILE_SIZE / 2.0
+const TILE_HALF_SIZE_VECTOR = Vector2.ONE * TILE_HALF_SIZE
 const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
@@ -225,7 +226,7 @@ func _build_required_chunks(player_chunk: Vector2i, stream_radius: int) -> Dicti
 
 
 func update_chunks(player_pos: Vector2) -> void:
-	var player_chunk: Vector2i = get_chunk_from_position(player_pos)
+	var player_chunk: Vector2i = world_pos_to_chunk_coords(player_pos)
 	var stream_r: int = get_terrain_only_stream_radius()
 	var required: Dictionary = _build_required_chunks(player_chunk, stream_r)
 	var full_r: int = get_full_generation_radius()
@@ -266,7 +267,7 @@ func update_chunks(player_pos: Vector2) -> void:
 
 
 func unload_far_chunks(player_pos: Vector2) -> void:
-	var player_chunk = get_chunk_from_position(player_pos)
+	var player_chunk = world_pos_to_chunk_coords(player_pos)
 
 	for key in loaded_chunks.keys():
 		var dx = abs(key.x - player_chunk.x)
@@ -297,7 +298,7 @@ func is_area_walkable_for_creature(creature: Creature, center: Vector2, size_pix
 	if size_pixels <= 0.0:
 		return can_creature_moveat_tile(creature, center)
 	var radius := size_pixels
-	var base_tile := get_tile_coords_from_world_pos(center)
+	var base_tile := world_pos_to_world_tile(center)
 	var tile_radius := ceili(radius / TILE_SIZE)
 	for dx in range(-tile_radius, tile_radius + 1):
 		for dy in range(-tile_radius, tile_radius + 1):
@@ -389,17 +390,10 @@ func world_pos_to_world_tile(world_pos: Vector2) -> Vector2i:
 	)
 
 func world_tile_to_world_pos(world_tile: Vector2i) -> Vector2:
-	return Vector2(
-		world_tile.x * TILE_SIZE,
-		world_tile.y * TILE_SIZE
-	)
+	return world_tile * TILE_SIZE
 
 func world_tile_to_world_center(world_tile: Vector2i) -> Vector2:
-	var origin: Vector2 = world_tile_to_world_pos(world_tile)
-	return Vector2(
-		origin.x + TILE_HALF_SIZE,
-		origin.y + TILE_HALF_SIZE
-	)
+	return world_tile_to_world_pos(world_tile) + TILE_HALF_SIZE_VECTOR
 
 func world_pos_to_chunk_coords(pos: Vector2) -> Vector2i:
 	return Vector2i(
@@ -419,59 +413,15 @@ func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
 		posmod(world_tile.y, CHUNK_SIZE)
 	)
 
-func world_tile_to_local_tile_in_chunk(world_tile: Vector2i, chunk_coords: Vector2i) -> Vector2i:
-	return Vector2i(
-		world_tile.x - chunk_coords.x * CHUNK_SIZE,
-		world_tile.y - chunk_coords.y * CHUNK_SIZE
-	)
-
-func chunk_and_local_to_world_tile(chunk_coords: Vector2i, local_tile: Vector2i) -> Vector2i:
-	return Vector2i(
-		chunk_coords.x * CHUNK_SIZE + local_tile.x,
-		chunk_coords.y * CHUNK_SIZE + local_tile.y
-	)
-
-func chunk_coords_to_world_pos(chunk_coords: Vector2i) -> Vector2:
-	return world_tile_to_world_pos(chunk_and_local_to_world_tile(chunk_coords, Vector2i.ZERO))
-
-func get_chunk_from_position(pos: Vector2) -> Vector2i:
-	return world_pos_to_chunk_coords(pos)
-
-func get_tile_coords_from_world_pos(world_pos: Vector2) -> Vector2i:
-	return world_pos_to_world_tile(world_pos)
-
-func get_tile_coords_relative_to_chunk(tile_coords: Vector2i) -> Vector2i:
-	return world_tile_to_local_tile(tile_coords)
-
-func get_tile_coords_in_chunk_from_world_pos(world_pos: Vector2) -> Vector2i:
-	return world_tile_to_local_tile(world_pos_to_world_tile(world_pos))
-
-
-## Runtime / save queries: falls back to [WorldGenerator] when the chunk is not loaded.
-func get_tile_type_at_world_tile(world_x: int, world_y: int) -> WorldGenerator.TileType:
-	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
-	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
-	var key := Vector2i(chunk_x, chunk_y)
-	if loaded_chunks.has(key):
-		var ch: Node = loaded_chunks[key]
-		if is_instance_valid(ch) and ch is Chunk:
-			var local_x: int = world_x - chunk_x * CHUNK_SIZE
-			var local_y: int = world_y - chunk_y * CHUNK_SIZE
-			return (ch as Chunk).get_tile_type(local_x, local_y)
-	return world_generator.get_tile_type(world_x, world_y)
-
-
 ## Vegetation generation only: loaded chunk tile data, no world generator fallback.
 func get_tile_type_for_generation(world_x: int, world_y: int) -> WorldGenerator.TileType:
-	var chunk_x := int(floor(float(world_x) / float(CHUNK_SIZE)))
-	var chunk_y := int(floor(float(world_y) / float(CHUNK_SIZE)))
-	var key := Vector2i(chunk_x, chunk_y)
+	var world_tile := Vector2i(world_x, world_y)
+	var key := world_tile_to_chunk_coords(world_tile)
 	if not loaded_chunks.has(key):
 		push_error("ChunkManager.get_tile_type_for_generation: chunk not loaded %s" % str(key))
 		return WorldGenerator.TileType.NONE
 	var ch: Node = loaded_chunks[key]
 	if not is_instance_valid(ch) or not (ch is Chunk):
 		return WorldGenerator.TileType.WATER
-	var local_x: int = world_x - chunk_x * CHUNK_SIZE
-	var local_y: int = world_y - chunk_y * CHUNK_SIZE
-	return (ch as Chunk).get_tile_type(local_x, local_y)
+	var local_tile := world_tile_to_local_tile(world_tile)
+	return (ch as Chunk).get_tile_type(local_tile.x, local_tile.y)

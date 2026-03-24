@@ -46,7 +46,7 @@ func generate_trees_for_chunk(
 			var tile_type: WorldGenerator.TileType = _chunk.get_tile_type(x, y)
 
 			if _should_spawn_forest_tree(global_x, global_y, x, y, chunk_size, _chunk, tile_type):
-				VegetationManager.spawn_tree(chunk_position, Vector2i(global_x, global_y), TreeType.TREE_2)
+				VegetationManager.spawn_tree(Vector2i(global_x, global_y), TreeType.TREE_2)
 
 	_spawn_plains_grove_trees_for_chunk(chunk_position, _chunk, chunk_size)
 
@@ -137,7 +137,7 @@ func _spawn_plains_grove_trees_for_chunk(chunk_position: Vector2i, _chunk: Chunk
 				var ly: int = p.y - wy0
 				if _chunk.get_tile_type(lx, ly) != WorldGenerator.TileType.GRASS:
 					continue
-				VegetationManager.spawn_tree(chunk_position, p, TreeType.TREE_1)
+				VegetationManager.spawn_tree(p, TreeType.TREE_1)
 
 
 func _plains_grove_tree_positions(mcx: int, mcy: int) -> Array[Vector2i]:

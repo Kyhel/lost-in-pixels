@@ -34,8 +34,8 @@ func filter_candidates(candidates: Array[Vector2i], max_count: int) -> Array[Vec
 	return picked
 
 
-func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
-	VegetationManager.spawn_water_lily(_chunk, _world_tile)
+func spawn_vegetation(_world_tile: Vector2i) -> void:
+	VegetationManager.spawn_water_lily(_world_tile)
 
 
 func _conflicts_with_existing_water_lilies(tile: Vector2i, tile_size: float) -> bool:

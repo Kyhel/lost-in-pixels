@@ -16,8 +16,8 @@ const MAX_BUSHES_PER_CHUNK := 2
 const MIN_BUSH_TILE_SPACING := 4
 
 
-func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
-	VegetationManager.spawn_berry_bush(_chunk, _world_tile)
+func spawn_vegetation(_world_tile: Vector2i) -> void:
+	VegetationManager.spawn_berry_bush(_world_tile)
 
 
 func get_max_vegetation_for_chunk(_chunk: Chunk) -> int:

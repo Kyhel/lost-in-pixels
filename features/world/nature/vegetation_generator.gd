@@ -30,9 +30,9 @@ func generate_for_chunk(
 
 	var picked: Array[Vector2i] = filter_candidates(candidates, max_vegetation)
 	for tile: Vector2i in picked:
-		spawn_vegetation(chunk_position, tile)
+		spawn_vegetation(tile)
 
-func spawn_vegetation(_chunk: Vector2i, _world_tile: Vector2i) -> void:
+func spawn_vegetation(_world_tile: Vector2i) -> void:
 	pass
 
 

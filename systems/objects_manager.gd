@@ -54,7 +54,7 @@ func spawn_item_attached_in_chunk(
 
 
 func spawn_item_at(item_data: ItemData, world_pos: Vector2, quantity: int = 1):
-	var chunk: Vector2i = ChunkManager.get_chunk_from_position(world_pos)
+	var chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(world_pos)
 	return spawn_item_in_chunk(chunk, item_data, world_pos, quantity)
 
 func is_item_spawn_blocked(
@@ -124,7 +124,7 @@ func get_nearby_items(origin: Vector2, radius: float) -> Array[WorldItem]:
 	var results: Array[WorldItem] = []
 	var radius_sq := radius * radius
 
-	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
+	var origin_chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(origin)
 
 	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
 		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):

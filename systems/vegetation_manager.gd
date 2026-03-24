@@ -21,11 +21,11 @@ func update_chunks(_delta: float) -> void:
 	pass
 
 
-func spawn_tree(chunk: Vector2i, tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
+func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
 	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
 		refresh_scene_references()
 
-	var tree := spawn_vegetation(chunk, tile_position, get_tree_scene(tree_type))
+	var tree := spawn_vegetation(tile_position, get_tree_scene(tree_type))
 	if tree == null:
 		return
 	var foliage_material = tree.get_node("Foliage").material
@@ -45,7 +45,7 @@ func get_tree_scene(tree_type: TreeGenerator.TreeType) -> PackedScene:
 			return tree_1_scene
 
 
-func spawn_vegetation(_chunk: Vector2i, world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
+func spawn_vegetation(world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
 	var resolved_chunk: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(resolved_chunk)
 	if chunk_node == null:
@@ -60,17 +60,17 @@ func spawn_vegetation(_chunk: Vector2i, world_tile: Vector2i, vegetation_scene: 
 	target_container.add_child(vegetation)
 	# Set global position only after parenting to avoid chunk transform offset.
 	vegetation.global_position = ChunkManager.world_tile_to_world_center(world_tile)
-	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile_in_chunk(world_tile, resolved_chunk)
+	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
 	chunk_node.register_environment_tile(local_tile)
 	return vegetation as Vegetation
 
 
-func spawn_berry_bush(chunk: Vector2i, world_tile: Vector2i) -> void:
-	spawn_vegetation(chunk, world_tile, berry_bush_scene)
+func spawn_berry_bush(world_tile: Vector2i) -> void:
+	spawn_vegetation(world_tile, berry_bush_scene)
 
 
-func spawn_water_lily(chunk: Vector2i, world_tile: Vector2i) -> void:
-	spawn_vegetation(chunk, world_tile, water_lily_scene)
+func spawn_water_lily(world_tile: Vector2i) -> void:
+	spawn_vegetation(world_tile, water_lily_scene)
 
 
 func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
@@ -78,7 +78,7 @@ func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk_node == null:
 		return false
-	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile_in_chunk(world_tile, chunk_coords)
+	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
 	return chunk_node.is_environment_tile_occupied(local_tile)
 
 
@@ -109,7 +109,7 @@ func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
 	var results: Array[Vegetation] = []
 	var radius_sq := radius * radius
 
-	var origin_chunk: Vector2i = ChunkManager.get_chunk_from_position(origin)
+	var origin_chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(origin)
 
 	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
 		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
