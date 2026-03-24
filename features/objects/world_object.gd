@@ -29,10 +29,11 @@ func can_be_picked_up(_by: Node) -> bool:
 	return true
 
 func be_eaten(by: Creature) -> void:
-	AbilityManager.notify_creature_ate_world_object(by, self)
+	EventManager.object_eaten.emit(by, self)
 	on_picked_up(by)
 
 func on_picked_up(by: Node) -> void:
+	EventManager.object_picked_up.emit(by, self)
 	if object_data and object_data.pickup_effect_script:
 		var eff = object_data.pickup_effect_script.new()
 		if eff.has_method("on_pickup"):

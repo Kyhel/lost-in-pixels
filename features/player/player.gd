@@ -105,13 +105,14 @@ func _die() -> void:
 	_dead = true
 	died.emit()
 
-func take_damage(amount: int, _source: Node = null) -> void:
+func take_damage(amount: int, source: Node = null) -> void:
 	if _dead or amount <= 0:
 		return
 	var previous_health := health
 	health = maxf(0.0, health - amount)
 	if health != previous_health:
 		health_changed.emit(health)
+		EventManager.player_got_hit.emit(source, self, amount)
 	if health <= 0.0:
 		_die()
 

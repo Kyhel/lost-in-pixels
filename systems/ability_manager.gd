@@ -11,6 +11,7 @@ signal discoveries_changed
 
 func _ready() -> void:
 	_register_abilities()
+	EventManager.object_eaten.connect(_on_object_eaten)
 
 
 func _register_abilities() -> void:
@@ -28,7 +29,7 @@ func get_ability(id: StringName) -> AbilityData:
 	return _by_id.get(id, null)
 
 
-func notify_creature_ate_world_object(eater: Creature, world_object: WorldObject) -> void:
+func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	if world_object == null or world_object.object_data == null:
 		return
 	var player := _get_player()

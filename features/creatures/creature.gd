@@ -213,7 +213,8 @@ func die() -> void:
 		alpha_mask.queue_free()
 	queue_free()
 
-func be_eaten(_by: Creature) -> void:
+func be_eaten(by: Creature) -> void:
+	EventManager.creature_eaten.emit(by, self)
 	die()
 
 ## Override in subclasses to run logic when this creature dies (e.g. drops, effects).
