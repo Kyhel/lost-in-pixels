@@ -66,7 +66,7 @@ func is_item_spawn_blocked(
 			return true
 	return false
 
-func on_chunk_unloaded(chunk: Vector2i) -> void:
+func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 	if chunk_items.has(chunk):
 
 		for item in chunk_items[chunk]:

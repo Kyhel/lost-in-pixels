@@ -31,6 +31,9 @@ func _physics_process(delta: float) -> void:
 	for coords in removed:
 		_rabbit_last_spawn_time.erase(coords)
 
+func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
+	_rabbit_last_spawn_time.erase(chunk)
+
 func spawn_items(chunk: Chunk) -> void:
 
 	var items: Array = ItemDatabase.get_items()

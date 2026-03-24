@@ -3,7 +3,15 @@ extends Node
 @export var player: Node2D
 
 func _ready():
-	pass
+	if not ChunkManager.chunk_unloaded.is_connected(CreatureManager._on_chunk_unloaded):
+		ChunkManager.chunk_unloaded.connect(CreatureManager._on_chunk_unloaded)
+	if not ChunkManager.chunk_unloaded.is_connected(ObjectsManager._on_chunk_unloaded):
+		ChunkManager.chunk_unloaded.connect(ObjectsManager._on_chunk_unloaded)
+	if not ChunkManager.chunk_unloaded.is_connected(VegetationManager._on_chunk_unloaded):
+		ChunkManager.chunk_unloaded.connect(VegetationManager._on_chunk_unloaded)
+	var spawn_system: SpawnSystem = get_node_or_null("SpawnSystem") as SpawnSystem
+	if spawn_system != null and not ChunkManager.chunk_unloaded.is_connected(spawn_system._on_chunk_unloaded):
+		ChunkManager.chunk_unloaded.connect(spawn_system._on_chunk_unloaded)
 
 
 func _unhandled_input(event: InputEvent) -> void:

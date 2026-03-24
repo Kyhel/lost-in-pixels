@@ -1,5 +1,7 @@
 extends Node2D
 
+signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
+
 const TILE_SIZE = 16
 const TILE_HALF_SIZE = TILE_SIZE / 2.0
 const CHUNK_SIZE = 32
@@ -44,12 +46,20 @@ func get_world_seed() -> int:
 
 func reset_world_state(clear_fog_memory: bool = true) -> void:
 	for key in loaded_chunks.keys():
-		var ch = loaded_chunks[key]
+		var ch: Node = loaded_chunks[key]
+		_emit_chunk_unloaded(key, ch)
 		if is_instance_valid(ch):
 			ch.queue_free()
 	loaded_chunks.clear()
 	if clear_fog_memory:
 		fog_memory.clear()
+
+
+func _emit_chunk_unloaded(chunk_coords: Vector2i, chunk_node: Node) -> void:
+	var chunk: Chunk = null
+	if is_instance_valid(chunk_node) and chunk_node is Chunk:
+		chunk = chunk_node as Chunk
+	chunk_unloaded.emit(chunk_coords, chunk)
 
 
 func merge_fog_from_save(entries: Array) -> void:
@@ -219,13 +229,12 @@ func unload_far_chunks(player_pos:Vector2):
 		var dy = abs(key.y - player_chunk.y)
 
 		if dx > get_unload_radius() or dy > get_unload_radius():
-			var chunk = loaded_chunks[key]
-			fog_memory[key] = chunk.fog_grid
+			var chunk: Node = loaded_chunks[key]
+			_emit_chunk_unloaded(key, chunk)
+			if chunk is Chunk:
+				fog_memory[key] = (chunk as Chunk).fog_grid
 			chunk.queue_free()  # supprime du tree
 			loaded_chunks.erase(key)
-			CreatureManager.on_chunk_unloaded(key)
-			ObjectsManager.on_chunk_unloaded(key)
-			VegetationManager.on_chunk_unloaded(key)
 
 func get_walk_speed_at_world_pos(world_pos: Vector2) -> float:
 	var def := get_tile_def_from_world_pos(world_pos)

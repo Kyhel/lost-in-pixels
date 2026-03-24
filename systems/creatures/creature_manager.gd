@@ -24,7 +24,7 @@ func clear_all_entities() -> void:
 	chunk_entities.clear()
 
 
-func on_chunk_unloaded(chunk: Vector2i):
+func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 
 	if !chunk_entities.has(chunk):
 		return

@@ -115,7 +115,7 @@ func vegetation_blocks_point(world_pos: Vector2, self_radius: float, margin: flo
 	return world_pos.distance_to(c as Vector2) < self_radius + rf + margin
 
 
-func on_chunk_unloaded(chunk: Vector2i) -> void:
+func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 	clear_environment_tiles_for_chunk(chunk)
 
 	if chunk_vegetation.has(chunk):
