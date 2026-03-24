@@ -28,8 +28,8 @@ func get_ability(id: StringName) -> AbilityData:
 	return _by_id.get(id, null)
 
 
-func notify_creature_ate_item(eater: Creature, item: WorldItem) -> void:
-	if item == null or item.item_data == null:
+func notify_creature_ate_world_object(eater: Creature, world_object: WorldObject) -> void:
+	if world_object == null or world_object.object_data == null:
 		return
 	var player := _get_player()
 	if player == null:
@@ -40,7 +40,7 @@ func notify_creature_ate_item(eater: Creature, item: WorldItem) -> void:
 			continue
 		if ability.unlock_rule == null:
 			continue
-		if ability.unlock_rule.matches(eater, item.item_data, eater.global_position, ppos):
+		if ability.unlock_rule.matches(eater, world_object.object_data, eater.global_position, ppos):
 			_discover(ability)
 
 

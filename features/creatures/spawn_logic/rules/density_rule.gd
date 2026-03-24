@@ -12,11 +12,11 @@ func can_spawn(world_pos: Vector2, _context: Dictionary) -> bool:
 		return true
 
 	var radius_px: float = radius * ChunkManager.TILE_SIZE
-	var nearby: Array = ObjectsManager.get_nearby_items(world_pos, radius_px)
+	var nearby: Array = ObjectsManager.get_nearby_world_objects(world_pos, radius_px)
 
 	var count: int = 0
 	for item in nearby:
-		if is_instance_valid(item) and item.item_data.id == item_type:
+		if is_instance_valid(item) and item.object_data.id == item_type:
 			count += 1
 
 	# After spawning we'd have count+1; it must be in [min_items, max_items]

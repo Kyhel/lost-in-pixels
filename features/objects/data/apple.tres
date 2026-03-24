@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b5yf6sdpcuvkd"]
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://b5yf6sdpcuvkd"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_hpaic"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_hpaic"]
 [ext_resource type="Texture2D" uid="uid://dawciy0006qxw" path="res://assets/food/apple.png" id="2_j163c"]
 
 [resource]

@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bd7wbpb0jhydq"]
 
-[ext_resource type="Script" uid="uid://c832tocieksip" path="res://data/objects/world_item.gd" id="1"]
+[ext_resource type="Script" uid="uid://c832tocieksip" path="res://data/objects/world_object.gd" id="1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3s8yu"]
 radius = 1.0
 
-[node name="WorldItem" type="Area2D" unique_id=818993668]
+[node name="WorldObject" type="Area2D" unique_id=818993668]
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2096127587]

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cib1t58m6m2i4"]
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://cib1t58m6m2i4"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_8kas0"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_8kas0"]
 [ext_resource type="Texture2D" uid="uid://c85gv2hc4wv84" path="res://assets/objects/health_potion.png" id="2_dvv3t"]
 
 [resource]

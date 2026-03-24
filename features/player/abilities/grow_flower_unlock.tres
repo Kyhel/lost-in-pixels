@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dav8up2rpo0xp" path="res://features/player/abilities/ability_unlock_rule.gd" id="1_unlock"]
 [ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="2_rabbit"]
-[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://data/objects/nature/flowers/flower_red_1.tres" id="3_flower"]
+[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="3_flower"]
 
 [resource]
 script = ExtResource("1_unlock")
 eater_creature = ExtResource("2_rabbit")
-food_item = ExtResource("3_flower")
+food_object_data = ExtResource("3_flower")
 witness_radius = 450.0

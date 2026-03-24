@@ -4,6 +4,9 @@ var _creatures: Dictionary[StringName, CreatureData] = {}
 
 func _ready() -> void:
 	var config: CreatureDatabaseConfig = load("res://systems/creatures/creature_database_config.tres")
+	if config == null:
+		push_error("CreatureDatabase: failed to load config resource")
+		return
 	for creature in config.creatures:
 		_register_creature(creature)
 

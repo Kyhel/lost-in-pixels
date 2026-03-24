@@ -2,7 +2,7 @@ class_name FoodSensor
 extends Sensor
 
 ## Scans the surroundings for food the creature can eat and stores found positions in the creature's blackboard under [constant BLACKBOARD_KEY_FOOD].
-## Edible types are configured on [member CreatureData.edible_items] and [member CreatureData.edible_creatures].
+## Edible types are configured on [member CreatureData.edible_object_data] and [member CreatureData.edible_creatures].
 
 @export var scan_radius: float = 300.0
 
@@ -17,18 +17,18 @@ func update(creature: Creature) -> void:
 		return
 
 	var origin: Vector2 = creature.global_position
-	var nearby: Array = ObjectsManager.get_nearby_items(origin, scan_radius)
+	var nearby: Array = ObjectsManager.get_nearby_world_objects(origin, scan_radius)
 	var foods: Array[Node2D] = []
 
 	for node in nearby:
-		if not node is WorldItem:
+		if not node is WorldObject:
 			continue
-		var world_item: WorldItem = node
-		if world_item.item_data == null:
+		var world_object: WorldObject = node
+		if world_object.object_data == null:
 			continue
-		if not _can_eat(data, world_item.item_data):
+		if not _can_eat(data, world_object.object_data):
 			continue
-		foods.append(world_item)
+		foods.append(world_object)
 
 	var nearby_entities = CreatureManager.get_nearby_entities(creature.global_position, scan_radius)
 
@@ -45,9 +45,9 @@ func update(creature: Creature) -> void:
 
 	creature.blackboard.set_value(Blackboard.KEY_FOOD, foods)
 
-func _can_eat(data: CreatureData, item_data: ItemData) -> bool:
-	for edible in data.edible_items:
-		if edible != null and edible.id == item_data.id:
+func _can_eat(data: CreatureData, object_data: ObjectData) -> bool:
+	for edible in data.edible_object_data:
+		if edible != null and edible.id == object_data.id:
 			return true
 	return false
 

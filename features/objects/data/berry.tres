@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c7k2bnaxryw1p"]
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://c7k2bnaxryw1p"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
 [ext_resource type="Texture2D" uid="uid://ba1cfysaknd15" path="res://assets/nature/berry_red.png" id="2_tex"]
 
 [resource]

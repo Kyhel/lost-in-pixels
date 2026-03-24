@@ -10,7 +10,7 @@ var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 var tile_types: Array[WorldGenerator.TileType] = []
 var biomes: Array[WorldGenerator.Biome] = []
 var environment_tile_occupied: Dictionary = {}
-var world_items: Array[WorldItem] = []
+var world_objects: Array[WorldObject] = []
 
 var coords: Vector2i
 
@@ -102,19 +102,19 @@ func is_environment_tile_occupied(local_tile: Vector2i) -> bool:
 	return environment_tile_occupied.has(local_tile)
 
 
-func register_world_item(item: WorldItem) -> void:
-	if item == null:
+func register_world_object(world_object: WorldObject) -> void:
+	if world_object == null:
 		return
-	if world_items.has(item):
+	if world_objects.has(world_object):
 		return
-	world_items.append(item)
+	world_objects.append(world_object)
 
 
-func unregister_world_item(item: WorldItem) -> void:
-	if item == null:
+func unregister_world_object(world_object: WorldObject) -> void:
+	if world_object == null:
 		return
-	world_items.erase(item)
+	world_objects.erase(world_object)
 
 
-func get_world_items() -> Array[WorldItem]:
-	return world_items
+func get_world_objects() -> Array[WorldObject]:
+	return world_objects

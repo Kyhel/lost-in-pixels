@@ -21,8 +21,8 @@ func _physics_process(delta: float) -> void:
 		if chunk == null:
 			continue
 
-		if ConfigManager.config.spawn_items:
-			spawn_items(chunk)
+		if ConfigManager.config.spawn_world_objects:
+			spawn_world_objects(chunk)
 			
 		if ConfigManager.config.spawn_rabbits:
 			spawn_rabbits(chunk)
@@ -38,14 +38,14 @@ func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 func _on_world_reset(_clear_fog_memory: bool) -> void:
 	_rabbit_last_spawn_time.clear()
 
-func spawn_items(chunk: Chunk) -> void:
+func spawn_world_objects(chunk: Chunk) -> void:
 
-	var items: Array = ItemDatabase.get_items()
+	var all_data: Array = ObjectDatabase.get_all_object_data()
 
-	var spawnable_items: Array = []
-	for item in items:
-		if item.spawn_definition != null:
-			spawnable_items.append(item)
+	var spawnable_object_data: Array = []
+	for object_data in all_data:
+		if object_data.spawn_definition != null:
+			spawnable_object_data.append(object_data)
 
 	var context: Dictionary = {}
 
@@ -61,19 +61,19 @@ func spawn_items(chunk: Chunk) -> void:
 			var tile_type = chunk.get_tile_type(local_x, local_y)
 			var biome = chunk.get_biome(local_x, local_y)
 
-			for item in spawnable_items:
+			for object_data in spawnable_object_data:
 
-				if item.spawn_definition.excluded_tile_types.has(tile_type):
+				if object_data.spawn_definition.excluded_tile_types.has(tile_type):
 					continue
 
-				if !item.spawn_definition.biomes.has(biome):
+				if !object_data.spawn_definition.biomes.has(biome):
 					continue
 
 				if randf() > 0.01:
 					continue
 
 				var can_spawn := true
-				for rule in item.spawn_definition.spawn_rules:
+				for rule in object_data.spawn_definition.spawn_rules:
 					var rule_can_spawn = rule.can_spawn(world_pos, context)
 					if !rule_can_spawn:
 						can_spawn = false
@@ -81,9 +81,9 @@ func spawn_items(chunk: Chunk) -> void:
 
 				if can_spawn:
 					var centered := world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
-					if ObjectsManager.is_item_spawn_blocked(centered, item):
+					if ObjectsManager.is_object_spawn_blocked(centered, object_data):
 						continue
-					ObjectsManager.spawn_item_in_chunk(chunk.coords, item, centered)
+					ObjectsManager.spawn_object_in_chunk(chunk.coords, object_data, centered)
 
 func spawn_rabbits(chunk: Chunk) -> void:
 

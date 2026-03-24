@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ObjectDatabaseConfig" format=3 uid="uid://d88yn5enqgjy"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_objscr"]
+[ext_resource type="Script" path="res://systems/objects/object_database_config.gd" id="2_cfgscr"]
+[ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="3_apple"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="4_berry"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="5_carrot"]
+[ext_resource type="Resource" uid="uid://djv3immofhr8w" path="res://features/objects/data/coin.tres" id="6_coin"]
+[ext_resource type="Resource" uid="uid://cib1t58m6m2i4" path="res://features/objects/data/health_potion.tres" id="7_potion"]
+[ext_resource type="Resource" uid="uid://iwatdajc18p8" path="res://features/objects/data/water_lily_flower.tres" id="8_lily"]
+[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="9_flower"]
+
+[resource]
+script = ExtResource("2_cfgscr")
+objects = Array[ExtResource("1_objscr")]([ExtResource("3_apple"), ExtResource("4_berry"), ExtResource("5_carrot"), ExtResource("6_coin"), ExtResource("7_potion"), ExtResource("8_lily"), ExtResource("9_flower")])
+metadata/_custom_type_script = "uid://bx9k2md7pq81w"

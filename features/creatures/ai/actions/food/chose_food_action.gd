@@ -44,7 +44,7 @@ func _get_food_candidates(creature: Creature, valid_foods: Array[Node2D]) -> Arr
 	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0:
 		var taming_foods: Array[Node2D] = []
 		for f in valid_foods:
-			if f is WorldItem and f.item_data != null and f.item_data.taming_value > 0:
+			if f is WorldObject and f.object_data != null and f.object_data.taming_value > 0:
 				taming_foods.append(f)
 		return taming_foods
 

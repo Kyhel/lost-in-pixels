@@ -27,6 +27,6 @@ func _has_food_with_taming_value(foods) -> bool:
 	for f in foods:
 		if not is_instance_valid(f):
 			continue
-		if f is WorldItem and f.item_data != null and f.item_data.taming_value > 0:
+		if f is WorldObject and f.object_data != null and f.object_data.taming_value > 0:
 			return true
 	return false

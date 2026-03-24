@@ -10,7 +10,6 @@ const FRONT_PICKUP_RADIUS = 22.0
 const PICKUP_CONE_HALF_ANGLE := PI / 4.0
 
 var attack_effect_scene := preload("res://features/player/attack_effect.tscn")
-var carrot_data: ItemData = preload("res://data/items/carrot.tres") as ItemData
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
@@ -166,7 +165,7 @@ func attack():
 
 func _spawn_carrot() -> void:
 	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
-	ObjectsManager.spawn_item_at(carrot_data, spawn_pos, 1)
+	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(&"carrot"), spawn_pos, 1)
 
 
 func try_pickup_in_front() -> void:
@@ -175,25 +174,25 @@ func try_pickup_in_front() -> void:
 		forward = Vector2.UP
 	var cos_threshold: float = cos(PICKUP_CONE_HALF_ANGLE)
 	var scored: Array[Dictionary] = []
-	for item in ObjectsManager.get_nearby_items(global_position, FRONT_PICKUP_RADIUS):
-		if item.item_data == null or not item.item_data.can_pickup:
+	for wo in ObjectsManager.get_nearby_world_objects(global_position, FRONT_PICKUP_RADIUS):
+		if wo.object_data == null or not wo.object_data.can_pickup:
 			continue
-		var to_item: Vector2 = item.global_position - global_position
-		var dist_sq: float = to_item.length_squared()
+		var to_wo: Vector2 = wo.global_position - global_position
+		var dist_sq: float = to_wo.length_squared()
 		if dist_sq < 0.0001:
-			scored.append({"item": item, "dist_sq": dist_sq})
+			scored.append({"world_object": wo, "dist_sq": dist_sq})
 			continue
-		var dir: Vector2 = to_item / sqrt(dist_sq)
+		var dir: Vector2 = to_wo / sqrt(dist_sq)
 		if forward.dot(dir) >= cos_threshold:
-			scored.append({"item": item, "dist_sq": dist_sq})
+			scored.append({"world_object": wo, "dist_sq": dist_sq})
 	scored.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return (a["dist_sq"] as float) < (b["dist_sq"] as float)
 	)
 	for entry in scored:
-		var it: WorldItem = entry["item"] as WorldItem
-		if not is_instance_valid(it) or it.item_data == null:
+		var it: WorldObject = entry["world_object"] as WorldObject
+		if not is_instance_valid(it) or it.object_data == null:
 			continue
-		var food_val: float = it.item_data.player_food_value
+		var food_val: float = it.object_data.player_food_value
 		it.on_picked_up(self)
 		if food_val > 0.0:
 			_apply_food_value(food_val)

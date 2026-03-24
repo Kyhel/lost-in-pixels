@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://djv3immofhr8w"]
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://djv3immofhr8w"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="1_m506g"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_m506g"]
 [ext_resource type="Texture2D" uid="uid://bybgxotfpjafy" path="res://assets/objects/coin.png" id="2_nd8hd"]
 
 [resource]

@@ -9,7 +9,7 @@ const BUSH_SEED_SALT := 0x70415252
 var chunk_coords: Vector2i = Vector2i.ZERO
 var world_tile: Vector2i = Vector2i.ZERO
 
-var _berry_data: ItemData
+var _berry_data: ObjectData
 var _slot_offsets: Array[Vector2] = []
 var _slot_refs: Array = []
 
@@ -20,9 +20,9 @@ const REGROW_INTERVAL := 5.0
 func _ready() -> void:
 	super._ready()
 	_regrow_elapsed = -CreatureUtils.get_stagger_phase_offset(self, REGROW_INTERVAL)
-	_berry_data = ItemDatabase.get_item(&"berry")
+	_berry_data = ObjectDatabase.get_object_data(&"berry")
 	if _berry_data == null:
-		push_error("BerryBush: berry item not in ItemDatabase")
+		push_error("BerryBush: berry object data not in ObjectDatabase")
 		return
 
 	var rng := RandomNumberGenerator.new()
@@ -70,20 +70,20 @@ func _slot_occupied(slot_i: int) -> bool:
 func _spawn_berry_at_slot(slot_i: int) -> void:
 	if _berry_data == null:
 		return
-	var spawned = ObjectsManager.spawn_item_attached_in_chunk(
+	var spawned = ObjectsManager.spawn_object_attached_in_chunk(
 		chunk_coords,
 		_berry_data,
 		self,
 		_slot_offsets[slot_i],
 		1
 	)
-	if spawned == null or not spawned is WorldItem:
+	if spawned == null or not spawned is WorldObject:
 		return
-	var item: WorldItem = spawned as WorldItem
-	var wr: WeakRef = weakref(item)
+	var world_object: WorldObject = spawned as WorldObject
+	var wr: WeakRef = weakref(world_object)
 	_slot_refs[slot_i] = wr
-	item.picked_up.connect(_on_berry_picked_up.bind(slot_i))
-	item.destroyed.connect(_on_berry_destroyed.bind(slot_i))
+	world_object.picked_up.connect(_on_berry_picked_up.bind(slot_i))
+	world_object.destroyed.connect(_on_berry_destroyed.bind(slot_i))
 
 
 func _on_berry_picked_up(_by: Node, slot_i: int) -> void:

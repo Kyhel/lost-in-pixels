@@ -1,7 +1,7 @@
 extends Area2D
-class_name WorldItem
+class_name WorldObject
 
-@export var item_data: ItemData
+@export var object_data: ObjectData
 @export var quantity: int = 1
 
 signal picked_up(by)
@@ -9,32 +9,32 @@ signal used(user, target)
 signal destroyed(reason)
 
 func _ready() -> void:
-	if item_data == null:
+	if object_data == null:
 		return
-	if item_data.texture:
+	if object_data.texture:
 		var sprite := $Sprite2D
-		sprite.texture = item_data.texture
+		sprite.texture = object_data.texture
 		var tex_size: Vector2 = sprite.texture.get_size()
-		var target_dim: float = item_data.hitbox_radius * 2.0
+		var target_dim: float = object_data.hitbox_radius * 2.0
 		sprite.scale = Vector2.ONE * (target_dim / maxf(tex_size.x, tex_size.y))
 	var cs: CollisionShape2D = $CollisionShape2D
 	var base_shape: Shape2D = cs.shape
 	if base_shape is CircleShape2D:
 		var base_r: float = (base_shape as CircleShape2D).radius
 		if base_r > 0.0:
-			cs.scale = Vector2.ONE * (item_data.hitbox_radius / base_r)
+			cs.scale = Vector2.ONE * (object_data.hitbox_radius / base_r)
 	z_index = Constants.Z_INDEX_OBJECTS
 
 func can_be_picked_up(_by: Node) -> bool:
 	return true
 
 func be_eaten(by: Creature) -> void:
-	AbilityManager.notify_creature_ate_item(by, self)
+	AbilityManager.notify_creature_ate_world_object(by, self)
 	on_picked_up(by)
 
 func on_picked_up(by: Node) -> void:
-	if item_data and item_data.pickup_effect_script:
-		var eff = item_data.pickup_effect_script.new()
+	if object_data and object_data.pickup_effect_script:
+		var eff = object_data.pickup_effect_script.new()
 		if eff.has_method("on_pickup"):
 			eff.on_pickup(self, by)
 
@@ -43,8 +43,8 @@ func on_picked_up(by: Node) -> void:
 
 
 func use_on(user: Node, target: Node = null) -> void:
-	if item_data and item_data.use_effect_script:
-		var eff = item_data.use_effect_script.new()
+	if object_data and object_data.use_effect_script:
+		var eff = object_data.use_effect_script.new()
 		if eff.has_method("on_use"):
 			eff.on_use(self, user, target)
 
@@ -52,8 +52,8 @@ func use_on(user: Node, target: Node = null) -> void:
 
 
 func destroy(reason: String = "default") -> void:
-	if item_data and item_data.destroy_effect_script:
-		var eff = item_data.destroy_effect_script.new()
+	if object_data and object_data.destroy_effect_script:
+		var eff = object_data.destroy_effect_script.new()
 		if eff.has_method("on_destroy"):
 			eff.on_destroy(self, reason)
 

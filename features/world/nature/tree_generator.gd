@@ -94,7 +94,7 @@ func _forest_priority(wx: int, wy: int) -> int:
 	return int(hash(Vector2i(wx, wy)) ^ world_seed ^ FOREST_PRIORITY_SALT)
 
 
-func _forest_base_eligible(wx: int, wy: int, tile_type: WorldGenerator.TileType) -> bool:
+func _forest_base_eligible(_wx: int, _wy: int, tile_type: WorldGenerator.TileType) -> bool:
 	if tile_type != WorldGenerator.TileType.DARK_GRASS:
 		return false
 	# if tree_noise.get_noise_2d(wx, wy) < 0.05:

@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_t6a1h"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_4xntq"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="2_ovces"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="3_lbjb4"]
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="3_n5fiy"]
 [ext_resource type="Texture2D" uid="uid://dmi7t3bssgqpn" path="res://assets/creatures/fox.png" id="3_ovces"]
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://data/items/item_data.gd" id="3_wg48q"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="4_bfsb6"]
 [ext_resource type="Resource" uid="uid://c8fpl1yr5xkqn" path="res://features/creatures/ai/goals/follow_player_goal.tres" id="4_follow"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="5_ewph6"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="6_6fm8k"]
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="7_food"]
-[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://data/items/carrot.tres" id="8_carrot"]
-[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://data/items/berry.tres" id="9_berry"]
 [ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="10_rabbit"]
 
 [resource]
@@ -24,7 +24,7 @@ hitbox_size = 20
 base_speed = 50.0
 running_multiplier = 3.0
 needs_eating = true
-edible_items = Array[ExtResource("3_wg48q")]([ExtResource("8_carrot"), ExtResource("9_berry")])
+edible_object_data = Array[ExtResource("3_lbjb4")]([ExtResource("4_bfsb6"), ExtResource("5_ewph6")])
 edible_creatures = Array[ExtResource("2_ovces")]([ExtResource("10_rabbit")])
 hunger_decay_rate = 2.0
 taming_value_threshold = 100

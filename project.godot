@@ -22,13 +22,13 @@ SaveGame="*uid://s4veg8m3p1x9q"
 ChunkManager="*uid://dqrsinwnx82bn"
 ObjectsManager="*uid://dp4jmd73t0oak"
 VegetationManager="*res://systems/vegetation_manager.gd"
-ItemDatabase="*res://systems/item_database.gd"
 MovementStrategyDatabase="*uid://c5id1fhom68l2"
 ConfigManager="*uid://de4qv4t7ch7cr"
 GameLog="*res://systems/game_log.gd"
 AbilityManager="*res://systems/ability_manager.gd"
 CreatureDatabase="*uid://s3p2akknti2k"
 CreatureManager="*uid://y2rh1urfh7el"
+ObjectDatabase="*uid://d2tw65q0t4xcq"
 
 [display]
 
