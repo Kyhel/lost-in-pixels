@@ -2,17 +2,16 @@ class_name TreeGenerator
 extends RefCounted
 
 ## Tiles from tree center in each direction reserved (plains / type 1 spacing between grove trees).
-const TREE_SPACING_RADIUS := 5
 const TREE_2_SPACING_RADIUS := 3
 
 ## Min Chebyshev distance between type-1 trees in the same plains grove (matches old 11-wide cell intent).
-const MIN_PLAINS_TREE_SPACING := 2 * TREE_SPACING_RADIUS + 1
+const MIN_PLAINS_TREE_SPACING := 8
 
 ## Macro-cell for plains groves; trees are placed in the inner box inset from cell edges by MIN_PLAINS_TREE_SPACING
 ## so adjacent cells never conflict (order-independent).
 const PLAINS_GROVE_CELL_SIZE := 48
-const MAX_TREES_PER_PLAINS_GROVE := 5
-const PLAINS_GROVE_PROBABILITY := 0.22
+const MAX_TREES_PER_PLAINS_GROVE := 8
+const PLAINS_GROVE_PROBABILITY := 0.5
 const PLAINS_GROVE_RNG_SALT := 0x50A7E5
 const FOREST_PRIORITY_SALT := 0x7E12E5
 
@@ -143,7 +142,7 @@ func _spawn_plains_grove_trees_for_chunk(chunk_position: Vector2i, _chunk: Chunk
 func _plains_grove_tree_positions(mcx: int, mcy: int) -> Array[Vector2i]:
 	var empty: Array[Vector2i] = []
 	var s: int = PLAINS_GROVE_CELL_SIZE
-	var inset: int = MIN_PLAINS_TREE_SPACING
+	var inset: int = ceili(MIN_PLAINS_TREE_SPACING / 2.0)
 	if s <= 2 * inset:
 		return empty
 	var rng := RandomNumberGenerator.new()
