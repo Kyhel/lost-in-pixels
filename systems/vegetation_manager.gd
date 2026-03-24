@@ -2,14 +2,6 @@ extends Node
 
 var occlusion_mask_viewport: SubViewport
 
-var chunk_vegetation: Dictionary[Vector2i, Array] = {}
-
-## World tile anchors for trees, berry bushes, water lilies, etc. (not small world items).
-var _environment_tile_occupied: Dictionary = {}
-
-const CHUNK_UPDATE_INTERVAL: float = 10.0
-var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
-
 var tree_1_scene := preload("res://features/world/nature/trees/tree_1.tscn")
 var tree_2_scene := preload("res://features/world/nature/trees/tree_2.tscn")
 var berry_bush_scene := preload("res://features/world/nature/berry_bush.tscn")
@@ -22,20 +14,11 @@ func refresh_scene_references() -> void:
 
 
 func clear_all_vegetation() -> void:
-	for k in chunk_vegetation.keys():
-		for veg in chunk_vegetation[k]:
-			if is_instance_valid(veg):
-				veg.queue_free()
-	chunk_vegetation.clear()
-	_environment_tile_occupied.clear()
+	pass
 
 
-func update_chunks(delta: float) -> void:
-	var result: Dictionary = _chunk_stagger.update(delta)
-	var chunks_to_check: Array[Vector2i] = result["chunks"]
-	for coords in chunks_to_check:
-		if chunk_vegetation.has(coords):
-			chunk_vegetation[coords] = ArrayUtils.cleanup_invalid_entries(chunk_vegetation[coords])
+func update_chunks(_delta: float) -> void:
+	pass
 
 
 func spawn_tree(chunk: Vector2i, tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
@@ -43,6 +26,8 @@ func spawn_tree(chunk: Vector2i, tile_position: Vector2i, tree_type: TreeGenerat
 		refresh_scene_references()
 
 	var tree := spawn_vegetation(chunk, tile_position, get_tree_scene(tree_type))
+	if tree == null:
+		return
 	var foliage_material = tree.get_node("Foliage").material
 	if occlusion_mask_viewport != null:
 		foliage_material.set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
@@ -61,6 +46,13 @@ func get_tree_scene(tree_type: TreeGenerator.TreeType) -> PackedScene:
 
 
 func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
+	if chunk_node == null:
+		return null
+	var target_container: Node2D = chunk_node.get_vegetation_container()
+	if target_container == null:
+		return null
+
 	var vegetation: Node2D = vegetation_scene.instantiate() as Node2D
 	vegetation.set("chunk_coords", chunk)
 	vegetation.set("world_tile", world_tile)
@@ -68,11 +60,16 @@ func spawn_vegetation(chunk: Vector2i, world_tile: Vector2i, vegetation_scene: P
 		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE,
 		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE
 	)
-	add_child(vegetation)
-	if not chunk_vegetation.has(chunk):
-		chunk_vegetation[chunk] = []
-	chunk_vegetation[chunk].append(vegetation)
-	register_environment_tile(world_tile)
+	target_container.add_child(vegetation)
+	vegetation.global_position = Vector2(
+		world_tile.x * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE,
+		world_tile.y * ChunkManager.TILE_SIZE + ChunkManager.TILE_HALF_SIZE
+	)
+	var local_tile: Vector2i = Vector2i(
+		world_tile.x - chunk.x * ChunkManager.CHUNK_SIZE,
+		world_tile.y - chunk.y * ChunkManager.CHUNK_SIZE
+	)
+	chunk_node.register_environment_tile(local_tile)
 	return vegetation as Vegetation
 
 
@@ -84,20 +81,19 @@ func spawn_water_lily(chunk: Vector2i, world_tile: Vector2i) -> void:
 	spawn_vegetation(chunk, world_tile, water_lily_scene)
 
 
-func register_environment_tile(world_tile: Vector2i) -> void:
-	_environment_tile_occupied[world_tile] = true
-
-
 func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
-	return _environment_tile_occupied.has(world_tile)
-
-
-func clear_environment_tiles_for_chunk(chunk_coords: Vector2i) -> void:
-	for ly in ChunkManager.CHUNK_SIZE:
-		for lx in ChunkManager.CHUNK_SIZE:
-			var wx: int = chunk_coords.x * ChunkManager.CHUNK_SIZE + lx
-			var wy: int = chunk_coords.y * ChunkManager.CHUNK_SIZE + ly
-			_environment_tile_occupied.erase(Vector2i(wx, wy))
+	var chunk_coords := Vector2i(
+		int(floor(float(world_tile.x) / float(ChunkManager.CHUNK_SIZE))),
+		int(floor(float(world_tile.y) / float(ChunkManager.CHUNK_SIZE)))
+	)
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk_node == null:
+		return false
+	var local_tile: Vector2i = Vector2i(
+		world_tile.x - chunk_coords.x * ChunkManager.CHUNK_SIZE,
+		world_tile.y - chunk_coords.y * ChunkManager.CHUNK_SIZE
+	)
+	return chunk_node.is_environment_tile_occupied(local_tile)
 
 
 func vegetation_blocks_point(world_pos: Vector2, self_radius: float, margin: float, node: Vegetation) -> bool:
@@ -115,14 +111,8 @@ func vegetation_blocks_point(world_pos: Vector2, self_radius: float, margin: flo
 	return world_pos.distance_to(c as Vector2) < self_radius + rf + margin
 
 
-func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
-	clear_environment_tiles_for_chunk(chunk)
-
-	if chunk_vegetation.has(chunk):
-		for veg in chunk_vegetation[chunk]:
-			if is_instance_valid(veg):
-				veg.queue_free()
-		chunk_vegetation.erase(chunk)
+func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
+	pass
 
 
 func _on_world_reset(_clear_fog_memory: bool) -> void:
@@ -138,11 +128,16 @@ func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
 	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
 		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
 			var key: Vector2i = Vector2i(cx, cy)
-			if not chunk_vegetation.has(key):
+			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
+			if chunk == null:
+				continue
+			var vegetation_container: Node2D = chunk.get_vegetation_container()
+			if vegetation_container == null:
 				continue
 
-			for veg in chunk_vegetation[key]:
-				if not is_instance_valid(veg):
+			for veg_node in vegetation_container.get_children():
+				var veg: Vegetation = veg_node as Vegetation
+				if veg == null or not is_instance_valid(veg):
 					continue
 
 				var dx: float = veg.global_position.x - origin.x
@@ -150,7 +145,7 @@ func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
 				var dist_sq: float = dx * dx + dy * dy
 
 				if dist_sq <= radius_sq:
-					results.append(veg as Vegetation)
+					results.append(veg)
 
 	return results
 

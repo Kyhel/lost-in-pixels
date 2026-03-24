@@ -166,8 +166,7 @@ func attack():
 
 func _spawn_carrot() -> void:
 	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
-	var chunk = ChunkManager.get_chunk_from_position(spawn_pos)
-	ObjectsManager.spawn_item_in_chunk(chunk, carrot_data, spawn_pos, 1)
+	ObjectsManager.spawn_item_at(carrot_data, spawn_pos, 1)
 
 
 func try_pickup_in_front() -> void:

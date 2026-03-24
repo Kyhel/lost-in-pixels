@@ -1,7 +1,5 @@
 extends Node
 
-var chunk_entities: Dictionary[Vector2i, Array] = {}
-
 const CHUNK_UPDATE_INTERVAL: float = 0.5
 var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
@@ -17,23 +15,11 @@ func _ready() -> void:
 			])
 
 func clear_all_entities() -> void:
-	for chunk in chunk_entities.keys():
-		for entity in chunk_entities[chunk]:
-			if is_instance_valid(entity):
-				entity.queue_free()
-	chunk_entities.clear()
+	pass
 
 
-func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
-
-	if !chunk_entities.has(chunk):
-		return
-
-	for entity in chunk_entities[chunk]:
-		if is_instance_valid(entity):
-			entity.queue_free()
-
-	chunk_entities.erase(chunk)
+func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
+	pass
 
 
 func _on_world_reset(_clear_fog_memory: bool) -> void:
@@ -44,7 +30,8 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 	if ConfigManager.config.max_creatures_per_chunk <= 0:
 		return
 
-	if chunk_entities.has(chunk_position):
+	var creatures_container: Node2D = chunk.get_creatures_container()
+	if creatures_container != null and creatures_container.get_child_count() > 0:
 		return
 
 	var rng := RandomNumberGenerator.new()
@@ -78,44 +65,56 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 		)
 		spawn_creature_at(chunk_position, creature_data, pos)
 
-func move_monster(monster: Creature, old_chunk: Vector2i, new_chunk: Vector2i):
-
-	if old_chunk in chunk_entities:
-		chunk_entities[old_chunk].erase(monster)
-
-	if !chunk_entities.has(new_chunk):
+func move_monster(monster: Creature, _old_chunk: Vector2i, new_chunk: Vector2i):
+	var target_chunk: Chunk = ChunkManager.get_loaded_chunk(new_chunk)
+	var target_container: Node2D = null
+	if target_chunk != null:
+		target_container = target_chunk.get_creatures_container()
+	if target_container == null:
 		if is_instance_valid(monster):
 			monster.queue_free()
 		return
 
-	chunk_entities[new_chunk].append(monster)
+	var world_pos: Vector2 = monster.global_position
+	if monster.get_parent() != target_container:
+		monster.reparent(target_container)
+	monster.global_position = world_pos
 
 func update_entity_chunks(delta: float) -> void:
 	var result: Dictionary = _chunk_stagger.update(delta)
 	var chunks_to_check: Array[Vector2i] = result["chunks"]
 
 	for coords in chunks_to_check:
-		if !chunk_entities.has(coords):
+		var chunk: Chunk = ChunkManager.get_loaded_chunk(coords)
+		if chunk == null:
+			continue
+		var creatures_container: Node2D = chunk.get_creatures_container()
+		if creatures_container == null:
 			continue
 
-		var monsters: Array = chunk_entities[coords].duplicate()
-		for monster in monsters:
+		var monsters: Array = creatures_container.get_children().duplicate()
+		for monster_node in monsters:
+			var monster: Creature = monster_node as Creature
+			if monster == null:
+				continue
 			if !is_instance_valid(monster):
 				continue
 
 			var new_chunk: Vector2i = ChunkManager.get_chunk_from_position(monster.global_position)
 			if new_chunk != coords:
 				move_monster(monster, coords, new_chunk)
-				
-		chunk_entities[coords] = ArrayUtils.cleanup_invalid_entries(chunk_entities[coords])
 
 func update_entity_visibility(player_pos:Vector2):
-
-	for key in chunk_entities.keys():
-
-		for monster in chunk_entities[key]:
-
-			if !is_instance_valid(monster):
+	for chunk_node: Node in ChunkManager.loaded_chunks.values():
+		if not is_instance_valid(chunk_node) or not chunk_node is Chunk:
+			continue
+		var chunk: Chunk = chunk_node as Chunk
+		var creatures_container: Node2D = chunk.get_creatures_container()
+		if creatures_container == null:
+			continue
+		for monster_node in creatures_container.get_children():
+			var monster: Creature = monster_node as Creature
+			if monster == null or !is_instance_valid(monster):
 				continue
 
 			monster.set_visible(is_monster_visible(monster.global_position, player_pos))
@@ -132,22 +131,31 @@ func is_monster_visible(world_pos:Vector2, player_pos:Vector2) -> bool:
 
 
 func get_creature_count_in_chunk(chunk_coords: Vector2i, creature_data: CreatureData) -> int:
-	if !chunk_entities.has(chunk_coords):
+	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk == null:
+		return 0
+	var creatures_container: Node2D = chunk.get_creatures_container()
+	if creatures_container == null:
 		return 0
 	var count := 0
-	for entity in chunk_entities[chunk_coords]:
+	for entity in creatures_container.get_children():
 		if is_instance_valid(entity) and entity.get("creature_data") == creature_data:
 			count += 1
 	return count
 
 func spawn_creature_at(chunk_coords: Vector2i, creature_data: CreatureData, world_pos: Vector2) -> void:
+	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk == null:
+		return
+	var target_container: Node2D = chunk.get_creatures_container()
+	if target_container == null:
+		return
+
 	var creature = creature_scene.instantiate()
 	creature.creature_data = creature_data
 	creature.global_position = world_pos
-	add_child(creature)
-	if !chunk_entities.has(chunk_coords):
-		chunk_entities[chunk_coords] = []
-	chunk_entities[chunk_coords].append(creature)
+	target_container.add_child(creature)
+	creature.global_position = world_pos
 
 func get_nearby_entities(origin: Vector2, radius: float) -> Array:
 	var results: Array = []
@@ -160,11 +168,15 @@ func get_nearby_entities(origin: Vector2, radius: float) -> Array:
 	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
 		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
 			var key: Vector2i = Vector2i(cx, cy)
-			if !chunk_entities.has(key):
+			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
+			if chunk == null:
+				continue
+			var creatures_container: Node2D = chunk.get_creatures_container()
+			if creatures_container == null:
 				continue
 
 			# Iterate safely and skip any invalid (already freed) instances.
-			for monster in chunk_entities[key]:
+			for monster in creatures_container.get_children():
 				if !is_instance_valid(monster):
 					continue
 

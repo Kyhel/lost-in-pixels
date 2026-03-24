@@ -6,11 +6,6 @@ signal world_reset(clear_fog_memory: bool)
 @export var player: Node2D
 
 func _ready():
-	
-	SignalUtils.safe_connect(ChunkManager.chunk_unloaded, CreatureManager._on_chunk_unloaded)
-	SignalUtils.safe_connect(ChunkManager.chunk_unloaded, ObjectsManager._on_chunk_unloaded)
-	SignalUtils.safe_connect(ChunkManager.chunk_unloaded, VegetationManager._on_chunk_unloaded)
-
 	SignalUtils.safe_connect(world_reset, ChunkManager._on_world_reset)
 	SignalUtils.safe_connect(world_reset, CreatureManager._on_world_reset)
 	SignalUtils.safe_connect(world_reset, ObjectsManager._on_world_reset)

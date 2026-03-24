@@ -11,6 +11,5 @@ func execute(player: Player) -> bool:
 	var spawn_pos := player.global_position + forward * distance
 	if ObjectsManager.is_item_spawn_blocked(spawn_pos, _flower_data):
 		return false
-	var chunk := ChunkManager.get_chunk_from_position(spawn_pos)
-	ObjectsManager.spawn_item_in_chunk(chunk, _flower_data, spawn_pos, 1)
+	ObjectsManager.spawn_item_at(_flower_data, spawn_pos, 1)
 	return true

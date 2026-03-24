@@ -110,6 +110,13 @@ func get_load_radius() -> int:
 func get_unload_radius() -> int:
 	return get_load_radius() + 4
 
+
+func get_loaded_chunk(chunk_coords: Vector2i) -> Chunk:
+	var node: Node = loaded_chunks.get(chunk_coords, null)
+	if node != null and is_instance_valid(node) and node is Chunk:
+		return node as Chunk
+	return null
+
 func load_chunk(chunk_x, chunk_y):
 
 	var key: Vector2i = Vector2i(chunk_x, chunk_y)
@@ -152,8 +159,6 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 			chunk.set_tile_type(x, y, tile_type)
 			chunk.set_biome(x, y, biome)
 
-	# _spawn_world_items(chunk_x, chunk_y)
-
 	if ConfigManager.config.spawn_trees:
 		tree_generator.generate_trees_for_chunk(
 			Vector2i(chunk_x, chunk_y),
@@ -168,29 +173,6 @@ func generate_chunk(chunk_x, chunk_y, chunk: Chunk):
 		water_lily_generator.generate_for_chunk(
 			Vector2i(chunk_x, chunk_y), chunk)
 
-func _spawn_world_items(chunk_x: int, chunk_y: int):
-
-	var rng := RandomNumberGenerator.new()
-	rng.seed = get_chunk_seed(chunk_x, chunk_y) + 12345
-
-	var item_count := rng.randi_range(0, 2)
-	for i in range(item_count):
-		var local_x: int = rng.randi_range(0, CHUNK_SIZE - 1)
-		var local_y: int = rng.randi_range(0, CHUNK_SIZE - 1)
-
-		var world_x: int = chunk_x * CHUNK_SIZE + local_x
-		var world_y: int = chunk_y * CHUNK_SIZE + local_y
-
-		var world_pos: Vector2 = Vector2(
-			world_x * TILE_SIZE,
-			world_y * TILE_SIZE
-		)
-
-		var chunk_key: Vector2i = Vector2i(chunk_x, chunk_y)
-		var item_data = ItemDatabase.get_item(&"coin")
-		if item_data:
-			var centered := world_pos + Vector2.ONE * TILE_SIZE / 2.0
-			ObjectsManager.spawn_item_in_chunk(chunk_key, item_data, centered)
 
 func _chebyshev_to_player_chunk(player_chunk: Vector2i, key: Vector2i) -> int:
 	return maxi(abs(key.x - player_chunk.x), abs(key.y - player_chunk.y))
