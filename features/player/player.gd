@@ -20,6 +20,10 @@ var attack_cooldown_timer: float = 0.0
 @export var max_health: float = 100.0
 @export var health: float = 100.0
 
+@export var light_radius := 300
+## World-space width of the transition band (shader softness). Outer edge of the veil is at `light_radius`.
+@export var light_softness := 200.0
+
 @export var edible_objects: Array[ObjectData] = []
 
 var _dead: bool = false
