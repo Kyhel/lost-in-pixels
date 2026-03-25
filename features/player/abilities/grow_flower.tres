@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://c4fv4xovno7v8" path="res://features/player/abilities/ability_data.gd" id="1_data"]
 [ext_resource type="Resource" path="res://features/player/abilities/grow_flower_unlock.tres" id="2_rule"]
+[ext_resource type="Texture2D" uid="uid://bx5rywmdkc04r" path="res://assets/nature/flower_red_1_item.png" id="2_yxsk5"]
 [ext_resource type="Script" uid="uid://dmarlbtfp57cm" path="res://features/player/abilities/effects/grow_flower_effect.gd" id="3_effect"]
-[ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="4_icon"]
 
 [resource]
 script = ExtResource("1_data")
 id = &"grow_flower"
 display_name = "Grow Flower"
-icon = ExtResource("4_icon")
+icon = ExtResource("2_yxsk5")
 unlock_rule = ExtResource("2_rule")
 effect_script = ExtResource("3_effect")
 discover_log_message = "By watching rabbits eat flowers you have developed the ability to grow flowers."
