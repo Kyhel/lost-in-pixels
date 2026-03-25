@@ -32,6 +32,7 @@ AbilityManager="*res://systems/ability_manager.gd"
 CreatureDatabase="*uid://s3p2akknti2k"
 CreatureManager="*uid://y2rh1urfh7el"
 ObjectDatabase="*uid://d2tw65q0t4xcq"
+ObjectInteractionSystem="*uid://dx3jfksyhhymp"
 
 [display]
 

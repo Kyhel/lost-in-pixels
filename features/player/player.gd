@@ -111,6 +111,9 @@ func _die() -> void:
 	_dead = true
 	died.emit()
 
+func is_dead() -> bool:
+	return _dead
+
 func take_damage(amount: int, source: Node = null) -> void:
 	if _dead or amount <= 0:
 		return
@@ -195,27 +198,17 @@ func try_pickup_in_front() -> void:
 	scored.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return (a["dist_sq"] as float) < (b["dist_sq"] as float)
 	)
+
 	for entry in scored:
 		var it: WorldObject = entry["world_object"] as WorldObject
 		if not is_instance_valid(it) or it.object_data == null:
 			continue
-		var food_val: float = it.object_data.player_food_value
-		it.on_picked_up(self)
+		var food_val: float = float(it.object_data.player_food_value)
 		if food_val > 0.0 and it.object_data in edible_objects:
-			_apply_food_value(food_val)
+			# Current interact behavior: choose Eat only when it would not overfill hunger.
+			if hunger + food_val <= max_hunger or health < max_health:
+				ObjectInteractionSystem.do_eat(self, it)
+				break
+			
+		ObjectInteractionSystem.do_pickup(self, it)
 		break
-
-func _apply_food_value(amount: float) -> void:
-	if amount <= 0.0 or _dead:
-		return
-	var room := max_hunger - hunger
-	var to_hunger := minf(amount, room)
-	if to_hunger > 0.0:
-		hunger += to_hunger
-		hunger_changed.emit(hunger)
-	var overflow := amount - to_hunger
-	if overflow > 0.0:
-		var prev_health := health
-		health = minf(max_health, health + overflow)
-		if health != prev_health:
-			health_changed.emit(health)

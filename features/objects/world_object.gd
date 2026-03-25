@@ -28,18 +28,10 @@ func can_be_picked_up(_by: Node) -> bool:
 	return true
 
 func be_eaten(by: Creature) -> void:
-	EventManager.object_eaten.emit(by, self)
-	on_picked_up(by)
+	ObjectInteractionSystem.do_eat(by, self)
 
 func on_picked_up(by: Node) -> void:
-	EventManager.object_picked_up.emit(by, self)
-	if object_data and object_data.pickup_effect_script:
-		var eff = object_data.pickup_effect_script.new()
-		if eff.has_method("on_pickup"):
-			eff.on_pickup(self, by)
-
-	emit_signal("picked_up", by)
-	destroy("picked_up")
+	ObjectInteractionSystem.do_pickup(by, self)
 
 
 func use_on(user: Node, target: Node = null) -> void:
