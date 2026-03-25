@@ -6,14 +6,14 @@ extends Node
 ## v4: adds inventory (per-slot array; null or {id, count}).
 ## Creatures, dropped items, and trees are not serialized; they follow procedural rules when chunks reload.
 
-func reset_autoload_world_state(clear_fog: bool) -> void:
+func reset_autoload_world_state() -> void:
 	var scene := get_tree().current_scene
 	if scene == null:
 		push_error("SaveGame: no current_scene; cannot emit SystemManager world reset.")
 		return
 	var system_manager := scene.find_child("SystemManager", true, false)
 	if system_manager != null and system_manager.has_method("reset_world_state"):
-		system_manager.reset_world_state(clear_fog)
+		system_manager.reset_world_state()
 	else:
 		push_error("SaveGame: SystemManager missing; cannot emit world reset.")
 
@@ -77,7 +77,7 @@ func apply_pending_world_before_reload() -> void:
 	var terrain_seed: int = int(d.get("world_seed", 0))
 	if terrain_seed == 0:
 		terrain_seed = GameSession.get_active_world_seed()
-	reset_autoload_world_state(true)
+	reset_autoload_world_state()
 	ChunkManager.set_world_seed(terrain_seed)
 	var fog: Variant = d.get("fog_memory", [])
 	if fog is Array:
@@ -95,7 +95,7 @@ func request_load_game() -> bool:
 
 func request_new_game() -> void:
 	GameSession.begin_new_game(randi())
-	reset_autoload_world_state(true)
+	reset_autoload_world_state()
 	ChunkManager.set_world_seed(GameSession.get_active_world_seed())
 	get_tree().paused = false
 	get_tree().reload_current_scene()

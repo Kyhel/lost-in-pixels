@@ -81,7 +81,7 @@ func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
 	pass
 
 
-func _on_world_reset(_clear_fog_memory: bool) -> void:
+func _on_world_reset() -> void:
 	clear_all_objects()
 
 

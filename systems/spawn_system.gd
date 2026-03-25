@@ -35,7 +35,7 @@ func _on_chunk_unloaded(chunk: Vector2i, _chunk_node: Chunk) -> void:
 	_rabbit_last_spawn_time.erase(chunk)
 
 
-func _on_world_reset(_clear_fog_memory: bool) -> void:
+func _on_world_reset() -> void:
 	_rabbit_last_spawn_time.clear()
 
 func spawn_world_objects(chunk: Chunk) -> void:
