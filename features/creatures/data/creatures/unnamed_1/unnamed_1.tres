@@ -24,5 +24,6 @@ biomes = Array[int]([1])
 excluded_tile_types = Array[int]([1, 8])
 allowed_wander_tiles = Array[int]([4])
 hit_damage = 10
-aggressiveness_buildup_rate = 20.0
+aggressiveness_buildup_rate = 50.0
+aggressiveness_decay_rate = 25.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

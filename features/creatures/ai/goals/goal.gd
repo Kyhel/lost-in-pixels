@@ -10,3 +10,6 @@ func get_score(_creature: Creature) -> float:
 
 func has_tag(tag: String) -> bool:
 	return tags.has(tag)
+
+func update(_creature: Creature, _delta: float) -> void:
+	pass

@@ -51,3 +51,4 @@ enum MovementType {
 @export var attack_cooldown: float = 0.8
 ## Per second toward 100 while the player is seen; 0 = attack as soon as the player is visible (no meter).
 @export var aggressiveness_buildup_rate: float = 0.0
+@export var aggressiveness_decay_rate: float = 10.0

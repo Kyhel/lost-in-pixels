@@ -12,12 +12,19 @@ const KEY_SEES_PLAYER := "sees_player"
 const KEY_AGGRESSIVENESS := "aggressiveness"
 ## When true, aggressiveness does not build up; cleared only when aggressiveness reaches 0.
 const KEY_AGGRESSIVENESS_RECOVERING := "aggressiveness_recovering"
+const KEY_CHASING_STATE := "chasing_state"
 
 const KEY_HUNGER_MAX := 100
 
 enum State {
 	IDLE,
-	EATING,
+	EATING
+}
+
+enum ChasingState {
+	IDLE,
+	CHASING,
+	RECOVERING
 }
 
 signal value_changed(key, value)
@@ -32,8 +39,8 @@ func set_value(key, value):
 	data[key] = value
 	value_changed.emit(key, value)
 
-func get_value(key):
-	return data.get(key)
+func get_value(key, default_value = null):
+	return data.get(key, default_value)
 
 func has(key):
 	return data.has(key)

@@ -104,10 +104,16 @@ func _physics_process(delta: float) -> void:
 	debug_final_velocity = Vector2.ZERO
 
 	sensors_node.update_sensors(delta, creature_data.sensors)
-	_update_aggressiveness(delta)
+
+	for goal in goals:
+		goal.update(self, delta)
+
 	ai_root.update_ai(delta)
+
 	movement.update_movement(self, delta)
+
 	move_and_slide()
+	
 	_update_hunger(delta)
 	_update_taming(delta)
 			
@@ -170,34 +176,6 @@ func _update_hunger(delta: float) -> void:
 
 	blackboard.set_value(Blackboard.KEY_HUNGER, hunger - creature_data.hunger_decay_rate * delta)
 
-const AGGRESSIVENESS_DECAY_PER_SEC := 10.0
-
-func _update_aggressiveness(delta: float) -> void:
-	if creature_data == null or creature_data.aggressiveness_buildup_rate <= 0.0:
-		return
-
-	var sees_player: bool = blackboard.get_value(Blackboard.KEY_SEES_PLAYER) == true
-	var raw_aggressiveness = blackboard.get_value(Blackboard.KEY_AGGRESSIVENESS)
-	var aggressiveness: float = 0.0 if raw_aggressiveness == null else float(raw_aggressiveness)
-	var raw_recovering = blackboard.get_value(Blackboard.KEY_AGGRESSIVENESS_RECOVERING)
-	var recovering: bool = false if raw_recovering == null else bool(raw_recovering)
-
-	if not sees_player and aggressiveness > 0.0:
-		aggressiveness = maxf(0.0, aggressiveness - AGGRESSIVENESS_DECAY_PER_SEC * delta)
-
-	if sees_player and not recovering and aggressiveness < 100.0:
-		aggressiveness = minf(100.0, aggressiveness + creature_data.aggressiveness_buildup_rate * delta)
-
-	if aggressiveness > 0.0:
-		if not sees_player:
-			recovering = true
-
-	if aggressiveness <= 0.0:
-		aggressiveness = 0.0
-		recovering = false
-
-	blackboard.set_value(Blackboard.KEY_AGGRESSIVENESS, aggressiveness)
-	blackboard.set_value(Blackboard.KEY_AGGRESSIVENESS_RECOVERING, recovering)
 
 func _update_taming(delta: float) -> void:
 	if creature_data == null or creature_data.taming_value_threshold <= 0:

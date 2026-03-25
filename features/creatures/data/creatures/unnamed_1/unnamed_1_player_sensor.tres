@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_usyx0")
-scan_radius = 400.0
+scan_radius = 500.0
 metadata/_custom_type_script = "uid://08ccf1h4vvj8"
