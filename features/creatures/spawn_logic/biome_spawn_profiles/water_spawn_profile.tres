@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BiomeCreatureSpawnProfile" format=3 uid="uid://biomewaterspawn1"]
+
+[ext_resource type="Script" path="res://features/creatures/creature_data.gd" id="1_creatureDataScript"]
+[ext_resource type="Script" path="res://features/creatures/spawn_logic/biome_creature_spawn_profile.gd" id="2_profileScript"]
+
+[ext_resource type="Resource" path="res://features/creatures/data/animals/beaver.tres" id="3_beaver"]
+
+[resource]
+script = ExtResource("2_profileScript")
+biome = 7
+creature_weights = Dictionary[ExtResource("1_creatureDataScript"), float]({
+ExtResource("3_beaver"): 1.0
+})
+

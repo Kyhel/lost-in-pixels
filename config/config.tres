@@ -7,16 +7,14 @@
 [ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_4nmm5"]
 [ext_resource type="Script" uid="uid://dx3c2xv76tb7s" path="res://config/config.gd" id="6_3l0t6"]
 [ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1.tres" id="6_wm4lb"]
+[ext_resource type="Resource" uid="uid://ceb4dhu7kc0pk" path="res://features/creatures/spawn_logic/biome_spawn_profiles/forest_spawn_profile.tres" id="8_forest_profile"]
+[ext_resource type="Resource" uid="uid://b1ncob6mvl0vg" path="res://features/creatures/spawn_logic/biome_spawn_profiles/plains_spawn_profile.tres" id="9_plains_profile"]
+[ext_resource type="Resource" uid="uid://b1t077bmvl0vg" path="res://features/creatures/spawn_logic/biome_spawn_profiles/water_spawn_profile.tres" id="10_water_profile"]
 
 [resource]
 script = ExtResource("6_3l0t6")
-allowed_creatures = Dictionary[ExtResource("1_ndyc7"), int]({
-ExtResource("3_yq3s8"): 2,
-ExtResource("2_wm4lb"): 1,
-ExtResource("4_w2q5h"): 1,
-ExtResource("5_4nmm5"): 1,
-ExtResource("6_wm4lb"): 1
-})
+allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("3_yq3s8"), ExtResource("2_wm4lb"), ExtResource("4_w2q5h"), ExtResource("5_4nmm5"), ExtResource("6_wm4lb")])
+biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_forest_profile"), ExtResource("9_plains_profile"), ExtResource("10_water_profile")])
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

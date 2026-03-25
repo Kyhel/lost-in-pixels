@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BiomeCreatureSpawnProfile" format=3 uid="uid://ceb4dhu7kc0pk"]
+
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_creatureDataScript"]
+[ext_resource type="Script" uid="uid://b0bggfn8ieexe" path="res://features/creatures/spawn_logic/biome_creature_spawn_profile.gd" id="2_profileScript"]
+[ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="3_rabbit"]
+[ext_resource type="Resource" uid="uid://mok3qihbyai6" path="res://features/creatures/data/animals/fox.tres" id="4_fox"]
+[ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="6_ogre"]
+[ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1.tres" id="7_unnamed1"]
+
+[resource]
+script = ExtResource("2_profileScript")
+biome = 1
+creature_weights = Dictionary[ExtResource("1_creatureDataScript"), float]({
+ExtResource("3_rabbit"): 1.0,
+ExtResource("4_fox"): 1.0,
+ExtResource("6_ogre"): 1.0,
+ExtResource("7_unnamed1"): 3.0
+})

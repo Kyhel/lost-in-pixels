@@ -5,14 +5,14 @@ var _chunk_stagger: ChunkStagger = ChunkStagger.new(CHUNK_UPDATE_INTERVAL)
 
 var creature_scene := preload("res://features/creatures/creature.tscn")
 
-var creature_spawn_probability_scores := []
+var _biome_profiles_by_biome: Dictionary = {}
 
 func _ready() -> void:
-	for creature_spawn_data in ConfigManager.config.allowed_creatures:
-		creature_spawn_probability_scores.append([
-			creature_spawn_data,
-			ConfigManager.config.allowed_creatures[creature_spawn_data]
-			])
+	_biome_profiles_by_biome.clear()
+	for profile in ConfigManager.config.biome_creature_spawn_profiles:
+		if profile == null:
+			continue
+		_biome_profiles_by_biome[profile.biome] = profile
 
 func clear_all_entities() -> void:
 	pass
@@ -47,18 +47,40 @@ func spawn_entities(chunk: Chunk, chunk_position: Vector2i) -> void:
 		var tile_type := chunk.get_tile_type(local_x, local_y)
 		var biome: WorldGenerator.Biome = chunk.get_biome(local_x, local_y)
 
-		var valid_creatures := creature_spawn_probability_scores.filter(func(entry):
-			var data: CreatureData = entry[0]
-			return data.biomes.has(biome) and !data.excluded_tile_types.has(tile_type)
-		).filter(func(entry):
-			return ConfigManager.config.allowed_creatures.has(entry[0])
-		)
+		var biome_profile: Resource = _biome_profiles_by_biome.get(biome, null)
 
-		if valid_creatures.is_empty():
+		var candidate_creatures: Array[CreatureData] = []
+		var weights: Array[float] = []
+
+		for creature_data in ConfigManager.config.allowed_creatures:
+			if !creature_data.biomes.has(biome):
+				continue
+			if creature_data.excluded_tile_types.has(tile_type):
+				continue
+
+			# If a biome profile exists, it is the only source of weights.
+			# Missing creatures in the profile get weight 0 (i.e., won't spawn).
+			if biome_profile == null:
+				candidate_creatures.append(creature_data)
+				weights.append(1.0)
+			else:
+				var weights_map_any = biome_profile.get("creature_weights")
+				var weights_map: Dictionary = {}
+				if weights_map_any != null:
+					weights_map = weights_map_any
+				var w_val = weights_map.get(creature_data)
+				var w: float = 0.0
+				if w_val != null:
+					w = float(w_val)
+				if w > 0.0:
+					candidate_creatures.append(creature_data)
+					weights.append(w)
+
+		if candidate_creatures.is_empty() or weights.is_empty():
 			continue
 
-		var picked_index := rng.rand_weighted(valid_creatures.map(func(creature_spawn_probability): return creature_spawn_probability[1]))
-		var creature_data: CreatureData = valid_creatures[picked_index][0]
+		var picked_index := rng.rand_weighted(weights)
+		var creature_data: CreatureData = candidate_creatures[picked_index]
 		var pos := Vector2(
 			world_x * ChunkManager.TILE_SIZE,
 			world_y * ChunkManager.TILE_SIZE
