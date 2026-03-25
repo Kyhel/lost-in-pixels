@@ -35,13 +35,12 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	var player := _get_player()
 	if player == null:
 		return
-	var ppos: Vector2 = player.global_position
 	for ability in _abilities:
 		if _discovered_set.has(ability.id):
 			continue
 		if ability.unlock_rule == null:
 			continue
-		if ability.unlock_rule.matches(eater, world_object.object_data, eater.global_position, ppos):
+		if ability.unlock_rule.matches(eater, world_object.object_data, player):
 			_discover(ability)
 
 
