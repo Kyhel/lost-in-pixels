@@ -9,7 +9,6 @@ const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
 const TERRAIN_VISION_RADIUS = 20
-const MONSTER_VISION_RADIUS = 200
 
 var loaded_chunks: Dictionary[Vector2i, Node] = {}
 

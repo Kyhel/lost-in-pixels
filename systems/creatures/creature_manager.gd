@@ -126,32 +126,6 @@ func update_entity_chunks(delta: float) -> void:
 			if new_chunk != coords:
 				move_monster(monster, coords, new_chunk)
 
-func update_entity_visibility(player_pos:Vector2):
-	for chunk_node: Node in ChunkManager.loaded_chunks.values():
-		if not is_instance_valid(chunk_node) or not chunk_node is Chunk:
-			continue
-		var chunk: Chunk = chunk_node as Chunk
-		var creatures_container: Node2D = chunk.get_creatures_container()
-		if creatures_container == null:
-			continue
-		for monster_node in creatures_container.get_children():
-			var monster: Creature = monster_node as Creature
-			if monster == null or !is_instance_valid(monster):
-				continue
-
-			monster.set_visible(is_monster_visible(monster.global_position, player_pos))
-
-func is_monster_visible(world_pos:Vector2, player_pos:Vector2) -> bool:
-
-	var dx = abs(world_pos.x - player_pos.x)
-	var dy = abs(world_pos.y - player_pos.y)
-
-	var distance_sq = dx*dx + dy*dy
-	var radius_px = ChunkManager.MONSTER_VISION_RADIUS * ChunkManager.TILE_SIZE
-
-	return distance_sq < radius_px * radius_px
-
-
 func get_creature_count_in_chunk(chunk_coords: Vector2i, creature_data: CreatureData) -> int:
 	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk == null:

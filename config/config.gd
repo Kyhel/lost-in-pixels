@@ -10,3 +10,4 @@ extends Resource
 @export var spawn_bushes := true
 @export var spawn_water_lilies := true
 @export var spawn_world_objects := true
+@export var player_light := true

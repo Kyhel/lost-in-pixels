@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://b5u1v60qgyuj4" path="res://ui/abilities_bar.gd" id="16_abbar"]
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
+[ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -106,6 +107,11 @@ player = NodePath("../../World/Entities/Player")
 [node name="SpawnSystem" type="Node" parent="Systems/SystemManager" unique_id=1409381695]
 script = ExtResource("8_dinhu")
 metadata/_custom_type_script = "uid://buon80ox32fe5"
+
+[node name="CreatureVisibilitySystem" type="Node" parent="Systems/SystemManager" unique_id=1409381696 node_paths=PackedStringArray("player", "player_light_layer")]
+script = ExtResource("19_cvsys")
+player = NodePath("../../../World/Entities/Player")
+player_light_layer = NodePath("../../../World/PlayerLightLayer")
 
 [node name="AlphaMaskViewport" type="SubViewport" parent="." unique_id=1206419223]
 transparent_bg = true
