@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://c7k2bnaxryw1p"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
+[ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="1_o1ifq"]
 [ext_resource type="Texture2D" uid="uid://ba1cfysaknd15" path="res://assets/nature/berry_red.png" id="2_tex"]
 
 [resource]
@@ -10,5 +11,6 @@ display_name = "Berry"
 texture = ExtResource("2_tex")
 can_pickup = true
 player_food_value = 10
+on_pickup_item = ExtResource("1_o1ifq")
 hitbox_radius = 1.0
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
