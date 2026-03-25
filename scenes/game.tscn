@@ -82,6 +82,7 @@ edible_objects = Array[ExtResource("6_5newe")]([ExtResource("7_37s47"), ExtResou
 texture = ExtResource("4_iywne")
 
 [node name="Camera" type="Camera2D" parent="World/Entities/Player" unique_id=526099589]
+zoom = Vector2(1.5, 1.5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Entities/Player" unique_id=664193358]
 shape = SubResource("CircleShape2D_gee14")
@@ -148,6 +149,7 @@ script = ExtResource("13_kvuet")
 player = NodePath("../../World/Entities/Player")
 
 [node name="InventoryPanel" parent="HUDLayer/HUDRoot" unique_id=990011005 instance=ExtResource("18_inv")]
+layout_mode = 1
 
 [node name="BottomCenterPanel" type="VBoxContainer" parent="HUDLayer/HUDRoot" unique_id=990011001]
 layout_mode = 1
