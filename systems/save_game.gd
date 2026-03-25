@@ -94,8 +94,4 @@ func request_load_game() -> bool:
 
 
 func request_new_game() -> void:
-	GameSession.begin_new_game(randi())
-	reset_autoload_world_state()
-	ChunkManager.set_world_seed(GameSession.get_active_world_seed())
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	GameSession.start_new_game()
