@@ -21,7 +21,7 @@
 [ext_resource type="Script" uid="uid://btgnvradaiwwp" path="res://ui/death_overlay.gd" id="15_death"]
 [ext_resource type="Script" uid="uid://b5u1v60qgyuj4" path="res://ui/abilities_bar.gd" id="16_abbar"]
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
-[ext_resource type="PackedScene" uid="uid://cinvpanelmain01" path="res://ui/inventory_panel.tscn" id="18_inv"]
+[ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
