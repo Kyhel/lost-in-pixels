@@ -34,18 +34,21 @@ A 2D pixel-style game built with **Godot 4.6**. You explore a chunk-based world,
 ## What you can do (controls)
 
 
-| Action           | Input                                        |
-| ---------------- | -------------------------------------------- |
-| **Move**         | **WASD** or **Arrow keys** or **left stick** |
-| **Attack**       | **F**                                        |
-| **Spawn carrot** | **Q** (or **A** on AZERTY)                   |
-| **Interact**     | **E**                                        |
+| Action                    | Input                                        |
+| ------------------------- | -------------------------------------------- |
+| **Move**                  | **WASD** or **Arrow keys** or **left stick** |
+| **Attack**                | **F**                                        |
+| **Spawn carrot**          | **Q** (or **A** on AZERTY)                   |
+| **Interact (objects)**    | **E**                                        |
+| **Interact (creatures)**  | **R**                                        |
+| **Pause / back**          | **Escape**                                   |
 
 
 - **Move**: Walk around the world; your movement speed can be modified by the terrain (e.g. different chunk types).
 - **Attack**: Hit enemies/creatures in a short range, instantly killing them.
 - **Spawn carrot**: Places a carrot in the world (e.g. in front of you). Creatures that eat food will go for it, and they might follow you afterwards
-- **Interact**: Try, and find out what happens
+- **Interact (objects)**: Pick up or eat nearby objects in front of you.
+- **Interact (creatures)**: Open the creature menu when a creature is nearby (give items, pet). **Escape** closes that menu or the pause menu, or opens pause when nothing else is open.
 
 ---
 

@@ -5,6 +5,10 @@ extends CanvasLayer
 var _open: bool = false
 
 
+func is_pause_open() -> bool:
+	return _open
+
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	visible = false
@@ -27,14 +31,6 @@ func close_pause() -> void:
 	_open = false
 	visible = false
 	get_tree().paused = false
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if not _open:
-		return
-	if event.is_action_pressed("pause_menu") or event.is_action_pressed("ui_cancel"):
-		close_pause()
-		get_viewport().set_input_as_handled()
 
 
 func _on_resume_pressed() -> void:

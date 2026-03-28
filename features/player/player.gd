@@ -77,6 +77,11 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("interact"):
 		try_pickup_in_front()
 
+	if Input.is_action_just_pressed("interact_creature"):
+		var target_creature: Creature = PlayerCreatureInteractionSystem.find_best_creature_target(self)
+		if target_creature != null:
+			PlayerCreatureInteractionSystem.begin_interaction(target_creature)
+
 	var speed_modifier = ChunkManager.get_walk_speed_at_world_pos(global_position)
 
 	velocity = dir.normalized() * base_speed * speed_modifier

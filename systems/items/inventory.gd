@@ -51,6 +51,34 @@ func get_slot(slot_index: int) -> Variant:
 	return _slots[slot_index]
 
 
+## Removes up to [param amount] of [param item_id] across stacked slots. Returns true if anything was removed.
+func remove_item(item_id: StringName, amount: int) -> bool:
+	if amount <= 0:
+		return false
+	if ItemDatabase.get_item_data(item_id) == null:
+		push_warning("Inventory.remove_item: unknown item id '%s'" % String(item_id))
+		return false
+	var remaining: int = amount
+	for i in SLOT_COUNT:
+		if remaining <= 0:
+			break
+		var entry: Variant = _slots[i]
+		if entry == null or not entry is Dictionary:
+			continue
+		if entry.get("id", null) != item_id:
+			continue
+		var cnt: int = int(entry["count"])
+		var take: int = mini(cnt, remaining)
+		cnt -= take
+		remaining -= take
+		if cnt <= 0:
+			_slots[i] = null
+		else:
+			entry["count"] = cnt
+		inventory_changed.emit()
+	return amount > remaining
+
+
 func reset() -> void:
 	_slots.resize(SLOT_COUNT)
 	_slots.fill(null)
