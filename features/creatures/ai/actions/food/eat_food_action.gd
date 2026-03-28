@@ -25,17 +25,6 @@ func tick(creature: Creature, _delta: float) -> State:
 	if not Node2DUtils.is_within_interaction_range(creature, target_food):
 		return State.FAILURE
 
-	if target_food is WorldObject:
-		var world_object: WorldObject = target_food
-		if world_object.object_data != null and world_object.object_data.taming_value > 0 and creature.creature_data.taming_value_threshold > 0:
-			var taming = creature.blackboard.get_value(Blackboard.KEY_TAMING)
-			if taming == null:
-				taming = 0
-			taming = int(taming) + world_object.object_data.taming_value
-			creature.blackboard.set_value(Blackboard.KEY_TAMING, taming)
-			if taming >= creature.creature_data.taming_value_threshold:
-				creature.blackboard.set_value(Blackboard.KEY_TAMED, true)
-
 	target_food.be_eaten(creature)
 
 	if target_food is Creature:
