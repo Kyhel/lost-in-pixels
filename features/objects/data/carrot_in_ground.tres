@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://bh16hdymgbxaw"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_g85o4"]
+[ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/carrot_in_ground.png" id="2_64fi8"]
+
+[resource]
+script = ExtResource("1_g85o4")
+id = &"carrot_in_ground"
+display_name = "Carrot in ground"
+texture = ExtResource("2_64fi8")
+metadata/_custom_type_script = "uid://b12224xo0dkcj"
