@@ -11,6 +11,8 @@ var _ai_elapsed := 0.0
 
 var creature: Creature
 
+var _goal_commit_start_time_sec := 0.0
+
 func _ready():
 	creature = get_parent()
 	# Stagger AI updates so creatures do not all tick on the same frame.
@@ -32,15 +34,40 @@ func update_ai(delta: float):
 
 func _run_ai(delta: float) -> void:
 
-	var new_goal = UtilityAI.choose_goal(creature)
+	var best: Goal = UtilityAI.choose_goal(creature)
+	var now_sec := Time.get_ticks_msec() / 1000.0
+	var should_switch := false
 
-	if new_goal != current_goal:
-		on_goal_changed(current_goal, new_goal)
-		current_goal = new_goal
-		switch_behavior_tree(new_goal.behavior_tree)
+	if best != current_goal:
+		if current_goal == null:
+			should_switch = best != null
+		elif best == null:
+			should_switch = true
+		else:
+			var p_best: int = creature.get_goal_priority(best)
+			var p_cur: int = creature.get_goal_priority(current_goal)
+			var elapsed := now_sec - _goal_commit_start_time_sec
+			should_switch = (p_best > p_cur) or (elapsed >= current_goal.commit_time)
+
+	if should_switch:
+		on_goal_changed(current_goal, best)
+		current_goal = best
+		_goal_commit_start_time_sec = now_sec
+		if best != null:
+			switch_behavior_tree(best.behavior_tree)
+		else:
+			_clear_behavior_tree()
 
 	if current_tree:
 		current_tree.tick(self.get_parent(), delta)
+
+func _clear_behavior_tree() -> void:
+	if current_tree == null:
+		return
+	if current_tree.get_parent() == self:
+		remove_child(current_tree)
+	current_tree = null
+
 
 func switch_behavior_tree(tree_scene: PackedScene):
 	if tree_scene == null:

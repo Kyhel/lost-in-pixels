@@ -12,7 +12,9 @@ script = ExtResource("3_w2fk1")
 id = &"big_wandering"
 display_name = "Big Wandering"
 sprite = ExtResource("4_6v0ai")
-goals = Array[ExtResource("1_6nug8")]([ExtResource("2_llims")])
+goals = Dictionary[ExtResource("1_6nug8"), int]({
+ExtResource("2_llims"): 0,
+})
 size_type = 1
 size = 64
 biomes = Array[int]([2, 1])

@@ -14,7 +14,10 @@ script = ExtResource("2_vncba")
 id = &"ogre"
 display_name = "Ogre"
 sprite = ExtResource("4_l5rue")
-goals = Array[ExtResource("1_r6fma")]([ExtResource("2_g5kge"), ExtResource("3_1vhlf")])
+goals = Dictionary[ExtResource("1_r6fma"), int]({
+ExtResource("2_g5kge"): 0,
+ExtResource("3_1vhlf"): 100,
+})
 sensors = Array[ExtResource("4_5ttwk")]([ExtResource("5_5ttwk")])
 size_type = 1
 size = 40

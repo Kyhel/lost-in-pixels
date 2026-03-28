@@ -17,7 +17,11 @@ script = ExtResource("4_247ax")
 id = &"rabbit"
 display_name = "Rabbit"
 sprite = ExtResource("6_bg2f0")
-goals = Array[ExtResource("1_dp7fp")]([ExtResource("2_dtyic"), ExtResource("3_a2dy0"), ExtResource("4_follow")])
+goals = Dictionary[ExtResource("1_dp7fp"), int]({
+ExtResource("2_dtyic"): 0,
+ExtResource("3_a2dy0"): 50,
+ExtResource("4_follow"): 60,
+})
 sensors = Array[ExtResource("6_a2dy0")]([ExtResource("7_food")])
 size = 12
 hop_multiplier = 0.5

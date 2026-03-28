@@ -14,7 +14,10 @@ script = ExtResource("1_82q1q")
 id = &"unnamed_1"
 display_name = "Unnamed 1"
 sprite = ExtResource("8_82itp")
-goals = Array[ExtResource("3_dh60g")]([ExtResource("4_xj47p"), ExtResource("5_tyi1x")])
+goals = Dictionary[ExtResource("3_dh60g"), int]({
+ExtResource("4_xj47p"): 100,
+ExtResource("5_tyi1x"): 0,
+})
 sensors = Array[ExtResource("6_3elvg")]([ExtResource("7_ypdqt")])
 size = 32
 hitbox_size = 26

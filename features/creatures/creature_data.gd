@@ -21,8 +21,15 @@ enum MovementType {
 @export var id: StringName = ""
 @export var display_name: String = ""
 @export var sprite: Texture2D
-@export var goals: Array[Goal] = []
+## Goal resource -> priority. Only these goals are considered by AI; missing value resolves to 0 in code.
+@export var goals: Dictionary = {}
 @export var sensors: Array[Sensor] = []
+
+
+func get_priority_for_goal(goal: Goal) -> int:
+	if not goals.has(goal):
+		return 0
+	return int(goals[goal])
 @export var size_type: CreatureSize = CreatureSize.SMALL
 @export var can_fly: bool = false
 @export var can_swim: bool = false

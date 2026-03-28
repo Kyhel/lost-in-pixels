@@ -12,7 +12,9 @@ script = ExtResource("3_5ln18")
 id = &"wandering_bird"
 display_name = "Wandering Bird"
 sprite = ExtResource("4_eh5x5")
-goals = Array[ExtResource("1_tfc83")]([ExtResource("2_natbx")])
+goals = Dictionary[ExtResource("1_tfc83"), int]({
+ExtResource("2_natbx"): 10,
+})
 can_fly = true
 size = 24
 base_speed = 80.0

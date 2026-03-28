@@ -17,7 +17,11 @@
 script = ExtResource("2_ovces")
 id = &"fox"
 sprite = ExtResource("3_ovces")
-goals = Array[ExtResource("1_t6a1h")]([ExtResource("2_4xntq"), ExtResource("3_n5fiy"), ExtResource("4_follow")])
+goals = Dictionary[ExtResource("1_t6a1h"), int]({
+ExtResource("2_4xntq"): 0,
+ExtResource("3_n5fiy"): 50,
+ExtResource("4_follow"): 60,
+})
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])
 size = 32
 hitbox_size = 20

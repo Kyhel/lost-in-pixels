@@ -15,7 +15,10 @@
 script = ExtResource("2_yyua3")
 id = &"beaver"
 sprite = ExtResource("4_27jme")
-goals = Array[ExtResource("1_56npc")]([ExtResource("2_27jme"), ExtResource("2_eat")])
+goals = Dictionary[ExtResource("1_56npc"), int]({
+ExtResource("2_27jme"): 0,
+ExtResource("2_eat"): 50,
+})
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 can_swim = true
 size = 30

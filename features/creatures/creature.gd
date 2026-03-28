@@ -17,7 +17,6 @@ var alpha_mask_scene := preload("res://scenes/alpha.tscn")
 var health: int
 var is_big: bool
 var blackboard: Blackboard  ## Shared memory for sensors and behaviors (e.g. found_food).
-var goals : Array[Goal] = []
 var sensors_node : SensorsRoot
 var ai_root : AIRoot
 var movement : MovementComponent
@@ -66,8 +65,6 @@ func _ready() -> void:
 			alpha_mask.node = self
 			mask_world.add_child(alpha_mask)
 
-		for goal in creature_data.goals:
-			goals.append(goal)
 		if creature_data.taming_value_threshold > 0:
 			blackboard.set_value(Blackboard.KEY_TAMING, 0)
 			blackboard.set_value(Blackboard.KEY_TAMED, false)
@@ -105,8 +102,9 @@ func _physics_process(delta: float) -> void:
 
 	sensors_node.update_sensors(delta, creature_data.sensors)
 
-	for goal in goals:
-		goal.update(self, delta)
+	if creature_data != null:
+		for goal in creature_data.goals:
+			goal.update(self, delta)
 
 	ai_root.update_ai(delta)
 
@@ -187,6 +185,12 @@ func _update_taming(delta: float) -> void:
 		taming = 0.0
 	taming = maxf(0.0, taming - creature_data.taming_decay_rate * delta)
 	blackboard.set_value(Blackboard.KEY_TAMING, taming)
+
+func get_goal_priority(goal: Goal) -> int:
+	if creature_data == null or goal == null:
+		return 0
+	return creature_data.get_priority_for_goal(goal)
+
 
 ## Approximate this creature's collision "radius" based on its configured hitbox size.
 ## Used by AI contact/approach logic (e.g. stop when the creature is close enough).
