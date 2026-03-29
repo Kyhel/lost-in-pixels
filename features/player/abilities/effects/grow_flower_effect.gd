@@ -22,7 +22,7 @@ func execute(player: Player) -> bool:
 	if not replaced:
 		spawn_data.behaviors.append(taming_behavior)
 	var forward := Vector2.from_angle(player.sprite.rotation - TAU / 4.0)
-	var distance := Player.PICKUP_RADIUS + ChunkManager.TILE_SIZE
+	var distance := Player.PICKUP_RADIUS
 	var spawn_pos := player.global_position + forward * distance
 	if ObjectsManager.is_object_spawn_blocked(spawn_pos, spawn_data):
 		return false
