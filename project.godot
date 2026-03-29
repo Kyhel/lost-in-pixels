@@ -21,7 +21,6 @@ GameSession="*uid://g7ses8n2k4m1p"
 SaveGame="*uid://s4veg8m3p1x9q"
 ChunkManager="*uid://dqrsinwnx82bn"
 ObjectsManager="*uid://dp4jmd73t0oak"
-VegetationDatabase="*res://features/world/vegetation_database.gd"
 VegetationManager="*res://systems/vegetation_manager.gd"
 ConfigManager="*uid://de4qv4t7ch7cr"
 GameLog="*res://systems/game_log.gd"
@@ -36,6 +35,7 @@ ObjectInteractionSystem="*uid://dx3jfksyhhymp"
 TamingSystem="*res://systems/creatures/taming_system.gd"
 PlayerInputManager="*res://systems/player_input_manager.gd"
 PlayerCreatureInteractionSystem="*res://systems/player_creature_interaction_system.gd"
+VegetationDatabase="*res://features/world/vegetation_database.gd"
 
 [display]
 

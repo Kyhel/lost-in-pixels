@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TreeFeature" format=3 uid="uid://e5713qx52vb1"]
+
+[ext_resource type="Script" uid="uid://b3n4m5k8q2w7p" path="res://features/objects/data/trees/tree_feature.gd" id="1_tree_feature"]
+[ext_resource type="Texture2D" uid="uid://c5c7ueiavty4n" path="res://assets/nature/tree_foliage_2.png" id="2_foliage"]
+
+[resource]
+script = ExtResource("1_tree_feature")
+foliage_radius = 32.0
+trunk_radius = 4.0
+foliage_texture = ExtResource("2_foliage")

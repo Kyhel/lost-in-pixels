@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TreeFeature" format=3 uid="uid://c8k2m4n6p8q1r"]
+
+[ext_resource type="Script" uid="uid://b3n4m5k8q2w7p" path="res://features/objects/data/trees/tree_feature.gd" id="1_tree_feature"]
+[ext_resource type="Texture2D" uid="uid://mg1udp0cxmj" path="res://assets/nature/tree_foliage_1.png" id="2_foliage"]
+
+[resource]
+script = ExtResource("1_tree_feature")
+foliage_texture = ExtResource("2_foliage")

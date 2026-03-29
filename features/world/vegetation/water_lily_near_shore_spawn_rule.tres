@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="WaterNearShoreVegetationSpawnRule" format=3 uid="uid://cyqlsbiaj6pga"]
 
-[ext_resource type="Script" uid="uid://h2j4k6m8n0p2q" path="res://features/world/nature/spawn_rules/water_near_shore_vegetation_spawn_rule.gd" id="1_shore"]
+[ext_resource type="Script" path="res://features/world/nature/spawn_rules/water_near_shore_vegetation_spawn_rule.gd" id="1_shore"]
 
 [resource]
 script = ExtResource("1_shore")
-max_shore_distance = 3

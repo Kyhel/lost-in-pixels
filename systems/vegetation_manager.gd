@@ -7,8 +7,9 @@ const WATER_LILY_ID := &"water_lily"
 
 var occlusion_mask_viewport: SubViewport
 
-var tree_1_scene := preload("res://features/world/nature/trees/tree_1.tscn")
-var tree_2_scene := preload("res://features/world/nature/trees/tree_2.tscn")
+var tree_scene := preload("res://features/objects/data/trees/tree.tscn")
+var tree_1_feature := preload("res://features/objects/data/trees/tree_1_feature.tres")
+var tree_2_feature := preload("res://features/objects/data/trees/tree_2_feature.tres")
 
 func refresh_scene_references() -> void:
 	var scene := get_tree().current_scene
@@ -28,7 +29,8 @@ func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> v
 	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
 		refresh_scene_references()
 
-	var tree := spawn_vegetation(tile_position, get_tree_scene(tree_type))
+	var tree_features: Array[Resource] = [get_tree_feature(tree_type)]
+	var tree := spawn_vegetation(tile_position, tree_scene, tree_features)
 	if tree == null:
 		return
 	var foliage_material = tree.get_node("Foliage").material
@@ -38,17 +40,21 @@ func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> v
 		push_warning("VegetationManager: AlphaMaskViewport missing; tree spawned without mask.")
 
 
-func get_tree_scene(tree_type: TreeGenerator.TreeType) -> PackedScene:
+func get_tree_feature(tree_type: TreeGenerator.TreeType) -> Resource:
 	match tree_type:
 		TreeGenerator.TreeType.TREE_1:
-			return tree_1_scene
+			return tree_1_feature
 		TreeGenerator.TreeType.TREE_2:
-			return tree_2_scene
+			return tree_2_feature
 		_:
-			return tree_1_scene
+			return tree_1_feature
 
 
-func spawn_vegetation(world_tile: Vector2i, vegetation_scene: PackedScene) -> Vegetation:
+func spawn_vegetation(
+	world_tile: Vector2i,
+	vegetation_scene: PackedScene,
+	features: Array[Resource] = [],
+) -> Vegetation:
 	var resolved_chunk: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(resolved_chunk)
 	if chunk_node == null:
@@ -57,7 +63,11 @@ func spawn_vegetation(world_tile: Vector2i, vegetation_scene: PackedScene) -> Ve
 	if target_container == null:
 		return null
 
-	var vegetation: Node2D = vegetation_scene.instantiate() as Node2D
+	var vegetation: Vegetation = vegetation_scene.instantiate() as Vegetation
+	if vegetation == null:
+		return null
+	if not features.is_empty():
+		vegetation.features = features
 	vegetation.set("chunk_coords", resolved_chunk)
 	vegetation.set("world_tile", world_tile)
 	target_container.add_child(vegetation)

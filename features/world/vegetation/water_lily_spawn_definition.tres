@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://f5g7h9i1k3m5n7"]
+[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://dde36m5qbci07"]
 
 [ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world/nature/spawn_rules/vegetation_spawn_definition.gd" id="1_def"]
 [ext_resource type="PackedScene" uid="uid://cwv6lfvkmnxtg" path="res://features/world/nature/water_lily.tscn" id="2_scene"]
 [ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_static"]
-[ext_resource type="Resource" uid="uid://c3w5h7u9t1s3v5" path="res://features/world/vegetation/water_lily_tile_spawn_rule.tres" id="4_rule"]
-[ext_resource type="Resource" uid="uid://i3k5l7m9n1q3r5" path="res://features/world/vegetation/water_lily_near_shore_spawn_rule.tres" id="5_shore"]
+[ext_resource type="Resource" uid="uid://bxqhhbjwq7x1" path="res://features/world/vegetation/water_lily_tile_spawn_rule.tres" id="4_rule"]
+[ext_resource type="Resource" uid="uid://cyqlsbiaj6pga" path="res://features/world/vegetation/water_lily_near_shore_spawn_rule.tres" id="5_shore"]
 
 [resource]
 script = ExtResource("1_def")

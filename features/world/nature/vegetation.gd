@@ -9,6 +9,8 @@ enum VegetationKind {
 
 @export var vegetation_kind: VegetationKind = VegetationKind.TREE
 
+@export var features: Array[Resource] = []
+
 ## World-space radius of the primary [CollisionShape2D] under the first [StaticBody2D] (circle, after scale).
 var hitbox_radius: float = 0.0
 ## World-space center of that collision shape (for overlap tests).
@@ -16,6 +18,10 @@ var hitbox_center_world: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
+	for f in features:
+		if f != null and f.has_method("apply"):
+			f.apply(self)
+
 	var body: StaticBody2D = _find_first_static_body(self)
 	if body == null:
 		push_warning("Vegetation: no StaticBody2D found under %s" % str(get_path()))

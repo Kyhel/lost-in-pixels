@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="VegetationDatabaseConfig" format=3 uid="uid://dlrbl5wh8jn8d"]
 
-[ext_resource type="Script" uid="uid://v8q2n4m6p8k1x0" path="res://features/world/vegetation_database_config.gd" id="1_cfg"]
-[ext_resource type="Script" uid="uid://bwm3k7n9p2q5r8" path="res://features/world/vegetation_data.gd" id="2_vd"]
-[ext_resource type="Resource" uid="uid://c8d1e3f5g7h9j1" path="res://features/world/vegetation/berry_bush_vegetation_data.tres" id="3_berry"]
-[ext_resource type="Resource" uid="uid://k2l4m6n8o0p2q4" path="res://features/world/vegetation/water_lily_vegetation_data.tres" id="4_lily"]
+[ext_resource type="Script" uid="uid://btcpaqr38j4pf" path="res://features/world/vegetation_database_config.gd" id="1_cfg"]
+[ext_resource type="Script" path="res://features/world/vegetation_data.gd" id="2_vd"]
+[ext_resource type="Resource" uid="uid://vfrqx8wi8it5" path="res://features/world/vegetation/berry_bush_vegetation_data.tres" id="3_berry"]
+[ext_resource type="Resource" uid="uid://gdx5bwrdiwrh" path="res://features/world/vegetation/water_lily_vegetation_data.tres" id="4_lily"]
 
 [resource]
 script = ExtResource("1_cfg")
