@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://0x6ua5yre7y1"]
 
-[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_56npc"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_27jme"]
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="2_eat"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_s30fk"]
@@ -10,15 +9,17 @@
 [ext_resource type="Texture2D" uid="uid://biu286a1d7wjw" path="res://assets/creatures/beaver.png" id="4_27jme"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="4_djyqf"]
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="5_food"]
+[ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="7_3fdru"]
+[ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="8_0t3oh"]
 
 [resource]
 script = ExtResource("2_yyua3")
 id = &"beaver"
 sprite = ExtResource("4_27jme")
-goals = Dictionary[ExtResource("1_56npc"), int]({
+goals = {
 ExtResource("2_27jme"): 0,
-ExtResource("2_eat"): 50,
-})
+ExtResource("2_eat"): 50
+}
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 can_swim = true
 size = 30

@@ -8,16 +8,6 @@ enum CreatureSize {
 	BIG     ## Layer 5 "Big creatures" - collides with terrain and other big creatures only.
 }
 
-enum MovementType {
-	DEFAULT,  ## Legacy/default movement strategy (same as walk speed, used for "first available" fallback).
-	HOP,
-	FLY,
-	SNEAK,
-	WALK,
-	RUN,
-	SPRINT,
-}
-
 @export var id: StringName = ""
 @export var display_name: String = ""
 @export var sprite: Texture2D
@@ -44,7 +34,10 @@ func get_priority_for_goal(goal: Goal) -> int:
 @export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
 ## If non-empty, wander destination tiles must be one of these and not in [member excluded_tile_types]. If empty, only exclusions apply.
 @export var allowed_wander_tiles: Array[WorldGenerator.TileType] = []
-@export var movement_types: Array[MovementType] = [MovementType.RUN]
+## Per-context scoring; first profile is used when no entry matches [member MovementRequest.context].
+@export var movement_profiles: Array[MovementProfile] = [
+	preload("res://features/creatures/movement/profiles/defaults/default_movement_profile.tres")
+]
 @export var needs_eating: bool = false
 ## Item types this species can eat; used by [FoodSensor] when [member needs_eating] is true.
 @export var edible_objects: Array[ObjectData] = []

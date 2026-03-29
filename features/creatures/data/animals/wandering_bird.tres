@@ -19,4 +19,3 @@ can_fly = true
 size = 24
 base_speed = 80.0
 biomes = Array[int]([1, 2, 3])
-movement_types = Array[int]([2])

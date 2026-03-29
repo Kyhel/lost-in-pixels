@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://3x8jvdyeafyk"]
 
-[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_6nug8"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_g5083"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_llims"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="3_w2fk1"]
 [ext_resource type="Texture2D" uid="uid://dyh4mefaigyld" path="res://assets/Monster_1.png" id="4_6v0ai"]
+[ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="4_g5083"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="5_nde7l"]
 
 [resource]
@@ -12,9 +12,9 @@ script = ExtResource("3_w2fk1")
 id = &"big_wandering"
 display_name = "Big Wandering"
 sprite = ExtResource("4_6v0ai")
-goals = Dictionary[ExtResource("1_6nug8"), int]({
-ExtResource("2_llims"): 0,
-})
+goals = {
+ExtResource("2_llims"): 0
+}
 size_type = 1
 size = 64
 biomes = Array[int]([2, 1])

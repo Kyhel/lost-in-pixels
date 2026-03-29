@@ -1,7 +1,7 @@
 class_name MovementProfileEntry
 extends Resource
 
-@export var movement_type : CreatureData.MovementType  # "walk", "run", "hop"
+@export var strategy: MovementStrategy
 
 @export var urgency_weight : float = 0.0
 @export var energy_weight : float = 0.0

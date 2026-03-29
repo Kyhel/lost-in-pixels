@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://06r8vifs4yfn"]
+
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_jmif1"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_rn8le"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="3_xhyr3"]
+[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="4_cfgnk"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="5_bpx73"]
+[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="6_awlgr"]
+[ext_resource type="Resource" uid="uid://c8fpl1yr5xkqn" path="res://features/creatures/ai/goals/follow_player_goal.tres" id="7_ymy6f"]
+[ext_resource type="Resource" uid="uid://c5atrmanpf2rn" path="res://features/creatures/ai/goals/flee_goal.tres" id="8_16ulj"]
+[ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="9_7x0m5"]
+[ext_resource type="Resource" uid="uid://bn05rm1fe32lv" path="res://features/creatures/data/animals/rabbit/rabbit_movement_profile.tres" id="10_fm44f"]
+[ext_resource type="Resource" uid="uid://cwv84b8qgyyb5" path="res://features/creatures/movement/profiles/eat/eat_profile.tres" id="11_jl4ha"]
+[ext_resource type="Resource" uid="uid://o4wxqh5xlx6t" path="res://features/creatures/movement/profiles/follow/follow_profile.tres" id="12_pqtku"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="13_iambh"]
+[ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="14_anvgs"]
+[ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/rabbit.png" id="15_w504m"]
+
+[resource]
+script = ExtResource("1_jmif1")
+id = &"rabbit"
+display_name = "Rabbit"
+sprite = ExtResource("15_w504m")
+goals = {
+ExtResource("5_bpx73"): 0,
+ExtResource("6_awlgr"): 50,
+ExtResource("7_ymy6f"): 60,
+ExtResource("8_16ulj"): 70
+}
+sensors = Array[ExtResource("13_iambh")]([ExtResource("14_anvgs")])
+size = 12
+hop_multiplier = 0.5
+movement_profiles = Array[ExtResource("9_7x0m5")]([ExtResource("10_fm44f"), ExtResource("11_jl4ha"), ExtResource("12_pqtku")])
+needs_eating = true
+edible_objects = Array[ExtResource("2_rn8le")]([ExtResource("3_xhyr3"), ExtResource("4_cfgnk")])
+hunger_decay_rate = 1.0
+taming_value_threshold = 20
+fear_buildup_rate = 100.0
+fear_decay_rate = 25.0
+fear_player_distance = 120.0
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"

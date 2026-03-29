@@ -1,8 +1,9 @@
 [gd_resource type="Resource" script_class="MovementProfileEntry" format=3 uid="uid://gmgtx2mlhr5k"]
 
 [ext_resource type="Script" uid="uid://bkowl4x2p0qwd" path="res://features/creatures/movement/movement_profile_entry.gd" id="1_iv4hh"]
+[ext_resource type="Resource" uid="uid://dxsi4r6nsffk5" path="res://features/creatures/movement/strategies/run_movement_strategy.tres" id="2_default"]
 
 [resource]
 script = ExtResource("1_iv4hh")
-movement_type = 4
+strategy = ExtResource("2_default")
 metadata/_custom_type_script = "uid://bkowl4x2p0qwd"

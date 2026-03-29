@@ -43,7 +43,9 @@ func tick(creature: Creature, _delta: float) -> State:
 			return State.RUNNING
 
 		target_position = picked
-		creature.movement.request_movement(MovementRequest.to_world_position(target_position, 0.0))
+		var flee_request := MovementRequest.to_world_position(target_position, 1.0)
+		flee_request.urgency = 1.0
+		creature.movement.request_movement(flee_request)
 
 	if creature.global_position.distance_to(target_position) < 15:
 

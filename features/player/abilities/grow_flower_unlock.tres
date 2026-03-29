@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityUnlockRule" format=3]
 
 [ext_resource type="Script" uid="uid://dav8up2rpo0xp" path="res://features/player/abilities/ability_unlock_rule.gd" id="1_unlock"]
-[ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit.tres" id="2_rabbit"]
+[ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit/rabbit.tres" id="2_rabbit"]
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="3_flower"]
 
 [resource]

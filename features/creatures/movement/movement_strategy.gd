@@ -3,8 +3,6 @@ extends Resource
 
 const NO_MOVEMENT_DIRECTION_THRESHOLD: float = PI / 2
 
-@export var movement_type: CreatureData.MovementType = CreatureData.MovementType.DEFAULT
-
 var separation_multiplier: float = 2
 var separation_force: float = 100.0
 
