@@ -7,8 +7,6 @@ enum PassType {
 	DECORATION,
 }
 
-@export var id: StringName
-
 @export var scene: PackedScene
 
 @export var density: float  # probability per tile

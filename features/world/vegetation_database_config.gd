@@ -1,4 +1,4 @@
 class_name VegetationDatabaseConfig
 extends Resource
 
-@export var vegetation: Array[VegetationSpawnDefinition] = []
+@export var vegetation: Array[VegetationData] = []

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="VegetationData" format=3 uid="uid://gdx5bwrdiwrh"]
+
+[ext_resource type="Script" uid="uid://bwm3k7n9p2q5r8" path="res://features/world/vegetation_data.gd" id="1_vd"]
+[ext_resource type="Resource" uid="uid://f5g7h9i1k3m5n7" path="res://features/world/vegetation/water_lily_spawn_definition.tres" id="2_def"]
+
+[resource]
+script = ExtResource("1_vd")
+id = &"water_lily"
+vegetation_spawn_definition = ExtResource("2_def")

@@ -8,7 +8,6 @@
 
 [resource]
 script = ExtResource("1_def")
-id = &"water_lily"
 scene = ExtResource("2_scene")
 pass_type = 1
 static_spawn_rules = Array[ExtResource("3_static")]([ExtResource("4_rule"), ExtResource("5_shore")])
