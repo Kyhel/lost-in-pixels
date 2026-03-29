@@ -8,5 +8,6 @@
 [resource]
 script = ExtResource("1_def")
 scene = ExtResource("2_scene")
+density = 0.001
 pass_type = 1
 static_spawn_rules = Array[ExtResource("3_static")]([ExtResource("4_rule")])

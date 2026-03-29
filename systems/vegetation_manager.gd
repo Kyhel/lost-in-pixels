@@ -1,6 +1,5 @@
 extends Node
 
-const MAX_SMALL_VEGETATION_PICKS := 10
 const MIN_PICKED_TILE_CHEBYSHEV := 3
 const BERRY_BUSH_ID := &"berry_bush"
 const WATER_LILY_ID := &"water_lily"
@@ -113,6 +112,8 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			for def in active_defs:
 				if not _definition_passes_static_rules(def, local_tile, chunk):
 					continue
+				if not _definition_passes_density(def, world_tile, chunk_coords):
+					continue
 				valid.append(def)
 			if not valid.is_empty():
 				tile_to_defs[world_tile] = valid
@@ -130,8 +131,6 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 
 	var picked: Array[Vector2i] = []
 	for t: Vector2i in candidates:
-		if picked.size() >= MAX_SMALL_VEGETATION_PICKS:
-			break
 		if _conflicts_with_picked(t, picked, MIN_PICKED_TILE_CHEBYSHEV):
 			continue
 		picked.append(t)
@@ -176,6 +175,26 @@ func _definition_passes_static_rules(
 		if not rule.is_valid(local_tile, chunk):
 			return false
 	return true
+
+
+func _definition_passes_density(
+	def: VegetationSpawnDefinition,
+	world_tile: Vector2i,
+	chunk_coords: Vector2i
+) -> bool:
+	var d: float = clampf(def.density, 0.0, 1.0)
+	if d <= 0.0:
+		return false
+	var salt: int
+	var path: String = def.resource_path
+	if path.is_empty():
+		salt = hash(def.scene.resource_path) if def.scene else 0
+	else:
+		salt = hash(path)
+	var h: int = ChunkManager.get_chunk_seed(chunk_coords.x, chunk_coords.y) ^ hash(world_tile) ^ salt
+	var roll_rng := RandomNumberGenerator.new()
+	roll_rng.seed = h
+	return roll_rng.randf() < d
 
 
 func _chebyshev_tile(a: Vector2i, b: Vector2i) -> int:
