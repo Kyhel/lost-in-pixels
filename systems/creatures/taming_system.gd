@@ -1,13 +1,6 @@
 extends Node
 
 
-func _taming_value_from_behaviors(od: ObjectData) -> int:
-	for b in od.behaviors:
-		if b is TamingBehavior:
-			return (b as TamingBehavior).taming_value
-	return 0
-
-
 func _ready() -> void:
 	EventManager.object_eaten.connect(_on_object_eaten)
 
@@ -21,7 +14,7 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	if world_object == null or world_object.object_data == null:
 		return
 	var od: ObjectData = world_object.object_data
-	var taming_add: int = _taming_value_from_behaviors(od)
+	var taming_add: int = TamingBehavior.get_taming_value(od)
 	if taming_add <= 0:
 		return
 

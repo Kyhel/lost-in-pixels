@@ -183,13 +183,6 @@ func _spawn_carrot() -> void:
 	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(&"carrot"), spawn_pos)
 
 
-func _player_food_value_from_behaviors(od: ObjectData) -> int:
-	for b in od.behaviors:
-		if b is PlayerEatableBehavior:
-			return (b as PlayerEatableBehavior).player_food_value
-	return 0
-
-
 func try_pickup_in_front() -> void:
 	var forward := Vector2.UP.rotated(sprite.rotation)
 	if forward.is_zero_approx():
@@ -197,7 +190,7 @@ func try_pickup_in_front() -> void:
 	var cos_threshold: float = cos(PICKUP_CONE_HALF_ANGLE)
 	var scored: Array[Dictionary] = []
 	for wo in ObjectsManager.get_nearby_world_objects(global_position, FRONT_PICKUP_RADIUS):
-		if wo.object_data == null or not wo.object_data.can_pickup:
+		if not PickableBehavior.has_behavior(wo):
 			continue
 		var to_wo: Vector2 = wo.global_position - global_position
 		var dist_sq: float = to_wo.length_squared()
@@ -215,7 +208,7 @@ func try_pickup_in_front() -> void:
 		var it: WorldObject = entry["world_object"] as WorldObject
 		if not is_instance_valid(it) or it.object_data == null:
 			continue
-		var food_val: float = float(_player_food_value_from_behaviors(it.object_data))
+		var food_val: float = float(PlayerEatableBehavior.get_food_value(it.object_data))
 		if food_val > 0.0 and it.object_data in edible_objects:
 			# Current interact behavior: choose Eat only when it would not overfill hunger.
 			if hunger + food_val <= max_hunger or health < max_health:

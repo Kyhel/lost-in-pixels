@@ -5,11 +5,8 @@ func do_pickup(by: Node, world_object: WorldObject) -> bool:
 
 	if world_object == null or by == null:
 		return false
-	if world_object.object_data == null:
-		return false
-	if not world_object.object_data.can_pickup:
-		return false
-	if not world_object.can_be_picked_up(by):
+
+	if not PickableBehavior.has_behavior(world_object):
 		return false
 
 	EventManager.object_picked_up.emit(by, world_object)
@@ -29,7 +26,10 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 
 	# Player eating: only succeeds when it won't overfill hunger.
 	if by is Player:
-		_apply_player_eat_food(by as Player, float(_player_food_value(world_object.object_data)))
+		_apply_player_eat_food(
+			by as Player,
+			float(PlayerEatableBehavior.get_food_value(world_object.object_data))
+		)
 		world_object.destroy("eaten")
 		return true
 
@@ -42,13 +42,6 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 		return true
 
 	return false
-
-
-func _player_food_value(od: ObjectData) -> int:
-	for b in od.behaviors:
-		if b is PlayerEatableBehavior:
-			return (b as PlayerEatableBehavior).player_food_value
-	return 0
 
 
 func _apply_player_eat_food(player: Player, amount: float) -> void:

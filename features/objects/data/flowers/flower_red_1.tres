@@ -21,7 +21,6 @@ script = ExtResource("1_k32ns")
 id = &"flower_red_1"
 display_name = "Red Flower 1"
 texture = ExtResource("3_voq16")
-can_pickup = true
 spawn_definition = ExtResource("2_66toi")
 behaviors = Array[ExtResource("5_wob")]([SubResource("Resource_pkb"), SubResource("Resource_peb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

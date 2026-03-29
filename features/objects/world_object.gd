@@ -24,9 +24,6 @@ func _ready() -> void:
 			cs.scale = Vector2.ONE * (object_data.hitbox_radius / base_r)
 	z_index = Constants.Z_INDEX_OBJECTS
 
-func can_be_picked_up(_by: Node) -> bool:
-	return true
-
 func be_eaten(by: Creature) -> void:
 	ObjectInteractionSystem.do_eat(by, self)
 

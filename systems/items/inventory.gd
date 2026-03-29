@@ -18,13 +18,7 @@ func _on_object_picked_up(actor: Node, world_object: WorldObject) -> void:
 		return
 	if not actor.is_in_group("player"):
 		return
-	var item: ItemData = null
-	for b in world_object.object_data.behaviors:
-		if b is PickableBehavior:
-			var pickable := b as PickableBehavior
-			if pickable.item != null:
-				item = pickable.item
-				break
+	var item: ItemData = PickableBehavior.get_pickup_item(world_object.object_data)
 	if item == null:
 		return
 	add_item(item.id, 1)
