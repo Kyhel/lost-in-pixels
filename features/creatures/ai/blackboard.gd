@@ -13,6 +13,9 @@ const KEY_AGGRESSIVENESS := "aggressiveness"
 ## When true, aggressiveness does not build up; cleared only when aggressiveness reaches 0.
 const KEY_AGGRESSIVENESS_RECOVERING := "aggressiveness_recovering"
 const KEY_CHASING_STATE := "chasing_state"
+const KEY_FEAR := "fear"
+## Fear at or above this value triggers flee goal scoring.
+const KEY_FEAR_FLEE_THRESHOLD := 80
 
 const KEY_HUNGER_MAX := 100
 

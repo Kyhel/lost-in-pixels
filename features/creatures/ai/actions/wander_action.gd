@@ -16,9 +16,7 @@ func tick(creature: Creature, _delta: float) -> State:
 
 		for _i in WANDER_PICK_ATTEMPTS:
 			picked = pick_wander_point(creature)
-			if not _candidate_passes_wander_filters(creature, picked):
-				continue
-			if not validate_target_position(creature, picked):
+			if not CreatureUtils.is_valid_wander_destination(creature, picked):
 				continue
 			found = true
 			break
@@ -37,22 +35,6 @@ func tick(creature: Creature, _delta: float) -> State:
 		return State.SUCCESS
 
 	return State.RUNNING
-
-func _candidate_passes_wander_filters(creature: Creature, world_pos: Vector2) -> bool:
-	var data := creature.creature_data
-	if data == null:
-		return true
-	var tile_type: WorldGenerator.TileType = ChunkManager.get_tile_type_at_world_pos(world_pos)
-	if data.excluded_tile_types.has(tile_type):
-		return false
-	if not data.allowed_wander_tiles.is_empty() and not data.allowed_wander_tiles.has(tile_type):
-		return false
-	return true
-
-func validate_target_position(creature: Creature, _target_position: Vector2) -> bool:
-	return ChunkManager.is_area_walkable_for_creature(
-			creature, _target_position, creature.creature_data.hitbox_size
-		) and not ChunkManager.is_environment_blocking_creature(creature, _target_position)
 
 func pick_wander_point(creature: Creature) -> Vector2:
 

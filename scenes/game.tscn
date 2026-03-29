@@ -223,6 +223,8 @@ layout_mode = 2
 bbcode_enabled = true
 scroll_following = true
 
+[node name="CreatureInteractionMenu" parent="." unique_id=999000001 instance=ExtResource("creature_menu")]
+
 [node name="PauseMenuRoot" type="CanvasLayer" parent="." unique_id=1776983684]
 layer = 50
 script = ExtResource("14_pause")

@@ -20,6 +20,7 @@ var blackboard: Blackboard  ## Shared memory for sensors and behaviors (e.g. fou
 var sensors_node : SensorsRoot
 var ai_root : AIRoot
 var movement : MovementComponent
+var fear_component: FearComponent
 var alpha_mask: Node2D
 
 var virtual_rotation: float = 0
@@ -50,6 +51,7 @@ func _ready() -> void:
 	ai_root = get_node("AI")
 	movement = get_node("Movement")
 	blackboard = Blackboard.new()
+	fear_component = FearComponent.new()
 	if debug_root != null:
 		debug_speed_line = debug_root.get_node_or_null("SpeedLine")
 		debug_separation_line = debug_root.get_node_or_null("SeparationLine")
@@ -101,6 +103,8 @@ func _physics_process(delta: float) -> void:
 	debug_final_velocity = Vector2.ZERO
 
 	sensors_node.update_sensors(delta, creature_data.sensors)
+
+	fear_component.update(self, delta)
 
 	if creature_data != null:
 		for goal in creature_data.goals:

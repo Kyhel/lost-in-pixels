@@ -59,3 +59,9 @@ func get_priority_for_goal(goal: Goal) -> int:
 ## Per second toward 100 while the player is seen; 0 = attack as soon as the player is visible (no meter).
 @export var aggressiveness_buildup_rate: float = 0.0
 @export var aggressiveness_decay_rate: float = 10.0
+## Per second toward 100 while the player is within [member fear_player_distance]; 0 disables buildup.
+@export var fear_buildup_rate: float = 0.0
+## Per second toward 0 while the player is outside [member fear_player_distance] (or when the player is missing).
+@export var fear_decay_rate: float = 10.0
+## World distance from player; within this radius fear builds up. 0 disables fear updates for this species.
+@export var fear_player_distance: float = 0.0
