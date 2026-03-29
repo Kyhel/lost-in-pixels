@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://f5g7h9i1k3m5n7"]
+
+[ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world/nature/spawn_rules/vegetation_spawn_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" uid="uid://cwv6lfvkmnxtg" path="res://features/world/nature/water_lily.tscn" id="2_scene"]
+[ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_static"]
+[ext_resource type="Resource" uid="uid://c3w5h7u9t1s3v5" path="res://features/world/vegetation/water_lily_tile_spawn_rule.tres" id="4_rule"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"water_lily"
+scene = ExtResource("2_scene")
+pass_type = 1
+static_spawn_rules = Array[ExtResource("3_static")]([ExtResource("4_rule")])

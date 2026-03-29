@@ -15,8 +15,6 @@ var loaded_chunks: Dictionary[Vector2i, Node] = {}
 var chunk_scene = preload("res://features/world/chunk.tscn")
 var world_generator: WorldGenerator
 var tree_generator: TreeGenerator
-var berry_bush_generator: Variant
-var water_lily_generator: Variant
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
 
@@ -29,8 +27,6 @@ func _apply_world_seed(p_seed: int) -> void:
 	world_generator.setup_seed(p_seed)
 	var wseed: int = world_generator.terrain_noise.seed
 	tree_generator = TreeGenerator.new(wseed)
-	berry_bush_generator = BerryBushGenerator.new(wseed)
-	water_lily_generator = WaterLilyGenerator.new(wseed)
 
 
 func set_world_seed(p_seed: int) -> void:
@@ -155,13 +151,8 @@ func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> voi
 			chunk,
 			CHUNK_SIZE)
 
-	if ConfigManager.config.spawn_bushes:
-		berry_bush_generator.generate_for_chunk(
-			Vector2i(chunk_x, chunk_y), chunk)
-
-	if ConfigManager.config.spawn_water_lilies:
-		water_lily_generator.generate_for_chunk(
-			Vector2i(chunk_x, chunk_y), chunk)
+	if ConfigManager.config.spawn_bushes or ConfigManager.config.spawn_water_lilies:
+		VegetationManager.spawn_small_vegetation(Vector2i(chunk_x, chunk_y), chunk)
 
 	chunk.vegetation_generated = true
 

@@ -1,11 +1,14 @@
 extends Node
 
+const MAX_SMALL_VEGETATION_PICKS := 10
+const MIN_PICKED_TILE_CHEBYSHEV := 3
+const BERRY_BUSH_ID := &"berry_bush"
+const WATER_LILY_ID := &"water_lily"
+
 var occlusion_mask_viewport: SubViewport
 
 var tree_1_scene := preload("res://features/world/nature/trees/tree_1.tscn")
 var tree_2_scene := preload("res://features/world/nature/trees/tree_2.tscn")
-var berry_bush_scene := preload("res://features/world/nature/berry_bush.tscn")
-var water_lily_scene := preload("res://features/world/nature/water_lily.tscn")
 
 func refresh_scene_references() -> void:
 	var scene := get_tree().current_scene
@@ -66,11 +69,122 @@ func spawn_vegetation(world_tile: Vector2i, vegetation_scene: PackedScene) -> Ve
 
 
 func spawn_berry_bush(world_tile: Vector2i) -> void:
-	spawn_vegetation(world_tile, berry_bush_scene)
+	var def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
+	if def == null or def.scene == null:
+		return
+	spawn_vegetation(world_tile, def.scene)
 
 
 func spawn_water_lily(world_tile: Vector2i) -> void:
-	spawn_vegetation(world_tile, water_lily_scene)
+	var def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
+	if def == null or def.scene == null:
+		return
+	spawn_vegetation(world_tile, def.scene)
+
+
+func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
+	var active_defs: Array[VegetationSpawnDefinition] = _build_active_small_vegetation_definitions()
+	if active_defs.is_empty():
+		return
+
+	var tile_to_defs: Dictionary = {}
+	var chunk_size: int = ChunkManager.CHUNK_SIZE
+
+	for local_x in range(chunk_size):
+		for local_y in range(chunk_size):
+			var local_tile: Vector2i = Vector2i(local_x, local_y)
+			var world_tile: Vector2i = Vector2i(
+				chunk_coords.x * chunk_size + local_x,
+				chunk_coords.y * chunk_size + local_y
+			)
+			if is_environment_tile_occupied(world_tile):
+				continue
+			var valid: Array[VegetationSpawnDefinition] = []
+			for def in active_defs:
+				if not _definition_passes_static_rules(def, local_tile, chunk):
+					continue
+				valid.append(def)
+			if not valid.is_empty():
+				tile_to_defs[world_tile] = valid
+
+	if tile_to_defs.is_empty():
+		return
+
+	var candidates: Array[Vector2i] = []
+	for k in tile_to_defs.keys():
+		candidates.append(k as Vector2i)
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = ChunkManager.get_chunk_seed(chunk_coords.x, chunk_coords.y)
+	_shuffle_vec2i_with_rng(candidates, rng)
+
+	var picked: Array[Vector2i] = []
+	for t: Vector2i in candidates:
+		if picked.size() >= MAX_SMALL_VEGETATION_PICKS:
+			break
+		if _conflicts_with_picked(t, picked, MIN_PICKED_TILE_CHEBYSHEV):
+			continue
+		picked.append(t)
+
+	for world_tile: Vector2i in picked:
+		var defs: Variant = tile_to_defs.get(world_tile, null)
+		if defs == null:
+			continue
+		var def_list: Array = defs as Array
+		if def_list.is_empty():
+			continue
+		var idx: int = rng.randi_range(0, def_list.size() - 1)
+		var chosen: VegetationSpawnDefinition = def_list[idx] as VegetationSpawnDefinition
+		if chosen != null and chosen.scene != null:
+			spawn_vegetation(world_tile, chosen.scene)
+
+
+func _build_active_small_vegetation_definitions() -> Array[VegetationSpawnDefinition]:
+	var out: Array[VegetationSpawnDefinition] = []
+	if ConfigManager.config.spawn_bushes:
+		var b: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
+		if b != null and b.pass_type == VegetationSpawnDefinition.PassType.SMALL:
+			out.append(b)
+	if ConfigManager.config.spawn_water_lilies:
+		var w: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
+		if w != null and w.pass_type == VegetationSpawnDefinition.PassType.SMALL:
+			out.append(w)
+	return out
+
+
+func _definition_passes_static_rules(
+	def: VegetationSpawnDefinition,
+	local_tile: Vector2i,
+	chunk: Chunk
+) -> bool:
+	var rules: Array = def.static_spawn_rules
+	if rules == null:
+		return true
+	for rule in rules:
+		if rule == null:
+			return false
+		if not rule.is_valid(local_tile, chunk):
+			return false
+	return true
+
+
+func _chebyshev_tile(a: Vector2i, b: Vector2i) -> int:
+	return maxi(absi(a.x - b.x), absi(a.y - b.y))
+
+
+func _conflicts_with_picked(tile: Vector2i, picked: Array[Vector2i], min_spacing: int) -> bool:
+	for p: Vector2i in picked:
+		if _chebyshev_tile(tile, p) < min_spacing:
+			return true
+	return false
+
+
+func _shuffle_vec2i_with_rng(arr: Array[Vector2i], rng: RandomNumberGenerator) -> void:
+	for i in range(arr.size() - 1, 0, -1):
+		var j: int = rng.randi_range(0, i)
+		var tmp: Vector2i = arr[i]
+		arr[i] = arr[j]
+		arr[j] = tmp
 
 
 func is_environment_tile_occupied(world_tile: Vector2i) -> bool:

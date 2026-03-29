@@ -1,4 +1,4 @@
-class_name VegetationDefinition
+class_name VegetationSpawnDefinition
 extends Resource
 
 enum PassType {
@@ -6,6 +6,8 @@ enum PassType {
 	SMALL,
 	DECORATION,
 }
+
+@export var id: StringName
 
 @export var scene: PackedScene
 

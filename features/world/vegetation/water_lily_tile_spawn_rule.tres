@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TileTypeVegetationSpawnRule" format=3 uid="uid://c3w5h7u9t1s3v5"]
+
+[ext_resource type="Script" uid="uid://d7x8k2m4n6p1s" path="res://features/world/nature/spawn_rules/tile_type_vegetation_spawn_rule.gd" id="1_tile_rule"]
+
+[resource]
+script = ExtResource("1_tile_rule")
+allowed_tile_types = Array[int]([1])

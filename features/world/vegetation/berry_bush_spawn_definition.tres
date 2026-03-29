@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://e4f6g8h0j2k4l6"]
+
+[ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world/nature/spawn_rules/vegetation_spawn_definition.gd" id="1_def"]
+[ext_resource type="PackedScene" uid="uid://d2h8w4laberry" path="res://features/world/nature/berry_bush.tscn" id="2_scene"]
+[ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_static"]
+[ext_resource type="Resource" uid="uid://b2v4g6t8s0r2u4" path="res://features/world/vegetation/berry_bush_tile_spawn_rule.tres" id="4_rule"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"berry_bush"
+scene = ExtResource("2_scene")
+pass_type = 1
+static_spawn_rules = Array[ExtResource("3_static")]([ExtResource("4_rule")])
