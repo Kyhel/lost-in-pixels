@@ -29,8 +29,8 @@ func _apply_world_seed(p_seed: int) -> void:
 	world_generator.setup_seed(p_seed)
 	var wseed: int = world_generator.terrain_noise.seed
 	tree_generator = TreeGenerator.new(wseed)
-	berry_bush_generator = load("res://features/world/nature/berry_bush_generator.gd").new(wseed)
-	water_lily_generator = load("res://features/world/nature/water_lily_generator.gd").new(wseed)
+	berry_bush_generator = BerryBushGenerator.new(wseed)
+	water_lily_generator = WaterLilyGenerator.new(wseed)
 
 
 func set_world_seed(p_seed: int) -> void:

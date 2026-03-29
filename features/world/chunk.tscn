@@ -13,8 +13,8 @@ tile_set = ExtResource("2_uc5gi")
 visible = false
 tile_set = ExtResource("2_uc5gi")
 
-[node name="Creatures" type="Node2D" parent="."]
+[node name="Creatures" type="Node2D" parent="." unique_id=1021857359]
 
-[node name="Objects" type="Node2D" parent="."]
+[node name="Objects" type="Node2D" parent="." unique_id=1272610546]
 
-[node name="Vegetation" type="Node2D" parent="."]
+[node name="Vegetation" type="Node2D" parent="." unique_id=1611748808]
