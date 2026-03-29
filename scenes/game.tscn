@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 [ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
+[ext_resource type="PackedScene" uid="uid://b8k3c7m2n4p5q6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
