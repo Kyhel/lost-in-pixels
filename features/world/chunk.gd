@@ -1,7 +1,7 @@
 extends Node2D
 class_name Chunk
 
-const CHUNK_SIZE = ChunkManager.CHUNK_SIZE
+const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 const FOG_TILE = 0
 

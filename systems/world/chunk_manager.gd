@@ -5,7 +5,7 @@ signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
 const TILE_SIZE = 16
 const TILE_HALF_SIZE = TILE_SIZE / 2.0
 const TILE_HALF_SIZE_VECTOR = Vector2.ONE * TILE_HALF_SIZE
-const CHUNK_SIZE = 32
+const CHUNK_SIZE = Chunk.CHUNK_SIZE
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 
 const TERRAIN_VISION_RADIUS = 20

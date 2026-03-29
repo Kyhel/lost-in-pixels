@@ -55,7 +55,7 @@ func should_spawn_vegetation(wx: int, wy: int, local_x: int, local_y: int, chunk
 		return false
 	if not _water_is_near_non_water(wx, wy):
 		return false
-	if VegetationManager.is_environment_tile_occupied(Vector2i(wx, wy)):
+	if chunk.is_environment_tile_occupied(Vector2i(local_x, local_y)):
 		return false
 	return true
 
@@ -68,7 +68,7 @@ func _water_is_near_non_water(wx: int, wy: int) -> bool:
 			var world_tile: Vector2i = Vector2i(tx, ty)
 			var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 			var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
-			var chunk := ChunkManager.get_loaded_chunk(chunk_coords)
+			var chunk : Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 			var tile_type := WorldGenerator.TileType.WATER
 			if chunk != null:
 				tile_type = chunk.get_tile_type(local_tile.x, local_tile.y)
