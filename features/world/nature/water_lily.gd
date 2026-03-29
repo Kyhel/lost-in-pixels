@@ -81,12 +81,7 @@ func _spawn_flower_at_slot(slot_i: int) -> void:
 	var world_object: WorldObject = spawned as WorldObject
 	var wr: WeakRef = weakref(world_object)
 	_slot_refs[slot_i] = wr
-	world_object.picked_up.connect(_on_flower_picked_up.bind(slot_i))
 	world_object.destroyed.connect(_on_flower_destroyed.bind(slot_i))
-
-
-func _on_flower_picked_up(_by: Node, slot_i: int) -> void:
-	_clear_slot(slot_i)
 
 
 func _on_flower_destroyed(_reason: String, slot_i: int) -> void:

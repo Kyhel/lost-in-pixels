@@ -11,7 +11,6 @@ func do_pickup(by: Node, world_object: WorldObject) -> bool:
 
 	EventManager.object_picked_up.emit(by, world_object)
 
-	world_object.picked_up.emit(by)
 	world_object.destroy("picked_up")
 	return true
 

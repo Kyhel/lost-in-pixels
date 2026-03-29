@@ -3,8 +3,6 @@ class_name WorldObject
 
 @export var object_data: ObjectData
 
-signal picked_up(by)
-signal used(user, target)
 signal destroyed(reason)
 
 func _ready() -> void:
@@ -26,13 +24,6 @@ func _ready() -> void:
 
 func be_eaten(by: Creature) -> void:
 	ObjectInteractionSystem.do_eat(by, self)
-
-func on_picked_up(by: Node) -> void:
-	ObjectInteractionSystem.do_pickup(by, self)
-
-
-func use_on(user: Node, target: Node = null) -> void:
-	emit_signal("used", user, target)
 
 
 func destroy(reason: String = "default") -> void:
