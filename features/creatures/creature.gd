@@ -10,7 +10,7 @@ class_name Creature
 signal damage_taken(amount: int, source: Node)
 signal died
 
-var alpha_mask_scene := preload("res://scenes/alpha.tscn")
+@export var alpha_mask_scene : PackedScene
 
 @export var creature_data: CreatureData
 @export var max_health: int = 1

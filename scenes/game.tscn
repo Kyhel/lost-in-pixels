@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://bnx32mppxvww1" path="res://scenes/game.gdshader" id="3_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
+[ext_resource type="PackedScene" uid="uid://b6rnl5roa1hdm" path="res://features/player/attack_effect.tscn" id="5_pl11u"]
 [ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="6_5newe"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry.tres" id="7_37s47"]
@@ -23,7 +24,7 @@
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 [ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
-[ext_resource type="PackedScene" uid="uid://b8k3c7m2n4p5q6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
+[ext_resource type="PackedScene" uid="uid://bu5j6ogejbau6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
 shader = ExtResource("3_u5sy4")
@@ -77,6 +78,7 @@ color = Color(0, 0, 0, 0.9019608)
 collision_mask = 50
 motion_mode = 1
 script = ExtResource("3_iywne")
+attack_effect_scene = ExtResource("5_pl11u")
 weapon = ExtResource("6_0tnpc")
 edible_objects = Array[ExtResource("6_5newe")]([ExtResource("7_37s47"), ExtResource("8_bt5mj")])
 

@@ -9,7 +9,7 @@ const PICKUP_RADIUS = 16
 const FRONT_PICKUP_RADIUS = 22.0
 const PICKUP_CONE_HALF_ANGLE := PI / 4.0
 
-var attack_effect_scene := preload("res://features/player/attack_effect.tscn")
+@export var attack_effect_scene : PackedScene
 @export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
@@ -36,7 +36,7 @@ signal health_changed(health)
 signal died()
 
 func _ready() -> void:
-	add_to_group("player")
+	add_to_group(Constants.GROUP_PLAYER)
 	_update_attack_hitbox_radius()
 	z_index = Constants.Z_INDEX_PLAYER
 

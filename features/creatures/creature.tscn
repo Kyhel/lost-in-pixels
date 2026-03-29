@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c102ba4bdwrig"]
 
 [ext_resource type="Script" uid="uid://dls1h3glcsgql" path="res://features/creatures/creature.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dohegmysonbui" path="res://scenes/alpha.tscn" id="2_3v3ho"]
 [ext_resource type="Script" uid="uid://bbqn8ng8lqgf" path="res://features/creatures/ai/ai_root.gd" id="2_s2qhw"]
 [ext_resource type="Script" uid="uid://cdjvfg3gei13a" path="res://features/creatures/ai/sensors_root.gd" id="3_4w7f4"]
 [ext_resource type="Script" uid="uid://tjjqyymwuh2r" path="res://features/creatures/movement/movement_component.gd" id="4_4w7f4"]
@@ -29,6 +30,7 @@ collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_script")
+alpha_mask_scene = ExtResource("2_3v3ho")
 
 [node name="Visuals" type="Sprite2D" parent="." unique_id=3039133]
 

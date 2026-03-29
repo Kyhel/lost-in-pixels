@@ -1,7 +1,5 @@
 extends Node
 
-const _CONFIG_SCRIPT: GDScript = preload("res://systems/objects/object_database_config.gd")
-
 var _object_data_by_id: Dictionary = {}
 
 func _ready() -> void:
