@@ -35,19 +35,9 @@ func on_picked_up(by: Node) -> void:
 
 
 func use_on(user: Node, target: Node = null) -> void:
-	if object_data and object_data.use_effect_script:
-		var eff = object_data.use_effect_script.new()
-		if eff.has_method("on_use"):
-			eff.on_use(self, user, target)
-
 	emit_signal("used", user, target)
 
 
 func destroy(reason: String = "default") -> void:
-	if object_data and object_data.destroy_effect_script:
-		var eff = object_data.destroy_effect_script.new()
-		if eff.has_method("on_destroy"):
-			eff.on_destroy(self, reason)
-
 	emit_signal("destroyed", reason)
 	queue_free()

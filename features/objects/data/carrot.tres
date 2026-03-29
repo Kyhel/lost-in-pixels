@@ -2,11 +2,17 @@
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_6g0dw"]
 [ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="2_cmqf5"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
+[ext_resource type="Script" uid="uid://bcd41b7j5s674" path="res://features/objects/behaviors/taming_behavior.gd" id="4_tmb"]
+
+[sub_resource type="Resource" id="Resource_tmb"]
+script = ExtResource("4_tmb")
+taming_value = 110
 
 [resource]
 script = ExtResource("1_6g0dw")
 id = &"carrot"
 display_name = "Carrot"
 texture = ExtResource("2_cmqf5")
-taming_value = 110
+behaviors = Array[ExtResource("3_wob")]([SubResource("Resource_tmb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

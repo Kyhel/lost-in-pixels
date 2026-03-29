@@ -2,6 +2,12 @@
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
 [ext_resource type="Texture2D" uid="uid://jno7s5uucgak" path="res://assets/nature/water_lilly_flower.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
+[ext_resource type="Script" uid="uid://cde52c8k52785" path="res://features/objects/behaviors/player_eatable_behavior.gd" id="4_peb"]
+
+[sub_resource type="Resource" id="Resource_peb"]
+script = ExtResource("4_peb")
+player_food_value = 10
 
 [resource]
 script = ExtResource("1_item")
@@ -9,5 +15,6 @@ id = &"water_lily_flower"
 display_name = "Water lily flower"
 texture = ExtResource("2_tex")
 can_pickup = true
-player_food_value = 10
 hitbox_radius = 1.0
+behaviors = Array[ExtResource("3_wob")]([SubResource("Resource_peb")])
+metadata/_custom_type_script = "uid://b12224xo0dkcj"

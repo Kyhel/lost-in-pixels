@@ -34,6 +34,13 @@ func tick(creature: Creature, _delta: float) -> State:
 	return State.SUCCESS
 
 
+func _object_has_positive_taming(od: ObjectData) -> bool:
+	for b in od.behaviors:
+		if b is TamingBehavior:
+			return (b as TamingBehavior).taming_value > 0
+	return false
+
+
 ## Same logic as EatGoal: when hungry, any food; when not hungry, only food with taming value.
 func _get_food_candidates(creature: Creature, valid_foods: Array[Node2D]) -> Array[Node2D]:
 	var hunger = creature.blackboard.get_value(Blackboard.KEY_HUNGER)
@@ -44,7 +51,7 @@ func _get_food_candidates(creature: Creature, valid_foods: Array[Node2D]) -> Arr
 	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0:
 		var taming_foods: Array[Node2D] = []
 		for f in valid_foods:
-			if f is WorldObject and f.object_data != null and f.object_data.taming_value > 0:
+			if f is WorldObject and f.object_data != null and _object_has_positive_taming(f.object_data):
 				taming_foods.append(f)
 		return taming_foods
 

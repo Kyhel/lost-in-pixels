@@ -26,10 +26,17 @@ func get_score(creature: Creature) -> float:
 	return 0.0
 
 
+func _object_has_positive_taming(od: ObjectData) -> bool:
+	for b in od.behaviors:
+		if b is TamingBehavior:
+			return (b as TamingBehavior).taming_value > 0
+	return false
+
+
 func _has_food_with_taming_value(foods) -> bool:
 	for f in foods:
 		if not is_instance_valid(f):
 			continue
-		if f is WorldObject and f.object_data != null and f.object_data.taming_value > 0:
+		if f is WorldObject and f.object_data != null and _object_has_positive_taming(f.object_data):
 			return true
 	return false

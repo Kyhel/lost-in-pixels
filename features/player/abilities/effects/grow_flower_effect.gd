@@ -10,8 +10,17 @@ func execute(player: Player) -> bool:
 		return false
 	if player == null or not is_instance_valid(player):
 		return false
-	var spawn_data := flower_data.duplicate(false) as ObjectData
-	spawn_data.taming_value = GROWN_FLOWER_TAMING_VALUE
+	var spawn_data := flower_data.duplicate(true) as ObjectData
+	var taming_behavior := TamingBehavior.new()
+	taming_behavior.taming_value = GROWN_FLOWER_TAMING_VALUE
+	var replaced := false
+	for i in range(spawn_data.behaviors.size()):
+		if spawn_data.behaviors[i] is TamingBehavior:
+			spawn_data.behaviors[i] = taming_behavior
+			replaced = true
+			break
+	if not replaced:
+		spawn_data.behaviors.append(taming_behavior)
 	var forward := Vector2.from_angle(player.sprite.rotation - TAU / 4.0)
 	var distance := Player.PICKUP_RADIUS + ChunkManager.TILE_SIZE
 	var spawn_pos := player.global_position + forward * distance

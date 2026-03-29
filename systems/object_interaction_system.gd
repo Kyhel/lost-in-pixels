@@ -14,11 +14,6 @@ func do_pickup(by: Node, world_object: WorldObject) -> bool:
 
 	EventManager.object_picked_up.emit(by, world_object)
 
-	if world_object.object_data.pickup_effect_script:
-		var eff = world_object.object_data.pickup_effect_script.new()
-		if eff.has_method("on_pickup"):
-			eff.on_pickup(world_object, by)
-
 	world_object.picked_up.emit(by)
 	world_object.destroy("picked_up")
 	return true
@@ -34,7 +29,7 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 
 	# Player eating: only succeeds when it won't overfill hunger.
 	if by is Player:
-		_apply_player_eat_food(by as Player, world_object.object_data.player_food_value)
+		_apply_player_eat_food(by as Player, float(_player_food_value(world_object.object_data)))
 		world_object.destroy("eaten")
 		return true
 
@@ -47,6 +42,13 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 		return true
 
 	return false
+
+
+func _player_food_value(od: ObjectData) -> int:
+	for b in od.behaviors:
+		if b is PlayerEatableBehavior:
+			return (b as PlayerEatableBehavior).player_food_value
+	return 0
 
 
 func _apply_player_eat_food(player: Player, amount: float) -> void:
