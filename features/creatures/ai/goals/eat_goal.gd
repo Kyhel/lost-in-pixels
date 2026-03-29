@@ -15,8 +15,11 @@ func get_score(creature: Creature) -> float:
 	if hunger != null and hunger <= 80:
 		return 1.0
 
+	var is_tamed = creature.blackboard.get_value(Blackboard.KEY_TAMED, false)
+
 	# Not hungry but go for food with taming value if creature can be tamed
-	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0:
+	# and crature not already tamed
+	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0 and not is_tamed:
 		if _has_food_with_taming_value(foods):
 			return 1.0
 
