@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_6g0dw"]
 [ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="2_cmqf5"]
-[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
-[ext_resource type="Script" uid="uid://bcd41b7j5s674" path="res://features/objects/behaviors/taming_behavior.gd" id="4_tmb"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_fbbbi"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
+[ext_resource type="Script" uid="uid://bcd41b7j5s674" path="res://features/objects/behaviors/taming_behavior.gd" id="5_tmb"]
 
 [sub_resource type="Resource" id="Resource_tmb"]
-script = ExtResource("4_tmb")
+script = ExtResource("5_tmb")
 taming_value = 110
 
 [resource]
@@ -14,5 +16,6 @@ script = ExtResource("1_6g0dw")
 id = &"carrot"
 display_name = "Carrot"
 texture = ExtResource("2_cmqf5")
-behaviors = Array[ExtResource("3_wob")]([SubResource("Resource_tmb")])
+scene = ExtResource("3_base_scene")
+behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_tmb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

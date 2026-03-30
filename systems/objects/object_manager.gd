@@ -4,7 +4,7 @@ const FALLBACK_WORLD_OBJECT_RADIUS := 4.0
 const PLACEMENT_MARGIN := 4.0
 const OVERLAP_SEARCH_RADIUS := 64.0
 
-var world_object_scene := preload("res://features/objects/world_object.tscn")
+var world_object_scene := preload("res://features/objects/scenes/base_world_object.tscn")
 
 
 func clear_all_objects() -> void:

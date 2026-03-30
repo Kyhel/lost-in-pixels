@@ -3,16 +3,18 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
 [ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="1_o1ifq"]
 [ext_resource type="Texture2D" uid="uid://ba1cfysaknd15" path="res://assets/nature/berry_red.png" id="2_tex"]
-[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
-[ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="4_pkb"]
-[ext_resource type="Script" uid="uid://cde52c8k52785" path="res://features/objects/behaviors/player_eatable_behavior.gd" id="5_peb"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_jiyf4"]
+[ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="5_pkb"]
+[ext_resource type="Script" uid="uid://cde52c8k52785" path="res://features/objects/behaviors/player_eatable_behavior.gd" id="6_peb"]
 
 [sub_resource type="Resource" id="Resource_pkb"]
-script = ExtResource("4_pkb")
+script = ExtResource("5_pkb")
 item = ExtResource("1_o1ifq")
 
 [sub_resource type="Resource" id="Resource_peb"]
-script = ExtResource("5_peb")
+script = ExtResource("6_peb")
 player_food_value = 10
 
 [resource]
@@ -20,6 +22,7 @@ script = ExtResource("1_item")
 id = &"berry"
 display_name = "Berry"
 texture = ExtResource("2_tex")
+scene = ExtResource("3_base_scene")
 hitbox_radius = 1.0
-behaviors = Array[ExtResource("3_wob")]([SubResource("Resource_pkb"), SubResource("Resource_peb")])
+behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_pkb"), SubResource("Resource_peb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

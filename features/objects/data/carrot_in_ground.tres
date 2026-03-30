@@ -1,11 +1,15 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://bh16hdymgbxaw"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_g85o4"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_vbcvm"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_7dc04"]
 [ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/carrot_in_ground.png" id="2_64fi8"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
 
 [resource]
 script = ExtResource("1_g85o4")
 id = &"carrot_in_ground"
 display_name = "Carrot in ground"
 texture = ExtResource("2_64fi8")
+scene = ExtResource("3_base_scene")
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
