@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_g85o4"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_vbcvm"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_7dc04"]
-[ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/carrot_in_ground.png" id="2_64fi8"]
-[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
+[ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/small_plant.png" id="2_64fi8"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
 
 [resource]
 script = ExtResource("1_g85o4")

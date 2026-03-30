@@ -3,12 +3,19 @@ extends Node2D
 
 @export var object_data: ObjectData
 
+var behavior_instances: Array[WorldObjectBehaviorInstance] = []
+
 signal destroyed(reason)
+
+
+func add_behavior_instance(instance: WorldObjectBehaviorInstance) -> void:
+	if instance == null:
+		return
+	behavior_instances.append(instance)
 
 func _ready() -> void:
 	if object_data == null:
 		return
-	object_data = _build_runtime_object_data(object_data)
 	if object_data.texture:
 		var sprite := get_node_or_null("Sprite2D") as Sprite2D
 		if sprite != null:
@@ -42,24 +49,6 @@ func be_eaten(by: Creature) -> void:
 func destroy(reason: String = "default") -> void:
 	emit_signal("destroyed", reason)
 	queue_free()
-
-
-func _build_runtime_object_data(source: ObjectData) -> ObjectData:
-	var instance_data := source.duplicate(false) as ObjectData
-	if instance_data == null:
-		return source
-	var resolved_behaviors: Array[WorldObjectBehavior] = []
-	for behavior in source.behaviors:
-		if behavior == null:
-			continue
-		var resolved: WorldObjectBehavior = behavior
-		if not behavior.shared:
-			var duplicated := behavior.duplicate(true)
-			if duplicated is WorldObjectBehavior:
-				resolved = duplicated as WorldObjectBehavior
-		resolved_behaviors.append(resolved)
-	instance_data.behaviors = resolved_behaviors
-	return instance_data
 
 
 func _apply_behaviors() -> void:
