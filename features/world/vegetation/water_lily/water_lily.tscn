@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cwv6lfvkmnxtg"]
 
-[ext_resource type="Script" uid="uid://171u4u5f3abt" path="res://features/world/nature/water_lily.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://171u4u5f3abt" path="res://features/world/vegetation/water_lily/water_lily.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cywrukpxtekcg" path="res://assets/nature/water_lilly.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lily"]

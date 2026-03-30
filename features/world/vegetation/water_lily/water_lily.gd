@@ -1,15 +1,12 @@
-class_name BerryBush
+class_name WaterLily
 extends Vegetation
 
-const SLOT_COUNT := 5
-const BUSH_SEED_SALT := 0x70415252
+const SLOT_COUNT := 3
+const LILY_SEED_SALT := 0x7A1E1E1E
 
 @export var regrow_chance: float = 0.1
 
-var chunk_coords: Vector2i = Vector2i.ZERO
-var world_tile: Vector2i = Vector2i.ZERO
-
-var _berry_data: ObjectData
+var _flower_data: ObjectData
 var _slot_offsets: Array[Vector2] = []
 var _slot_refs: Array = []
 
@@ -20,13 +17,13 @@ const REGROW_INTERVAL := 5.0
 func _ready() -> void:
 	super._ready()
 	_regrow_elapsed = -CreatureUtils.get_stagger_phase_offset(self, REGROW_INTERVAL)
-	_berry_data = ObjectDatabase.get_object_data(&"berry")
-	if _berry_data == null:
-		push_error("BerryBush: berry object data not in ObjectDatabase")
+	_flower_data = ObjectDatabase.get_object_data(&"water_lily_flower")
+	if _flower_data == null:
+		push_error("WaterLily: water_lily_flower object data not in ObjectDatabase")
 		return
 
 	var rng := RandomNumberGenerator.new()
-	rng.seed = ChunkManager.get_world_seed() ^ hash(world_tile) ^ BUSH_SEED_SALT
+	rng.seed = ChunkManager.get_world_seed() ^ hash(world_tile) ^ LILY_SEED_SALT
 
 	var half_tile: float = ChunkManager.TILE_SIZE * 0.5
 	var base_angle: float = rng.randf_range(0.0, TAU)
@@ -38,11 +35,11 @@ func _ready() -> void:
 		_slot_refs.append(null)
 
 	for slot_i in SLOT_COUNT:
-		_spawn_berry_at_slot(slot_i)
+		_spawn_flower_at_slot(slot_i)
 
 
 func _physics_process(delta: float) -> void:
-	if _berry_data == null:
+	if _flower_data == null:
 		return
 	_regrow_elapsed += delta
 	while _regrow_elapsed >= REGROW_INTERVAL:
@@ -56,7 +53,7 @@ func _tick_regrow() -> void:
 			continue
 		if randf() >= regrow_chance:
 			continue
-		_spawn_berry_at_slot(slot_i)
+		_spawn_flower_at_slot(slot_i)
 
 
 func _slot_occupied(slot_i: int) -> bool:
@@ -67,12 +64,12 @@ func _slot_occupied(slot_i: int) -> bool:
 	return node != null and is_instance_valid(node)
 
 
-func _spawn_berry_at_slot(slot_i: int) -> void:
-	if _berry_data == null:
+func _spawn_flower_at_slot(slot_i: int) -> void:
+	if _flower_data == null:
 		return
 	var spawned = ObjectsManager.spawn_object_attached_in_chunk(
 		chunk_coords,
-		_berry_data,
+		_flower_data,
 		self,
 		_slot_offsets[slot_i],
 	)
@@ -81,10 +78,10 @@ func _spawn_berry_at_slot(slot_i: int) -> void:
 	var world_object: WorldObject = spawned as WorldObject
 	var wr: WeakRef = weakref(world_object)
 	_slot_refs[slot_i] = wr
-	world_object.destroyed.connect(_on_berry_destroyed.bind(slot_i))
+	world_object.destroyed.connect(_on_flower_destroyed.bind(slot_i))
 
 
-func _on_berry_destroyed(_reason: String, slot_i: int) -> void:
+func _on_flower_destroyed(_reason: String, slot_i: int) -> void:
 	_clear_slot(slot_i)
 
 

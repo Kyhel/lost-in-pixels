@@ -16,6 +16,9 @@ var hitbox_radius: float = 0.0
 ## World-space center of that collision shape (for overlap tests).
 var hitbox_center_world: Vector2 = Vector2.ZERO
 
+var chunk_coords: Vector2i = Vector2i.ZERO
+var world_tile: Vector2i = Vector2i.ZERO
+
 
 func _ready() -> void:
 	for f in features:

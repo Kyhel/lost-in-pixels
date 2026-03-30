@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cfq8k2m7p4n5w"]
 
 [ext_resource type="Texture2D" uid="uid://cu270wwko7jdg" path="res://assets/nature/tree_trunk_1.png" id="1_trunk_tex"]
-[ext_resource type="Script" uid="uid://ca5ph3myugs7g" path="res://features/world/nature/vegetation.gd" id="2_veg"]
+[ext_resource type="Script" uid="uid://ca5ph3myugs7g" path="res://features/world/vegetation/vegetation.gd" id="2_veg"]
 [ext_resource type="Shader" uid="uid://dlue02v0rg8pc" path="res://features/objects/data/trees/tree_1.gdshader" id="3_shader"]
 [ext_resource type="Texture2D" uid="uid://mg1udp0cxmj" path="res://assets/nature/tree_foliage_1.png" id="4_foliage_tex"]
 

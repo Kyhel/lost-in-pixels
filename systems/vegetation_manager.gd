@@ -67,8 +67,8 @@ func spawn_vegetation(
 		return null
 	if not features.is_empty():
 		vegetation.features = features
-	vegetation.set("chunk_coords", resolved_chunk)
-	vegetation.set("world_tile", world_tile)
+	vegetation.chunk_coords = resolved_chunk
+	vegetation.world_tile = world_tile
 	target_container.add_child(vegetation)
 	# Set global position only after parenting to avoid chunk transform offset.
 	vegetation.global_position = ChunkManager.world_tile_to_world_center(world_tile)
