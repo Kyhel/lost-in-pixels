@@ -29,4 +29,3 @@ func _process(_delta: float):
 func _physics_process(delta: float) -> void:
 	CreatureManager.update_entity_chunks(delta)
 	ObjectsManager.update_chunks(delta)
-	VegetationManager.update_chunks(delta)

@@ -9,13 +9,6 @@ var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.
 var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush/berry_bush.tres")
 var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily/water_lily.tres")
 
-func clear_all_vegetation() -> void:
-	pass
-
-
-func update_chunks(_delta: float) -> void:
-	pass
-
 
 func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
 	var tree_data: ObjectData = get_tree_object_data(tree_type)
@@ -209,7 +202,7 @@ func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
 
 
 func _on_world_reset() -> void:
-	clear_all_vegetation()
+	pass
 
 
 func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
