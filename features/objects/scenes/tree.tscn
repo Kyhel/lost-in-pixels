@@ -12,20 +12,20 @@ shader_parameter/alpha_amount = 0.5
 [sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
 radius = 8.0
 
-[node name="Tree" type="Area2D"]
+[node name="Tree" type="Node2D" unique_id=186156872]
 script = ExtResource("2_world_object")
 
-[node name="Trunk" type="Sprite2D" parent="."]
+[node name="Trunk" type="Sprite2D" parent="." unique_id=146873834]
 texture = ExtResource("1_trunk_tex")
 
-[node name="Foliage" type="Sprite2D" parent="."]
+[node name="Foliage" type="Sprite2D" parent="." unique_id=1580320736]
 z_index = 500
 material = SubResource("ShaderMaterial_foliage")
 texture = ExtResource("4_foliage_tex")
 
-[node name="TrunkBody" type="StaticBody2D" parent="."]
+[node name="TrunkBody" type="StaticBody2D" parent="." unique_id=762137018]
 collision_layer = 32
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody" unique_id=1744667548]
 shape = SubResource("CircleShape2D_trunk")

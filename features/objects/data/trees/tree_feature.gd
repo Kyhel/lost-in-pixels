@@ -4,6 +4,8 @@ extends WorldObjectFeature
 @export var foliage_radius: float = 64.0
 @export var trunk_radius: float = 8.0
 @export var foliage_texture: Texture2D
+## Added to [constant Constants.Z_INDEX_FOLIAGE] so different tree types can sort above/below each other.
+@export var foliage_z_index_offset: int = 0
 
 
 func apply(node: Node2D) -> void:
@@ -19,6 +21,7 @@ func apply(node: Node2D) -> void:
 
 	if foliage_texture != null:
 		foliage.texture = foliage_texture
+	foliage.z_index = Constants.Z_INDEX_FOLIAGE + foliage_z_index_offset
 	_apply_occlusion_mask_to_foliage(node, foliage)
 
 	var tex_size: Vector2 = foliage.texture.get_size()
