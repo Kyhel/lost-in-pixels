@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
 [ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="1_o1ifq"]
 [ext_resource type="Texture2D" uid="uid://ba1cfysaknd15" path="res://assets/nature/berry_red.png" id="2_tex"]
-[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_jiyf4"]
 [ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="5_pkb"]
@@ -23,6 +23,6 @@ id = &"berry"
 display_name = "Berry"
 texture = ExtResource("2_tex")
 scene = ExtResource("3_base_scene")
-hitbox_radius = 1.0
+hitbox_radius = 2.0
 behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_pkb"), SubResource("Resource_peb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

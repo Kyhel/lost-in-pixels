@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ProduceBehavior" format=3]
+
+[ext_resource type="Script" path="res://features/objects/behaviors/produce_behavior.gd" id="1_prb"]
+[ext_resource type="Resource" path="res://features/objects/data/water_lily_flower.tres" id="2_lily_flower"]
+
+[resource]
+script = ExtResource("1_prb")
+produce_object_data = ExtResource("2_lily_flower")
+slot_count = 3
+regrow_chance = 0.1
+regrow_interval = 5.0
+seed_salt = 2048798238

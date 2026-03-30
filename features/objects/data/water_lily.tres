@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://4w54c65f7cqm"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_obj"]
+[ext_resource type="Texture2D" uid="uid://cywrukpxtekcg" path="res://assets/nature/water_lilly.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_63a82"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/colliding_world_object.tscn" id="3_scene"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
+[ext_resource type="Resource" path="res://features/objects/behaviors/water_lily_produce_behavior.tres" id="5_prb"]
+
+[resource]
+script = ExtResource("1_obj")
+id = &"water_lily"
+display_name = "Water Lily"
+texture = ExtResource("2_tex")
+scene = ExtResource("3_scene")
+hitbox_radius = 8.0
+behaviors = Array[ExtResource("4_wob")]([ExtResource("5_prb")])

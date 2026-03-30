@@ -8,6 +8,8 @@ var occlusion_mask_viewport: SubViewport
 
 var tree_1_data: ObjectData = preload("res://features/objects/data/trees/tree_1.tres")
 var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.tres")
+var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush.tres")
+var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily.tres")
 
 func refresh_scene_references() -> void:
 	var scene := get_tree().current_scene
@@ -86,17 +88,31 @@ func spawn_vegetation(
 
 
 func spawn_berry_bush(world_tile: Vector2i) -> void:
-	var def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
-	if def == null or def.scene == null:
+	if berry_bush_data == null:
 		return
-	spawn_vegetation(world_tile, def.scene)
+	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
+	var world_object: WorldObject = ObjectsManager.spawn_object_at(berry_bush_data, world_pos)
+	if world_object == null:
+		return
+	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk_node != null:
+		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
+		chunk_node.register_environment_tile(local_tile)
 
 
 func spawn_water_lily(world_tile: Vector2i) -> void:
-	var def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
-	if def == null or def.scene == null:
+	if water_lily_data == null:
 		return
-	spawn_vegetation(world_tile, def.scene)
+	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
+	var world_object: WorldObject = ObjectsManager.spawn_object_at(water_lily_data, world_pos)
+	if world_object == null:
+		return
+	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk_node != null:
+		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
+		chunk_node.register_environment_tile(local_tile)
 
 
 func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
@@ -152,7 +168,15 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			continue
 		var idx: int = rng.randi_range(0, def_list.size() - 1)
 		var chosen: VegetationSpawnDefinition = def_list[idx] as VegetationSpawnDefinition
-		if chosen != null and chosen.scene != null:
+		if chosen == null:
+			continue
+		var berry_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
+		var lily_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
+		if chosen == berry_def:
+			spawn_berry_bush(world_tile)
+		elif chosen == lily_def:
+			spawn_water_lily(world_tile)
+		elif chosen.scene != null:
 			spawn_vegetation(world_tile, chosen.scene)
 
 

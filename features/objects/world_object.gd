@@ -1,5 +1,5 @@
-extends Area2D
 class_name WorldObject
+extends Node2D
 
 @export var object_data: ObjectData
 
@@ -23,8 +23,16 @@ func _ready() -> void:
 			var base_r: float = (base_shape as CircleShape2D).radius
 			if base_r > 0.0:
 				cs.scale = Vector2.ONE * (object_data.hitbox_radius / base_r)
+	var trunk_cs: CollisionShape2D = get_node_or_null("TrunkBody/CollisionShape2D") as CollisionShape2D
+	if trunk_cs != null:
+		var trunk_shape: Shape2D = trunk_cs.shape
+		if trunk_shape is CircleShape2D:
+			var trunk_base_r: float = (trunk_shape as CircleShape2D).radius
+			if trunk_base_r > 0.0:
+				trunk_cs.scale = Vector2.ONE * (object_data.hitbox_radius / trunk_base_r)
 	_apply_features()
 	_apply_behaviors()
+	set_physics_process(_has_physics_behaviors())
 	z_index = Constants.Z_INDEX_OBJECTS
 
 func be_eaten(by: Creature) -> void:
@@ -66,3 +74,21 @@ func _apply_features() -> void:
 		if feature == null:
 			continue
 		feature.apply(self)
+
+
+func _physics_process(delta: float) -> void:
+	if object_data == null:
+		return
+	for behavior in object_data.behaviors:
+		if behavior == null or not behavior.ticks_in_physics:
+			continue
+		behavior.physics_update(self, delta)
+
+
+func _has_physics_behaviors() -> bool:
+	if object_data == null:
+		return false
+	for behavior in object_data.behaviors:
+		if behavior != null and behavior.ticks_in_physics:
+			return true
+	return false

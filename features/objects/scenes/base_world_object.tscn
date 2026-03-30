@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bti2rydm2g6ad"]
 
-[ext_resource type="Script" path="res://features/objects/world_object.gd" id="1_world_object"]
+[ext_resource type="Script" uid="uid://c832tocieksip" path="res://features/objects/world_object.gd" id="1_world_object"]
 
-[node name="BaseWorldObject" type="Area2D"]
+[node name="BaseWorldObject" type="Node2D" unique_id=1751432400]
 script = ExtResource("1_world_object")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1561868004]

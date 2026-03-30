@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://dde36m5qbci07"]
 
-[ext_resource type="PackedScene" uid="uid://cwv6lfvkmnxtg" path="res://features/world/vegetation/water_lily/water_lily.tscn" id="1_cchkk"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/colliding_world_object.tscn" id="1_cchkk"]
 [ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world/nature/spawn_rules/vegetation_spawn_definition.gd" id="2_5tgha"]
 [ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_tq50u"]
 [ext_resource type="Resource" uid="uid://bxqhhbjwq7x1" path="res://features/world/vegetation/water_lily/water_lily_tile_spawn_rule.tres" id="4_nbdby"]

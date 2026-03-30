@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://r514gn44t7kk"]
+
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_obj"]
+[ext_resource type="Texture2D" uid="uid://fy4x38l37mvg" path="res://assets/nature/berry_bush.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_ccsm0"]
+[ext_resource type="PackedScene" path="res://features/objects/scenes/colliding_world_object.tscn" id="3_scene"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
+[ext_resource type="Resource" uid="uid://baoxlg7ar24vr" path="res://features/objects/behaviors/berry_bush_produce_behavior.tres" id="5_prb"]
+
+[resource]
+script = ExtResource("1_obj")
+id = &"berry_bush"
+display_name = "Berry Bush"
+texture = ExtResource("2_tex")
+scene = ExtResource("3_scene")
+hitbox_radius = 8.0
+behaviors = Array[ExtResource("4_wob")]([ExtResource("5_prb")])
