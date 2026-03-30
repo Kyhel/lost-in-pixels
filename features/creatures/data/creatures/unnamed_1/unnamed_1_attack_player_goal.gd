@@ -24,8 +24,8 @@ func update(creature: Creature, delta: float) -> void:
 func update_chasing_state(creature: Creature) -> void:
 
 	# If the creature is chasing the player and reaches terrain without dark grass, stop  chasing
-	var tile: WorldGenerator.TileType = ChunkManager.get_tile_type_at_world_pos(creature.global_position)
-	if tile != WorldGenerator.TileType.DARK_GRASS:
+	var tile := ChunkManager.get_tile_type_at_world_pos(creature.global_position)
+	if tile != Terrain.Type.DARK_GRASS:
 		creature.blackboard.set_value(Blackboard.KEY_CHASING_STATE, Blackboard.ChasingState.RECOVERING)
 		return
 
@@ -55,5 +55,5 @@ func _player_on_aggressive_tile(creature: Creature) -> bool:
 	var player = creature.get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
 	if player == null:
 		return false
-	var player_tile: WorldGenerator.TileType = ChunkManager.get_tile_type_at_world_pos(player.global_position)
-	return player_tile == WorldGenerator.TileType.DARK_GRASS
+	var player_tile := ChunkManager.get_tile_type_at_world_pos(player.global_position)
+	return player_tile == Terrain.Type.DARK_GRASS

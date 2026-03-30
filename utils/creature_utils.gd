@@ -5,7 +5,7 @@ static func is_valid_wander_destination(creature: Creature, world_pos: Vector2) 
 	var data := creature.creature_data
 	if data == null:
 		return false
-	var tile_type: WorldGenerator.TileType = ChunkManager.get_tile_type_at_world_pos(world_pos)
+	var tile_type := ChunkManager.get_tile_type_at_world_pos(world_pos)
 	if data.excluded_tile_types.has(tile_type):
 		return false
 	if not data.allowed_wander_tiles.is_empty() and not data.allowed_wander_tiles.has(tile_type):

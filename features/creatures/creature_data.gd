@@ -30,10 +30,10 @@ func get_priority_for_goal(goal: Goal) -> int:
 @export var running_multiplier: float = 2.0
 @export var hop_multiplier: float = 1.0
 @export var rotating_speed: float = TAU
-@export var biomes: Array[WorldGenerator.Biome] = [WorldGenerator.Biome.FOREST, WorldGenerator.Biome.PLAINS]
-@export var excluded_tile_types: Array[WorldGenerator.TileType] = [WorldGenerator.TileType.WATER]
+@export var biomes: Array[TerrainGenerator.Biome] = [TerrainGenerator.Biome.FOREST, TerrainGenerator.Biome.PLAINS]
+@export var excluded_tile_types: Array[Terrain.Type] = [Terrain.Type.WATER]
 ## If non-empty, wander destination tiles must be one of these and not in [member excluded_tile_types]. If empty, only exclusions apply.
-@export var allowed_wander_tiles: Array[WorldGenerator.TileType] = []
+@export var allowed_wander_tiles: Array[Terrain.Type] = []
 ## Per-context scoring; first profile is used when no entry matches [member MovementRequest.context].
 @export var movement_profiles: Array[MovementProfile] = [
 	preload("res://features/creatures/movement/profiles/defaults/default_movement_profile.tres")

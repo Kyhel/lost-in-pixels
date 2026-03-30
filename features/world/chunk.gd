@@ -7,8 +7,8 @@ const FOG_TILE = 0
 
 var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 
-var tile_types: Array[WorldGenerator.TileType] = []
-var biomes: Array[WorldGenerator.Biome] = []
+var tile_types: Array[Terrain.Type] = []
+var biomes: Array[TerrainGenerator.Biome] = []
 var environment_tile_occupied: Dictionary = {}
 var world_objects: Array[WorldObject] = []
 
@@ -28,16 +28,16 @@ func _ready() -> void:
 	tile_types.resize(CHUNK_AREA);
 	biomes.resize(CHUNK_AREA);
 
-func set_biome(x:int, y:int, biome: WorldGenerator.Biome) -> void:
+func set_biome(x:int, y:int, biome: TerrainGenerator.Biome) -> void:
 	biomes[x * CHUNK_SIZE + y] = biome
 
-func get_biome(x:int, y:int) -> WorldGenerator.Biome:
+func get_biome(x:int, y:int) -> TerrainGenerator.Biome:
 	return biomes[x * CHUNK_SIZE + y]
 
-func set_tile_type(x:int, y:int, type: WorldGenerator.TileType) -> void:
+func set_tile_type(x:int, y:int, type: Terrain.Type) -> void:
 	tile_types[x * CHUNK_SIZE + y] = type
 
-func get_tile_type(x:int, y:int) -> WorldGenerator.TileType:
+func get_tile_type(x:int, y:int) -> Terrain.Type:
 	return tile_types[x * CHUNK_SIZE + y]
 
 func set_tile(x:int, y:int, tile:Vector2i):

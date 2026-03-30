@@ -105,7 +105,7 @@ func spawn_rabbits(chunk: Chunk) -> void:
 		for local_x in ChunkManager.CHUNK_SIZE:
 			var tile_type := chunk.get_tile_type(local_x, local_y)
 			var biome := chunk.get_biome(local_x, local_y)
-			if biome != WorldGenerator.Biome.PLAINS:
+			if biome != TerrainGenerator.Biome.PLAINS:
 				continue
 			if rabbit_data.excluded_tile_types.has(tile_type):
 				continue

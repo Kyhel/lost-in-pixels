@@ -43,7 +43,7 @@ func generate_tree_placements_for_chunk(
 		for y: int in range(chunk_size):
 			var global_x: int = chunk_position.x * chunk_size + x
 			var global_y: int = chunk_position.y * chunk_size + y
-			var tile_type: WorldGenerator.TileType = _chunk.get_tile_type(x, y)
+			var tile_type := _chunk.get_tile_type(x, y)
 
 			if _should_spawn_forest_tree(global_x, global_y, x, y, chunk_size, _chunk, tile_type):
 				placements.append({
@@ -55,11 +55,11 @@ func generate_tree_placements_for_chunk(
 	return placements
 
 
-func get_tree_type(tile_type: WorldGenerator.TileType) -> TreeType:
+func get_tree_type(tile_type: Terrain.Type) -> TreeType:
 	match tile_type:
-		WorldGenerator.TileType.DARK_GRASS:
+		Terrain.Type.DARK_GRASS:
 			return TreeType.TREE_2
-		WorldGenerator.TileType.GRASS:
+		Terrain.Type.GRASS:
 			return TreeType.TREE_1
 		_:
 			return TreeType.TREE_1
@@ -72,9 +72,9 @@ func _should_spawn_forest_tree(
 	local_y: int,
 	chunk_size: int,
 	_chunk: Chunk,
-	tile_type: WorldGenerator.TileType,
+	tile_type: Terrain.Type,
 ) -> bool:
-	if tile_type != WorldGenerator.TileType.DARK_GRASS:
+	if tile_type != Terrain.Type.DARK_GRASS:
 		return false
 	if !_forest_base_eligible(wx, wy, tile_type):
 		return false
@@ -86,7 +86,7 @@ func _should_spawn_forest_tree(
 				continue
 			var nx: int = wx + dx
 			var ny: int = wy + dy
-			var n_tile: WorldGenerator.TileType = _get_tile_type_world(nx, ny, local_x + dx, local_y + dy, chunk_size, _chunk)
+			var n_tile := _get_tile_type_world(nx, ny, local_x + dx, local_y + dy, chunk_size, _chunk)
 			if !_forest_base_eligible(nx, ny, n_tile):
 				continue
 			if _forest_priority(nx, ny) >= my_priority:
@@ -98,8 +98,8 @@ func _forest_priority(wx: int, wy: int) -> int:
 	return int(hash(Vector2i(wx, wy)) ^ world_seed ^ FOREST_PRIORITY_SALT)
 
 
-func _forest_base_eligible(_wx: int, _wy: int, tile_type: WorldGenerator.TileType) -> bool:
-	if tile_type != WorldGenerator.TileType.DARK_GRASS:
+func _forest_base_eligible(_wx: int, _wy: int, tile_type: Terrain.Type) -> bool:
+	if tile_type != Terrain.Type.DARK_GRASS:
 		return false
 	# if tree_noise.get_noise_2d(wx, wy) < 0.05:
 	# 	return false
@@ -115,7 +115,7 @@ func _get_tile_type_world(
 	local_y: int,
 	chunk_size: int,
 	_chunk: Chunk,
-) -> WorldGenerator.TileType:
+) -> Terrain.Type:
 	if local_x >= 0 and local_x < chunk_size and local_y >= 0 and local_y < chunk_size:
 		return _chunk.get_tile_type(local_x, local_y)
 	return ChunkManager.get_tile_type_for_generation(wx, wy)
@@ -140,7 +140,7 @@ func _collect_plains_grove_tree_placements_for_chunk(chunk_position: Vector2i, _
 					continue
 				var lx: int = p.x - wx0
 				var ly: int = p.y - wy0
-				if _chunk.get_tile_type(lx, ly) != WorldGenerator.TileType.GRASS:
+				if _chunk.get_tile_type(lx, ly) != Terrain.Type.GRASS:
 					continue
 				placements.append({
 					"world_tile": p,
@@ -166,7 +166,7 @@ func _plains_grove_tree_positions(mcx: int, mcy: int) -> Array[Vector2i]:
 	var grass_tiles: Array[Vector2i] = []
 	for gx: int in range(x0, x1 + 1):
 		for gy: int in range(y0, y1 + 1):
-			if ChunkManager.get_tile_type_for_generation(gx, gy) == WorldGenerator.TileType.GRASS:
+			if ChunkManager.get_tile_type_for_generation(gx, gy) == Terrain.Type.GRASS:
 				grass_tiles.append(Vector2i(gx, gy))
 	if grass_tiles.is_empty():
 		return empty

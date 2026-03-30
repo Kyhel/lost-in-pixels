@@ -1,6 +1,7 @@
 extends Node2D
 
 signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
+const TerrainGeneratorScript = preload("res://features/world/terrain_generator.gd")
 
 const TILE_SIZE = 16
 const TILE_HALF_SIZE = TILE_SIZE / 2.0
@@ -13,7 +14,7 @@ const TERRAIN_VISION_RADIUS = 20
 var loaded_chunks: Dictionary[Vector2i, Node] = {}
 
 var chunk_scene = preload("res://features/world/chunk.tscn")
-var world_generator: WorldGenerator
+var world_generator
 var vegetation_generator: VegetationGenerator
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 
 func _apply_world_seed(p_seed: int) -> void:
-	world_generator = WorldGenerator.new()
+	world_generator = TerrainGeneratorScript.new()
 	world_generator.setup_seed(p_seed)
 	vegetation_generator = VegetationGenerator.new(world_generator.terrain_noise.seed)
 
@@ -129,16 +130,16 @@ func get_loaded_chunk(chunk_coords: Vector2i) -> Chunk:
 
 
 func _generate_chunk_terrain(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
-	var tile_types: Array[WorldGenerator.TileType] = world_generator.compute_chunk_tile_types(
+	var tile_types: Array[Terrain.Type] = world_generator.compute_chunk_tile_types(
 		chunk_x, chunk_y, CHUNK_SIZE
 	)
 	var ti := 0
 	for x in range(CHUNK_SIZE):
 		for y in range(CHUNK_SIZE):
-			var tile_type: WorldGenerator.TileType = tile_types[ti]
+			var tile_type := tile_types[ti]
 			ti += 1
-			var biome: WorldGenerator.Biome = world_generator.biome_from_tile_type(tile_type)
-			chunk.set_tile(x, y, world_generator.TILE_DEFS[tile_type]["atlas"])
+			var biome: int = world_generator.biome_from_tile_type(tile_type)
+			chunk.set_tile(x, y, Terrain.get_definition(tile_type).atlas)
 			chunk.set_tile_type(x, y, tile_type)
 			chunk.set_biome(x, y, biome)
 
@@ -264,14 +265,14 @@ func unload_far_chunks(player_pos: Vector2) -> void:
 			loaded_chunks.erase(key)
 
 func get_walk_speed_at_world_pos(world_pos: Vector2) -> float:
-	var def := get_tile_def_from_world_pos(world_pos)
-	return def.get("walk_speed", 1.0)
+	var def: TerrainDefinition = get_tile_def_from_world_pos(world_pos)
+	return def.walk_speed
 
 func can_creature_moveat_tile(creature: Creature, world_pos: Vector2) -> bool:
-	var def := get_tile_def_from_world_pos(world_pos)
+	var def: TerrainDefinition = get_tile_def_from_world_pos(world_pos)
 
-	var can_walk = def.get("walkable", false)
-	var can_swim = def.get("swimmable", false) and creature.creature_data.can_swim
+	var can_walk = def.walkable
+	var can_swim = def.swimmable and creature.creature_data.can_swim
 
 	return can_walk or can_swim
 
@@ -335,29 +336,29 @@ func reveal_around_player(player_pos):
 
 				reveal_tile(world_x,world_y)
 
-func get_tile_def_from_world_pos(world_pos: Vector2) -> Dictionary:
+func get_tile_def_from_world_pos(world_pos: Vector2) -> TerrainDefinition:
 	# 1) convert from pixels to world tile coords
 	var world_tile_coords: Vector2i = world_pos_to_world_tile(world_pos)
 
 	var chunk_coords: Vector2i = world_pos_to_chunk_coords(world_pos)
 
 	if !loaded_chunks.has(chunk_coords):
-		return {}  # or some safe default
+		return Terrain.get_definition(Terrain.Type.NONE)
 	var chunk := loaded_chunks[chunk_coords]
 	# 3) local tile coordinates inside the chunk
 	var local: Vector2i = world_tile_to_local_tile(world_tile_coords)
 	# 4) return the stored def (atlas, walk_speed, walkable, …)
-	return world_generator.TILE_DEFS[chunk.get_tile_type(local.x, local.y)]
+	return Terrain.get_definition(chunk.get_tile_type(local.x, local.y))
 
 ## Tile type at a world pixel position using loaded chunk data (same coordinate path as [method get_tile_def_from_world_pos]).
-func get_tile_type_at_world_pos(world_pos: Vector2) -> WorldGenerator.TileType:
+func get_tile_type_at_world_pos(world_pos: Vector2) -> Terrain.Type:
 	var world_tile_coords: Vector2i = world_pos_to_world_tile(world_pos)
 	var chunk_coords: Vector2i = world_pos_to_chunk_coords(world_pos)
 	if not loaded_chunks.has(chunk_coords):
-		return WorldGenerator.TileType.NONE
+		return Terrain.Type.NONE
 	var chunk: Chunk = loaded_chunks[chunk_coords] as Chunk
 	if not is_instance_valid(chunk):
-		return WorldGenerator.TileType.NONE
+		return Terrain.Type.NONE
 	var local: Vector2i = world_tile_to_local_tile(world_tile_coords)
 	return chunk.get_tile_type(local.x, local.y)
 
@@ -408,15 +409,15 @@ func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
 	)
 
 ## Vegetation generation only: loaded chunk tile data, no world generator fallback.
-func get_tile_type_for_generation(world_x: int, world_y: int) -> WorldGenerator.TileType:
+func get_tile_type_for_generation(world_x: int, world_y: int) -> Terrain.Type:
 	var world_tile := Vector2i(world_x, world_y)
 	var key := world_tile_to_chunk_coords(world_tile)
 	if not loaded_chunks.has(key):
 		push_error("ChunkManager.get_tile_type_for_generation: chunk not loaded %s" % str(key))
-		return WorldGenerator.TileType.NONE
+		return Terrain.Type.NONE
 	var ch: Node = loaded_chunks[key]
 	if not is_instance_valid(ch) or not (ch is Chunk):
-		return WorldGenerator.TileType.WATER
+		return Terrain.Type.WATER
 	var local_tile := world_tile_to_local_tile(world_tile)
 	return (ch as Chunk).get_tile_type(local_tile.x, local_tile.y)
 

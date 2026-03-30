@@ -22,11 +22,11 @@ func _water_is_near_non_water(wx: int, wy: int) -> bool:
 			var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 			var local: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
 			var ch: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
-			var tile_type: WorldGenerator.TileType = WorldGenerator.TileType.WATER
+			var tile_type: int = Terrain.Type.WATER
 			if ch != null:
 				tile_type = ch.get_tile_type(local.x, local.y)
 			else:
 				tile_type = ChunkManager.world_generator.get_tile_type(tx, ty)
-			if tile_type != WorldGenerator.TileType.WATER:
+			if tile_type != Terrain.Type.WATER:
 				return true
 	return false
