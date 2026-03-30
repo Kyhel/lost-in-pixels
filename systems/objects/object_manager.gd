@@ -13,7 +13,7 @@ func clear_all_objects() -> void:
 func update_chunks(_delta: float) -> void:
 	pass
 
-func spawn_object_in_chunk(chunk: Vector2i, object_data, world_pos: Vector2):
+func spawn_object_in_chunk(chunk: Vector2i, object_data: ObjectData, world_pos: Vector2):
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
 	if chunk_node == null:
 		return null
@@ -21,7 +21,9 @@ func spawn_object_in_chunk(chunk: Vector2i, object_data, world_pos: Vector2):
 	if target_container == null:
 		return null
 
-	var world_object = world_object_scene.instantiate()
+	var world_object := _instantiate_world_object(object_data)
+	if world_object == null:
+		return null
 	world_object.object_data = object_data
 
 	target_container.add_child(world_object)
@@ -32,7 +34,7 @@ func spawn_object_in_chunk(chunk: Vector2i, object_data, world_pos: Vector2):
 
 func spawn_object_attached_in_chunk(
 	chunk: Vector2i,
-	object_data,
+	object_data: ObjectData,
 	parent: Node2D,
 	local_pos: Vector2,
 ):
@@ -42,7 +44,9 @@ func spawn_object_attached_in_chunk(
 	if parent == null or not is_instance_valid(parent):
 		return null
 
-	var world_object = world_object_scene.instantiate()
+	var world_object := _instantiate_world_object(object_data)
+	if world_object == null:
+		return null
 	world_object.object_data = object_data
 	parent.add_child(world_object)
 	world_object.position = local_pos
@@ -53,6 +57,20 @@ func spawn_object_attached_in_chunk(
 func spawn_object_at(object_data: ObjectData, world_pos: Vector2):
 	var chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(world_pos)
 	return spawn_object_in_chunk(chunk, object_data, world_pos)
+
+
+func _instantiate_world_object(object_data: ObjectData) -> WorldObject:
+	var object_scene: PackedScene = world_object_scene
+	if object_data != null and object_data.scene != null:
+		object_scene = object_data.scene
+	var instance := object_scene.instantiate()
+	if not (instance is WorldObject):
+		push_warning("ObjectManager: scene '%s' root is not WorldObject." % object_scene.resource_path)
+		if object_scene != world_object_scene:
+			instance = world_object_scene.instantiate()
+		else:
+			return null
+	return instance as WorldObject
 
 func is_object_spawn_blocked(
 	world_pos: Vector2,

@@ -6,9 +6,8 @@ const WATER_LILY_ID := &"water_lily"
 
 var occlusion_mask_viewport: SubViewport
 
-var tree_scene := preload("res://features/objects/data/trees/tree.tscn")
-var tree_1_feature := preload("res://features/objects/data/trees/tree_1_feature.tres")
-var tree_2_feature := preload("res://features/objects/data/trees/tree_2_feature.tres")
+var tree_1_data: ObjectData = preload("res://features/objects/data/trees/tree_1.tres")
+var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.tres")
 
 func refresh_scene_references() -> void:
 	var scene := get_tree().current_scene
@@ -27,26 +26,35 @@ func update_chunks(_delta: float) -> void:
 func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
 	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
 		refresh_scene_references()
-
-	var tree_features: Array[Resource] = [get_tree_feature(tree_type)]
-	var tree := spawn_vegetation(tile_position, tree_scene, tree_features)
+	var tree_data: ObjectData = get_tree_object_data(tree_type)
+	if tree_data == null:
+		return
+	var tree_pos: Vector2 = ChunkManager.world_tile_to_world_center(tile_position)
+	var tree: WorldObject = ObjectsManager.spawn_object_at(tree_data, tree_pos)
 	if tree == null:
 		return
-	var foliage_material = tree.get_node("Foliage").material
+	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(tile_position)
+	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk_node != null:
+		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(tile_position)
+		chunk_node.register_environment_tile(local_tile)
+	var foliage := tree.get_node_or_null("Foliage") as Sprite2D
+	var foliage_material := foliage.material if foliage != null else null
 	if occlusion_mask_viewport != null:
-		foliage_material.set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
+		if foliage_material is ShaderMaterial:
+			(foliage_material as ShaderMaterial).set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
 	else:
 		push_warning("VegetationManager: AlphaMaskViewport missing; tree spawned without mask.")
 
 
-func get_tree_feature(tree_type: TreeGenerator.TreeType) -> Resource:
+func get_tree_object_data(tree_type: TreeGenerator.TreeType) -> ObjectData:
 	match tree_type:
 		TreeGenerator.TreeType.TREE_1:
-			return tree_1_feature
+			return tree_1_data
 		TreeGenerator.TreeType.TREE_2:
-			return tree_2_feature
+			return tree_2_data
 		_:
-			return tree_1_feature
+			return tree_1_data
 
 
 func spawn_vegetation(
@@ -279,9 +287,12 @@ func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
 	return results
 
 
-func get_nearby_trees(origin: Vector2, radius: float) -> Array[Vegetation]:
-	var out: Array[Vegetation] = []
-	for veg in get_nearby_vegetation(origin, radius):
-		if veg.is_tree():
-			out.append(veg)
+func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
+	var out: Array[WorldObject] = []
+	for world_object in ObjectsManager.get_nearby_world_objects(origin, radius):
+		if world_object.object_data == null:
+			continue
+		var id: StringName = world_object.object_data.id
+		if id == &"tree_1" or id == &"tree_2":
+			out.append(world_object)
 	return out

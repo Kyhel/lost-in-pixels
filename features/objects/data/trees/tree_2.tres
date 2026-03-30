@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3]
+
+[ext_resource type="Script" path="res://features/objects/object_data.gd" id="1_obj"]
+[ext_resource type="PackedScene" path="res://features/objects/data/trees/tree.tscn" id="2_scene"]
+[ext_resource type="Script" path="res://features/objects/world_object_feature.gd" id="3_wof"]
+[ext_resource type="Resource" path="res://features/objects/data/trees/tree_2_feature.tres" id="4_feature"]
+
+[resource]
+script = ExtResource("1_obj")
+id = &"tree_2"
+display_name = "Tree 2"
+scene = ExtResource("2_scene")
+hitbox_radius = 4.0
+features = Array[ExtResource("3_wof")]([ExtResource("4_feature")])
