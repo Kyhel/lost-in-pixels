@@ -1,7 +1,6 @@
 class_name VegetationGenerator
 extends RefCounted
 
-const MIN_PICKED_TILE_CHEBYSHEV := 3
 const TREE_1_ID := &"tree_1"
 const TREE_2_ID := &"tree_2"
 
@@ -104,14 +103,9 @@ func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 	rng.seed = ChunkManager.get_chunk_seed(chunk_coords.x, chunk_coords.y)
 	_shuffle_vec2i_with_rng(candidates, rng)
 
-	var picked: Array[Vector2i] = []
+	var picked_placements: Array[Dictionary] = []
 	for t: Vector2i in candidates:
-		if _conflicts_with_picked(t, picked, MIN_PICKED_TILE_CHEBYSHEV):
-			continue
-		picked.append(t)
-
-	for world_tile: Vector2i in picked:
-		var defs: Variant = tile_to_defs.get(world_tile, null)
+		var defs: Variant = tile_to_defs.get(t, null)
 		if defs == null:
 			continue
 		var def_list: Array = defs as Array
@@ -119,6 +113,18 @@ func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			continue
 		var idx: int = rng.randi_range(0, def_list.size() - 1)
 		var chosen: VegetationSpawnDefinition = def_list[idx] as VegetationSpawnDefinition
+		if chosen == null:
+			continue
+		if _conflicts_with_picked(t, chosen, picked_placements):
+			continue
+		picked_placements.append({
+			"tile": t,
+			"definition": chosen
+		})
+
+	for placement in picked_placements:
+		var world_tile: Vector2i = placement.get("tile", Vector2i.ZERO)
+		var chosen: VegetationSpawnDefinition = placement.get("definition", null) as VegetationSpawnDefinition
 		if chosen == null:
 			continue
 		_spawn_object_on_tile(chosen.object_data, world_tile)
@@ -178,11 +184,25 @@ func _chebyshev_tile(a: Vector2i, b: Vector2i) -> int:
 	return maxi(absi(a.x - b.x), absi(a.y - b.y))
 
 
-func _conflicts_with_picked(tile: Vector2i, picked: Array[Vector2i], min_spacing: int) -> bool:
-	for p: Vector2i in picked:
-		if _chebyshev_tile(tile, p) < min_spacing:
+func _conflicts_with_picked(
+	tile: Vector2i,
+	definition: VegetationSpawnDefinition,
+	picked_placements: Array[Dictionary]
+) -> bool:
+	var this_spacing: int = _spacing_for_definition(definition)
+	for placement in picked_placements:
+		var other_tile: Vector2i = placement.get("tile", Vector2i.ZERO)
+		var other_def: VegetationSpawnDefinition = placement.get("definition", null) as VegetationSpawnDefinition
+		var required_spacing: int = maxi(this_spacing, _spacing_for_definition(other_def))
+		if _chebyshev_tile(tile, other_tile) <= required_spacing:
 			return true
 	return false
+
+
+func _spacing_for_definition(definition: VegetationSpawnDefinition) -> int:
+	if definition == null:
+		return 1
+	return maxi(1, definition.min_spacing)
 
 
 func _shuffle_vec2i_with_rng(arr: Array[Vector2i], rng: RandomNumberGenerator) -> void:
