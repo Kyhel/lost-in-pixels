@@ -24,7 +24,6 @@ ObjectsManager="*uid://dp4jmd73t0oak"
 ConfigManager="*uid://de4qv4t7ch7cr"
 GameLog="*res://systems/game_log.gd"
 EventManager="*res://systems/event_manager.gd"
-SimulationSystem="*res://systems/simulation_system.gd"
 ItemDatabase="*res://systems/items/item_database.gd"
 Inventory="*res://systems/items/inventory.gd"
 AbilityManager="*res://systems/player/ability_manager.gd"
@@ -36,6 +35,7 @@ TamingSystem="*res://systems/creatures/taming_system.gd"
 PlayerInputManager="*res://systems/player_input_manager.gd"
 PlayerCreatureInteractionSystem="*res://systems/player_creature_interaction_system.gd"
 VegetationDatabase="*res://features/world/vegetation_database.gd"
+SimulationSystem="*res://systems/simulation_system.gd"
 
 [display]
 

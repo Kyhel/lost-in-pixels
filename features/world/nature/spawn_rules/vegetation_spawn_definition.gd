@@ -7,8 +7,6 @@ enum PassType {
 	DECORATION,
 }
 
-@export var scene: PackedScene
-
 @export var object_data: ObjectData
 
 @export var density := 0.1  # probability per tile

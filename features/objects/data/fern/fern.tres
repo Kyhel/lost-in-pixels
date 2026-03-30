@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://dobd5gvc3tc87"]
+
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_q4xdo"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_whdi1"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="3_oaa65"]
+
+[resource]
+script = ExtResource("3_oaa65")
+metadata/_custom_type_script = "uid://b12224xo0dkcj"
