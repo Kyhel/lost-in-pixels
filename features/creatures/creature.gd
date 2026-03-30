@@ -25,25 +25,13 @@ var alpha_mask: Node2D
 
 var virtual_rotation: float = 0
 
-## Debug vectors for movement (drawn by the creature scene's `Debug` node).
-## Units: the strategy computes these and they are visualized as "speed-like" vectors.
-var debug_seek: Vector2 = Vector2.ZERO
-var debug_separation: Vector2 = Vector2.ZERO
-var debug_avoidance: Vector2 = Vector2.ZERO
-var debug_steering: Vector2 = Vector2.ZERO
-var debug_final_velocity: Vector2 = Vector2.ZERO
-
 @onready var visualRoot: = $Visuals
 @onready var collisionShape: = $CollisionShape
+@onready var creature_debug: CreatureDebug = get_node_or_null("Debug") as CreatureDebug
 
 ## Cached obstacle-avoidance query (per creature so shared [MovementStrategy] resources stay thread-safe).
 var _obstacle_avoid_query_params: PhysicsShapeQueryParameters2D
 var _obstacle_avoid_rect_shape: RectangleShape2D
-
-@onready var debug_root: Node2D = get_node_or_null("Debug")
-var debug_speed_line: Line2D = null
-var debug_separation_line: Line2D = null
-var debug_avoidance_line: Line2D = null
 
 func _ready() -> void:
 
@@ -51,10 +39,6 @@ func _ready() -> void:
 	ai_root = get_node("AI")
 	movement = get_node("Movement")
 	blackboard = Blackboard.new()
-	if debug_root != null:
-		debug_speed_line = debug_root.get_node_or_null("SpeedLine")
-		debug_separation_line = debug_root.get_node_or_null("SeparationLine")
-		debug_avoidance_line = debug_root.get_node_or_null("AvoidanceLine")
 	health = max_health
 
 	if creature_data != null:
@@ -101,7 +85,6 @@ func _initialize_hunger_need_starting_value() -> void:
 
 func _process(_delta: float) -> void:
 	_update_visuals()
-	_update_debug_visuals()
 
 func _get_z_index() -> int:
 	if creature_data.can_fly:
@@ -112,12 +95,8 @@ func _get_z_index() -> int:
 		return Constants.Z_INDEX_SMALL_CREATURES
 
 func _physics_process(delta: float) -> void:
-	# Clear debug values every physics tick so stale vectors don't linger.
-	debug_seek = Vector2.ZERO
-	debug_separation = Vector2.ZERO
-	debug_avoidance = Vector2.ZERO
-	debug_steering = Vector2.ZERO
-	debug_final_velocity = Vector2.ZERO
+	if creature_debug != null:
+		creature_debug.reset_vectors()
 
 	if creature_data != null:
 		for goal in creature_data.goals:
@@ -130,23 +109,6 @@ func _physics_process(delta: float) -> void:
 func _update_visuals() -> void:
 	visualRoot.rotation = virtual_rotation
 	collisionShape.rotation = virtual_rotation
-
-func _update_debug_visuals() -> void:
-
-	if debug_root == null or not debug_root.visible:
-		return
-
-	_update_line_points(debug_speed_line, Vector2.ZERO, velocity)
-	_update_line_points(debug_separation_line, Vector2.ZERO, debug_separation * 100)
-	_update_line_points(debug_avoidance_line, Vector2.ZERO, debug_avoidance)
-
-func _update_line_points(line: Line2D, start: Vector2, end: Vector2) -> void:
-	if line == null:
-		return
-	var pts := PackedVector2Array()
-	pts.push_back(start)
-	pts.push_back(end)
-	line.points = pts
 
 func _get_collision_layer() -> int:
 

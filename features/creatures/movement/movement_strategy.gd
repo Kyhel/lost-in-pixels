@@ -181,17 +181,13 @@ func compute_velocity(
 	steering += separation
 	steering += avoidance
 
-	# Debug values (drawn by the creature scene).
-	if creature != null:
-		creature.debug_seek = seek
-		creature.debug_separation = separation
-		creature.debug_avoidance = avoidance
-		creature.debug_steering = steering
-
 	velocity += steering
 	velocity = velocity.limit_length(speed)
+
 	if creature != null:
-		creature.debug_final_velocity = velocity
+		var dbg := creature.creature_debug
+		if dbg != null:
+			dbg.set_movement_debug(seek, separation, avoidance, steering, velocity)
 
 	return velocity
 
