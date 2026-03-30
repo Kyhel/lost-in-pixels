@@ -21,5 +21,4 @@ biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_forest_profile")
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
 small_vegetation = Array[ExtResource("11_objdata")]([ExtResource("12_berry"), ExtResource("13_lily")])
-camera_zoom_level = 0.2
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"
