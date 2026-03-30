@@ -4,7 +4,7 @@ var _vegetation_by_id: Dictionary = {}
 
 
 func _ready() -> void:
-	var config: VegetationDatabaseConfig = preload("res://features/world/vegetation_database_config.tres")
+	var config: VegetationDatabaseConfig = preload("res://features/world/vegetation/vegetation_database_config.tres")
 	if config == null:
 		push_error("VegetationDatabase: failed to load config resource")
 		return

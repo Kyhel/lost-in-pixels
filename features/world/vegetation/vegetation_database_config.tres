@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="VegetationDatabaseConfig" format=3 uid="uid://dlrbl5wh8jn8d"]
+
+[ext_resource type="Script" uid="uid://btcpaqr38j4pf" path="res://features/world/vegetation/vegetation_database_config.gd" id="1_mym6n"]
+[ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world/nature/spawn_rules/vegetation_spawn_definition.gd" id="2_1wt15"]
+[ext_resource type="Resource" uid="uid://c31wg4eyc3dr2" path="res://features/world/vegetation/berry_bush/berry_bush_spawn_definition.tres" id="3_qa6yb"]
+[ext_resource type="Resource" uid="uid://dde36m5qbci07" path="res://features/world/vegetation/water_lily/water_lily_spawn_definition.tres" id="4_xwvma"]
+[ext_resource type="Resource" uid="uid://d0oax8uwkjqxn" path="res://features/world/vegetation/fern/fern_spawn_definition.tres" id="5_iaafv"]
+
+[resource]
+script = ExtResource("1_mym6n")
+vegetation_spawn_definitions = Array[ExtResource("2_1wt15")]([ExtResource("3_qa6yb"), ExtResource("4_xwvma"), ExtResource("5_iaafv")])

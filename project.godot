@@ -34,7 +34,7 @@ ObjectInteractionSystem="*uid://dx3jfksyhhymp"
 TamingSystem="*res://systems/creatures/taming_system.gd"
 PlayerInputManager="*res://systems/player_input_manager.gd"
 PlayerCreatureInteractionSystem="*res://systems/player_creature_interaction_system.gd"
-VegetationDatabase="*res://features/world/vegetation_database.gd"
+VegetationDatabase="*res://features/world/vegetation/vegetation_database.gd"
 SimulationSystem="*res://systems/simulation_system.gd"
 
 [display]

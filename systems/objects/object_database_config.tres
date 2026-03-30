@@ -10,9 +10,10 @@
 [ext_resource type="Resource" uid="uid://4w54c65f7cqm" path="res://features/objects/data/water_lily/water_lily.tres" id="8_tok16"]
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="9_flower"]
 [ext_resource type="Resource" uid="uid://dmheix1xlsmr5" path="res://features/objects/data/trees/tree_1.tres" id="10_tree_1"]
+[ext_resource type="Resource" uid="uid://dobd5gvc3tc87" path="res://features/objects/data/fern/fern.tres" id="11_8hrd4"]
 [ext_resource type="Resource" uid="uid://dlq8w3gcb5xn7" path="res://features/objects/data/trees/tree_2.tres" id="11_tree_2"]
 
 [resource]
 script = ExtResource("2_cfgscr")
-objects = Array[ExtResource("1_objscr")]([ExtResource("3_apple"), ExtResource("4_berry"), ExtResource("5_carrot"), ExtResource("8_lily"), ExtResource("9_flower"), ExtResource("6_berry_bush"), ExtResource("8_tok16"), ExtResource("10_tree_1"), ExtResource("11_tree_2")])
+objects = Array[ExtResource("1_objscr")]([ExtResource("3_apple"), ExtResource("4_berry"), ExtResource("5_carrot"), ExtResource("8_lily"), ExtResource("9_flower"), ExtResource("6_berry_bush"), ExtResource("8_tok16"), ExtResource("10_tree_1"), ExtResource("11_tree_2"), ExtResource("11_8hrd4")])
 metadata/_custom_type_script = "uid://bx9k2md7pq81w"

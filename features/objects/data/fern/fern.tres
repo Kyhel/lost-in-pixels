@@ -3,7 +3,14 @@
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_q4xdo"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_whdi1"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="3_oaa65"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_qivb7"]
+[ext_resource type="Texture2D" uid="uid://ca5iikk2jwmvf" path="res://assets/nature/fern.png" id="4_whdi1"]
 
 [resource]
 script = ExtResource("3_oaa65")
+id = &"fern"
+display_name = "Fern"
+texture = ExtResource("4_whdi1")
+scene = ExtResource("3_qivb7")
+hitbox_radius = 10.0
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
