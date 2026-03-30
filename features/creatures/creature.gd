@@ -102,15 +102,11 @@ func _physics_process(delta: float) -> void:
 	debug_steering = Vector2.ZERO
 	debug_final_velocity = Vector2.ZERO
 
-	sensors_node.update_sensors(delta, creature_data.sensors)
-
 	fear_component.update(self, delta)
 
 	if creature_data != null:
 		for goal in creature_data.goals:
 			goal.update(self, delta)
-
-	ai_root.update_ai(delta)
 
 	movement.update_movement(self, delta)
 

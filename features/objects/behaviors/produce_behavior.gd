@@ -8,10 +8,6 @@ extends WorldObjectBehavior
 @export var seed_salt: int = 0
 
 
-func _init() -> void:
-	ticks_in_physics = true
-
-
 func apply(world_object: WorldObject) -> void:
 	if world_object == null:
 		return
@@ -21,31 +17,14 @@ func apply(world_object: WorldObject) -> void:
 		return
 	var instance := ProduceBehaviorInstance.new()
 	_init_slots(world_object, instance)
-	instance.regrow_elapsed = -CreatureUtils.get_stagger_phase_offset(world_object, regrow_interval)
 	world_object.add_behavior_instance(instance)
 	for i in range(slot_count):
 		_spawn_at_slot(world_object, instance, i)
-
-
-func physics_update(world_object: WorldObject, delta: float) -> void:
-	if world_object == null or regrow_interval <= 0.0:
-		return
-	if produce_object_data == null:
-		return
-	var instance := _get_instance(world_object)
-	if instance == null:
-		return
-	instance.regrow_elapsed += delta
-	while instance.regrow_elapsed >= regrow_interval:
-		instance.regrow_elapsed -= regrow_interval
-		_tick_regrow(world_object, instance)
-
-
-func _get_instance(world_object: WorldObject) -> ProduceBehaviorInstance:
-	for inst in world_object.behavior_instances:
-		if inst is ProduceBehaviorInstance:
-			return inst as ProduceBehaviorInstance
-	return null
+	SimulationSystem.register_produce(
+		world_object,
+		func(_n: Object, _td: float) -> void:
+			_tick_regrow(world_object, instance)
+	)
 
 
 func _tick_regrow(world_object: WorldObject, instance: ProduceBehaviorInstance) -> void:

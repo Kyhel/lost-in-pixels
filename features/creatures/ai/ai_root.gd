@@ -6,31 +6,18 @@ var current_goal
 
 var tree_cache := {}
 
-@export var update_interval := 0.1
-var _ai_elapsed := 0.0
-
 var creature: Creature
 
 var _goal_commit_start_time_sec := 0.0
 
-func _ready():
-	creature = get_parent()
-	# Stagger AI updates so creatures do not all tick on the same frame.
-	var phase: float = CreatureUtils.get_stagger_phase_offset(creature, update_interval)
-	_ai_elapsed = -phase
+func _enter_tree() -> void:
+	creature = get_parent() as Creature
+	SimulationSystem.register_ai(
+		self,
+		func(_n: Object, td: float) -> void:
+			_run_ai(td)
+	)
 
-func update_ai(delta: float):
-	if update_interval <= 0.0:
-		_run_ai(delta)
-		return
-
-	_ai_elapsed += delta
-	if _ai_elapsed < update_interval:
-		return
-
-	var ai_delta := _ai_elapsed
-	_ai_elapsed = fmod(_ai_elapsed, update_interval)
-	_run_ai(ai_delta)
 
 func _run_ai(delta: float) -> void:
 

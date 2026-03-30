@@ -39,7 +39,6 @@ func _ready() -> void:
 				trunk_cs.scale = Vector2.ONE * (object_data.hitbox_radius / trunk_base_r)
 	_apply_features()
 	_apply_behaviors()
-	set_physics_process(_has_physics_behaviors())
 	z_index = Constants.Z_INDEX_OBJECTS
 
 func be_eaten(by: Creature) -> void:
@@ -63,21 +62,3 @@ func _apply_features() -> void:
 		if feature == null:
 			continue
 		feature.apply(self)
-
-
-func _physics_process(delta: float) -> void:
-	if object_data == null:
-		return
-	for behavior in object_data.behaviors:
-		if behavior == null or not behavior.ticks_in_physics:
-			continue
-		behavior.physics_update(self, delta)
-
-
-func _has_physics_behaviors() -> bool:
-	if object_data == null:
-		return false
-	for behavior in object_data.behaviors:
-		if behavior != null and behavior.ticks_in_physics:
-			return true
-	return false
