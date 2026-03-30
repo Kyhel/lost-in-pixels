@@ -9,7 +9,8 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	if eater == null or eater.creature_data == null:
 		return
 	var cd: CreatureData = eater.creature_data
-	if cd.taming_value_threshold <= 0:
+	var threshold: int = TamingNeed.get_taming_value_threshold(cd)
+	if threshold <= 0:
 		return
 	if world_object == null or world_object.object_data == null:
 		return
@@ -18,12 +19,12 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	if taming_add <= 0:
 		return
 
-	var was_tamed: bool = eater.blackboard.get_value(Blackboard.KEY_TAMED) == true
+	var was_tamed: bool = eater.blackboard.get_value(Blackboard.KEY_TAMED, false)
 	var taming: float = eater.get_need_value(NeedIds.TAMING, 0.0)
 	taming += float(taming_add)
-	eater.set_need_value(NeedIds.TAMING, taming)
+	eater.needs_component.set_need_value(NeedIds.TAMING, taming)
 
-	var now_tamed: bool = int(taming) >= cd.taming_value_threshold
+	var now_tamed: bool = int(taming) >= threshold
 	if now_tamed:
 		eater.blackboard.set_value(Blackboard.KEY_TAMED, true)
 

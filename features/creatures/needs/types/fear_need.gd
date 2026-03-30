@@ -1,6 +1,8 @@
 class_name FearNeed
 extends Need
 
+const FEAR_THRESHOLD: float = 80.0
+
 @export var fear_buildup_rate: float = 0.0
 @export var fear_player_distance: float = 0.0
 

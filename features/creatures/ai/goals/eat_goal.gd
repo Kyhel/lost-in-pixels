@@ -11,7 +11,7 @@ func get_score(creature: Creature) -> float:
 	if foods == null or foods.is_empty():
 		return 0
 
-	var hunger = creature.get_need_value_or_null(NeedIds.HUNGER)
+	var hunger = creature.needs_component.get_need_value_or_null(NeedIds.HUNGER)
 	if hunger != null and hunger <= 80:
 		return 1.0
 
@@ -19,7 +19,7 @@ func get_score(creature: Creature) -> float:
 
 	# Not hungry but go for food with taming value if creature can be tamed
 	# and crature not already tamed
-	if creature.creature_data != null and creature.creature_data.taming_value_threshold > 0 and not is_tamed:
+	if creature.creature_data != null and TamingNeed.get_taming_value_threshold(creature.creature_data) > 0 and not is_tamed:
 		if _has_food_with_taming_value(foods):
 			return 1.0
 

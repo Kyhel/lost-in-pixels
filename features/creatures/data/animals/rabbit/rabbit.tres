@@ -22,12 +22,14 @@
 
 [sub_resource type="Resource" id="need_hunger_rabbit"]
 script = ExtResource("hunger_s")
+edible_objects = Array[ExtResource("2_rn8le")]([ExtResource("3_xhyr3"), ExtResource("4_cfgnk")])
 id = &"hunger"
 base_decay_rate = 1.0
 initial_value = -1.0
 
 [sub_resource type="Resource" id="need_taming_rabbit"]
 script = ExtResource("taming_s")
+taming_value_threshold = 20
 id = &"taming"
 base_decay_rate = 5.0
 
@@ -54,6 +56,4 @@ needs = Array[ExtResource("need_base")]([SubResource("need_hunger_rabbit"), SubR
 size = 12
 hop_multiplier = 0.5
 movement_profiles = Array[ExtResource("9_7x0m5")]([ExtResource("10_fm44f"), ExtResource("11_jl4ha"), ExtResource("12_pqtku")])
-edible_objects = Array[ExtResource("2_rn8le")]([ExtResource("3_xhyr3"), ExtResource("4_cfgnk")])
-taming_value_threshold = 20
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

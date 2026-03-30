@@ -16,6 +16,7 @@
 
 [sub_resource type="Resource" id="need_hunger_beaver"]
 script = ExtResource("hunger_s")
+edible_objects = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResource("4_0t3oh")])
 id = &"hunger"
 base_decay_rate = 1.0
 initial_value = -1.0
@@ -35,5 +36,4 @@ size = 30
 hitbox_size = 12
 biomes = Array[int]([1, 2, 7])
 excluded_tile_types = Array[int]([])
-edible_objects = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResource("4_0t3oh")])
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

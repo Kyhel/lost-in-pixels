@@ -19,12 +19,15 @@
 
 [sub_resource type="Resource" id="need_hunger_fox"]
 script = ExtResource("hunger_s")
+edible_objects = Array[ExtResource("3_lbjb4")]([ExtResource("4_bfsb6"), ExtResource("5_ewph6")])
+edible_creatures = Array[ExtResource("2_ovces")]([ExtResource("2_ewph6")])
 id = &"hunger"
 base_decay_rate = 2.0
 initial_value = -1.0
 
 [sub_resource type="Resource" id="need_taming_fox"]
 script = ExtResource("taming_s")
+taming_value_threshold = 100
 id = &"taming"
 base_decay_rate = 5.0
 
@@ -43,7 +46,4 @@ size = 32
 hitbox_size = 20
 base_speed = 50.0
 running_multiplier = 3.0
-edible_objects = Array[ExtResource("3_lbjb4")]([ExtResource("4_bfsb6"), ExtResource("5_ewph6")])
-edible_creatures = Array[ExtResource("2_ovces")]([ExtResource("2_ewph6")])
-taming_value_threshold = 100
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

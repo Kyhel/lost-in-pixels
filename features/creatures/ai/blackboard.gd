@@ -5,19 +5,12 @@ const KEY_FOOD := "visible_food"
 const KEY_TARGET_FOOD := "target_food"
 const KEY_PREDATORS := "visible_predators"
 const KEY_STATE := "state"
-const KEY_HUNGER := "hunger"
-const KEY_TAMING := "taming"
 const KEY_TAMED := "tamed"
 const KEY_SEES_PLAYER := "sees_player"
 const KEY_AGGRESSIVENESS := "aggressiveness"
 ## When true, aggressiveness does not build up; cleared only when aggressiveness reaches 0.
 const KEY_AGGRESSIVENESS_RECOVERING := "aggressiveness_recovering"
 const KEY_CHASING_STATE := "chasing_state"
-const KEY_FEAR := "fear"
-## Fear at or above this value triggers flee goal scoring.
-const KEY_FEAR_FLEE_THRESHOLD := 80
-
-const KEY_HUNGER_MAX := 100
 
 enum State {
 	IDLE,

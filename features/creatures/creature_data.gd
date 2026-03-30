@@ -14,7 +14,7 @@ enum CreatureSize {
 ## Goal resource -> priority. Only these goals are considered by AI; missing value resolves to 0 in code.
 @export var goals: Dictionary = {}
 @export var sensors: Array[Sensor] = []
-## Per-species need definitions (hunger, fear, taming, etc.). Include a hunger need for species that eat.
+## Per-species need definitions (hunger, fear, taming, etc.). Carnivores/herbivores: configure edibles on [HungerNeed].
 @export var needs: Array[Need] = []
 @export var size_type: CreatureSize = CreatureSize.SMALL
 @export var can_fly: bool = false
@@ -34,11 +34,6 @@ enum CreatureSize {
 @export var movement_profiles: Array[MovementProfile] = [
 	preload("res://features/creatures/movement/profiles/defaults/default_movement_profile.tres")
 ]
-## Item types this species can eat; used by [FoodSensor] together with [member edible_creatures].
-@export var edible_objects: Array[ObjectData] = []
-## Prey species ([CreatureData]) this species can eat; used by [FoodSensor].
-@export var edible_creatures: Array[CreatureData] = []
-@export var taming_value_threshold: int = 0
 @export var hit_damage: int = 1
 @export var attack_range: float = Constants.DEFAULT_COMBAT_APPROACH_STANDOFF
 @export var attack_cooldown: float = 0.8

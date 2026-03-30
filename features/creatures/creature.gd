@@ -65,8 +65,6 @@ func _ready() -> void:
 			alpha_mask.node = self
 			mask_world.add_child(alpha_mask)
 
-		if creature_data.taming_value_threshold > 0:
-			blackboard.set_value(Blackboard.KEY_TAMED, false)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
 			$Visuals.texture = creature_data.sprite
@@ -79,12 +77,15 @@ func _ready() -> void:
 		$CollisionShape.scale = Vector2.ONE * creature_data.hitbox_size / $CollisionShape.shape.radius / 2
 		z_index = _get_z_index()
 
-	needs_component = NeedsComponent.from_creature_data(creature_data)
+	needs_component = NeedsComponent.new(creature_data)
 	_initialize_hunger_need_starting_value()
 	if needs_component != null and needs_component.has_any():
-		SimulationSystem.register_needs(self, _on_needs_tick)
+		SimulationSystem.register_needs(self,
+		func(_n: Object, tick_delta: float) -> void:
+			needs_component.update_all(self, tick_delta))
 
 	$UIRoot/NeedsDisplay.set_watch(self)
+
 
 func _initialize_hunger_need_starting_value() -> void:
 	if needs_component == null:
@@ -95,33 +96,7 @@ func _initialize_hunger_need_starting_value() -> void:
 	var hunger_need := inst.need as HungerNeed
 	if hunger_need == null:
 		return
-	if hunger_need.initial_value >= 0.0:
-		return
-	inst.set_value(randf_range(Blackboard.KEY_HUNGER_MAX * 0.8, Blackboard.KEY_HUNGER_MAX))
-
-
-func _on_needs_tick(_node: Object, tick_delta: float) -> void:
-	if needs_component != null:
-		needs_component.update_all(self, tick_delta)
-
-
-func get_need_value_or_null(id: StringName) -> Variant:
-	if needs_component == null:
-		return null
-	if not needs_component.instances.has(id):
-		return null
-	return needs_component.get_need_value(id)
-
-
-func get_need_value(id: StringName, default_value: float = 0.0) -> float:
-	if needs_component == null:
-		return default_value
-	return needs_component.get_need_value(id, default_value)
-
-
-func set_need_value(id: StringName, value: float) -> void:
-	if needs_component != null:
-		needs_component.set_need_value(id, value)
+	inst.set_value(randf_range(NeedInstance.MAX_VALUE * 0.8, NeedInstance.MAX_VALUE))
 
 
 func _process(_delta: float) -> void:
