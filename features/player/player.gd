@@ -39,6 +39,7 @@ func _ready() -> void:
 	add_to_group(Constants.GROUP_PLAYER)
 	_update_attack_hitbox_radius()
 	z_index = Constants.Z_INDEX_PLAYER
+	$Camera.zoom = Vector2.ONE * ConfigManager.config.camera_zoom_level
 
 func _physics_process(delta):
 

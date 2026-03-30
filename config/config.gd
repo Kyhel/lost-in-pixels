@@ -11,3 +11,4 @@ extends Resource
 @export var small_vegetation: Array[ObjectData] = []
 @export var spawn_world_objects := true
 @export var player_light := true
+@export var camera_zoom_level := 1.5
