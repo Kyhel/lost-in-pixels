@@ -90,9 +90,6 @@ func is_object_spawn_blocked(
 				r = FALLBACK_WORLD_OBJECT_RADIUS
 		if world_pos.distance_to(wo.global_position) < self_radius + r + margin:
 			return true
-	for veg in VegetationManager.get_nearby_vegetation(world_pos, OVERLAP_SEARCH_RADIUS):
-		if VegetationManager.vegetation_blocks_point(world_pos, self_radius, margin, veg):
-			return true
 	return false
 
 func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:

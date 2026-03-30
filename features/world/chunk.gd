@@ -22,7 +22,6 @@ var creatures_generated := false
 @onready var fog : TileMapLayer = $Fog
 @onready var creatures_container: Node2D = $Creatures
 @onready var objects_container: Node2D = $Objects
-@onready var vegetation_container: Node2D = $Vegetation
 
 func _ready() -> void:
 	z_index = Constants.Z_INDEX_TERRAIN
@@ -88,10 +87,6 @@ func get_creatures_container() -> Node2D:
 
 func get_objects_container() -> Node2D:
 	return objects_container
-
-
-func get_vegetation_container() -> Node2D:
-	return vegetation_container
 
 
 func register_environment_tile(local_tile: Vector2i) -> void:

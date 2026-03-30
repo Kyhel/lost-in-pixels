@@ -59,34 +59,6 @@ func get_tree_object_data(tree_type: TreeGenerator.TreeType) -> ObjectData:
 			return tree_1_data
 
 
-func spawn_vegetation(
-	world_tile: Vector2i,
-	vegetation_scene: PackedScene,
-	features: Array[Resource] = [],
-) -> Vegetation:
-	var resolved_chunk: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
-	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(resolved_chunk)
-	if chunk_node == null:
-		return null
-	var target_container: Node2D = chunk_node.get_vegetation_container()
-	if target_container == null:
-		return null
-
-	var vegetation: Vegetation = vegetation_scene.instantiate() as Vegetation
-	if vegetation == null:
-		return null
-	if not features.is_empty():
-		vegetation.features = features
-	vegetation.chunk_coords = resolved_chunk
-	vegetation.world_tile = world_tile
-	target_container.add_child(vegetation)
-	# Set global position only after parenting to avoid chunk transform offset.
-	vegetation.global_position = ChunkManager.world_tile_to_world_center(world_tile)
-	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
-	chunk_node.register_environment_tile(local_tile)
-	return vegetation as Vegetation
-
-
 func spawn_berry_bush(world_tile: Vector2i) -> void:
 	if berry_bush_data == null:
 		return
@@ -176,8 +148,6 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			spawn_berry_bush(world_tile)
 		elif chosen == lily_def:
 			spawn_water_lily(world_tile)
-		elif chosen.scene != null:
-			spawn_vegetation(world_tile, chosen.scene)
 
 
 func _build_active_small_vegetation_definitions() -> Array[VegetationSpawnDefinition]:
@@ -257,58 +227,12 @@ func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
 	return chunk_node.is_environment_tile_occupied(local_tile)
 
 
-func vegetation_blocks_point(world_pos: Vector2, self_radius: float, margin: float, node: Vegetation) -> bool:
-	var r: Variant = node.get("hitbox_radius")
-	var c: Variant = node.get("hitbox_center_world")
-	if r == null or c == null:
-		return false
-	if not (r is float or r is int):
-		return false
-	if not c is Vector2:
-		return false
-	var rf: float = float(r)
-	if rf <= 0.0:
-		return false
-	return world_pos.distance_to(c as Vector2) < self_radius + rf + margin
-
-
 func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
 	pass
 
 
 func _on_world_reset() -> void:
 	clear_all_vegetation()
-
-
-func get_nearby_vegetation(origin: Vector2, radius: float) -> Array[Vegetation]:
-	var results: Array[Vegetation] = []
-	var radius_sq := radius * radius
-
-	var origin_chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(origin)
-
-	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
-		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
-			var key: Vector2i = Vector2i(cx, cy)
-			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
-			if chunk == null:
-				continue
-			var vegetation_container: Node2D = chunk.get_vegetation_container()
-			if vegetation_container == null:
-				continue
-
-			for veg_node in vegetation_container.get_children():
-				var veg: Vegetation = veg_node as Vegetation
-				if veg == null or not is_instance_valid(veg):
-					continue
-
-				var dx: float = veg.global_position.x - origin.x
-				var dy: float = veg.global_position.y - origin.y
-				var dist_sq: float = dx * dx + dy * dy
-
-				if dist_sq <= radius_sq:
-					results.append(veg)
-
-	return results
 
 
 func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
