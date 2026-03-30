@@ -28,7 +28,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	target_food.be_eaten(creature)
 
 	if target_food is Creature:
-		creature.blackboard.set_value(Blackboard.KEY_HUNGER, Blackboard.KEY_HUNGER_MAX)
+		creature.set_need_value(NeedIds.HUNGER, Blackboard.KEY_HUNGER_MAX)
 
 	eating_timer = EATING_TIME
 	creature.blackboard.set_value(Blackboard.KEY_STATE, Blackboard.State.EATING)

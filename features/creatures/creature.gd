@@ -20,7 +20,7 @@ var blackboard: Blackboard  ## Shared memory for sensors and behaviors (e.g. fou
 var sensors_node : SensorsRoot
 var ai_root : AIRoot
 var movement : MovementComponent
-var fear_component: FearComponent
+var needs_component: NeedsComponent
 var alpha_mask: Node2D
 
 var virtual_rotation: float = 0
@@ -51,13 +51,11 @@ func _ready() -> void:
 	ai_root = get_node("AI")
 	movement = get_node("Movement")
 	blackboard = Blackboard.new()
-	fear_component = FearComponent.new()
 	if debug_root != null:
 		debug_speed_line = debug_root.get_node_or_null("SpeedLine")
 		debug_separation_line = debug_root.get_node_or_null("SeparationLine")
 		debug_avoidance_line = debug_root.get_node_or_null("AvoidanceLine")
 	health = max_health
-	$UIRoot/NeedsDisplay.set_watch(self)
 
 	if creature_data != null:
 
@@ -68,7 +66,6 @@ func _ready() -> void:
 			mask_world.add_child(alpha_mask)
 
 		if creature_data.taming_value_threshold > 0:
-			blackboard.set_value(Blackboard.KEY_TAMING, 0)
 			blackboard.set_value(Blackboard.KEY_TAMED, false)
 		is_big = creature_data.size_type == CreatureData.CreatureSize.BIG
 		if creature_data.sprite != null:
@@ -81,6 +78,51 @@ func _ready() -> void:
 		scale = Vector2.ONE * creature_data.scale_factor
 		$CollisionShape.scale = Vector2.ONE * creature_data.hitbox_size / $CollisionShape.shape.radius / 2
 		z_index = _get_z_index()
+
+	needs_component = NeedsComponent.from_creature_data(creature_data)
+	_initialize_hunger_need_starting_value()
+	if needs_component != null and needs_component.has_any():
+		SimulationSystem.register_needs(self, _on_needs_tick)
+
+	$UIRoot/NeedsDisplay.set_watch(self)
+
+func _initialize_hunger_need_starting_value() -> void:
+	if needs_component == null:
+		return
+	var inst := needs_component.get_instance(NeedIds.HUNGER)
+	if inst == null:
+		return
+	var hunger_need := inst.need as HungerNeed
+	if hunger_need == null:
+		return
+	if hunger_need.initial_value >= 0.0:
+		return
+	inst.set_value(randf_range(Blackboard.KEY_HUNGER_MAX * 0.8, Blackboard.KEY_HUNGER_MAX))
+
+
+func _on_needs_tick(_node: Object, tick_delta: float) -> void:
+	if needs_component != null:
+		needs_component.update_all(self, tick_delta)
+
+
+func get_need_value_or_null(id: StringName) -> Variant:
+	if needs_component == null:
+		return null
+	if not needs_component.instances.has(id):
+		return null
+	return needs_component.get_need_value(id)
+
+
+func get_need_value(id: StringName, default_value: float = 0.0) -> float:
+	if needs_component == null:
+		return default_value
+	return needs_component.get_need_value(id, default_value)
+
+
+func set_need_value(id: StringName, value: float) -> void:
+	if needs_component != null:
+		needs_component.set_need_value(id, value)
+
 
 func _process(_delta: float) -> void:
 	_update_visuals()
@@ -102,8 +144,6 @@ func _physics_process(delta: float) -> void:
 	debug_steering = Vector2.ZERO
 	debug_final_velocity = Vector2.ZERO
 
-	fear_component.update(self, delta)
-
 	if creature_data != null:
 		for goal in creature_data.goals:
 			goal.update(self, delta)
@@ -111,10 +151,7 @@ func _physics_process(delta: float) -> void:
 	movement.update_movement(self, delta)
 
 	move_and_slide()
-	
-	_update_hunger(delta)
-	_update_taming(delta)
-			
+
 func _update_visuals() -> void:
 	visualRoot.rotation = virtual_rotation
 	collisionShape.rotation = virtual_rotation
@@ -160,31 +197,6 @@ func _get_collision_mask() -> int:
 		mask &= ~Layers.WATER
 
 	return mask
-
-func _update_hunger(delta: float) -> void:
-
-	if not creature_data.needs_eating:
-		return
-
-	var hunger = blackboard.get_value(Blackboard.KEY_HUNGER)
-
-	if hunger == null:
-		hunger = randf_range(Blackboard.KEY_HUNGER_MAX * 0.8 , Blackboard.KEY_HUNGER_MAX)
-		blackboard.set_value(Blackboard.KEY_HUNGER, hunger)
-
-	blackboard.set_value(Blackboard.KEY_HUNGER, hunger - creature_data.hunger_decay_rate * delta)
-
-
-func _update_taming(delta: float) -> void:
-	if creature_data == null or creature_data.taming_value_threshold <= 0:
-		return
-	if blackboard.get_value(Blackboard.KEY_TAMED) == true:
-		return
-	var taming = blackboard.get_value(Blackboard.KEY_TAMING)
-	if taming == null:
-		taming = 0.0
-	taming = maxf(0.0, taming - creature_data.taming_decay_rate * delta)
-	blackboard.set_value(Blackboard.KEY_TAMING, taming)
 
 func get_goal_priority(goal: Goal) -> int:
 	if creature_data == null or goal == null:

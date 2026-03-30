@@ -11,7 +11,8 @@ func tick(creature: Creature, _delta: float) -> State:
 	if target_position == null:
 
 		var data := creature.creature_data
-		if data == null or data.fear_player_distance <= 0.0:
+		var flee_radius := _get_flee_radius(creature)
+		if data == null or flee_radius <= 0.0:
 			creature.movement.stop()
 			return State.RUNNING
 
@@ -33,7 +34,7 @@ func tick(creature: Creature, _delta: float) -> State:
 			var dir := base_away
 			if i > 0:
 				dir = base_away.rotated(randf_range(-0.6, 0.6))
-			picked = creature.global_position + dir * (2.0 * data.fear_player_distance)
+			picked = creature.global_position + dir * (2.0 * flee_radius)
 			if CreatureUtils.is_valid_wander_destination(creature, picked):
 				found = true
 				break
@@ -58,3 +59,11 @@ func tick(creature: Creature, _delta: float) -> State:
 func reset() -> void:
 	super.reset()
 	target_position = null
+
+
+static func _get_flee_radius(creature: Creature) -> float:
+	if creature.needs_component != null:
+		var inst: NeedInstance = creature.needs_component.get_instance(NeedIds.FEAR)
+		if inst != null and inst.need is FearNeed:
+			return (inst.need as FearNeed).fear_player_distance
+	return 0.0

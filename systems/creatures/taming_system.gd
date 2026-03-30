@@ -19,13 +19,11 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 		return
 
 	var was_tamed: bool = eater.blackboard.get_value(Blackboard.KEY_TAMED) == true
-	var taming: Variant = eater.blackboard.get_value(Blackboard.KEY_TAMING)
-	if taming == null:
-		taming = 0
-	taming = int(taming) + taming_add
-	eater.blackboard.set_value(Blackboard.KEY_TAMING, taming)
+	var taming: float = eater.get_need_value(NeedIds.TAMING, 0.0)
+	taming += float(taming_add)
+	eater.set_need_value(NeedIds.TAMING, taming)
 
-	var now_tamed: bool = taming >= cd.taming_value_threshold
+	var now_tamed: bool = int(taming) >= cd.taming_value_threshold
 	if now_tamed:
 		eater.blackboard.set_value(Blackboard.KEY_TAMED, true)
 

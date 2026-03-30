@@ -35,7 +35,7 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 	# Creature eating: current behavior is to refill hunger to max.
 	if by is Creature:
 		var creature := by as Creature
-		creature.blackboard.set_value(Blackboard.KEY_HUNGER, Blackboard.KEY_HUNGER_MAX)
+		creature.set_need_value(NeedIds.HUNGER, Blackboard.KEY_HUNGER_MAX)
 		EventManager.object_eaten.emit(creature, world_object)
 		world_object.destroy("eaten")
 		return true

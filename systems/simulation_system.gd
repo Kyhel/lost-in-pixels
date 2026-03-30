@@ -8,16 +8,20 @@ extends Node
 @export var ai_update_interval: float = 0.1
 ## Global step between produce physics_update calls. <= 0 runs every physics frame (legacy regrow timing).
 @export var produce_update_interval: float = 5.0
+## Global step between creature need ticks. At most one tick per creature per interval.
+@export var need_update_interval: float = 0.1
 
 var _sensor_entries: Array[Dictionary] = []
 var _ai_entries: Array[Dictionary] = []
 var _produce_entries: Array[Dictionary] = []
+var _needs_entries: Array[Dictionary] = []
 
 
 func _on_world_reset() -> void:
 	_sensor_entries.clear()
 	_ai_entries.clear()
 	_produce_entries.clear()
+	_needs_entries.clear()
 
 
 func register_sensor(root: SensorsRoot, on_tick: Callable) -> void:
@@ -30,6 +34,10 @@ func register_ai(root: AIRoot, on_tick: Callable) -> void:
 
 func register_produce(world_object: WorldObject, on_tick: Callable) -> void:
 	_register_entry(_produce_entries, world_object, produce_update_interval, on_tick)
+
+
+func register_needs(creature: Creature, on_tick: Callable) -> void:
+	_register_entry(_needs_entries, creature, need_update_interval, on_tick)
 
 
 func _remove_entry_by_node(entries: Array[Dictionary], node: Object) -> void:
@@ -55,6 +63,7 @@ func _physics_process(delta: float) -> void:
 	_process_stagger_queue(_sensor_entries, sensor_update_interval, delta)
 	_process_stagger_queue(_ai_entries, ai_update_interval, delta)
 	_process_stagger_queue(_produce_entries, produce_update_interval, delta)
+	_process_stagger_queue(_needs_entries, need_update_interval, delta)
 
 
 ## Returns null if this frame did not cross a tick (elapsed may be updated only). If interval <= 0, always returns delta (every physics frame).

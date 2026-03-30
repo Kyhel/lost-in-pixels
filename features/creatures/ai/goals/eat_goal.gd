@@ -11,7 +11,7 @@ func get_score(creature: Creature) -> float:
 	if foods == null or foods.is_empty():
 		return 0
 
-	var hunger = creature.blackboard.get_value(Blackboard.KEY_HUNGER)
+	var hunger = creature.get_need_value_or_null(NeedIds.HUNGER)
 	if hunger != null and hunger <= 80:
 		return 1.0
 

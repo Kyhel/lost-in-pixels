@@ -36,7 +36,7 @@ func tick(creature: Creature, _delta: float) -> State:
 
 ## Same logic as EatGoal: when hungry, any food; when not hungry, only food with taming value.
 func _get_food_candidates(creature: Creature, valid_foods: Array[Node2D]) -> Array[Node2D]:
-	var hunger = creature.blackboard.get_value(Blackboard.KEY_HUNGER)
+	var hunger = creature.get_need_value_or_null(NeedIds.HUNGER)
 	if hunger != null and hunger <= 80:
 		return valid_foods
 

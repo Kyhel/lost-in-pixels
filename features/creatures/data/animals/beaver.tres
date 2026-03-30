@@ -11,6 +11,14 @@
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="5_food"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="7_3fdru"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="8_0t3oh"]
+[ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
+[ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
+
+[sub_resource type="Resource" id="need_hunger_beaver"]
+script = ExtResource("hunger_s")
+id = &"hunger"
+base_decay_rate = 1.0
+initial_value = -1.0
 
 [resource]
 script = ExtResource("2_yyua3")
@@ -21,12 +29,11 @@ ExtResource("2_27jme"): 0,
 ExtResource("2_eat"): 50
 }
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
+needs = Array[ExtResource("need_base")]([SubResource("need_hunger_beaver")])
 can_swim = true
 size = 30
 hitbox_size = 12
 biomes = Array[int]([1, 2, 7])
 excluded_tile_types = Array[int]([])
-needs_eating = true
 edible_objects = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResource("4_0t3oh")])
-hunger_decay_rate = 1.0
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"

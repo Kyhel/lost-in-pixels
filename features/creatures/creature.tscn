@@ -10,20 +10,6 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 8.0
 
-[sub_resource type="GDScript" id="GDScript_oxi2p"]
-script/source = "extends ProgressBar
-
-var creature: Creature
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-func _on_blackboard_value_changed(key: String, _value: Variant) -> void:
-	if key == Blackboard.KEY_HUNGER:
-		value = _value
-"
-
 [node name="Creature" type="CharacterBody2D" unique_id=1127989516]
 z_index = 1
 collision_layer = 0
@@ -88,4 +74,3 @@ offset_right = 27.0
 offset_bottom = 4.0
 step = 1.0
 show_percentage = false
-script = SubResource("GDScript_oxi2p")

@@ -13,6 +13,20 @@
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="7_food"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="9_0l1a1"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="10_dpj8p"]
+[ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
+[ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
+[ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
+
+[sub_resource type="Resource" id="need_hunger_fox"]
+script = ExtResource("hunger_s")
+id = &"hunger"
+base_decay_rate = 2.0
+initial_value = -1.0
+
+[sub_resource type="Resource" id="need_taming_fox"]
+script = ExtResource("taming_s")
+id = &"taming"
+base_decay_rate = 5.0
 
 [resource]
 script = ExtResource("2_ovces")
@@ -24,13 +38,12 @@ ExtResource("3_n5fiy"): 50,
 ExtResource("4_follow"): 60
 }
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])
+needs = Array[ExtResource("need_base")]([SubResource("need_hunger_fox"), SubResource("need_taming_fox")])
 size = 32
 hitbox_size = 20
 base_speed = 50.0
 running_multiplier = 3.0
-needs_eating = true
 edible_objects = Array[ExtResource("3_lbjb4")]([ExtResource("4_bfsb6"), ExtResource("5_ewph6")])
 edible_creatures = Array[ExtResource("2_ovces")]([ExtResource("2_ewph6")])
-hunger_decay_rate = 2.0
 taming_value_threshold = 100
 metadata/_custom_type_script = "uid://clk4ii14vm1a2"
