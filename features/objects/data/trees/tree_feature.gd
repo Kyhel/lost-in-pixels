@@ -19,6 +19,7 @@ func apply(node: Node2D) -> void:
 
 	if foliage_texture != null:
 		foliage.texture = foliage_texture
+	_apply_occlusion_mask_to_foliage(node, foliage)
 
 	var tex_size: Vector2 = foliage.texture.get_size()
 	var max_f: float = maxf(tex_size.x, tex_size.y)
@@ -51,3 +52,20 @@ func _find_first_collision_shape(body: StaticBody2D) -> CollisionShape2D:
 		if child is CollisionShape2D:
 			return child as CollisionShape2D
 	return null
+
+
+func _apply_occlusion_mask_to_foliage(node: Node2D, foliage: Sprite2D) -> void:
+	var foliage_material := foliage.material
+	if not (foliage_material is ShaderMaterial):
+		return
+	var scene_tree := node.get_tree()
+	if scene_tree == null:
+		return
+	var scene_root := scene_tree.current_scene
+	if scene_root == null:
+		return
+	var occlusion_mask_viewport := scene_root.find_child("AlphaMaskViewport", true, false) as SubViewport
+	if occlusion_mask_viewport == null:
+		push_warning("TreeFeature: AlphaMaskViewport missing; tree spawned without mask.")
+		return
+	(foliage_material as ShaderMaterial).set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())

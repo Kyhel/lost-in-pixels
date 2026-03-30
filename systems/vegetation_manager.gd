@@ -4,18 +4,10 @@ const MIN_PICKED_TILE_CHEBYSHEV := 3
 const BERRY_BUSH_ID := &"berry_bush"
 const WATER_LILY_ID := &"water_lily"
 
-var occlusion_mask_viewport: SubViewport
-
 var tree_1_data: ObjectData = preload("res://features/objects/data/trees/tree_1.tres")
 var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.tres")
 var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush/berry_bush.tres")
 var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily/water_lily.tres")
-
-func refresh_scene_references() -> void:
-	var scene := get_tree().current_scene
-	if scene:
-		occlusion_mask_viewport = scene.find_child("AlphaMaskViewport", true, false) as SubViewport
-
 
 func clear_all_vegetation() -> void:
 	pass
@@ -26,8 +18,6 @@ func update_chunks(_delta: float) -> void:
 
 
 func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
-	if occlusion_mask_viewport == null or not is_instance_valid(occlusion_mask_viewport):
-		refresh_scene_references()
 	var tree_data: ObjectData = get_tree_object_data(tree_type)
 	if tree_data == null:
 		return
@@ -40,13 +30,6 @@ func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> v
 	if chunk_node != null:
 		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(tile_position)
 		chunk_node.register_environment_tile(local_tile)
-	var foliage := tree.get_node_or_null("Foliage") as Sprite2D
-	var foliage_material := foliage.material if foliage != null else null
-	if occlusion_mask_viewport != null:
-		if foliage_material is ShaderMaterial:
-			(foliage_material as ShaderMaterial).set_shader_parameter("mask_tex", occlusion_mask_viewport.get_texture())
-	else:
-		push_warning("VegetationManager: AlphaMaskViewport missing; tree spawned without mask.")
 
 
 func get_tree_object_data(tree_type: TreeGenerator.TreeType) -> ObjectData:
@@ -60,24 +43,18 @@ func get_tree_object_data(tree_type: TreeGenerator.TreeType) -> ObjectData:
 
 
 func spawn_berry_bush(world_tile: Vector2i) -> void:
-	if berry_bush_data == null:
-		return
-	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
-	var world_object: WorldObject = ObjectsManager.spawn_object_at(berry_bush_data, world_pos)
-	if world_object == null:
-		return
-	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
-	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
-	if chunk_node != null:
-		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
-		chunk_node.register_environment_tile(local_tile)
+	_spawn_small_object(berry_bush_data, world_tile)
 
 
 func spawn_water_lily(world_tile: Vector2i) -> void:
-	if water_lily_data == null:
+	_spawn_small_object(water_lily_data, world_tile)
+
+
+func _spawn_small_object(object_data: ObjectData, world_tile: Vector2i) -> void:
+	if object_data == null:
 		return
 	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
-	var world_object: WorldObject = ObjectsManager.spawn_object_at(water_lily_data, world_pos)
+	var world_object: WorldObject = ObjectsManager.spawn_object_at(object_data, world_pos)
 	if world_object == null:
 		return
 	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)

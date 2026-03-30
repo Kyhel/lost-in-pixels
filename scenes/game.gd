@@ -5,7 +5,6 @@ const OCCLUSION_LAYER = 2
 
 func _ready() -> void:
 	print("Game started")
-	VegetationManager.refresh_scene_references()
 	call_deferred(&"_apply_session_to_player")
 
 
