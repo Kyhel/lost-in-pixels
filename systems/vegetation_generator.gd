@@ -1,49 +1,65 @@
-extends Node
+class_name VegetationGenerator
+extends RefCounted
 
 const MIN_PICKED_TILE_CHEBYSHEV := 3
 const BERRY_BUSH_ID := &"berry_bush"
 const WATER_LILY_ID := &"water_lily"
+const TREE_1_ID := &"tree_1"
+const TREE_2_ID := &"tree_2"
 
-var tree_1_data: ObjectData = preload("res://features/objects/data/trees/tree_1.tres")
-var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.tres")
-var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush/berry_bush.tres")
-var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily/water_lily.tres")
+var _world_seed: int = 0
+var _tree_generator: TreeGenerator
+
+func _init(world_seed: int) -> void:
+	_world_seed = world_seed
+	_tree_generator = TreeGenerator.new(world_seed)
 
 
-func spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
-	var tree_data: ObjectData = get_tree_object_data(tree_type)
-	if tree_data == null:
+func generate_chunk_vegetation(chunk_coords: Vector2i, chunk: Chunk, chunk_size: int) -> void:
+
+	if chunk == null:
 		return
-	var tree_pos: Vector2 = ChunkManager.world_tile_to_world_center(tile_position)
-	var tree: WorldObject = ObjectsManager.spawn_object_at(tree_data, tree_pos)
-	if tree == null:
-		return
-	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(tile_position)
-	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
-	if chunk_node != null:
-		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(tile_position)
-		chunk_node.register_environment_tile(local_tile)
+
+	if ConfigManager.config.spawn_trees:
+		var placements: Array[Dictionary] = _tree_generator.generate_tree_placements_for_chunk(
+			chunk_coords,
+			chunk,
+			chunk_size
+		)
+		for placement in placements:
+			var world_tile: Vector2i = placement.get("world_tile", Vector2i.ZERO)
+			var tree_type: TreeGenerator.TreeType = placement.get("tree_type", TreeGenerator.TreeType.TREE_1)
+			_spawn_tree(world_tile, tree_type)
+
+	if ConfigManager.config.spawn_bushes or ConfigManager.config.spawn_water_lilies:
+		_spawn_small_vegetation(chunk_coords, chunk)
 
 
-func get_tree_object_data(tree_type: TreeGenerator.TreeType) -> ObjectData:
-	match tree_type:
-		TreeGenerator.TreeType.TREE_1:
-			return tree_1_data
-		TreeGenerator.TreeType.TREE_2:
-			return tree_2_data
-		_:
-			return tree_1_data
+func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
+	var out: Array[WorldObject] = []
+	for world_object in ObjectsManager.get_nearby_world_objects(origin, radius):
+		if world_object.object_data == null:
+			continue
+		var id: StringName = world_object.object_data.id
+		if id == TREE_1_ID or id == TREE_2_ID:
+			out.append(world_object)
+	return out
 
 
-func spawn_berry_bush(world_tile: Vector2i) -> void:
-	_spawn_small_object(berry_bush_data, world_tile)
+func _spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
+	var object_id: StringName = TREE_1_ID
+	if tree_type == TreeGenerator.TreeType.TREE_2:
+		object_id = TREE_2_ID
+	var tree_data: ObjectData = ObjectDatabase.get_object_data(object_id)
+	_spawn_object_on_tile(tree_data, tile_position)
 
 
-func spawn_water_lily(world_tile: Vector2i) -> void:
-	_spawn_small_object(water_lily_data, world_tile)
+func _spawn_small_object(object_id: StringName, world_tile: Vector2i) -> void:
+	var object_data: ObjectData = ObjectDatabase.get_object_data(object_id)
+	_spawn_object_on_tile(object_data, world_tile)
 
 
-func _spawn_small_object(object_data: ObjectData, world_tile: Vector2i) -> void:
+func _spawn_object_on_tile(object_data: ObjectData, world_tile: Vector2i) -> void:
 	if object_data == null:
 		return
 	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
@@ -57,7 +73,7 @@ func _spawn_small_object(object_data: ObjectData, world_tile: Vector2i) -> void:
 		chunk_node.register_environment_tile(local_tile)
 
 
-func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
+func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 	var active_defs: Array[VegetationSpawnDefinition] = _build_active_small_vegetation_definitions()
 	if active_defs.is_empty():
 		return
@@ -72,7 +88,7 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 				chunk_coords.x * chunk_size + local_x,
 				chunk_coords.y * chunk_size + local_y
 			)
-			if is_environment_tile_occupied(world_tile):
+			if _is_environment_tile_occupied(world_tile):
 				continue
 			var valid: Array[VegetationSpawnDefinition] = []
 			for def in active_defs:
@@ -101,6 +117,8 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			continue
 		picked.append(t)
 
+	var berry_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
+	var lily_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
 	for world_tile: Vector2i in picked:
 		var defs: Variant = tile_to_defs.get(world_tile, null)
 		if defs == null:
@@ -112,12 +130,10 @@ func spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 		var chosen: VegetationSpawnDefinition = def_list[idx] as VegetationSpawnDefinition
 		if chosen == null:
 			continue
-		var berry_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
-		var lily_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
 		if chosen == berry_def:
-			spawn_berry_bush(world_tile)
+			_spawn_small_object(BERRY_BUSH_ID, world_tile)
 		elif chosen == lily_def:
-			spawn_water_lily(world_tile)
+			_spawn_small_object(WATER_LILY_ID, world_tile)
 
 
 func _build_active_small_vegetation_definitions() -> Array[VegetationSpawnDefinition]:
@@ -188,29 +204,10 @@ func _shuffle_vec2i_with_rng(arr: Array[Vector2i], rng: RandomNumberGenerator) -
 		arr[j] = tmp
 
 
-func is_environment_tile_occupied(world_tile: Vector2i) -> bool:
+func _is_environment_tile_occupied(world_tile: Vector2i) -> bool:
 	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk_node == null:
 		return false
 	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
 	return chunk_node.is_environment_tile_occupied(local_tile)
-
-
-func _on_chunk_unloaded(_chunk: Vector2i, _chunk_node: Chunk) -> void:
-	pass
-
-
-func _on_world_reset() -> void:
-	pass
-
-
-func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
-	var out: Array[WorldObject] = []
-	for world_object in ObjectsManager.get_nearby_world_objects(origin, radius):
-		if world_object.object_data == null:
-			continue
-		var id: StringName = world_object.object_data.id
-		if id == &"tree_1" or id == &"tree_2":
-			out.append(world_object)
-	return out

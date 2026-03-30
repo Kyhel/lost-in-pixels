@@ -32,11 +32,12 @@ func _init(p_seed: int) -> void:
 	tree_noise.fractal_gain = 0.5
 
 
-func generate_trees_for_chunk(
+func generate_tree_placements_for_chunk(
 	chunk_position: Vector2i,
 	_chunk: Chunk,
 	chunk_size: int,
-) -> void:
+) -> Array[Dictionary]:
+	var placements: Array[Dictionary] = []
 
 	for x: int in range(chunk_size):
 		for y: int in range(chunk_size):
@@ -45,9 +46,13 @@ func generate_trees_for_chunk(
 			var tile_type: WorldGenerator.TileType = _chunk.get_tile_type(x, y)
 
 			if _should_spawn_forest_tree(global_x, global_y, x, y, chunk_size, _chunk, tile_type):
-				VegetationManager.spawn_tree(Vector2i(global_x, global_y), TreeType.TREE_2)
+				placements.append({
+					"world_tile": Vector2i(global_x, global_y),
+					"tree_type": TreeType.TREE_2,
+				})
 
-	_spawn_plains_grove_trees_for_chunk(chunk_position, _chunk, chunk_size)
+	placements.append_array(_collect_plains_grove_tree_placements_for_chunk(chunk_position, _chunk, chunk_size))
+	return placements
 
 
 func get_tree_type(tile_type: WorldGenerator.TileType) -> TreeType:
@@ -116,7 +121,8 @@ func _get_tile_type_world(
 	return ChunkManager.get_tile_type_for_generation(wx, wy)
 
 
-func _spawn_plains_grove_trees_for_chunk(chunk_position: Vector2i, _chunk: Chunk, chunk_size: int) -> void:
+func _collect_plains_grove_tree_placements_for_chunk(chunk_position: Vector2i, _chunk: Chunk, chunk_size: int) -> Array[Dictionary]:
+	var placements: Array[Dictionary] = []
 	var s: int = PLAINS_GROVE_CELL_SIZE
 	var wx0: int = chunk_position.x * chunk_size
 	var wy0: int = chunk_position.y * chunk_size
@@ -136,7 +142,11 @@ func _spawn_plains_grove_trees_for_chunk(chunk_position: Vector2i, _chunk: Chunk
 				var ly: int = p.y - wy0
 				if _chunk.get_tile_type(lx, ly) != WorldGenerator.TileType.GRASS:
 					continue
-				VegetationManager.spawn_tree(p, TreeType.TREE_1)
+				placements.append({
+					"world_tile": p,
+					"tree_type": TreeType.TREE_1,
+				})
+	return placements
 
 
 func _plains_grove_tree_positions(mcx: int, mcy: int) -> Array[Vector2i]:

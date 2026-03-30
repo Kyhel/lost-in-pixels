@@ -9,7 +9,6 @@ func _ready():
 	SignalUtils.safe_connect(world_reset, ChunkManager._on_world_reset)
 	SignalUtils.safe_connect(world_reset, CreatureManager._on_world_reset)
 	SignalUtils.safe_connect(world_reset, ObjectsManager._on_world_reset)
-	SignalUtils.safe_connect(world_reset, VegetationManager._on_world_reset)
 	SignalUtils.safe_connect(world_reset, GameLog._on_world_reset)
 	
 	var spawn_system: SpawnSystem = get_node_or_null("SpawnSystem") as SpawnSystem

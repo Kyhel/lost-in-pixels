@@ -14,7 +14,7 @@ var loaded_chunks: Dictionary[Vector2i, Node] = {}
 
 var chunk_scene = preload("res://features/world/chunk.tscn")
 var world_generator: WorldGenerator
-var tree_generator: TreeGenerator
+var vegetation_generator: VegetationGenerator
 var fog_memory: Dictionary[Vector2i, Array] = {}
 
 
@@ -25,8 +25,7 @@ func _ready() -> void:
 func _apply_world_seed(p_seed: int) -> void:
 	world_generator = WorldGenerator.new()
 	world_generator.setup_seed(p_seed)
-	var wseed: int = world_generator.terrain_noise.seed
-	tree_generator = TreeGenerator.new(wseed)
+	vegetation_generator = VegetationGenerator.new(world_generator.terrain_noise.seed)
 
 
 func set_world_seed(p_seed: int) -> void:
@@ -145,14 +144,8 @@ func _generate_chunk_terrain(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 
 
 func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
-	if ConfigManager.config.spawn_trees:
-		tree_generator.generate_trees_for_chunk(
-			Vector2i(chunk_x, chunk_y),
-			chunk,
-			CHUNK_SIZE)
-
-	if ConfigManager.config.spawn_bushes or ConfigManager.config.spawn_water_lilies:
-		VegetationManager.spawn_small_vegetation(Vector2i(chunk_x, chunk_y), chunk)
+	if vegetation_generator != null:
+		vegetation_generator.generate_chunk_vegetation(Vector2i(chunk_x, chunk_y), chunk, CHUNK_SIZE)
 
 	chunk.vegetation_generated = true
 
@@ -426,3 +419,9 @@ func get_tile_type_for_generation(world_x: int, world_y: int) -> WorldGenerator.
 		return WorldGenerator.TileType.WATER
 	var local_tile := world_tile_to_local_tile(world_tile)
 	return (ch as Chunk).get_tile_type(local_tile.x, local_tile.y)
+
+
+func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
+	if vegetation_generator == null:
+		return []
+	return vegetation_generator.get_nearby_trees(origin, radius)
