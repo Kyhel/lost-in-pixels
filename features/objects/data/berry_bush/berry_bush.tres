@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_ccsm0"]
 [ext_resource type="PackedScene" path="res://features/objects/scenes/colliding_world_object.tscn" id="3_scene"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
-[ext_resource type="Resource" uid="uid://baoxlg7ar24vr" path="res://features/objects/behaviors/berry_bush_produce_behavior.tres" id="5_prb"]
+[ext_resource type="Resource" uid="uid://ck0cu82h8yrnl" path="res://features/objects/data/berry_bush/berry_bush_produce_behavior.tres" id="5_prb"]
 
 [resource]
 script = ExtResource("1_obj")

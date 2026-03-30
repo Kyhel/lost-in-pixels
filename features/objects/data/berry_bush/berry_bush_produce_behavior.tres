@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ProduceBehavior" format=3 uid="uid://ck0cu82h8yrnl"]
+
+[ext_resource type="Script" uid="uid://c615vdxbnwexl" path="res://features/objects/behaviors/produce_behavior.gd" id="1_prb"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="2_berry"]
+
+[resource]
+script = ExtResource("1_prb")
+produce_object_data = ExtResource("2_berry")
+slot_count = 5
+regrow_chance = 0.1
+seed_salt = 1883331154
+metadata/_custom_type_script = "uid://c615vdxbnwexl"

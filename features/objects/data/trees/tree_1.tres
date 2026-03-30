@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://dmheix1xlsmr5"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_obj"]
-[ext_resource type="PackedScene" uid="uid://cfq8k2m7p4n5w" path="res://features/objects/data/trees/tree.tscn" id="2_scene"]
+[ext_resource type="PackedScene" uid="uid://cfq8k2m7p4n5w" path="res://features/objects/scenes/tree.tscn" id="2_scene"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_wof"]
 [ext_resource type="Resource" uid="uid://c8k2m4n6p8q1r" path="res://features/objects/data/trees/tree_1_feature.tres" id="4_feature"]

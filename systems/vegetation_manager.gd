@@ -8,8 +8,8 @@ var occlusion_mask_viewport: SubViewport
 
 var tree_1_data: ObjectData = preload("res://features/objects/data/trees/tree_1.tres")
 var tree_2_data: ObjectData = preload("res://features/objects/data/trees/tree_2.tres")
-var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush.tres")
-var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily.tres")
+var berry_bush_data: ObjectData = preload("res://features/objects/data/berry_bush/berry_bush.tres")
+var water_lily_data: ObjectData = preload("res://features/objects/data/water_lily/water_lily.tres")
 
 func refresh_scene_references() -> void:
 	var scene := get_tree().current_scene
