@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="VegetationData" format=3 uid="uid://vfrqx8wi8it5"]
-
-[ext_resource type="Script" uid="uid://cjeexve65wv6j" path="res://features/world/vegetation_data.gd" id="1_vd"]
-[ext_resource type="Resource" uid="uid://c31wg4eyc3dr2" path="res://features/world/vegetation/berry_bush/berry_bush_spawn_definition.tres" id="2_def"]
-
-[resource]
-script = ExtResource("1_vd")
-id = &"berry_bush"
-vegetation_spawn_definition = ExtResource("2_def")

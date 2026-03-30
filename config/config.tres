@@ -10,6 +10,9 @@
 [ext_resource type="Resource" uid="uid://ceb4dhu7kc0pk" path="res://features/creatures/spawn_logic/biome_spawn_profiles/forest_spawn_profile.tres" id="8_forest_profile"]
 [ext_resource type="Resource" uid="uid://b1ncob6mvl0vg" path="res://features/creatures/spawn_logic/biome_spawn_profiles/plains_spawn_profile.tres" id="9_plains_profile"]
 [ext_resource type="Resource" uid="uid://b1t077bmvl0vg" path="res://features/creatures/spawn_logic/biome_spawn_profiles/water_spawn_profile.tres" id="10_water_profile"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="11_objdata"]
+[ext_resource type="Resource" uid="uid://r514gn44t7kk" path="res://features/objects/data/berry_bush/berry_bush.tres" id="12_berry"]
+[ext_resource type="Resource" uid="uid://4w54c65f7cqm" path="res://features/objects/data/water_lily/water_lily.tres" id="13_lily"]
 
 [resource]
 script = ExtResource("6_3l0t6")
@@ -17,4 +20,5 @@ allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("3_yq3s8"), ExtRe
 biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_forest_profile"), ExtResource("9_plains_profile"), ExtResource("10_water_profile")])
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
+small_vegetation = Array[ExtResource("11_objdata")]([ExtResource("12_berry"), ExtResource("13_lily")])
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

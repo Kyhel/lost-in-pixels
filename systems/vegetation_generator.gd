@@ -2,8 +2,6 @@ class_name VegetationGenerator
 extends RefCounted
 
 const MIN_PICKED_TILE_CHEBYSHEV := 3
-const BERRY_BUSH_ID := &"berry_bush"
-const WATER_LILY_ID := &"water_lily"
 const TREE_1_ID := &"tree_1"
 const TREE_2_ID := &"tree_2"
 
@@ -31,7 +29,7 @@ func generate_chunk_vegetation(chunk_coords: Vector2i, chunk: Chunk, chunk_size:
 			var tree_type: TreeGenerator.TreeType = placement.get("tree_type", TreeGenerator.TreeType.TREE_1)
 			_spawn_tree(world_tile, tree_type)
 
-	if ConfigManager.config.spawn_bushes or ConfigManager.config.spawn_water_lilies:
+	if ConfigManager.config.spawn_small_vegetation:
 		_spawn_small_vegetation(chunk_coords, chunk)
 
 
@@ -52,11 +50,6 @@ func _spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> 
 		object_id = TREE_2_ID
 	var tree_data: ObjectData = ObjectDatabase.get_object_data(object_id)
 	_spawn_object_on_tile(tree_data, tile_position)
-
-
-func _spawn_small_object(object_id: StringName, world_tile: Vector2i) -> void:
-	var object_data: ObjectData = ObjectDatabase.get_object_data(object_id)
-	_spawn_object_on_tile(object_data, world_tile)
 
 
 func _spawn_object_on_tile(object_data: ObjectData, world_tile: Vector2i) -> void:
@@ -117,8 +110,6 @@ func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 			continue
 		picked.append(t)
 
-	var berry_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
-	var lily_def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
 	for world_tile: Vector2i in picked:
 		var defs: Variant = tile_to_defs.get(world_tile, null)
 		if defs == null:
@@ -130,22 +121,21 @@ func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 		var chosen: VegetationSpawnDefinition = def_list[idx] as VegetationSpawnDefinition
 		if chosen == null:
 			continue
-		if chosen == berry_def:
-			_spawn_small_object(BERRY_BUSH_ID, world_tile)
-		elif chosen == lily_def:
-			_spawn_small_object(WATER_LILY_ID, world_tile)
+		_spawn_object_on_tile(chosen.object_data, world_tile)
 
 
 func _build_active_small_vegetation_definitions() -> Array[VegetationSpawnDefinition]:
 	var out: Array[VegetationSpawnDefinition] = []
-	if ConfigManager.config.spawn_bushes:
-		var b: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(BERRY_BUSH_ID)
-		if b != null and b.pass_type == VegetationSpawnDefinition.PassType.SMALL:
-			out.append(b)
-	if ConfigManager.config.spawn_water_lilies:
-		var w: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(WATER_LILY_ID)
-		if w != null and w.pass_type == VegetationSpawnDefinition.PassType.SMALL:
-			out.append(w)
+	for object_data in ConfigManager.config.small_vegetation:
+		if object_data == null:
+			continue
+		var def: VegetationSpawnDefinition = VegetationDatabase.get_vegetation_spawn_definition(object_data.id)
+		if def == null:
+			push_warning("VegetationGenerator: no VegetationSpawnDefinition for ObjectData id '%s'; skipped." % String(object_data.id))
+			continue
+		if def.pass_type != VegetationSpawnDefinition.PassType.SMALL:
+			continue
+		out.append(def)
 	return out
 
 
@@ -170,15 +160,14 @@ func _definition_passes_density(
 	world_tile: Vector2i,
 	chunk_coords: Vector2i
 ) -> bool:
+
+	if def.object_data == null:
+		return false
+
 	var d: float = clampf(def.density, 0.0, 1.0)
 	if d <= 0.0:
 		return false
-	var salt: int
-	var path: String = def.resource_path
-	if path.is_empty():
-		salt = hash(def.scene.resource_path) if def.scene else 0
-	else:
-		salt = hash(path)
+	var salt := hash(def.object_data.id)
 	var h: int = ChunkManager.get_chunk_seed(chunk_coords.x, chunk_coords.y) ^ hash(world_tile) ^ salt
 	var roll_rng := RandomNumberGenerator.new()
 	roll_rng.seed = h

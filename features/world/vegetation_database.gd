@@ -8,27 +8,26 @@ func _ready() -> void:
 	if config == null:
 		push_error("VegetationDatabase: failed to load config resource")
 		return
-	for veg_data in config.vegetation:
-		_register_vegetation_data(veg_data)
+	for spawn_def in config.vegetation_spawn_definitions:
+		_register_spawn_definition(spawn_def)
 
 
-func _register_vegetation_data(data: VegetationData) -> void:
-	if data == null:
-		return
-	var spawn_def: VegetationSpawnDefinition = data.vegetation_spawn_definition
+func _register_spawn_definition(spawn_def: VegetationSpawnDefinition) -> void:
 	if spawn_def == null:
-		push_warning("VegetationDatabase: VegetationData has no vegetation_spawn_definition; skipped.")
 		return
-	var resolved_id: StringName = data.id
+	var object_data: ObjectData = spawn_def.object_data
+	if object_data == null:
+		push_warning("VegetationDatabase: VegetationSpawnDefinition has no object_data; skipped.")
+		return
+	var resolved_id: StringName = object_data.id
 	if String(resolved_id).is_empty():
-		var path: String = data.resource_path
+		var path: String = object_data.resource_path
 		if path.is_empty():
-			push_warning("VegetationDatabase: VegetationData has no id and no resource_path; skipped.")
+			push_warning("VegetationDatabase: ObjectData has no id and no resource_path; skipped.")
 			return
 		resolved_id = StringName(path.get_file().get_basename())
-		data.id = resolved_id
 	if String(resolved_id).is_empty():
-		push_warning("VegetationDatabase: could not resolve VegetationData id; skipped.")
+		push_warning("VegetationDatabase: could not resolve ObjectData id; skipped.")
 		return
 	if _vegetation_by_id.has(resolved_id):
 		push_warning("VegetationDatabase: duplicate vegetation id '%s'; skipping duplicate." % String(resolved_id))

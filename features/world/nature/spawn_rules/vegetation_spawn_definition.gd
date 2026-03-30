@@ -9,6 +9,8 @@ enum PassType {
 
 @export var scene: PackedScene
 
+@export var object_data: ObjectData
+
 @export var density := 0.1  # probability per tile
 @export var noise_scale := 1.0
 @export var min_spacing := 1  # for large objects
