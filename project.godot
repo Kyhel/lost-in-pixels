@@ -17,18 +17,16 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+CreatureDatabase="*uid://s3p2akknti2k"
+ItemDatabase="*res://systems/items/item_database.gd"
 GameSession="*uid://g7ses8n2k4m1p"
 SaveGame="*uid://s4veg8m3p1x9q"
 ChunkManager="*uid://dqrsinwnx82bn"
-ObjectsManager="*uid://dp4jmd73t0oak"
 ConfigManager="*uid://de4qv4t7ch7cr"
 GameLog="*res://systems/game_log.gd"
 EventManager="*res://systems/event_manager.gd"
-ItemDatabase="*res://systems/items/item_database.gd"
 Inventory="*res://systems/items/inventory.gd"
-CreatureDatabase="*uid://s3p2akknti2k"
 CreatureManager="*uid://y2rh1urfh7el"
-ObjectDatabase="*uid://d2tw65q0t4xcq"
 ObjectInteractionSystem="*uid://dx3jfksyhhymp"
 TamingSystem="*res://systems/creatures/taming_system.gd"
 PlayerInputManager="*res://systems/player_input_manager.gd"
@@ -37,6 +35,8 @@ SimulationSystem="*res://systems/simulation_system.gd"
 VegetationDatabase="*res://features/world/vegetation/vegetation_database.gd"
 AbilityDatabase="*res://systems/player/ability_database.gd"
 AbilityManager="*res://systems/player/ability_manager.gd"
+ObjectDatabase="*uid://d2tw65q0t4xcq"
+ObjectsManager="*uid://dp4jmd73t0oak"
 
 [display]
 

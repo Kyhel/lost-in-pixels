@@ -21,7 +21,7 @@ func _rebuild() -> void:
 		btn.disabled = true
 		if i < AbilityManager.discovered_order.size():
 			var id: StringName = AbilityManager.discovered_order[i]
-			var ability: AbilityData = AbilityManager.get_ability(id)
+			var ability: AbilityData = AbilityDatabase.get_ability_data(id)
 			if ability != null and ability.icon != null:
 				btn.texture_normal = ability.icon
 			btn.disabled = false

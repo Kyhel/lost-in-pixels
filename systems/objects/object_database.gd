@@ -3,7 +3,7 @@ extends Node
 var _object_data_by_id: Dictionary = {}
 
 func _ready() -> void:
-	var config: ObjectDatabaseConfig = preload("res://systems/objects/object_database_config.tres")
+	var config: ObjectDatabaseConfig = load("res://systems/objects/object_database_config.tres")
 	if config == null:
 		push_error("ObjectDatabase: failed to load config resource")
 		return

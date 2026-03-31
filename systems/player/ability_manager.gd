@@ -1,6 +1,5 @@
 extends Node
 
-var _by_id: Dictionary = {}
 var discovered_order: Array[StringName] = []
 var _discovered_set: Dictionary = {}
 
@@ -10,10 +9,6 @@ signal discoveries_changed
 
 func _ready() -> void:
 	EventManager.object_eaten.connect(_on_object_eaten)
-
-
-func get_ability(id: StringName) -> AbilityData:
-	return _by_id.get(id, null)
 
 
 func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
@@ -52,7 +47,7 @@ func try_activate_slot(slot_index: int) -> void:
 	if slot_index < 0 or slot_index >= discovered_order.size():
 		return
 	var id: StringName = discovered_order[slot_index]
-	var ability: AbilityData = _by_id.get(id, null)
+	var ability: AbilityData = AbilityDatabase.get_ability_data(id)
 	if ability == null or ability.effect_script == null:
 		return
 	var player := _get_player()
@@ -78,7 +73,8 @@ func apply_discovered_from_save(ids: Variant) -> void:
 	if ids is Array:
 		for v in ids:
 			var sid := StringName(str(v))
-			if _by_id.has(sid):
+			var ability := AbilityDatabase.get_ability_data(sid)
+			if ability != null:
 				_discovered_set[sid] = true
 				discovered_order.append(sid)
 	discoveries_changed.emit()
