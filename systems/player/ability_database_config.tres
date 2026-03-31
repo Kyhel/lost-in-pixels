@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://c4fv4xovno7v8" path="res://features/player/abilities/ability_data.gd" id="1_data"]
 [ext_resource type="Script" uid="uid://dwndip00qph22" path="res://systems/player/ability_database_config.gd" id="2_cfg"]
+[ext_resource type="Resource" uid="uid://xa6qewcvnaem" path="res://features/player/abilities/grow_flower.tres" id="3_grow_flower"]
 
 [resource]
 script = ExtResource("2_cfg")
+abilities = Array[ExtResource("1_data")]([ExtResource("3_grow_flower")])

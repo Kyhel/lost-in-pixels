@@ -14,6 +14,8 @@
 [ext_resource type="Resource" uid="uid://r514gn44t7kk" path="res://features/objects/data/berry_bush/berry_bush.tres" id="12_berry"]
 [ext_resource type="Resource" uid="uid://4w54c65f7cqm" path="res://features/objects/data/water_lily/water_lily.tres" id="13_lily"]
 [ext_resource type="Resource" uid="uid://dobd5gvc3tc87" path="res://features/objects/data/fern/fern.tres" id="14_gwnb0"]
+[ext_resource type="Script" uid="uid://c4fv4xovno7v8" path="res://features/player/abilities/ability_data.gd" id="15_soift"]
+[ext_resource type="Resource" uid="uid://xa6qewcvnaem" path="res://features/player/abilities/grow_flower.tres" id="16_uqt4q"]
 
 [resource]
 script = ExtResource("6_3l0t6")
@@ -22,4 +24,5 @@ biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_forest_profile")
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
 small_vegetation = Array[ExtResource("11_objdata")]([ExtResource("12_berry"), ExtResource("13_lily"), ExtResource("14_gwnb0")])
+starting_abilities = Array[ExtResource("15_soift")]([ExtResource("16_uqt4q")])
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"
