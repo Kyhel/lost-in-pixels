@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_jmif1"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_rn8le"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="3_xhyr3"]
-[ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrot_in_ground.tres" id="4_carrot_ground"]
+[ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrots/carrot_in_ground.tres" id="4_carrot_ground"]
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="4_cfgnk"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/behaviors/wander/wander_goal.tres" id="5_bpx73"]
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/behaviors/eat/eat_goal.tres" id="6_awlgr"]
