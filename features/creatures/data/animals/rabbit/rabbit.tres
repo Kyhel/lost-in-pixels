@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://df3xr5h1hdajt" path="res://features/creatures/needs/types/fear_need.gd" id="fear_s"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
+[ext_resource type="Script" path="res://features/creatures/needs/types/fetch_desire_need.gd" id="fetch_desire_s"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
 
@@ -51,6 +52,12 @@ id = &"stamina"
 base_decay_rate = -10.0
 initial_value = 100.0
 
+[sub_resource type="Resource" id="need_fetch_desire_rabbit"]
+script = ExtResource("fetch_desire_s")
+id = &"fetch_desire"
+base_decay_rate = -5.0
+initial_value = 100.0
+
 [sub_resource type="Resource" id="trait_rabbit_fetcher"]
 script = ExtResource("16_fetcher_trait")
 fetchable_objects = Array[ExtResource("2_rn8le")]([ExtResource("4_carrot_ground")])
@@ -69,7 +76,7 @@ ExtResource("8_fetch"): 70,
 ExtResource("8_16ulj"): 100
 })
 sensors = Array[ExtResource("13_iambh")]([ExtResource("21_7x0m5")])
-needs = Array[ExtResource("need_base")]([SubResource("need_hunger_rabbit"), SubResource("need_taming_rabbit"), SubResource("need_fear_rabbit"), SubResource("need_stamina_rabbit")])
+needs = Array[ExtResource("need_base")]([SubResource("need_hunger_rabbit"), SubResource("need_taming_rabbit"), SubResource("need_fear_rabbit"), SubResource("need_stamina_rabbit"), SubResource("need_fetch_desire_rabbit")])
 traits = Array[Resource]([SubResource("trait_rabbit_fetcher")])
 size = 12
 hop_multiplier = 0.5
