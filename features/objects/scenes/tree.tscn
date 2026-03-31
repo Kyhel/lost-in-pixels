@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://cfq8k2m7p4n5w"]
 
-[ext_resource type="Texture2D" uid="uid://cu270wwko7jdg" path="res://assets/nature/tree_trunk_1.png" id="1_trunk_tex"]
 [ext_resource type="Script" uid="uid://c832tocieksip" path="res://features/objects/world_object.gd" id="2_world_object"]
 [ext_resource type="Shader" uid="uid://dlue02v0rg8pc" path="res://features/objects/data/trees/tree_1.gdshader" id="3_shader"]
 [ext_resource type="Texture2D" uid="uid://mg1udp0cxmj" path="res://assets/nature/tree_foliage_1.png" id="4_foliage_tex"]
@@ -10,22 +9,19 @@ shader = ExtResource("3_shader")
 shader_parameter/alpha_amount = 0.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
-radius = 8.0
+radius = 1.0
 
-[node name="Tree" type="Node2D" unique_id=186156872]
+[node name="Tree" type="StaticBody2D" unique_id=524183893]
+collision_layer = 32
+collision_mask = 0
 script = ExtResource("2_world_object")
 
-[node name="Trunk" type="Sprite2D" parent="." unique_id=146873834]
-texture = ExtResource("1_trunk_tex")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=146873834]
 
 [node name="Foliage" type="Sprite2D" parent="." unique_id=1580320736]
 z_index = 500
 material = SubResource("ShaderMaterial_foliage")
 texture = ExtResource("4_foliage_tex")
 
-[node name="TrunkBody" type="StaticBody2D" parent="." unique_id=762137018]
-collision_layer = 32
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody" unique_id=1744667548]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1744667548]
 shape = SubResource("CircleShape2D_trunk")

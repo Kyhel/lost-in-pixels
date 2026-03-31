@@ -5,10 +5,12 @@
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="3_wob"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_wof"]
 [ext_resource type="Resource" uid="uid://e5713qx52vb1" path="res://features/objects/data/trees/tree_2_feature.tres" id="4_feature"]
+[ext_resource type="Texture2D" uid="uid://cu270wwko7jdg" path="res://assets/nature/tree_trunk_1.png" id="6_ovcnq"]
 
 [resource]
 script = ExtResource("1_obj")
 id = &"tree_2"
 display_name = "Tree 2"
+texture = ExtResource("6_ovcnq")
 scene = ExtResource("2_scene")
 features = Array[ExtResource("3_wof")]([ExtResource("4_feature")])

@@ -5,4 +5,6 @@
 
 [resource]
 script = ExtResource("1_tree_feature")
+foliage_radius = null
 foliage_texture = ExtResource("2_foliage")
+foliage_z_index_offset = null
