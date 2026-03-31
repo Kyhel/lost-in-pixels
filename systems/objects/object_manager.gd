@@ -54,9 +54,21 @@ func spawn_object_attached_in_chunk(
 	return world_object
 
 
-func spawn_object_at(object_data: ObjectData, world_pos: Vector2):
+func spawn_object_at(object_data: ObjectData, world_pos: Vector2) -> WorldObject:
 	var chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(world_pos)
 	return spawn_object_in_chunk(chunk, object_data, world_pos)
+
+
+func spawn_object_attached(parent: Node2D, object_data: ObjectData, local_pos: Vector2 = Vector2.ZERO) -> WorldObject:
+	if parent == null or not is_instance_valid(parent):
+		return null
+	var world_object := _instantiate_world_object(object_data)
+	if world_object == null:
+		return null
+	world_object.object_data = object_data
+	parent.add_child(world_object)
+	world_object.position = local_pos
+	return world_object
 
 
 func _instantiate_world_object(object_data: ObjectData) -> WorldObject:

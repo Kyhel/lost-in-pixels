@@ -109,6 +109,18 @@ func creature_receive_item_from_player(creature: Creature, item_id: StringName) 
 	GameLog.log_message("%s received %s from player" % [creature_name, item_name])
 
 
+func creature_give_item_to_player(creature: Creature, item_id: StringName, amount: int = 1) -> void:
+	if creature == null or not is_instance_valid(creature):
+		return
+	if amount <= 0:
+		return
+	Inventory.add_item(item_id, amount)
+	var creature_name := _creature_display_name(creature)
+	var item_data: ItemData = ItemDatabase.get_item_data(item_id)
+	var item_name := item_data.display_name if item_data != null else String(item_id)
+	GameLog.log_message("%s gave %d %s to player" % [creature_name, amount, item_name])
+
+
 func player_pet_creature(creature: Creature) -> void:
 	if creature == null or not is_instance_valid(creature):
 		return

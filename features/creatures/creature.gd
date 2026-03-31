@@ -26,6 +26,7 @@ var alpha_mask: Node2D
 var virtual_rotation: float = 0
 
 @onready var visualRoot: = $Visuals
+@onready var heldItemAnchor: Node2D = $Visuals/HeldItem
 @onready var collisionShape: = $CollisionShape
 @onready var creature_debug: CreatureDebug = get_node_or_null("Debug") as CreatureDebug
 
@@ -157,6 +158,48 @@ func get_obstacle_avoidance_shape_query() -> PhysicsShapeQueryParameters2D:
 		_obstacle_avoid_query_params.collide_with_bodies = true
 		_obstacle_avoid_query_params.collide_with_areas = false
 	return _obstacle_avoid_query_params
+
+
+func get_held_item_anchor() -> Node2D:
+	return heldItemAnchor
+
+
+func get_held_world_object() -> WorldObject:
+	if heldItemAnchor == null:
+		return null
+	for child in heldItemAnchor.get_children():
+		if child is WorldObject and is_instance_valid(child):
+			return child as WorldObject
+	return null
+
+
+func is_holding_world_object() -> bool:
+	return get_held_world_object() != null
+
+
+func hold_world_object(world_object: WorldObject) -> bool:
+	if world_object == null or not is_instance_valid(world_object):
+		return false
+	if heldItemAnchor == null:
+		return false
+	var current := get_held_world_object()
+	if current != null and current != world_object:
+		return false
+
+	var parent := world_object.get_parent()
+	if parent != null:
+		parent.remove_child(world_object)
+	heldItemAnchor.add_child(world_object)
+	world_object.position = Vector2.ZERO
+	return true
+
+
+func clear_held_world_object(destroy_held: bool = false) -> void:
+	var held := get_held_world_object()
+	if held == null or not is_instance_valid(held):
+		return
+	if destroy_held:
+		held.queue_free()
 
 func take_damage(amount: int, source: Node = null) -> void:
 	if amount <= 0:

@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="FoodSensor" format=3 uid="uid://d5715qs5tu56"]
+[gd_resource type="Resource" script_class="ForageSensor" format=3 uid="uid://d5715qs5tu56"]
 
-[ext_resource type="Script" uid="uid://crtq7g0dtrud8" path="res://features/creatures/ai/sensors/food_sensor.gd" id="1_food"]
+[ext_resource type="Script" path="res://features/creatures/ai/sensors/forage_sensor.gd" id="1_food"]
 
 [resource]
 script = ExtResource("1_food")

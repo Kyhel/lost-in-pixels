@@ -4,10 +4,14 @@
 [ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/behaviors/base/bt_sequence.gd" id="1_h3fwb"]
 [ext_resource type="Script" uid="uid://38u27wyoj7au" path="res://features/creatures/ai/actions/food/chose_food_action.gd" id="2_f2ly3"]
 [ext_resource type="Script" uid="uid://bmqnsncfddino" path="res://features/creatures/ai/behaviors/base/bt_reactive_sequence.gd" id="2_nom0i"]
-[ext_resource type="Script" uid="uid://dg6j26ube2um7" path="res://features/creatures/ai/actions/food/move_to_food_action.gd" id="3_5mhbh"]
+[ext_resource type="Script" path="res://features/creatures/ai/behaviors/base/bt_selector.gd" id="3_selector"]
 [ext_resource type="Script" uid="uid://cxupon3xppdg8" path="res://features/creatures/ai/behaviors/conditions/has_visible_food_condition.gd" id="3_m8456"]
 [ext_resource type="Script" uid="uid://cdj6bb0caq8io" path="res://features/creatures/ai/actions/food/eat_food_action.gd" id="4_qbvdd"]
+[ext_resource type="Script" path="res://features/creatures/ai/actions/move_to_prey_action.gd" id="5_move_prey"]
+[ext_resource type="Script" path="res://features/creatures/ai/actions/move_to_world_object_action.gd" id="6_move_object"]
 [ext_resource type="Script" uid="uid://b7qmdc71lcl1u" path="res://features/creatures/ai/behaviors/conditions/can_eat_target_food_condition.gd" id="7_qjxcg"]
+[ext_resource type="Script" path="res://features/creatures/ai/behaviors/conditions/target_food_is_creature_condition.gd" id="8_food_creature"]
+[ext_resource type="Script" path="res://features/creatures/ai/behaviors/conditions/target_food_is_world_object_condition.gd" id="9_food_object"]
 
 [node name="EatBt" type="Node" unique_id=1665506821]
 script = ExtResource("1_5mhbh")
@@ -25,8 +29,26 @@ script = ExtResource("3_m8456")
 [node name="ChoseFood" type="Node" parent="BTSequence/BTReactiveSequence" unique_id=844311212]
 script = ExtResource("2_f2ly3")
 
-[node name="MoveToFood" type="Node" parent="BTSequence/BTReactiveSequence" unique_id=260727819]
-script = ExtResource("3_5mhbh")
+[node name="MoveToTargetSelector" type="Node" parent="BTSequence/BTReactiveSequence"]
+script = ExtResource("3_selector")
+
+[node name="MoveToPreySequence" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector"]
+script = ExtResource("1_h3fwb")
+
+[node name="TargetFoodIsCreatureCondition" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector/MoveToPreySequence"]
+script = ExtResource("8_food_creature")
+
+[node name="MoveToPreyAction" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector/MoveToPreySequence"]
+script = ExtResource("5_move_prey")
+
+[node name="MoveToObjectSequence" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector"]
+script = ExtResource("1_h3fwb")
+
+[node name="TargetFoodIsWorldObjectCondition" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector/MoveToObjectSequence"]
+script = ExtResource("9_food_object")
+
+[node name="MoveToWorldObjectAction" type="Node" parent="BTSequence/BTReactiveSequence/MoveToTargetSelector/MoveToObjectSequence"]
+script = ExtResource("6_move_object")
 
 [node name="CanEatTargetFoodCondition" type="Node" parent="BTSequence" unique_id=2049537186]
 script = ExtResource("7_qjxcg")
