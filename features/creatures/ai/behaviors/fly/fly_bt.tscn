@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cwqtctflh1m13"]
 
 [ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_3woxo"]
-[ext_resource type="Script" uid="uid://uap13xpllcy3" path="res://features/creatures/ai/actions/fly_action.gd" id="2_jyjbo"]
+[ext_resource type="Script" uid="uid://uap13xpllcy3" path="res://features/creatures/ai/behaviors/fly/fly_action.gd" id="2_jyjbo"]
 
 [node name="FlyBt" type="Node" unique_id=1722283635]
 script = ExtResource("1_3woxo")

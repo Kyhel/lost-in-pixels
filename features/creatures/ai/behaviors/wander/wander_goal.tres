@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WanderGoal" format=3 uid="uid://dhnvy30mkocgp"]
+
+[ext_resource type="PackedScene" uid="uid://dhpxlm3jh1l0h" path="res://features/creatures/ai/behaviors/wander/wander_bt.tscn" id="1_57ub6"]
+[ext_resource type="Script" uid="uid://dwco2tsdq8owd" path="res://features/creatures/ai/behaviors/wander/wander_goal.gd" id="1_j58wk"]
+
+[resource]
+script = ExtResource("1_j58wk")
+behavior_tree = ExtResource("1_57ub6")
+metadata/_custom_type_script = "uid://dwco2tsdq8owd"

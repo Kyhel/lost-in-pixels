@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://c4iehlhcuxu2t"]
 
-[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_1ghcg"]
-[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_g5kge"]
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/base/goals/goal.gd" id="1_1ghcg"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/behaviors/wander/wander_goal.tres" id="2_g5kge"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="2_vncba"]
 [ext_resource type="Resource" uid="uid://b6unlk8m478g1" path="res://features/creatures/ai/behaviors/attack_player/attack_player_goal.tres" id="3_1vhlf"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="3_o0rll"]

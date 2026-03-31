@@ -39,7 +39,6 @@ func get_score(creature: Creature) -> float:
 
 	var fetch_desire_inst := creature.needs_component.get_instance(NeedIds.FETCH_DESIRE)
 	if fetch_desire_inst != null:
-		print(fetch_desire_inst.current_value)
 		fetch_desire_ratio = clampf(inverse_lerp(
 			FETCH_DESIRE_MIN,
 			NeedInstance.MAX_VALUE,

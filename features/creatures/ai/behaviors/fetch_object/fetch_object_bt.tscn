@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bdml2gofnqn27"]
+
+[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_bt"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/base/behavior_trees/bt_sequence.gd" id="2_seq"]
+[ext_resource type="Script" uid="uid://di2w77mq8xdam" path="res://features/creatures/ai/base/behavior_trees/bt_selector.gd" id="3_sel"]
+[ext_resource type="Script" uid="uid://cvlgbd3kxevkg" path="res://features/creatures/ai/behaviors/_shared/conditions/is_tamed_condition.gd" id="4_is_tamed"]
+[ext_resource type="Script" uid="uid://bhrt41aslepox" path="res://features/creatures/ai/behaviors/_shared/conditions/has_fetch_objective_condition.gd" id="5_has_fetch_objective"]
+[ext_resource type="Script" uid="uid://cijf5aw62crn0" path="res://features/creatures/ai/behaviors/_shared/conditions/is_holding_world_object_condition.gd" id="6_is_holding"]
+[ext_resource type="Script" uid="uid://cn5u415arfloa" path="res://features/creatures/ai/behaviors/fetch_object/return_to_player_with_held_object_action.gd" id="7_return"]
+[ext_resource type="Script" uid="uid://u4fs2w23qt5a" path="res://features/creatures/ai/behaviors/fetch_object/give_held_object_to_player_action.gd" id="8_give"]
+[ext_resource type="Script" uid="uid://cithfw600x3xx" path="res://features/creatures/ai/behaviors/fetch_object/choose_fetchable_action.gd" id="9_choose"]
+[ext_resource type="Script" uid="uid://bl53iuawqh7ce" path="res://features/creatures/ai/behaviors/_shared/actions/move_to_world_object_action.gd" id="10_move_object"]
+[ext_resource type="Script" uid="uid://c4k31eunatap3" path="res://features/creatures/ai/behaviors/fetch_object/fetch_world_object_action.gd" id="11_fetch"]
+
+[node name="FetchObjectBt" type="Node" unique_id=904005915]
+script = ExtResource("1_bt")
+
+[node name="BTSequence" type="Node" parent="." unique_id=37265972]
+script = ExtResource("2_seq")
+
+[node name="IsTamedCondition" type="Node" parent="BTSequence" unique_id=1797463591]
+script = ExtResource("4_is_tamed")
+
+[node name="HasFetchObjectiveCondition" type="Node" parent="BTSequence" unique_id=1769412311]
+script = ExtResource("5_has_fetch_objective")
+
+[node name="FetchFlowSelector" type="Node" parent="BTSequence" unique_id=1831420192]
+script = ExtResource("3_sel")
+
+[node name="ReturnSequence" type="Node" parent="BTSequence/FetchFlowSelector" unique_id=62944954]
+script = ExtResource("2_seq")
+
+[node name="IsHoldingWorldObjectCondition" type="Node" parent="BTSequence/FetchFlowSelector/ReturnSequence" unique_id=1993889387]
+script = ExtResource("6_is_holding")
+
+[node name="ReturnToPlayerWithHeldObjectAction" type="Node" parent="BTSequence/FetchFlowSelector/ReturnSequence" unique_id=639217239]
+script = ExtResource("7_return")
+
+[node name="GiveHeldObjectToPlayerAction" type="Node" parent="BTSequence/FetchFlowSelector/ReturnSequence" unique_id=1786322236]
+script = ExtResource("8_give")
+
+[node name="FetchSequence" type="Node" parent="BTSequence/FetchFlowSelector" unique_id=950333591]
+script = ExtResource("2_seq")
+
+[node name="ChooseFetchableAction" type="Node" parent="BTSequence/FetchFlowSelector/FetchSequence" unique_id=2018715966]
+script = ExtResource("9_choose")
+
+[node name="MoveToFetchableAction" type="Node" parent="BTSequence/FetchFlowSelector/FetchSequence" unique_id=1994033025]
+script = ExtResource("10_move_object")
+
+[node name="FetchWorldObjectAction" type="Node" parent="BTSequence/FetchFlowSelector/FetchSequence" unique_id=233989868]
+script = ExtResource("11_fetch")

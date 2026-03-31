@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://0x6ua5yre7y1"]
 
-[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_mf0im"]
-[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="2_27jme"]
-[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="2_eat"]
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/base/goals/goal.gd" id="1_mf0im"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/behaviors/wander/wander_goal.tres" id="2_27jme"]
+[ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/behaviors/eat/eat_goal.tres" id="2_eat"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_s30fk"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="2_yyua3"]
 [ext_resource type="Resource" uid="uid://iwatdajc18p8" path="res://features/objects/data/water_lily/water_lily_flower.tres" id="3_3fdru"]

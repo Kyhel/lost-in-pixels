@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="FleeGoal" format=3 uid="uid://c5atrmanpf2rn"]
-
-[ext_resource type="PackedScene" uid="uid://cpf2hsilq46o8" path="res://features/creatures/ai/behaviors/trees/flee_bt.tscn" id="1_bt"]
-[ext_resource type="Script" uid="uid://df2khdvojhmng" path="res://features/creatures/ai/goals/flee_goal.gd" id="2_script"]
-
-[resource]
-script = ExtResource("2_script")
-behavior_tree = ExtResource("1_bt")
-metadata/_custom_type_script = "uid://d8k3n9qfleegoal01"

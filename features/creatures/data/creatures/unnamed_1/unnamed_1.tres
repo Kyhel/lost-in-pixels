@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://bww6ohk217c5l"]
 
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_82q1q"]
-[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_dh60g"]
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/base/goals/goal.gd" id="1_dh60g"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="3_u7wky"]
-[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="3_xj47p"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/behaviors/wander/wander_goal.tres" id="3_xj47p"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="4_dh60g"]
 [ext_resource type="Resource" uid="uid://cq7n2k8w4m1at" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1_attack_player_goal.tres" id="4_xj47p"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="5_xj47p"]
