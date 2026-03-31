@@ -1,24 +1,16 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dte6gvr54djx"]
 
-[ext_resource type="Script" path="res://features/objects/world_object.gd" id="1_world_object"]
+[ext_resource type="Script" uid="uid://c832tocieksip" path="res://features/objects/world_object.gd" id="1_world_object"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_area"]
 radius = 1.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
-radius = 1.0
-
-[node name="CollidingWorldObject" type="Area2D"]
-script = ExtResource("1_world_object")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_area")
-
-[node name="TrunkBody" type="StaticBody2D" parent="."]
+[node name="CollidingWorldObject" type="StaticBody2D" unique_id=1173137656]
 collision_layer = 32
 collision_mask = 0
+script = ExtResource("1_world_object")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TrunkBody"]
-shape = SubResource("CircleShape2D_trunk")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1673499091]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1227911763]
+shape = SubResource("CircleShape2D_area")

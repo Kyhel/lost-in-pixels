@@ -30,13 +30,6 @@ func _ready() -> void:
 			var base_r: float = (base_shape as CircleShape2D).radius
 			if base_r > 0.0:
 				cs.scale = Vector2.ONE * (object_data.hitbox_radius / base_r)
-	var trunk_cs: CollisionShape2D = get_node_or_null("TrunkBody/CollisionShape2D") as CollisionShape2D
-	if trunk_cs != null:
-		var trunk_shape: Shape2D = trunk_cs.shape
-		if trunk_shape is CircleShape2D:
-			var trunk_base_r: float = (trunk_shape as CircleShape2D).radius
-			if trunk_base_r > 0.0:
-				trunk_cs.scale = Vector2.ONE * (object_data.hitbox_radius / trunk_base_r)
 	_apply_features()
 	_apply_behaviors()
 	z_index = Constants.Z_INDEX_OBJECTS

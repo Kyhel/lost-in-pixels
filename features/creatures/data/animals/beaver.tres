@@ -13,6 +13,7 @@
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="8_0t3oh"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
+[ext_resource type="Script" uid="uid://brnsc777efkrv" path="res://features/creatures/traits/terrain_preference_trait.gd" id="terrain_pref_s"]
 
 [sub_resource type="Resource" id="need_hunger_beaver"]
 script = ExtResource("hunger_s")
@@ -20,6 +21,12 @@ edible_objects = Array[ExtResource("2_s30fk")]([ExtResource("3_3fdru"), ExtResou
 id = &"hunger"
 base_decay_rate = 1.0
 initial_value = -1.0
+
+[sub_resource type="Resource" id="trait_beaver_terrain_preference"]
+script = ExtResource("terrain_pref_s")
+preferred_terrains = Array[int]([1, 8])
+max_distance = 3
+id = &"beaver_terrain_preference"
 
 [resource]
 script = ExtResource("2_yyua3")
@@ -31,6 +38,7 @@ ExtResource("2_eat"): 50
 }
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_beaver")])
+traits = Array[Resource]([SubResource("trait_beaver_terrain_preference")])
 can_swim = true
 size = 30
 hitbox_size = 12

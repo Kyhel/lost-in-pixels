@@ -16,6 +16,8 @@ enum CreatureSize {
 @export var sensors: Array[Sensor] = []
 ## Per-species need definitions (hunger, fear, taming, etc.). Carnivores/herbivores: configure edibles on [HungerNeed].
 @export var needs: Array[Need] = []
+## Per-species trait definitions (terrain preferences, special movement constraints, etc.).
+@export var traits: Array[Resource] = []
 @export var size_type: CreatureSize = CreatureSize.SMALL
 @export var can_fly: bool = false
 @export var can_swim: bool = false
@@ -28,8 +30,8 @@ enum CreatureSize {
 @export var rotating_speed: float = TAU
 @export var biomes: Array[TerrainGenerator.Biome] = [TerrainGenerator.Biome.FOREST, TerrainGenerator.Biome.PLAINS]
 @export var excluded_tile_types: Array[Terrain.Type] = [Terrain.Type.WATER]
-## If non-empty, wander destination tiles must be one of these and not in [member excluded_tile_types]. If empty, only exclusions apply.
-@export var allowed_wander_tiles: Array[Terrain.Type] = []
+## If non-empty, wander destination tiles must be one of these. If empty, no tile-type restriction is applied.
+@export var navigable_terrain_types: Array[Terrain.Type] = []
 ## Per-context scoring; first profile is used when no entry matches [member MovementRequest.context].
 @export var movement_profiles: Array[MovementProfile] = [
 	preload("res://features/creatures/movement/profiles/defaults/default_movement_profile.tres")

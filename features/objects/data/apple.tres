@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_hpaic"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_ch0yp"]
 [ext_resource type="Texture2D" uid="uid://dawciy0006qxw" path="res://assets/food/apple.png" id="2_j163c"]
-[ext_resource type="PackedScene" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
 
 [resource]
 script = ExtResource("1_hpaic")
