@@ -12,3 +12,4 @@ extends Resource
 @export var spawn_world_objects := true
 @export var player_light := true
 @export var camera_zoom_level := 1.5
+@export var starting_abilities: Array[AbilityData] = []

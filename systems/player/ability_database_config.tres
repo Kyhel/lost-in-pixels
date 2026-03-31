@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="AbilityDatabaseConfig" format=3 uid="uid://i2qpfmm2wxhl"]
+
+[ext_resource type="Script" uid="uid://c4fv4xovno7v8" path="res://features/player/abilities/ability_data.gd" id="1_data"]
+[ext_resource type="Script" path="res://systems/player/ability_database_config.gd" id="2_cfg"]
+
+[resource]
+script = ExtResource("2_cfg")

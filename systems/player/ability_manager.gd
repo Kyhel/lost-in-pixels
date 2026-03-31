@@ -1,6 +1,5 @@
 extends Node
 
-var _abilities: Array[AbilityData] = []
 var _by_id: Dictionary = {}
 var discovered_order: Array[StringName] = []
 var _discovered_set: Dictionary = {}
@@ -10,19 +9,7 @@ signal discoveries_changed
 
 
 func _ready() -> void:
-	_register_abilities()
 	EventManager.object_eaten.connect(_on_object_eaten)
-
-
-func _register_abilities() -> void:
-	_register(load("res://features/player/abilities/grow_flower.tres") as AbilityData)
-
-
-func _register(ability: AbilityData) -> void:
-	if ability == null or ability.id == &"":
-		return
-	_abilities.append(ability)
-	_by_id[ability.id] = ability
 
 
 func get_ability(id: StringName) -> AbilityData:
@@ -35,7 +22,7 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	var player := _get_player()
 	if player == null:
 		return
-	for ability in _abilities:
+	for ability in AbilityDatabase.get_all_ability_data():
 		if _discovered_set.has(ability.id):
 			continue
 		if ability.unlock_rule == null:

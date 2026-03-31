@@ -92,7 +92,13 @@ func apply_session_to_player(player: Player) -> void:
 	player.hunger_changed.emit(player.hunger)
 	player.health_changed.emit(player.health)
 	player._update_attack_hitbox_radius()
-	AbilityManager.apply_discovered_from_save([])
+	var starting_ability_ids: Array[StringName] = []
+	for ability in ConfigManager.config.starting_abilities:
+		var ability_data := ability as AbilityData
+		if ability_data == null or ability_data.id == &"":
+			continue
+		starting_ability_ids.append(ability_data.id)
+	AbilityManager.apply_discovered_from_save(starting_ability_ids)
 	Inventory.reset()
 	consume_new_game()
 	GameLog.log_message(WELCOME_MESSAGE)
