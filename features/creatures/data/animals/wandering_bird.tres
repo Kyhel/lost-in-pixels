@@ -6,6 +6,14 @@
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="3_5ln18"]
 [ext_resource type="Texture2D" uid="uid://bvek2ki4p8hcc" path="res://assets/FlyingMonster_1.png" id="4_eh5x5"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="5_q2hkp"]
+[ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
+[ext_resource type="Script" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
+
+[sub_resource type="Resource" id="need_stamina_wandering_bird"]
+script = ExtResource("stamina_s")
+id = &"stamina"
+base_decay_rate = -10.0
+initial_value = 100.0
 
 [resource]
 script = ExtResource("3_5ln18")
@@ -15,6 +23,7 @@ sprite = ExtResource("4_eh5x5")
 goals = Dictionary[ExtResource("1_tfc83"), int]({
 ExtResource("2_natbx"): 10,
 })
+needs = Array[ExtResource("need_base")]([SubResource("need_stamina_wandering_bird")])
 can_fly = true
 size = 24
 base_speed = 80.0

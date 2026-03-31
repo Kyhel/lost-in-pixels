@@ -4,3 +4,4 @@ extends Object
 const HUNGER := &"hunger"
 const FEAR := &"fear"
 const TAMING := &"taming"
+const STAMINA := &"stamina"

@@ -9,6 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://dbxsejnfss52t" path="res://assets/creatures/ogre.png" id="4_l5rue"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="5_1ghcg"]
 [ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://features/creatures/ai/sensors/player_sensor.tres" id="5_5ttwk"]
+[ext_resource type="Script" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
+
+[sub_resource type="Resource" id="need_stamina_ogre"]
+script = ExtResource("stamina_s")
+id = &"stamina"
+base_decay_rate = -10.0
+initial_value = 100.0
 
 [resource]
 script = ExtResource("2_vncba")
@@ -20,6 +27,7 @@ ExtResource("2_g5kge"): 0,
 ExtResource("3_1vhlf"): 100
 }
 sensors = Array[ExtResource("4_5ttwk")]([ExtResource("5_5ttwk")])
+needs = Array[ExtResource("5_1ghcg")]([SubResource("need_stamina_ogre")])
 size_type = 1
 size = 40
 hitbox_size = 36

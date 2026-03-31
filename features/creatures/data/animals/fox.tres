@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
+[ext_resource type="Script" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 
 [sub_resource type="Resource" id="need_hunger_fox"]
 script = ExtResource("hunger_s")
@@ -31,6 +32,12 @@ taming_value_threshold = 100
 id = &"taming"
 base_decay_rate = 5.0
 
+[sub_resource type="Resource" id="need_stamina_fox"]
+script = ExtResource("stamina_s")
+id = &"stamina"
+base_decay_rate = -10.0
+initial_value = 100.0
+
 [resource]
 script = ExtResource("2_ovces")
 id = &"fox"
@@ -41,7 +48,7 @@ ExtResource("3_n5fiy"): 50,
 ExtResource("4_follow"): 60
 }
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])
-needs = Array[ExtResource("need_base")]([SubResource("need_hunger_fox"), SubResource("need_taming_fox")])
+needs = Array[ExtResource("need_base")]([SubResource("need_hunger_fox"), SubResource("need_taming_fox"), SubResource("need_stamina_fox")])
 size = 32
 hitbox_size = 20
 base_speed = 50.0

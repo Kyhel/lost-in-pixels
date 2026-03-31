@@ -1,6 +1,9 @@
 class_name FetchWorldObjectAction
 extends BTNode
 
+const FETCH_STAMINA_COST: float = 50.0
+
+
 func tick(creature: Creature, _delta: float) -> State:
 	if creature.is_holding_world_object():
 		return State.SUCCESS
@@ -24,5 +27,10 @@ func tick(creature: Creature, _delta: float) -> State:
 	if not creature.hold_world_object(held_object):
 		held_object.queue_free()
 		return State.FAILURE
+	var stamina_inst: NeedInstance = null
+	if creature.needs_component != null:
+		stamina_inst = creature.needs_component.get_instance(NeedIds.STAMINA)
+	if stamina_inst != null:
+		stamina_inst.set_value(stamina_inst.current_value - FETCH_STAMINA_COST)
 	creature.blackboard.set_value(Blackboard.KEY_TARGET_FETCHABLE, null)
 	return State.SUCCESS
