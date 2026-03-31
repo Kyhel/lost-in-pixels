@@ -4,7 +4,7 @@ var _ability_data_by_id: Dictionary = {}
 
 
 func _ready() -> void:
-	var config = load("res://systems/player/ability_database_config.tres")
+	var config : AbilityDatabaseConfig = preload("res://systems/player/ability_database_config.tres")
 	if config == null:
 		push_error("AbilityDatabase: failed to load config resource")
 		return
