@@ -20,9 +20,9 @@
 [ext_resource type="Script" uid="uid://dth5pdm4tf628" path="res://features/creatures/traits/fetcher_trait.gd" id="16_fetcher_trait"]
 [ext_resource type="Resource" uid="uid://c3rtkym13c8d6" path="res://features/creatures/ai/sensors/forage_sensor.tres" id="21_7x0m5"]
 [ext_resource type="Script" uid="uid://df3xr5h1hdajt" path="res://features/creatures/needs/types/fear_need.gd" id="fear_s"]
+[ext_resource type="Script" uid="uid://cn573jqod1ca3" path="res://features/creatures/needs/types/fetch_desire_need.gd" id="fetch_desire_s"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
-[ext_resource type="Script" path="res://features/creatures/needs/types/fetch_desire_need.gd" id="fetch_desire_s"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
 

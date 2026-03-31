@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cpf2hsilq46o8"]
 
-[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/behaviors/base/behavior_tree.gd" id="1_bt"]
-[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/behaviors/base/bt_sequence.gd" id="2_seq"]
+[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_bt"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/base/behavior_trees/bt_sequence.gd" id="2_seq"]
 [ext_resource type="Script" uid="uid://cvi8t5wck07iq" path="res://features/creatures/ai/actions/flee_action.gd" id="3_flee"]
 [ext_resource type="Script" uid="uid://bbphc0cd1ol6g" path="res://features/creatures/ai/behaviors/conditions/fear_at_or_below_flee_threshold_condition.gd" id="4_cond"]
 [ext_resource type="Script" uid="uid://bxanopywmp2d8" path="res://features/creatures/ai/actions/wait_action.gd" id="5_wait"]

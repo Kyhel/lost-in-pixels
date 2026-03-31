@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b2fpl1yr5xkqm"]
 
-[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/behaviors/base/behavior_tree.gd" id="1_bt"]
-[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/behaviors/base/bt_sequence.gd" id="2_seq"]
+[ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_bt"]
+[ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/base/behavior_trees/bt_sequence.gd" id="2_seq"]
 [ext_resource type="Script" uid="uid://cvlgbd3kxevkg" path="res://features/creatures/ai/behaviors/conditions/is_tamed_condition.gd" id="3_cond"]
 [ext_resource type="Script" uid="uid://birw33176dc1d" path="res://features/creatures/ai/actions/follow_player_action.gd" id="4_act"]
 
