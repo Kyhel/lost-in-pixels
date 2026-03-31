@@ -12,7 +12,7 @@ enum CreatureSize {
 @export var display_name: String = ""
 @export var sprite: Texture2D
 ## Goal resource -> priority. Only these goals are considered by AI; missing value resolves to 0 in code.
-@export var goals: Dictionary = {}
+@export var goals: Dictionary[Goal, int] = {}
 @export var sensors: Array[Sensor] = []
 ## Per-species need definitions (hunger, fear, taming, etc.). Carnivores/herbivores: configure edibles on [HungerNeed].
 @export var needs: Array[Need] = []
