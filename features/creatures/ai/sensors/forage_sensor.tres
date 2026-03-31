@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ForageSensor" format=3 uid="uid://c3rtkym13c8d6"]
+
+[ext_resource type="Script" uid="uid://bb273ss2f4p7p" path="res://features/creatures/ai/sensors/forage_sensor.gd" id="1_u3xrj"]
+
+[resource]
+script = ExtResource("1_u3xrj")
+metadata/_custom_type_script = "uid://bb273ss2f4p7p"

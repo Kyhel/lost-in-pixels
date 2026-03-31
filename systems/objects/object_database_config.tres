@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://byak2md7pq81w" path="res://systems/objects/object_database_config.gd" id="2_cfgscr"]
 [ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="3_apple"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="4_berry"]
-[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="5_carrot"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="4_j4li2"]
+[ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrot_in_ground.tres" id="5_0ci7b"]
 [ext_resource type="Resource" uid="uid://r514gn44t7kk" path="res://features/objects/data/berry_bush/berry_bush.tres" id="6_berry_bush"]
 [ext_resource type="Resource" uid="uid://iwatdajc18p8" path="res://features/objects/data/water_lily/water_lily_flower.tres" id="8_lily"]
 [ext_resource type="Resource" uid="uid://4w54c65f7cqm" path="res://features/objects/data/water_lily/water_lily.tres" id="8_tok16"]
@@ -15,5 +16,5 @@
 
 [resource]
 script = ExtResource("2_cfgscr")
-objects = Array[ExtResource("1_objscr")]([ExtResource("3_apple"), ExtResource("4_berry"), ExtResource("5_carrot"), ExtResource("8_lily"), ExtResource("9_flower"), ExtResource("6_berry_bush"), ExtResource("8_tok16"), ExtResource("10_tree_1"), ExtResource("11_tree_2"), ExtResource("11_8hrd4")])
+objects = Array[ExtResource("1_objscr")]([ExtResource("3_apple"), ExtResource("4_berry"), ExtResource("4_j4li2"), ExtResource("5_0ci7b"), ExtResource("8_lily"), ExtResource("9_flower"), ExtResource("6_berry_bush"), ExtResource("8_tok16"), ExtResource("10_tree_1"), ExtResource("11_tree_2"), ExtResource("11_8hrd4")])
 metadata/_custom_type_script = "uid://bx9k2md7pq81w"

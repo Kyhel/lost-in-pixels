@@ -8,7 +8,7 @@ func tick(creature: Creature, _delta: float) -> State:
 
 	var valid_nodes: Array[Node2D] = []
 	for node in fetchables:
-		if node is WorldObject and is_instance_valid(node):
+		if is_instance_valid(node) and node is WorldObject:
 			valid_nodes.append(node)
 
 	if valid_nodes.is_empty():

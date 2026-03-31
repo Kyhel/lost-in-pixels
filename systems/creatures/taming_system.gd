@@ -20,7 +20,7 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 		return
 
 	var was_tamed: bool = eater.blackboard.get_value(Blackboard.KEY_TAMED, false)
-	var taming: float = eater.get_need_value(NeedIds.TAMING, 0.0)
+	var taming: float = eater.needs_component.get_need_value(NeedIds.TAMING, 0.0)
 	taming += float(taming_add)
 	eater.needs_component.set_need_value(NeedIds.TAMING, taming)
 

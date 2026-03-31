@@ -1,10 +1,11 @@
 [gd_resource type="Resource" script_class="CreatureData" format=3 uid="uid://06r8vifs4yfn"]
 
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/goals/goal.gd" id="1_awlgr"]
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_jmif1"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_rn8le"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="3_xhyr3"]
+[ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrot_in_ground.tres" id="4_carrot_ground"]
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="4_cfgnk"]
-[ext_resource type="Resource" path="res://features/objects/data/carrot_in_ground.tres" id="4_carrot_ground"]
 [ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/goals/wander_goal.tres" id="5_bpx73"]
 [ext_resource type="Resource" uid="uid://6kr4qf001sd" path="res://features/creatures/ai/goals/eat_goal.tres" id="6_awlgr"]
 [ext_resource type="Resource" uid="uid://c8fpl1yr5xkqn" path="res://features/creatures/ai/goals/follow_player_goal.tres" id="7_ymy6f"]
@@ -15,9 +16,9 @@
 [ext_resource type="Resource" uid="uid://cwv84b8qgyyb5" path="res://features/creatures/movement/profiles/eat/eat_profile.tres" id="11_jl4ha"]
 [ext_resource type="Resource" uid="uid://o4wxqh5xlx6t" path="res://features/creatures/movement/profiles/follow/follow_profile.tres" id="12_pqtku"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="13_iambh"]
-[ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="14_anvgs"]
 [ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/rabbit.png" id="15_w504m"]
-[ext_resource type="Script" path="res://features/creatures/traits/fetcher_trait.gd" id="16_fetcher_trait"]
+[ext_resource type="Script" uid="uid://dth5pdm4tf628" path="res://features/creatures/traits/fetcher_trait.gd" id="16_fetcher_trait"]
+[ext_resource type="Resource" uid="uid://c3rtkym13c8d6" path="res://features/creatures/ai/sensors/forage_sensor.tres" id="21_7x0m5"]
 [ext_resource type="Script" uid="uid://df3xr5h1hdajt" path="res://features/creatures/needs/types/fear_need.gd" id="fear_s"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
@@ -53,14 +54,14 @@ script = ExtResource("1_jmif1")
 id = &"rabbit"
 display_name = "Rabbit"
 sprite = ExtResource("15_w504m")
-goals = {
+goals = Dictionary[ExtResource("1_awlgr"), int]({
 ExtResource("5_bpx73"): 0,
 ExtResource("6_awlgr"): 50,
 ExtResource("7_ymy6f"): 60,
-ExtResource("8_fetch"): 61,
-ExtResource("8_16ulj"): 70
-}
-sensors = Array[ExtResource("13_iambh")]([ExtResource("14_anvgs")])
+ExtResource("8_fetch"): 70,
+ExtResource("8_16ulj"): 100
+})
+sensors = Array[ExtResource("13_iambh")]([ExtResource("21_7x0m5")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_rabbit"), SubResource("need_taming_rabbit"), SubResource("need_fear_rabbit")])
 traits = Array[Resource]([SubResource("trait_rabbit_fetcher")])
 size = 12

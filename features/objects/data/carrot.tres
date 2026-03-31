@@ -1,28 +1,28 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://d4fipfqbnme6i"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_6g0dw"]
-[ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="2_cmqf5"]
-[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
-[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_fbbbi"]
-[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
-[ext_resource type="Script" uid="uid://bcd41b7j5s674" path="res://features/objects/behaviors/taming_behavior.gd" id="5_tmb"]
-[ext_resource type="Script" path="res://features/objects/behaviors/pickable_behavior.gd" id="6_pkb"]
-[ext_resource type="Resource" uid="uid://dp4fch7ro7shh" path="res://features/items/data/carrot.tres" id="7_item_carrot"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_ot3co"]
+[ext_resource type="Script" uid="uid://bcd41b7j5s674" path="res://features/objects/behaviors/taming_behavior.gd" id="2_6q0s2"]
+[ext_resource type="Resource" uid="uid://dp4fch7ro7shh" path="res://features/items/data/carrot.tres" id="3_fc150"]
+[ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="4_5vll0"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_iic2v"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="6_2p4ut"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="7_pgmcc"]
+[ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="8_vkso0"]
 
 [sub_resource type="Resource" id="Resource_tmb"]
-script = ExtResource("5_tmb")
+script = ExtResource("2_6q0s2")
 taming_value = 110
 
 [sub_resource type="Resource" id="Resource_pkb"]
-script = ExtResource("6_pkb")
-item = ExtResource("7_item_carrot")
+script = ExtResource("4_5vll0")
+item = ExtResource("3_fc150")
 
 [resource]
-script = ExtResource("1_6g0dw")
+script = ExtResource("7_pgmcc")
 id = &"carrot"
 display_name = "Carrot"
-texture = ExtResource("2_cmqf5")
-scene = ExtResource("3_base_scene")
+texture = ExtResource("8_vkso0")
+scene = ExtResource("6_2p4ut")
 hitbox_radius = 6.0
-behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_tmb"), SubResource("Resource_pkb")])
+behaviors = Array[ExtResource("1_ot3co")]([SubResource("Resource_tmb"), SubResource("Resource_pkb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

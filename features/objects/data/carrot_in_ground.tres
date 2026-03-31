@@ -1,22 +1,25 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://bh16hdymgbxaw"]
 
-[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_g85o4"]
-[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_vbcvm"]
-[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="2_7dc04"]
-[ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/small_plant.png" id="2_64fi8"]
-[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
-[ext_resource type="Script" path="res://features/objects/behaviors/fetchable_behavior.gd" id="4_fetchable"]
-[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="5_carrot"]
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_pxlyt"]
+[ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrot.tres" id="2_gfcx2"]
+[ext_resource type="Script" uid="uid://b77hppo458gn3" path="res://features/objects/behaviors/fetchable_behavior.gd" id="3_1swef"]
+[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="4_k8mim"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="5_wuvio"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="6_ogste"]
+[ext_resource type="Resource" uid="uid://durvj73mou40j" path="res://features/objects/data/carrot_in_ground_spawn_definition.tres" id="7_sgx8o"]
+[ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/small_plant.png" id="8_2r3y1"]
 
 [sub_resource type="Resource" id="Resource_fetchable"]
-script = ExtResource("4_fetchable")
-fetched_object_data = ExtResource("5_carrot")
+script = ExtResource("3_1swef")
+fetched_object_data = ExtResource("2_gfcx2")
 
 [resource]
-script = ExtResource("1_g85o4")
+script = ExtResource("6_ogste")
 id = &"carrot_in_ground"
 display_name = "Carrot in ground"
-texture = ExtResource("2_64fi8")
-scene = ExtResource("3_base_scene")
-behaviors = Array[ExtResource("1_vbcvm")]([SubResource("Resource_fetchable")])
+texture = ExtResource("8_2r3y1")
+scene = ExtResource("5_wuvio")
+hitbox_radius = 8.0
+spawn_definition = ExtResource("7_sgx8o")
+behaviors = Array[ExtResource("1_pxlyt")]([SubResource("Resource_fetchable")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"
