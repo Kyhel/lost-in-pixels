@@ -18,7 +18,9 @@ func _init(creature_data: CreatureData = null) -> void:
 			push_error("Need id is empty: %s" % need)
 			continue
 		var inst := NeedInstance.new(need)
-		inst.value_changed.connect(need_value_changed.emit)
+		inst.value_changed.connect(func(v: float) -> void:
+			need_value_changed.emit(inst.need.id, v)
+		)
 		inst.setup()
 		instances[nid] = inst
 
