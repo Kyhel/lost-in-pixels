@@ -40,7 +40,7 @@ func _on_world_reset() -> void:
 
 func spawn_world_objects(chunk: Chunk) -> void:
 
-	var all_data: Array = ObjectDatabase.get_all_object_data()
+	var all_data := ObjectDatabase.get_all()
 
 	var spawnable_object_data: Array = []
 	for object_data in all_data:
