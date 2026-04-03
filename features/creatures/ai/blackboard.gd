@@ -2,9 +2,9 @@ class_name Blackboard
 extends Resource
 
 const KEY_FOOD := "visible_food"
-const KEY_TARGET_FOOD := "target_food"
 const KEY_FETCHABLES := "visible_fetchables"
-const KEY_TARGET_FETCHABLE := "target_fetchable"
+const KEY_TARGET_OBJECT := "target_object"
+const KEY_TARGET_CREATURE := "target_creature"
 const KEY_PREDATORS := "visible_predators"
 const KEY_STATE := "state"
 const KEY_TAMED := "tamed"

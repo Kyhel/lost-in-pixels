@@ -15,5 +15,5 @@ func tick(creature: Creature, _delta: float) -> State:
 		return State.FAILURE
 
 	var closest = Node2DUtils.get_closest(creature.global_position, valid_nodes)
-	creature.blackboard.set_value(Blackboard.KEY_TARGET_FETCHABLE, closest)
+	creature.blackboard.set_value(Blackboard.KEY_TARGET_OBJECT, closest)
 	return State.SUCCESS

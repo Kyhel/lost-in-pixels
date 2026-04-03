@@ -20,16 +20,17 @@ func tick(creature: Creature, _delta: float) -> State:
 	if candidates.is_empty():
 		return State.FAILURE
 
-	var pool: Array[Node2D] = candidates
 	var live_prey: Array[Node2D] = []
 	for n in candidates:
 		if n is Creature:
 			live_prey.append(n)
 	if not live_prey.is_empty():
-		pool = live_prey
+		var closest_prey = Node2DUtils.get_closest(creature.global_position, live_prey)
+		creature.blackboard.set_value(Blackboard.KEY_TARGET_CREATURE, closest_prey)
+		return State.SUCCESS
 
-	var closest_food = Node2DUtils.get_closest(creature.global_position, pool)
-	creature.blackboard.set_value(Blackboard.KEY_TARGET_FOOD, closest_food)
+	var closest_food = Node2DUtils.get_closest(creature.global_position, candidates)
+	creature.blackboard.set_value(Blackboard.KEY_TARGET_OBJECT, closest_food)
 
 	return State.SUCCESS
 

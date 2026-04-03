@@ -13,5 +13,5 @@ func tick(creature: Creature, _delta: float) -> State:
 
 	PlayerCreatureInteractionSystem.creature_give_item_to_player(creature, item.id, 1)
 	creature.clear_held_world_object(true)
-	creature.blackboard.set_value(Blackboard.KEY_TARGET_FETCHABLE, null)
+	creature.blackboard.set_value(Blackboard.KEY_TARGET_OBJECT, null)
 	return State.SUCCESS

@@ -17,7 +17,10 @@ func tick(creature: Creature, _delta: float) -> State:
 			eating_timer -= _delta
 		return State.RUNNING
 
-	var target_food = creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD)
+	var target_food = creature.blackboard.get_value(Blackboard.KEY_TARGET_CREATURE)
+	
+	if target_food == null:
+		target_food = creature.blackboard.get_value(Blackboard.KEY_TARGET_OBJECT)
 
 	if target_food == null:
 		return State.FAILURE

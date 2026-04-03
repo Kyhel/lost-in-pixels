@@ -8,7 +8,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	if creature.is_holding_world_object():
 		return State.SUCCESS
 
-	var target := creature.blackboard.get_value(Blackboard.KEY_TARGET_FETCHABLE) as WorldObject
+	var target := creature.blackboard.get_value(Blackboard.KEY_TARGET_OBJECT) as WorldObject
 	if target == null or not is_instance_valid(target):
 		return State.FAILURE
 	if target.object_data == null:
@@ -36,5 +36,5 @@ func tick(creature: Creature, _delta: float) -> State:
 		stamina_inst.set_value(stamina_inst.current_value - FETCH_STAMINA_COST)
 	if fetch_desire_inst != null:
 		fetch_desire_inst.set_value(NeedInstance.MIN_VALUE)
-	creature.blackboard.set_value(Blackboard.KEY_TARGET_FETCHABLE, null)
+	creature.blackboard.set_value(Blackboard.KEY_TARGET_OBJECT, null)
 	return State.SUCCESS

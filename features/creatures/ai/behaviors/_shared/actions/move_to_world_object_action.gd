@@ -3,7 +3,7 @@ extends BTNode
 
 
 func tick(creature: Creature, _delta: float) -> State:
-	var target = creature.blackboard.get_value(Blackboard.KEY_TARGET_FOOD)
+	var target = creature.blackboard.get_value(Blackboard.KEY_TARGET_OBJECT)
 	if not is_instance_valid(target) or not target is WorldObject:
 		return State.FAILURE
 
