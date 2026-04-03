@@ -126,18 +126,27 @@ func update_entity_chunks(delta: float) -> void:
 			if new_chunk != coords:
 				move_monster(monster, coords, new_chunk)
 
-func get_creature_count_in_chunk(chunk_coords: Vector2i, creature_data: CreatureData) -> int:
-	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
-	if chunk == null:
-		return 0
+func get_creature_count_in_chunk_by_id(chunk: Chunk, creature_id: StringName) -> int:
 	var creatures_container: Node2D = chunk.get_creatures_container()
 	if creatures_container == null:
 		return 0
 	var count := 0
 	for entity in creatures_container.get_children():
-		if is_instance_valid(entity) and entity.get("creature_data") == creature_data:
+		if !is_instance_valid(entity):
+			continue
+		if entity is not Creature:
+			continue
+		if (entity as Creature).creature_data.id == creature_id:
 			count += 1
 	return count
+
+
+func get_creature_count_in_chunk(chunk_coords: Vector2i, creature_data: CreatureData) -> int:
+	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
+	if chunk == null:
+		return 0
+	return get_creature_count_in_chunk_by_id(chunk, creature_data.id)
+
 
 func spawn_creature_at(chunk_coords: Vector2i, creature_data: CreatureData, world_pos: Vector2) -> void:
 	var chunk: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)

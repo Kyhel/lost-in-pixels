@@ -16,9 +16,9 @@
 [ext_resource type="Resource" uid="uid://cwv84b8qgyyb5" path="res://features/creatures/movement/profiles/eat/eat_profile.tres" id="11_jl4ha"]
 [ext_resource type="Resource" uid="uid://o4wxqh5xlx6t" path="res://features/creatures/movement/profiles/follow/follow_profile.tres" id="12_pqtku"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="13_iambh"]
-[ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/rabbit.png" id="15_w504m"]
 [ext_resource type="Script" uid="uid://dth5pdm4tf628" path="res://features/creatures/traits/fetcher_trait.gd" id="16_fetcher_trait"]
 [ext_resource type="Resource" uid="uid://c3rtkym13c8d6" path="res://features/creatures/ai/sensors/forage_sensor.tres" id="21_7x0m5"]
+[ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/animals/rabbit.png" id="24_jl4ha"]
 [ext_resource type="Script" uid="uid://df3xr5h1hdajt" path="res://features/creatures/needs/types/fear_need.gd" id="fear_s"]
 [ext_resource type="Script" uid="uid://cn573jqod1ca3" path="res://features/creatures/needs/types/fetch_desire_need.gd" id="fetch_desire_s"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
@@ -67,7 +67,7 @@ id = &"rabbit_fetcher"
 script = ExtResource("1_jmif1")
 id = &"rabbit"
 display_name = "Rabbit"
-sprite = ExtResource("15_w504m")
+sprite = ExtResource("24_jl4ha")
 goals = Dictionary[ExtResource("1_awlgr"), int]({
 ExtResource("5_bpx73"): 0,
 ExtResource("6_awlgr"): 50,

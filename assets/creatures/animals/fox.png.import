@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biu286a1d7wjw"
-path="res://.godot/imported/beaver.png-258b945b9db4c7627611ce4df91500f9.ctex"
+uid="uid://dmi7t3bssgqpn"
+path="res://.godot/imported/fox.png-674b869010c75615dbbc3f216cdeb549.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/creatures/beaver.png"
-dest_files=["res://.godot/imported/beaver.png-258b945b9db4c7627611ce4df91500f9.ctex"]
+source_file="res://assets/creatures/animals/fox.png"
+dest_files=["res://.godot/imported/fox.png-674b869010c75615dbbc3f216cdeb549.ctex"]
 
 [params]
 

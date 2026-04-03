@@ -7,8 +7,9 @@
 [ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://features/creatures/data/animals/beaver.tres" id="4_rswok"]
 [ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_w2wff"]
 [ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1.tres" id="6_58cbe"]
+[ext_resource type="Resource" uid="uid://pk3684ivf6kb" path="res://features/creatures/data/animals/deer.tres" id="7_d2p64"]
 
 [resource]
 script = ExtResource("2_8g27w")
-creatures = Array[ExtResource("1_782i1")]([ExtResource("2_u4bk2"), ExtResource("3_d2p64"), ExtResource("4_rswok"), ExtResource("5_w2wff"), ExtResource("6_58cbe")])
+creatures = Array[ExtResource("1_782i1")]([ExtResource("2_u4bk2"), ExtResource("3_d2p64"), ExtResource("4_rswok"), ExtResource("5_w2wff"), ExtResource("6_58cbe"), ExtResource("7_d2p64")])
 metadata/_custom_type_script = "uid://bs5vqmy33q48t"
