@@ -42,6 +42,7 @@ initial_value = 100.0
 [resource]
 script = ExtResource("2_ovces")
 id = &"fox"
+display_name = "Fox"
 sprite = ExtResource("3_ovces")
 goals = Dictionary[ExtResource("1_54fj1"), int]({
 ExtResource("2_4xntq"): 0,

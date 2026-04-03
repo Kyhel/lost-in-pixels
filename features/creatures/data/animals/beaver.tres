@@ -39,6 +39,7 @@ id = &"beaver_terrain_preference"
 [resource]
 script = ExtResource("2_yyua3")
 id = &"beaver"
+display_name = "Beaver"
 sprite = ExtResource("4_27jme")
 goals = Dictionary[ExtResource("1_mf0im"), int]({
 ExtResource("2_27jme"): 0,

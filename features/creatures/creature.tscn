@@ -22,6 +22,7 @@ alpha_mask_scene = ExtResource("2_3v3ho")
 [node name="Visuals" type="Sprite2D" parent="." unique_id=3039133]
 
 [node name="HeldItem" type="Node2D" parent="Visuals" unique_id=676034726]
+position = Vector2(10, 0)
 
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=984625315]
 shape = SubResource("CircleShape2D_1")
