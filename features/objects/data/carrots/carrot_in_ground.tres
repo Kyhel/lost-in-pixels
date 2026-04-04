@@ -3,34 +3,13 @@
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_gfcx2"]
 [ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrots/carrot.tres" id="2_1swef"]
 [ext_resource type="Script" uid="uid://b77hppo458gn3" path="res://features/objects/behaviors/fetchable_behavior.gd" id="3_k8mim"]
-[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="4_wuvio"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="5_ogste"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="6_sgx8o"]
-[ext_resource type="Script" uid="uid://bmemkokxjo2af" path="res://features/creatures/spawn_logic/spawn_definition.gd" id="7_2r3y1"]
-[ext_resource type="Script" uid="uid://ph73uwqahm4c" path="res://features/creatures/spawn_logic/spawn_rule.gd" id="8_hwxrq"]
-[ext_resource type="Script" uid="uid://b5hlqawjlqfc5" path="res://features/creatures/spawn_logic/rules/density_rule.gd" id="9_1swef"]
 [ext_resource type="Texture2D" uid="uid://chv3sv7d3hueq" path="res://assets/nature/small_plant.png" id="9_imf2q"]
-[ext_resource type="Script" uid="uid://ihk51y7nqyh1" path="res://features/creatures/spawn_logic/rules/no_nearby_tree_rule.gd" id="10_k8mim"]
 
 [sub_resource type="Resource" id="Resource_fetchable"]
 script = ExtResource("3_k8mim")
 fetched_object_data = ExtResource("2_1swef")
-
-[sub_resource type="Resource" id="Resource_k8mim"]
-script = ExtResource("9_1swef")
-item_type = &"carrot_in_ground"
-metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
-
-[sub_resource type="Resource" id="Resource_wuvio"]
-script = ExtResource("10_k8mim")
-metadata/_custom_type_script = "uid://ihk51y7nqyh1"
-
-[sub_resource type="Resource" id="Resource_h1602"]
-script = ExtResource("7_2r3y1")
-biomes = Array[int]([2])
-excluded_tile_types = Array[int]([1])
-spawn_rules = Array[ExtResource("8_hwxrq")]([SubResource("Resource_k8mim"), SubResource("Resource_wuvio")])
-metadata/_custom_type_script = "uid://bmemkokxjo2af"
 
 [resource]
 script = ExtResource("6_sgx8o")
@@ -39,6 +18,5 @@ display_name = "Carrot in ground"
 texture = ExtResource("9_imf2q")
 scene = ExtResource("5_ogste")
 hitbox_radius = 8.0
-spawn_definition = SubResource("Resource_h1602")
 behaviors = Array[ExtResource("1_gfcx2")]([SubResource("Resource_fetchable")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

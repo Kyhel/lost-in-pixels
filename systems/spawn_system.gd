@@ -40,12 +40,17 @@ func _on_world_reset() -> void:
 
 func spawn_world_objects(chunk: Chunk) -> void:
 
-	var all_data := ObjectDatabase.get_all()
-
-	var spawnable_object_data: Array = []
-	for object_data in all_data:
-		if object_data.spawn_definition != null:
-			spawnable_object_data.append(object_data)
+	var defs_dict := ConfigManager.config.realtime_spawn_definitions
+	var spawnable_defs: Array[SpawnDefinition] = []
+	for def in defs_dict:
+		if not def is SpawnDefinition:
+			continue
+		var spawn_def: SpawnDefinition = def as SpawnDefinition
+		if not defs_dict[def]:
+			continue
+		if spawn_def.object_data == null:
+			continue
+		spawnable_defs.append(spawn_def)
 
 	var context: Dictionary = {}
 
@@ -61,19 +66,20 @@ func spawn_world_objects(chunk: Chunk) -> void:
 			var tile_type = chunk.get_tile_type(local_x, local_y)
 			var biome = chunk.get_biome(local_x, local_y)
 
-			for object_data in spawnable_object_data:
+			for spawn_def in spawnable_defs:
+				var object_data: ObjectData = spawn_def.object_data
 
-				if object_data.spawn_definition.excluded_tile_types.has(tile_type):
+				if spawn_def.excluded_tile_types.has(tile_type):
 					continue
 
-				if !object_data.spawn_definition.biomes.has(biome):
+				if !spawn_def.biomes.has(biome):
 					continue
 
 				if randf() > 0.01:
 					continue
 
 				var can_spawn := true
-				for rule in object_data.spawn_definition.spawn_rules:
+				for rule in spawn_def.spawn_rules:
 					var rule_can_spawn = rule.can_spawn(world_pos, context)
 					if !rule_can_spawn:
 						can_spawn = false

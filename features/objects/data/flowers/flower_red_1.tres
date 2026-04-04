@@ -4,33 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="3_voq16"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="4_base_scene"]
 [ext_resource type="Resource" uid="uid://cpw8xv4np1rrg" path="res://features/items/data/flower_red_1.tres" id="4_flower_item"]
-[ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_ngibq"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="5_wob"]
 [ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="6_pkb"]
-[ext_resource type="Script" uid="uid://bmemkokxjo2af" path="res://features/creatures/spawn_logic/spawn_definition.gd" id="8_ebmwr"]
-[ext_resource type="Script" uid="uid://ph73uwqahm4c" path="res://features/creatures/spawn_logic/spawn_rule.gd" id="9_60dle"]
-[ext_resource type="Script" uid="uid://b5hlqawjlqfc5" path="res://features/creatures/spawn_logic/rules/density_rule.gd" id="10_60dle"]
-[ext_resource type="Script" uid="uid://ihk51y7nqyh1" path="res://features/creatures/spawn_logic/rules/no_nearby_tree_rule.gd" id="11_yqfnj"]
 
 [sub_resource type="Resource" id="Resource_pkb"]
 script = ExtResource("6_pkb")
 item = ExtResource("4_flower_item")
-
-[sub_resource type="Resource" id="Resource_2pg5o"]
-script = ExtResource("10_60dle")
-item_type = &"flower_red_1"
-metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
-
-[sub_resource type="Resource" id="Resource_d3rku"]
-script = ExtResource("11_yqfnj")
-metadata/_custom_type_script = "uid://ihk51y7nqyh1"
-
-[sub_resource type="Resource" id="Resource_yqfnj"]
-script = ExtResource("8_ebmwr")
-biomes = Array[int]([2])
-excluded_tile_types = Array[int]([1])
-spawn_rules = Array[ExtResource("9_60dle")]([SubResource("Resource_2pg5o"), SubResource("Resource_d3rku")])
-metadata/_custom_type_script = "uid://bmemkokxjo2af"
 
 [resource]
 script = ExtResource("1_k32ns")
@@ -38,6 +17,5 @@ id = &"flower_red_1"
 display_name = "Red Flower 1"
 texture = ExtResource("3_voq16")
 scene = ExtResource("4_base_scene")
-spawn_definition = SubResource("Resource_yqfnj")
 behaviors = Array[ExtResource("5_wob")]([SubResource("Resource_pkb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

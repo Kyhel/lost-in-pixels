@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://c4iehlhcuxu2t" path="res://features/creatures/data/creatures/ogre.tres" id="5_4nmm5"]
 [ext_resource type="Script" uid="uid://dx3c2xv76tb7s" path="res://config/config.gd" id="6_3l0t6"]
 [ext_resource type="Resource" uid="uid://bww6ohk217c5l" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1.tres" id="6_wm4lb"]
-[ext_resource type="Resource" uid="uid://8rsw42bc4pk2" path="res://config/player_config.tres" id="7_player_cfg"]
+[ext_resource type="Resource" uid="uid://dk58v5rim3ab7" path="res://config/player_config.tres" id="7_player_cfg"]
 [ext_resource type="Resource" uid="uid://pk3684ivf6kb" path="res://features/creatures/data/animals/deer.tres" id="7_uqt4q"]
 [ext_resource type="Resource" uid="uid://ceb4dhu7kc0pk" path="res://features/creatures/spawn_logic/biome_spawn_profiles/forest_spawn_profile.tres" id="8_forest_profile"]
 [ext_resource type="Resource" uid="uid://b1ncob6mvl0vg" path="res://features/creatures/spawn_logic/biome_spawn_profiles/plains_spawn_profile.tres" id="9_plains_profile"]
@@ -18,6 +18,46 @@
 [ext_resource type="Resource" uid="uid://dobd5gvc3tc87" path="res://features/objects/data/fern/fern.tres" id="14_gwnb0"]
 [ext_resource type="Script" uid="uid://c4fv4xovno7v8" path="res://features/player/abilities/ability_data.gd" id="15_soift"]
 [ext_resource type="Resource" uid="uid://xa6qewcvnaem" path="res://features/player/abilities/grow_flower.tres" id="16_uqt4q"]
+[ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="17_flower_od"]
+[ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrots/carrot_in_ground.tres" id="18_carrot_od"]
+[ext_resource type="Script" uid="uid://bmemkokxjo2af" path="res://features/creatures/spawn_logic/spawn_definition.gd" id="19_spawn_def"]
+[ext_resource type="Script" uid="uid://ph73uwqahm4c" path="res://features/creatures/spawn_logic/spawn_rule.gd" id="20_spawn_rule"]
+[ext_resource type="Script" uid="uid://b5hlqawjlqfc5" path="res://features/creatures/spawn_logic/rules/density_rule.gd" id="21_density_rule"]
+[ext_resource type="Script" uid="uid://ihk51y7nqyh1" path="res://features/creatures/spawn_logic/rules/no_nearby_tree_rule.gd" id="22_no_tree_rule"]
+
+[sub_resource type="Resource" id="Resource_rt_flower_den"]
+script = ExtResource("21_density_rule")
+item_type = &"flower_red_1"
+metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
+
+[sub_resource type="Resource" id="Resource_rt_flower_tree"]
+script = ExtResource("22_no_tree_rule")
+metadata/_custom_type_script = "uid://ihk51y7nqyh1"
+
+[sub_resource type="Resource" id="Resource_rt_flower"]
+script = ExtResource("19_spawn_def")
+object_data = ExtResource("17_flower_od")
+biomes = Array[int]([2])
+excluded_tile_types = Array[int]([1])
+spawn_rules = Array[ExtResource("20_spawn_rule")]([SubResource("Resource_rt_flower_den"), SubResource("Resource_rt_flower_tree")])
+metadata/_custom_type_script = "uid://bmemkokxjo2af"
+
+[sub_resource type="Resource" id="Resource_rt_carrot_den"]
+script = ExtResource("21_density_rule")
+item_type = &"carrot_in_ground"
+metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
+
+[sub_resource type="Resource" id="Resource_rt_carrot_tree"]
+script = ExtResource("22_no_tree_rule")
+metadata/_custom_type_script = "uid://ihk51y7nqyh1"
+
+[sub_resource type="Resource" id="Resource_rt_carrot"]
+script = ExtResource("19_spawn_def")
+object_data = ExtResource("18_carrot_od")
+biomes = Array[int]([2])
+excluded_tile_types = Array[int]([1])
+spawn_rules = Array[ExtResource("20_spawn_rule")]([SubResource("Resource_rt_carrot_den"), SubResource("Resource_rt_carrot_tree")])
+metadata/_custom_type_script = "uid://bmemkokxjo2af"
 
 [resource]
 script = ExtResource("6_3l0t6")
@@ -28,4 +68,8 @@ chunk_load_radius = 3
 max_creatures_per_chunk = 3
 small_vegetation = Array[ExtResource("11_objdata")]([ExtResource("12_berry"), ExtResource("13_lily"), ExtResource("14_gwnb0")])
 starting_abilities = Array[ExtResource("15_soift")]([ExtResource("16_uqt4q")])
+realtime_spawn_definitions = {
+SubResource("Resource_rt_flower"): true,
+SubResource("Resource_rt_carrot"): true,
+}
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

@@ -11,6 +11,8 @@ extends Resource
 @export var spawn_small_vegetation := true
 @export var small_vegetation: Array[ObjectData] = []
 @export var spawn_world_objects := true
+## SpawnDefinition → enabled. Keys are [SpawnDefinition] resources; each must set [member SpawnDefinition.object_data].
+@export var realtime_spawn_definitions: Dictionary[SpawnDefinition, bool] = {}
 @export var player_light := true
 @export var camera_zoom_level := 1.5
 @export var starting_abilities: Array[AbilityData] = []
