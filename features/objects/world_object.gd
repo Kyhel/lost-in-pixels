@@ -3,6 +3,9 @@ extends Node2D
 
 @export var object_data: ObjectData
 
+## When true, eating this object can apply taming via [TamableTrait] (see [TamableTrait.world_object_is_taming_target]).
+var placed_by_player: bool = false
+
 var behavior_instances: Array[WorldObjectBehaviorInstance] = []
 
 signal destroyed(reason)

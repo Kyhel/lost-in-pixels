@@ -15,7 +15,12 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	if world_object == null or world_object.object_data == null:
 		return
 	var od: ObjectData = world_object.object_data
-	var taming_add: int = TamingBehavior.get_taming_value(od)
+	var tamable := TamableTrait.find_on(cd)
+	if tamable == null:
+		return
+	if not world_object.placed_by_player:
+		return
+	var taming_add: int = tamable.get_taming_value_for(od)
 	if taming_add <= 0:
 		return
 

@@ -20,16 +20,16 @@ func get_score(creature: Creature) -> float:
 	# Not hungry but go for food with taming value if creature can be tamed
 	# and crature not already tamed
 	if creature.creature_data != null and TamingNeed.get_taming_value_threshold(creature.creature_data) > 0 and not is_tamed:
-		if _has_food_with_taming_value(foods):
+		if _has_food_with_taming_value(creature, foods):
 			return 1.0
 
 	return 0.0
 
 
-func _has_food_with_taming_value(foods) -> bool:
+func _has_food_with_taming_value(creature: Creature, foods) -> bool:
 	for f in foods:
 		if not is_instance_valid(f):
 			continue
-		if f is WorldObject and f.object_data != null and TamingBehavior.has_taming(f.object_data):
+		if f is WorldObject and TamableTrait.world_object_is_taming_target(creature, f as WorldObject):
 			return true
 	return false

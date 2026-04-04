@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
+[ext_resource type="Script" path="res://features/creatures/traits/tamable_trait.gd" id="17_tamable"]
 
 [sub_resource type="Resource" id="need_hunger_fox"]
 script = ExtResource("hunger_s")
@@ -39,6 +40,13 @@ id = &"stamina"
 base_decay_rate = -10.0
 initial_value = 100.0
 
+[sub_resource type="Resource" id="trait_fox_tamable"]
+script = ExtResource("17_tamable")
+taming_by_food = {
+ExtResource("5_ewph6"): 110
+}
+id = &"tamable"
+
 [resource]
 script = ExtResource("2_ovces")
 id = &"fox"
@@ -51,6 +59,7 @@ ExtResource("4_follow"): 60
 })
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_fox"), SubResource("need_taming_fox"), SubResource("need_stamina_fox")])
+traits = Array[Resource]([SubResource("trait_fox_tamable")])
 size = 32
 hitbox_size = 20
 base_speed = 50.0

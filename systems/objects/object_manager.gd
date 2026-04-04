@@ -13,7 +13,12 @@ func clear_all_objects() -> void:
 func update_chunks(_delta: float) -> void:
 	pass
 
-func spawn_object_in_chunk(chunk: Vector2i, object_data: ObjectData, world_pos: Vector2):
+func spawn_object_in_chunk(
+	chunk: Vector2i,
+	object_data: ObjectData,
+	world_pos: Vector2,
+	placed_by_player: bool = false,
+):
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
 	if chunk_node == null:
 		return null
@@ -25,6 +30,7 @@ func spawn_object_in_chunk(chunk: Vector2i, object_data: ObjectData, world_pos: 
 	if world_object == null:
 		return null
 	world_object.object_data = object_data
+	world_object.placed_by_player = placed_by_player
 
 	target_container.add_child(world_object)
 	world_object.global_position = world_pos
@@ -37,6 +43,7 @@ func spawn_object_attached_in_chunk(
 	object_data: ObjectData,
 	parent: Node2D,
 	local_pos: Vector2,
+	placed_by_player: bool = false,
 ):
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk)
 	if chunk_node == null:
@@ -48,24 +55,31 @@ func spawn_object_attached_in_chunk(
 	if world_object == null:
 		return null
 	world_object.object_data = object_data
+	world_object.placed_by_player = placed_by_player
 	parent.add_child(world_object)
 	world_object.position = local_pos
 	_register_world_object_in_chunk(chunk_node, world_object)
 	return world_object
 
 
-func spawn_object_at(object_data: ObjectData, world_pos: Vector2) -> WorldObject:
+func spawn_object_at(object_data: ObjectData, world_pos: Vector2, placed_by_player: bool = false) -> WorldObject:
 	var chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(world_pos)
-	return spawn_object_in_chunk(chunk, object_data, world_pos)
+	return spawn_object_in_chunk(chunk, object_data, world_pos, placed_by_player)
 
 
-func spawn_object_attached(parent: Node2D, object_data: ObjectData, local_pos: Vector2 = Vector2.ZERO) -> WorldObject:
+func spawn_object_attached(
+	parent: Node2D,
+	object_data: ObjectData,
+	local_pos: Vector2 = Vector2.ZERO,
+	placed_by_player: bool = false,
+) -> WorldObject:
 	if parent == null or not is_instance_valid(parent):
 		return null
 	var world_object := _instantiate_world_object(object_data)
 	if world_object == null:
 		return null
 	world_object.object_data = object_data
+	world_object.placed_by_player = placed_by_player
 	parent.add_child(world_object)
 	world_object.position = local_pos
 	return world_object

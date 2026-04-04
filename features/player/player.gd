@@ -165,7 +165,7 @@ func attack():
 
 func _spawn_carrot() -> void:
 	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
-	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(&"carrot"), spawn_pos)
+	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(&"carrot"), spawn_pos, true)
 
 
 func try_pickup_in_front() -> void:
