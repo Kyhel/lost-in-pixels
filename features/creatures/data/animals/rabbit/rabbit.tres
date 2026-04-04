@@ -55,8 +55,8 @@ initial_value = 100.0
 [sub_resource type="Resource" id="need_fetch_desire_rabbit"]
 script = ExtResource("fetch_desire_s")
 id = &"fetch_desire"
-base_decay_rate = -5.0
-initial_value = 100.0
+base_decay_rate = -2.0
+initial_value = 80.0
 
 [sub_resource type="Resource" id="trait_rabbit_fetcher"]
 script = ExtResource("16_fetcher_trait")

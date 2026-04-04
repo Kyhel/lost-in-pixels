@@ -13,7 +13,7 @@ var _follow_state: FollowState = FollowState.STOPPED
 var orbit_target_position: Vector2 = Vector2.ZERO
 
 func tick(creature: Creature, _delta: float) -> State:
-	var player = creature.get_tree().get_first_node_in_group("player") as Node2D
+	var player = creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Node2D
 	if player == null:
 		return State.FAILURE
 
