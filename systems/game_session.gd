@@ -71,9 +71,6 @@ func apply_session_to_player(player: Player) -> void:
 				player.global_position = Vector2(float(pos[0]), float(pos[1]))
 			player.hunger = float(pdict.get("hunger", player.max_hunger))
 			player.health = clampf(float(pdict.get("health", player.max_health)), 0.0, player.max_health)
-			var wpath: String = str(pdict.get("weapon_path", ""))
-			if wpath != "" and ResourceLoader.exists(wpath):
-				player.weapon = load(wpath)
 			player.hunger_changed.emit(player.hunger)
 			player.health_changed.emit(player.health)
 			player._update_attack_hitbox_radius()

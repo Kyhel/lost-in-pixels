@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="PackedScene" uid="uid://b6rnl5roa1hdm" path="res://features/player/attack_effect.tscn" id="5_pl11u"]
-[ext_resource type="Resource" uid="uid://btixqbnannlan" path="res://data/weapons/basic_sword.tres" id="6_0tnpc"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="6_5newe"]
 [ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="7_37s47"]
 [ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="8_bt5mj"]
@@ -79,7 +78,6 @@ collision_mask = 50
 motion_mode = 1
 script = ExtResource("3_iywne")
 attack_effect_scene = ExtResource("5_pl11u")
-weapon = ExtResource("6_0tnpc")
 edible_objects = Array[ExtResource("6_5newe")]([ExtResource("7_37s47"), ExtResource("8_bt5mj")])
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Entities/Player" unique_id=1558994929]

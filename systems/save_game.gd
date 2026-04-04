@@ -1,6 +1,6 @@
 extends Node
 ## Save/load JSON to user://.
-## v1: world seed, player position/hunger/weapon, fog grids.
+## v1: world seed, player position/hunger, fog grids.
 ## v2: adds player health (loads v1 with full health default).
 ## v3: adds discovered_abilities (StringName ids).
 ## v4: adds inventory (per-slot array; null or {id, count}).
@@ -19,9 +19,6 @@ func reset_autoload_world_state() -> void:
 
 
 func save_to_disk(player: Player) -> bool:
-	var weapon_path := ""
-	if player.weapon != null:
-		weapon_path = player.weapon.resource_path
 	var ability_ids: Array = []
 	for aid in AbilityManager.discovered_order:
 		ability_ids.append(String(aid))
@@ -32,7 +29,6 @@ func save_to_disk(player: Player) -> bool:
 			"position": [player.global_position.x, player.global_position.y],
 			"hunger": player.hunger,
 			"health": player.health,
-			"weapon_path": weapon_path,
 		},
 		"fog_memory": ChunkManager.build_fog_save_payload(),
 		"discovered_abilities": ability_ids,

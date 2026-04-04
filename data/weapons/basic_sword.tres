@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://btixqbnannlan"]
-
-[ext_resource type="Script" uid="uid://ccggiggk0xlyu" path="res://data/weapons/weapon_data.gd" id="1_15wrg"]
-
-[resource]
-script = ExtResource("1_15wrg")
-id = &"basic_sword"
-display_name = "Basic sword"
-attack_range = 40.0

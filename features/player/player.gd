@@ -3,14 +3,13 @@ extends CharacterBody2D
 
 var base_speed = 200
 
-const ATTACK_RANGE = 20 # fallback if no weapon equipped
-const ATTACK_DAMAGE = 1 # fallback if no weapon equipped
+const ATTACK_RANGE = 20
+const ATTACK_DAMAGE = 1
 const PICKUP_RADIUS = 16
 const FRONT_PICKUP_RADIUS = 22.0
 const PICKUP_CONE_HALF_ANGLE := PI / 4.0
 
 @export var attack_effect_scene : PackedScene
-@export var weapon: WeaponData
 var attack_cooldown_timer: float = 0.0
 
 @export var max_hunger: float = 100.0
@@ -135,8 +134,6 @@ func _update_attack_hitbox_radius() -> void:
 	if not is_node_ready() or attack_hitbox == null:
 		return
 	var radius: float = ATTACK_RANGE
-	if weapon != null:
-		radius = weapon.attack_range
 	var shape: CircleShape2D = attack_hitbox.get_node("CollisionShape2D").shape
 	if shape is CircleShape2D:
 		shape.radius = radius
@@ -158,13 +155,6 @@ func attack():
 	var damage: int = ATTACK_DAMAGE
 	var cooldown: float = 0.3
 	var effect_scene := attack_effect_scene
-
-	if weapon != null:
-		attack_range = weapon.attack_range
-		damage = weapon.attack_damage
-		cooldown = weapon.attack_cooldown
-		if weapon.effect_scene != null:
-			effect_scene = weapon.effect_scene
 
 	_update_attack_hitbox_radius()
 
