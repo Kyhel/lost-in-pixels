@@ -29,7 +29,7 @@ func _ready() -> void:
 	player_config = ConfigManager.config.player_config
 	hunger = player_config.max_hunger
 	health = player_config.max_health
-	add_to_group(Constants.GROUP_PLAYER)
+	add_to_group(Groups.PLAYER)
 	_update_attack_hitbox_radius()
 	z_index = Constants.Z_INDEX_PLAYER
 	$Camera.zoom = Vector2.ONE * ConfigManager.config.camera_zoom_level
@@ -165,7 +165,7 @@ func attack():
 
 func _spawn_carrot() -> void:
 	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
-	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(&"carrot"), spawn_pos, true)
+	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(ObjectIds.CARROT), spawn_pos, true)
 
 
 func try_pickup_in_front() -> void:

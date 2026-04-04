@@ -9,5 +9,5 @@ func _ready() -> void:
 
 
 func _apply_session_to_player() -> void:
-	var player: Player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
+	var player: Player = get_tree().get_first_node_in_group(Groups.PLAYER) as Player
 	GameSession.apply_session_to_player(player)

@@ -52,7 +52,7 @@ func update_idle_state(creature: Creature, delta: float) -> void:
 
 
 func _player_on_aggressive_tile(creature: Creature) -> bool:
-	var player = creature.get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
+	var player = creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Player
 	if player == null:
 		return false
 	var player_tile := ChunkManager.get_tile_type_at_world_pos(player.global_position)

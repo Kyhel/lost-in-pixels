@@ -5,7 +5,7 @@ func tick(creature: Creature, _delta: float) -> State:
 	if not creature.is_holding_world_object():
 		return State.FAILURE
 
-	var player := creature.get_tree().get_first_node_in_group("player") as Node2D
+	var player := creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Node2D
 	if player == null:
 		return State.FAILURE
 

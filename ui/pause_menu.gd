@@ -63,7 +63,7 @@ func _on_quit_pressed() -> void:
 
 
 func _get_player() -> Player:
-	var player := get_tree().get_first_node_in_group(Constants.GROUP_PLAYER)
+	var player := get_tree().get_first_node_in_group(Groups.PLAYER)
 	if player == null:
 		return null
 	return player as Player

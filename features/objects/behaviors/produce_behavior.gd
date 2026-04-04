@@ -11,7 +11,7 @@ extends WorldObjectBehavior
 func apply(world_object: WorldObject) -> void:
 	if world_object == null:
 		return
-	world_object.add_to_group("produce_behavior")
+	world_object.add_to_group(Groups.PRODUCE_BEHAVIOR)
 	if produce_object_data == null:
 		push_warning("ProduceBehavior: missing produce_object_data")
 		return

@@ -209,7 +209,7 @@ func _compute_separation(creature: Creature) -> Vector2:
 	var force := Vector2.ZERO
 	var count := 0
 
-	for other in creature.get_tree().get_nodes_in_group(Constants.GROUP_FOLLOWING_CREATURES):
+	for other in creature.get_tree().get_nodes_in_group(Groups.FOLLOWING_CREATURES):
 
 		if !is_instance_valid(other):
 			continue
@@ -351,4 +351,4 @@ func _should_ignore_chase_target_player(collider: Object, request: MovementReque
 		return false
 	if not (collider is Node):
 		return false
-	return (collider as Node).is_in_group(Constants.GROUP_PLAYER)
+	return (collider as Node).is_in_group(Groups.PLAYER)

@@ -12,7 +12,7 @@ func update(creature: Creature, instance: NeedInstance, delta: float) -> void:
 		return
 
 	var fear := instance.current_value
-	var player := creature.get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Node2D
+	var player := creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Node2D
 	if player == null:
 		fear = maxf(0.0, fear - base_decay_rate * delta)
 		instance.set_value(fear)

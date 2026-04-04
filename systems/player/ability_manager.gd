@@ -88,7 +88,7 @@ func _get_player() -> Player:
 	var tree := get_tree()
 	if tree == null:
 		return null
-	var n := tree.get_first_node_in_group("player")
+	var n := tree.get_first_node_in_group(Groups.PLAYER)
 	return n as Player
 
 

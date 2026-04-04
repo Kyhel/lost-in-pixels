@@ -1,9 +1,6 @@
 class_name VegetationGenerator
 extends RefCounted
 
-const TREE_1_ID := &"tree_1"
-const TREE_2_ID := &"tree_2"
-
 var _world_seed: int = 0
 var _tree_generator: TreeGenerator
 
@@ -38,15 +35,15 @@ func get_nearby_trees(origin: Vector2, radius: float) -> Array[WorldObject]:
 		if world_object.object_data == null:
 			continue
 		var id: StringName = world_object.object_data.id
-		if id == TREE_1_ID or id == TREE_2_ID:
+		if id == ObjectIds.TREE_1 or id == ObjectIds.TREE_2:
 			out.append(world_object)
 	return out
 
 
 func _spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> void:
-	var object_id: StringName = TREE_1_ID
+	var object_id: StringName = ObjectIds.TREE_1
 	if tree_type == TreeGenerator.TreeType.TREE_2:
-		object_id = TREE_2_ID
+		object_id = ObjectIds.TREE_2
 	var tree_data: ObjectData = ObjectDatabase.get_object_data(object_id)
 	_spawn_object_on_tile(tree_data, tile_position)
 

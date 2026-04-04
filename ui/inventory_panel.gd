@@ -64,7 +64,7 @@ func _on_popup_id_pressed(menu_id: int) -> void:
 	var action: String = str(_context_actions.get(menu_id, ""))
 	if action.is_empty():
 		return
-	var player: Player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
+	var player: Player = get_tree().get_first_node_in_group(Groups.PLAYER) as Player
 	if player == null:
 		return
 	if action == "eat":

@@ -9,7 +9,7 @@ func tick(creature: Creature, delta: float) -> State:
 		creature.movement.stop()
 		return State.FAILURE
 
-	var player := creature.get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
+	var player := creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Player
 	if player == null:
 		creature.movement.stop()
 		return State.FAILURE

@@ -40,7 +40,7 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	var object_name := _object_display_name(od)
 
 	if now_tamed:
-		eater.add_to_group(Constants.GROUP_TAMED_CREATURES)
+		eater.add_to_group(Groups.TAMED_CREATURES)
 		GameLog.log_message(
 			"The %s appreciated eating the %s, it's now following you" % [creature_name, object_name]
 		)

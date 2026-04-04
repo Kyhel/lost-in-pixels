@@ -16,7 +16,7 @@ func tick(creature: Creature, _delta: float) -> State:
 			creature.movement.stop()
 			return State.RUNNING
 
-		var player := creature.get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Node2D
+		var player := creature.get_tree().get_first_node_in_group(Groups.PLAYER) as Node2D
 		if player == null:
 			creature.movement.stop()
 			return State.RUNNING

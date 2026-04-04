@@ -91,7 +91,7 @@ func _get_tree_cache_key(tree_scene: PackedScene) -> String:
 func on_goal_changed(old_goal: Goal, new_goal: Goal):
 
 	if old_goal != null and old_goal.has_tag(GoalTags.TAG_FOLLOW_PLAYER):
-		creature.remove_from_group(Constants.GROUP_FOLLOWING_CREATURES)
+		creature.remove_from_group(Groups.FOLLOWING_CREATURES)
 
 	if new_goal != null and new_goal.has_tag(GoalTags.TAG_FOLLOW_PLAYER):
-		creature.add_to_group(Constants.GROUP_FOLLOWING_CREATURES)
+		creature.add_to_group(Groups.FOLLOWING_CREATURES)

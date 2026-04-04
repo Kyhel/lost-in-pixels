@@ -16,7 +16,7 @@ func _ready() -> void:
 func _on_object_picked_up(actor: Node, world_object: WorldObject) -> void:
 	if world_object == null or world_object.object_data == null:
 		return
-	if not actor.is_in_group("player"):
+	if not actor.is_in_group(Groups.PLAYER):
 		return
 	var item: ItemData = PickableBehavior.get_pickup_item(world_object.object_data)
 	if item == null:

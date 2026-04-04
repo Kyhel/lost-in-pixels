@@ -2,7 +2,7 @@ class_name GrowFlowerEffect
 extends RefCounted
 
 func execute(player: Player) -> bool:
-	var flower_data := ObjectDatabase.get_object_data(&"flower_red_1")
+	var flower_data := ObjectDatabase.get_object_data(ObjectIds.FLOWER_RED_1)
 	if flower_data == null:
 		push_error("GrowFlowerEffect: failed to load flower data")
 		return false

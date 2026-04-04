@@ -100,7 +100,7 @@ func spawn_rabbits(chunk: Chunk) -> void:
 	if !ConfigManager.config.spawn_rabbits:
 		return
 
-	var rabbit_count: int = CreatureManager.get_creature_count_in_chunk_by_id(chunk, &"rabbit")
+	var rabbit_count: int = CreatureManager.get_creature_count_in_chunk_by_id(chunk, CreatureIds.RABBIT)
 	if rabbit_count >= RABBIT_MAX_PER_CHUNK:
 		return
 
@@ -108,7 +108,7 @@ func spawn_rabbits(chunk: Chunk) -> void:
 	if now - _rabbit_last_spawn_time.get(chunk.coords, -999.0) < RABBIT_SPAWN_INTERVAL:
 		return
 
-	var rabbit_data := CreatureDatabase.get_creature_data(&"rabbit")
+	var rabbit_data := CreatureDatabase.get_creature_data(CreatureIds.RABBIT)
 
 	var plains_tiles: Array[Vector2i] = []
 	for local_y in ChunkManager.CHUNK_SIZE:

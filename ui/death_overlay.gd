@@ -6,7 +6,7 @@ extends CanvasLayer
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	visible = false
-	var p := get_tree().get_first_node_in_group(Constants.GROUP_PLAYER)
+	var p := get_tree().get_first_node_in_group(Groups.PLAYER)
 	if p is Player:
 		(p as Player).died.connect(_on_player_died)
 
