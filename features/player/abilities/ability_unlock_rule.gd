@@ -14,4 +14,4 @@ func matches(eater: Creature, object_data: ObjectData, player: Player) -> bool:
 	if food_object_data != null:
 		if object_data != food_object_data and object_data.id != food_object_data.id:
 			return false
-	return eater.global_position.distance_to(player.global_position) <= player.light_radius * witness_multiplier
+	return eater.global_position.distance_to(player.global_position) <= player.player_config.light_radius * witness_multiplier

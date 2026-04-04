@@ -69,8 +69,8 @@ func apply_session_to_player(player: Player) -> void:
 			var pos: Variant = pdict.get("position", null)
 			if pos is Array and pos.size() >= 2:
 				player.global_position = Vector2(float(pos[0]), float(pos[1]))
-			player.hunger = float(pdict.get("hunger", player.max_hunger))
-			player.health = clampf(float(pdict.get("health", player.max_health)), 0.0, player.max_health)
+			player.hunger = float(pdict.get("hunger", player.player_config.max_hunger))
+			player.health = clampf(float(pdict.get("health", player.player_config.max_health)), 0.0, player.player_config.max_health)
 			player.hunger_changed.emit(player.hunger)
 			player.health_changed.emit(player.health)
 			player._update_attack_hitbox_radius()
@@ -84,8 +84,8 @@ func apply_session_to_player(player: Player) -> void:
 		return
 
 	player.global_position = NEW_GAME_PLAYER_POSITION
-	player.hunger = player.max_hunger
-	player.health = player.max_health
+	player.hunger = player.player_config.max_hunger
+	player.health = player.player_config.max_health
 	player.hunger_changed.emit(player.hunger)
 	player.health_changed.emit(player.health)
 	player._update_attack_hitbox_radius()

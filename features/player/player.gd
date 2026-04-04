@@ -9,21 +9,12 @@ const PICKUP_RADIUS = 16
 const FRONT_PICKUP_RADIUS = 22.0
 const PICKUP_CONE_HALF_ANGLE := PI / 4.0
 
-@export var attack_effect_scene : PackedScene
+var player_config: PlayerConfig
+
 var attack_cooldown_timer: float = 0.0
 
-@export var max_hunger: float = 100.0
-@export var hunger_decay_rate: float = 0.5 # per second
-@export var hunger: float = max_hunger
-
-@export var max_health: float = 100.0
-@export var health: float = 100.0
-
-@export var light_radius := 300
-## World-space width of the transition band (shader softness). Outer edge of the veil is at `light_radius`.
-@export var light_softness := 200.0
-
-@export var edible_objects: Array[ObjectData] = []
+var hunger: float
+var health: float
 
 var _dead: bool = false
 
@@ -35,6 +26,9 @@ signal health_changed(health)
 signal died()
 
 func _ready() -> void:
+	player_config = ConfigManager.config.player_config
+	hunger = player_config.max_hunger
+	health = player_config.max_health
 	add_to_group(Constants.GROUP_PLAYER)
 	_update_attack_hitbox_radius()
 	z_index = Constants.Z_INDEX_PLAYER
@@ -95,7 +89,7 @@ func _physics_process(delta):
 	ChunkManager.reveal_around_player(global_position)
 
 func _apply_metabolic_drain(delta: float) -> void:
-	var drain := hunger_decay_rate * delta
+	var drain: float = player_config.hunger_decay_rate * delta
 	var remaining := drain
 	if hunger > 0.0:
 		var take := minf(hunger, remaining)
@@ -154,7 +148,7 @@ func attack():
 	var attack_range: float = ATTACK_RANGE
 	var damage: int = ATTACK_DAMAGE
 	var cooldown: float = 0.3
-	var effect_scene := attack_effect_scene
+	var effect_scene: PackedScene = player_config.attack_effect_scene
 
 	_update_attack_hitbox_radius()
 
@@ -200,9 +194,9 @@ func try_pickup_in_front() -> void:
 		if not is_instance_valid(it) or it.object_data == null:
 			continue
 		var food_val: float = float(PlayerEatableBehavior.get_food_value(it.object_data))
-		if food_val > 0.0 and it.object_data in edible_objects:
+		if food_val > 0.0 and it.object_data in player_config.edible_objects:
 			# Current interact behavior: choose Eat only when it would not overfill hunger.
-			if hunger + food_val <= max_hunger or health < max_health:
+			if hunger + food_val <= player_config.max_hunger or health < player_config.max_health:
 				ObjectInteractionSystem.do_eat(self, it)
 				break
 			

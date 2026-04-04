@@ -1,6 +1,7 @@
 class_name Config
 extends Resource
 
+@export var player_config: PlayerConfig
 @export var spawn_rabbits := true
 @export var allowed_creatures : Array[CreatureData] = []
 @export var biome_creature_spawn_profiles : Array[Resource] = []

@@ -46,7 +46,7 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 func _apply_player_eat_food(player: Player, amount: float) -> void:
 	if amount <= 0.0 or player.is_dead():
 		return
-	var room := player.max_hunger - player.hunger
+	var room := player.player_config.max_hunger - player.hunger
 	var to_hunger := minf(amount, room)
 	if to_hunger > 0.0:
 		player.hunger += to_hunger
@@ -54,6 +54,6 @@ func _apply_player_eat_food(player: Player, amount: float) -> void:
 	var overflow := amount - to_hunger
 	if overflow > 0.0:
 		var prev_health := player.health
-		player.health = minf(player.max_health, player.health + overflow)
+		player.health = minf(player.player_config.max_health, player.health + overflow)
 		if player.health != prev_health:
 			player.health_changed.emit(player.health)

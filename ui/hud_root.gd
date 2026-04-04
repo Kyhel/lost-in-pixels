@@ -10,11 +10,11 @@ func _ready() -> void:
 	player.health_changed.connect(_on_health_changed)
 
 	health_bar.min_value = 0
-	health_bar.max_value = player.max_health
+	health_bar.max_value = player.player_config.max_health
 	health_bar.value = player.health
 
 	hunger_bar.min_value = 0
-	hunger_bar.max_value = player.max_hunger
+	hunger_bar.max_value = player.player_config.max_hunger
 	hunger_bar.value = player.hunger
 
 

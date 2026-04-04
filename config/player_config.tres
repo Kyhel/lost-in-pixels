@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PlayerConfig" format=3]
+
+[ext_resource type="PackedScene" uid="uid://b6rnl5roa1hdm" path="res://features/player/attack_effect.tscn" id="1_attack"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="2_objdata"]
+[ext_resource type="Resource" uid="uid://c7k2bnaxryw1p" path="res://features/objects/data/berry_bush/berry.tres" id="3_berry"]
+[ext_resource type="Resource" uid="uid://b5yf6sdpcuvkd" path="res://features/objects/data/apple.tres" id="4_apple"]
+[ext_resource type="Script" uid="uid://cfupvhc3a3x31" path="res://config/player_config.gd" id="5_cfg"]
+
+[resource]
+script = ExtResource("5_cfg")
+attack_effect_scene = ExtResource("1_attack")
+max_hunger = 100.0
+hunger_decay_rate = 0.5
+max_health = 100.0
+light_radius = 300
+light_softness = 200.0
+edible_objects = Array[ExtResource("2_objdata")]([ExtResource("3_berry"), ExtResource("4_apple")])
