@@ -9,7 +9,7 @@ var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 
 var tile_types: Array[Terrain.Type] = []
 var biomes: Array[TerrainGenerator.Biome] = []
-var environment_tile_occupied: Dictionary = {}
+var environment_tile_occupied: Dictionary[Vector2i, bool] = {}
 var world_objects: Array[WorldObject] = []
 
 var coords: Vector2i

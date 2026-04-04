@@ -17,7 +17,7 @@ enum CreatureSize {
 ## Per-species need definitions (hunger, fear, taming, etc.). Carnivores/herbivores: configure edibles on [HungerNeed].
 @export var needs: Array[Need] = []
 ## Per-species trait definitions (terrain preferences, special movement constraints, etc.).
-@export var traits: Array[Resource] = []
+@export var traits: Array[CreatureTrait] = []
 @export var size_type: CreatureSize = CreatureSize.SMALL
 @export var can_fly: bool = false
 @export var can_swim: bool = false
