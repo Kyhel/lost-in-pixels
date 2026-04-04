@@ -6,7 +6,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	var config: CreatureDatabaseConfig = preload("res://systems/creatures/creature_database_config.tres")
+	var config: CreatureDatabaseConfig = load("res://systems/creatures/creature_database_config.tres")
 	if config == null:
 		push_error("%s: failed to load config resource" % database_name)
 		return

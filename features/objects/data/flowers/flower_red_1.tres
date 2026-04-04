@@ -3,14 +3,13 @@
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_k32ns"]
 [ext_resource type="Texture2D" uid="uid://b4r8iktdnd4pr" path="res://assets/nature/flower_red_1.png" id="3_voq16"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="4_base_scene"]
-[ext_resource type="Resource" uid="uid://cpw8xv4np1rrg" path="res://features/items/data/flower_red_1.tres" id="4_flower_item"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_ngibq"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="5_wob"]
 [ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="6_pkb"]
 
 [sub_resource type="Resource" id="Resource_pkb"]
 script = ExtResource("6_pkb")
-item = ExtResource("4_flower_item")
+item_id = &"flower_red_1"
 
 [resource]
 script = ExtResource("1_k32ns")

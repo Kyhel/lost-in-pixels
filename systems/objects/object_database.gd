@@ -6,7 +6,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	var config: ObjectDatabaseConfig = preload("res://systems/objects/object_database_config.tres")
+	var config: ObjectDatabaseConfig = load("res://systems/objects/object_database_config.tres")
 	if config == null:
 		push_error("%s: failed to load config resource" % database_name)
 		return

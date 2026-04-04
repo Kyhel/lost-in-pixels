@@ -5,6 +5,7 @@ extends PanelContainer
 
 var _popup: PopupMenu
 var _context_slot: int = -1
+var _context_actions: Dictionary = {}
 
 
 func _ready() -> void:
@@ -35,23 +36,43 @@ func _on_slot_gui_input(event: InputEvent, slot_index: int) -> void:
 		return
 	var id: StringName = data["id"]
 	var def: ItemData = ItemDatabase.get_item_data(id)
-	if def == null or def.get_food_amount() <= 0.0:
+	if def == null:
+		return
+	var can_eat := def.get_food_amount() > 0.0
+	var can_drop := def.on_drop_object != null
+	if not can_eat and not can_drop:
 		return
 	_context_slot = slot_index
 	_popup.clear()
-	_popup.add_item("Eat", 0)
+	_context_actions.clear()
+	var next_id := 0
+	if can_eat:
+		_popup.add_item("Eat", next_id)
+		_context_actions[next_id] = "eat"
+		next_id += 1
+	if can_drop:
+		_popup.add_item("Drop", next_id)
+		_context_actions[next_id] = "drop"
+		next_id += 1
 	_popup.position = get_global_mouse_position()
 	_popup.popup()
 
 
-func _on_popup_id_pressed(id: int) -> void:
-	if id != 0 or _context_slot < 0:
+func _on_popup_id_pressed(menu_id: int) -> void:
+	if _context_slot < 0:
+		return
+	var action: String = str(_context_actions.get(menu_id, ""))
+	if action.is_empty():
 		return
 	var player: Player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
 	if player == null:
 		return
-	Inventory.consume_one_at_slot(_context_slot, player)
+	if action == "eat":
+		Inventory.consume_one_at_slot(_context_slot, player)
+	elif action == "drop":
+		Inventory.drop_one_at_slot(_context_slot, player)
 	_context_slot = -1
+	_context_actions.clear()
 
 
 func _refresh() -> void:

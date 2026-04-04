@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://c7k2bnaxryw1p"]
 
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_item"]
-[ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="1_o1ifq"]
 [ext_resource type="Texture2D" uid="uid://ba1cfysaknd15" path="res://assets/nature/berry_red.png" id="2_tex"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_base_scene"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
@@ -10,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_pkb"]
 script = ExtResource("5_pkb")
-item = ExtResource("1_o1ifq")
+item_id = &"berry_red"
 
 [resource]
 script = ExtResource("1_item")

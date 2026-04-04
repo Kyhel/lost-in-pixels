@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://d4fipfqbnme6i"]
 
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_ot3co"]
-[ext_resource type="Resource" uid="uid://dp4fch7ro7shh" path="res://features/items/data/carrot.tres" id="3_fc150"]
 [ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="4_5vll0"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_iic2v"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="6_2p4ut"]
@@ -10,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_pkb"]
 script = ExtResource("4_5vll0")
-item = ExtResource("3_fc150")
+item_id = &"carrot"
 
 [resource]
 script = ExtResource("7_pgmcc")

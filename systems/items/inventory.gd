@@ -91,6 +91,33 @@ func consume_one_at_slot(slot_index: int, player: Player) -> bool:
 	return true
 
 
+## Spawns [member ItemData.on_drop_object] in front of the player (same placement rules as grow flower), with [member WorldObject.placed_by_player] set. Removes one from the stack on success.
+func drop_one_at_slot(slot_index: int, player: Player) -> bool:
+	if slot_index < 0 or slot_index >= SLOT_COUNT:
+		return false
+	if player == null or player.is_dead():
+		return false
+	var entry: Variant = _slots[slot_index]
+	if entry == null or not entry is Dictionary:
+		return false
+	var item_id: StringName = entry.get("id", &"") as StringName
+	var data: ItemData = ItemDatabase.get_item_data(item_id)
+	if data == null or data.on_drop_object == null:
+		return false
+	var forward := Vector2.from_angle(player.sprite.rotation - TAU / 4.0)
+	var distance := Player.PICKUP_RADIUS
+	var spawn_pos := player.global_position + forward * distance
+	if ObjectsManager.is_object_spawn_blocked(spawn_pos, data.on_drop_object):
+		return false
+	var wo: WorldObject = ObjectsManager.spawn_object_at(data.on_drop_object, spawn_pos, true)
+	if wo == null:
+		return false
+	if _remove_from_slot(slot_index, 1) < 1:
+		return false
+	inventory_changed.emit()
+	return true
+
+
 func remove_item(item_id: StringName, amount: int) -> bool:
 	if amount <= 0:
 		return false

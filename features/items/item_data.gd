@@ -6,6 +6,7 @@ extends Resource
 @export var description: String = ""
 @export var texture: Texture2D
 @export var consume_effects: Array[Resource] = []
+@export var on_drop_object: ObjectData
 
 
 func get_food_amount() -> float:

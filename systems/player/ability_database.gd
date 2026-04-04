@@ -6,7 +6,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	var config: AbilityDatabaseConfig = preload("res://systems/player/ability_database_config.tres")
+	var config: AbilityDatabaseConfig = load("res://systems/player/ability_database_config.tres")
 	if config == null:
 		push_error("%s: failed to load config resource" % database_name)
 		return
