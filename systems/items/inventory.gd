@@ -51,7 +51,46 @@ func get_slot(slot_index: int) -> Variant:
 	return _slots[slot_index]
 
 
+## Removes up to [param amount] from the stack at [param slot_index]. Returns how many were removed.
+func _remove_from_slot(slot_index: int, amount: int) -> int:
+	if slot_index < 0 or slot_index >= SLOT_COUNT or amount <= 0:
+		return 0
+	var entry: Variant = _slots[slot_index]
+	if entry == null or not entry is Dictionary:
+		return 0
+	var cnt: int = int(entry["count"])
+	var take: int = mini(cnt, amount)
+	cnt -= take
+	if cnt <= 0:
+		_slots[slot_index] = null
+	else:
+		entry["count"] = cnt
+	return take
+
+
 ## Removes up to [param amount] of [param item_id] across stacked slots. Returns true if anything was removed.
+## Applies all [member ItemData.consume_effects] for the item in [param slot_index], then removes one from that slot. Returns false if invalid, empty, or player cannot consume.
+func consume_one_at_slot(slot_index: int, player: Player) -> bool:
+	if slot_index < 0 or slot_index >= SLOT_COUNT:
+		return false
+	if player == null or player.is_dead():
+		return false
+	var entry: Variant = _slots[slot_index]
+	if entry == null or not entry is Dictionary:
+		return false
+	var item_id: StringName = entry.get("id", &"") as StringName
+	var data: ItemData = ItemDatabase.get_item_data(item_id)
+	if data == null:
+		return false
+	for e in data.consume_effects:
+		if e != null:
+			e.apply(player)
+	if _remove_from_slot(slot_index, 1) < 1:
+		return false
+	inventory_changed.emit()
+	return true
+
+
 func remove_item(item_id: StringName, amount: int) -> bool:
 	if amount <= 0:
 		return false
@@ -67,14 +106,10 @@ func remove_item(item_id: StringName, amount: int) -> bool:
 			continue
 		if entry.get("id", null) != item_id:
 			continue
-		var cnt: int = int(entry["count"])
-		var take: int = mini(cnt, remaining)
-		cnt -= take
-		remaining -= take
-		if cnt <= 0:
-			_slots[i] = null
-		else:
-			entry["count"] = cnt
+		var taken: int = _remove_from_slot(i, remaining)
+		if taken <= 0:
+			continue
+		remaining -= taken
 		inventory_changed.emit()
 	return amount > remaining
 

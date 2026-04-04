@@ -7,15 +7,10 @@
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_jiyf4"]
 [ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="5_pkb"]
-[ext_resource type="Script" uid="uid://cde52c8k52785" path="res://features/objects/behaviors/player_eatable_behavior.gd" id="6_peb"]
 
 [sub_resource type="Resource" id="Resource_pkb"]
 script = ExtResource("5_pkb")
 item = ExtResource("1_o1ifq")
-
-[sub_resource type="Resource" id="Resource_peb"]
-script = ExtResource("6_peb")
-player_food_value = 10
 
 [resource]
 script = ExtResource("1_item")
@@ -24,5 +19,5 @@ display_name = "Berry"
 texture = ExtResource("2_tex")
 scene = ExtResource("3_base_scene")
 hitbox_radius = 2.0
-behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_pkb"), SubResource("Resource_peb")])
+behaviors = Array[ExtResource("4_wob")]([SubResource("Resource_pkb")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

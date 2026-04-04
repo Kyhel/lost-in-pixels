@@ -2,10 +2,16 @@
 
 [ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="1_02xg5"]
 [ext_resource type="Texture2D" uid="uid://blfddubxqwq10" path="res://assets/food/carrot.png" id="2_m8cgd"]
+[ext_resource type="Script" uid="uid://ewn46rjqc0a2" path="res://features/items/food_effect.gd" id="4_food"]
+
+[sub_resource type="Resource" id="Resource_food"]
+script = ExtResource("4_food")
+amount = 10.0
 
 [resource]
 script = ExtResource("1_02xg5")
 id = &"carrot"
 display_name = "Carrot"
 texture = ExtResource("2_m8cgd")
+consume_effects = Array[Resource]([SubResource("Resource_food")])
 metadata/_custom_type_script = "uid://dendcxderw11w"

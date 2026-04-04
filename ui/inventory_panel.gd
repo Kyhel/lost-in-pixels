@@ -3,10 +3,55 @@ extends PanelContainer
 
 @onready var _grid: GridContainer = $GridContainer
 
+var _popup: PopupMenu
+var _context_slot: int = -1
+
 
 func _ready() -> void:
+	_popup = PopupMenu.new()
+	add_child(_popup)
+	_popup.id_pressed.connect(_on_popup_id_pressed)
 	Inventory.inventory_changed.connect(_refresh)
+	_connect_slots()
 	_refresh()
+
+
+func _connect_slots() -> void:
+	for i in _grid.get_child_count():
+		var cell: Control = _grid.get_child(i) as Control
+		if cell == null:
+			continue
+		cell.gui_input.connect(_on_slot_gui_input.bind(i))
+
+
+func _on_slot_gui_input(event: InputEvent, slot_index: int) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mb := event as InputEventMouseButton
+	if not mb.pressed or mb.button_index != MOUSE_BUTTON_RIGHT:
+		return
+	var data: Variant = Inventory.get_slot(slot_index)
+	if data == null or not data is Dictionary:
+		return
+	var id: StringName = data["id"]
+	var def: ItemData = ItemDatabase.get_item_data(id)
+	if def == null or def.get_food_amount() <= 0.0:
+		return
+	_context_slot = slot_index
+	_popup.clear()
+	_popup.add_item("Eat", 0)
+	_popup.position = get_global_mouse_position()
+	_popup.popup()
+
+
+func _on_popup_id_pressed(id: int) -> void:
+	if id != 0 or _context_slot < 0:
+		return
+	var player: Player = get_tree().get_first_node_in_group(Constants.GROUP_PLAYER) as Player
+	if player == null:
+		return
+	Inventory.consume_one_at_slot(_context_slot, player)
+	_context_slot = -1
 
 
 func _refresh() -> void:

@@ -193,12 +193,5 @@ func try_pickup_in_front() -> void:
 		var it: WorldObject = entry["world_object"] as WorldObject
 		if not is_instance_valid(it) or it.object_data == null:
 			continue
-		var food_val: float = float(PlayerEatableBehavior.get_food_value(it.object_data))
-		if food_val > 0.0 and it.object_data in player_config.edible_objects:
-			# Current interact behavior: choose Eat only when it would not overfill hunger.
-			if hunger + food_val <= player_config.max_hunger or health < player_config.max_health:
-				ObjectInteractionSystem.do_eat(self, it)
-				break
-			
 		ObjectInteractionSystem.do_pickup(self, it)
 		break

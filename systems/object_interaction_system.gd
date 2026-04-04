@@ -23,14 +23,9 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 	if world_object.object_data == null:
 		return false
 
-	# Player eating: only succeeds when it won't overfill hunger.
+	# Player does not eat world objects; use inventory consume instead.
 	if by is Player:
-		_apply_player_eat_food(
-			by as Player,
-			float(PlayerEatableBehavior.get_food_value(world_object.object_data))
-		)
-		world_object.destroy("eaten")
-		return true
+		return false
 
 	# Creature eating: current behavior is to refill hunger to max.
 	if by is Creature:
@@ -43,7 +38,7 @@ func do_eat(by: Node, world_object: WorldObject) -> bool:
 	return false
 
 
-func _apply_player_eat_food(player: Player, amount: float) -> void:
+func apply_food_amount_to_player(player: Player, amount: float) -> void:
 	if amount <= 0.0 or player.is_dead():
 		return
 	var room := player.player_config.max_hunger - player.hunger
