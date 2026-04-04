@@ -7,4 +7,3 @@ class_name BiomeCreatureSpawnProfile
 func get_weight(creature: CreatureData) -> float:
 	# Missing entries are treated as weight 0.
 	return creature_weights.get(creature, 0.0)
-

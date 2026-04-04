@@ -1,7 +1,6 @@
 extends Node2D
 
 signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
-const TerrainGeneratorScript = preload("res://features/world/terrain_generator.gd")
 
 const TILE_SIZE = 16
 const TILE_HALF_SIZE = TILE_SIZE / 2.0
@@ -13,7 +12,7 @@ const TERRAIN_VISION_RADIUS = 20
 
 var loaded_chunks: Dictionary[Vector2i, Node] = {}
 
-var chunk_scene = preload("res://features/world/chunk.tscn")
+var chunk_scene = preload("res://features/world_generation/chunk.tscn")
 var world_generator
 var vegetation_generator: VegetationGenerator
 var fog_memory: Dictionary[Vector2i, Array] = {}
@@ -24,7 +23,7 @@ func _ready() -> void:
 
 
 func _apply_world_seed(p_seed: int) -> void:
-	world_generator = TerrainGeneratorScript.new()
+	world_generator = TerrainGenerator.new()
 	world_generator.setup_seed(p_seed)
 	vegetation_generator = VegetationGenerator.new(world_generator.terrain_noise.seed)
 

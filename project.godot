@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 AbilityDatabase="*res://systems/player/ability_database.gd"
 CreatureDatabase="*uid://s3p2akknti2k"
-VegetationDatabase="*res://features/world/vegetation/vegetation_database.gd"
+VegetationDatabase="*res://features/world_generation/vegetation/vegetation_database.gd"
 ObjectDatabase="*uid://d2tw65q0t4xcq"
 ChunkManager="*uid://dqrsinwnx82bn"
 ItemDatabase="*res://systems/items/item_database.gd"

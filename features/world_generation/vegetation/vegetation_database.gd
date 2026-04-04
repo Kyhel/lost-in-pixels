@@ -6,7 +6,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	var config: VegetationDatabaseConfig = preload("res://features/world/vegetation/vegetation_database_config.tres")
+	var config: VegetationDatabaseConfig = preload("res://features/world_generation/vegetation/vegetation_database_config.tres")
 	if config == null:
 		push_error("%s: failed to load config resource" % database_name)
 		return

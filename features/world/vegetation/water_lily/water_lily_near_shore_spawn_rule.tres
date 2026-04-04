@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="WaterNearShoreVegetationSpawnRule" format=3 uid="uid://cyqlsbiaj6pga"]
-
-[ext_resource type="Script" uid="uid://cqee2sqjlyj7" path="res://features/world/nature/spawn_rules/water_near_shore_vegetation_spawn_rule.gd" id="1_shore"]
-
-[resource]
-script = ExtResource("1_shore")

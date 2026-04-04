@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://c31wg4eyc3dr2"]
+
+[ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world_generation/nature/spawn_rules/vegetation_spawn_definition.gd" id="2_770uc"]
+[ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world_generation/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_ck73g"]
+[ext_resource type="Resource" uid="uid://dw0fc0g1jqxin" path="res://features/world_generation/vegetation/berry_bush/berry_bush_tile_spawn_rule.tres" id="4_wvuch"]
+[ext_resource type="Resource" uid="uid://r514gn44t7kk" path="res://features/objects/data/berry_bush/berry_bush.tres" id="5_odata"]
+
+[resource]
+script = ExtResource("2_770uc")
+object_data = ExtResource("5_odata")
+density = 0.001
+pass_type = 1
+static_spawn_rules = Array[ExtResource("3_ck73g")]([ExtResource("4_wvuch")])

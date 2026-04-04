@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TileTypeVegetationSpawnRule" format=3 uid="uid://dw0fc0g1jqxin"]
 
-[ext_resource type="Script" uid="uid://dkdy0pu3yua1" path="res://features/world/nature/spawn_rules/tile_type_vegetation_spawn_rule.gd" id="1_tile_rule"]
+[ext_resource type="Script" uid="uid://dkdy0pu3yua1" path="res://features/world_generation/nature/spawn_rules/tile_type_vegetation_spawn_rule.gd" id="1_tile_rule"]
 
 [resource]
 script = ExtResource("1_tile_rule")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="VegetationSpawnDefinition" format=3 uid="uid://dde36m5qbci07"]
+
+[ext_resource type="Script" uid="uid://cafo7otgd3spe" path="res://features/world_generation/nature/spawn_rules/vegetation_spawn_definition.gd" id="2_5tgha"]
+[ext_resource type="Script" uid="uid://boqn7wruylafj" path="res://features/world_generation/nature/spawn_rules/static_vegetation_spawn_rule.gd" id="3_tq50u"]
+[ext_resource type="Resource" uid="uid://bxqhhbjwq7x1" path="res://features/world_generation/vegetation/water_lily/water_lily_tile_spawn_rule.tres" id="4_nbdby"]
+[ext_resource type="Resource" uid="uid://cyqlsbiaj6pga" path="res://features/world_generation/vegetation/water_lily/water_lily_near_shore_spawn_rule.tres" id="5_p05si"]
+[ext_resource type="Resource" uid="uid://4w54c65f7cqm" path="res://features/objects/data/water_lily/water_lily.tres" id="6_odata"]
+
+[resource]
+script = ExtResource("2_5tgha")
+object_data = ExtResource("6_odata")
+density = 0.06
+pass_type = 1
+static_spawn_rules = Array[ExtResource("3_tq50u")]([ExtResource("4_nbdby"), ExtResource("5_p05si")])
