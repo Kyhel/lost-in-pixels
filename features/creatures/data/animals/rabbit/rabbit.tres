@@ -17,9 +17,10 @@
 [ext_resource type="Resource" uid="uid://o4wxqh5xlx6t" path="res://features/creatures/movement/profiles/follow/follow_profile.tres" id="12_pqtku"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="13_iambh"]
 [ext_resource type="Script" uid="uid://dth5pdm4tf628" path="res://features/creatures/traits/fetcher_trait.gd" id="16_fetcher_trait"]
-[ext_resource type="Script" path="res://features/creatures/traits/tamable_trait.gd" id="17_tamable"]
+[ext_resource type="Script" uid="uid://3yd4r2l0onpw" path="res://features/creatures/traits/tamable_trait.gd" id="17_tamable"]
 [ext_resource type="Resource" uid="uid://c3rtkym13c8d6" path="res://features/creatures/ai/sensors/forage_sensor.tres" id="21_7x0m5"]
 [ext_resource type="Texture2D" uid="uid://fy0y4hm3l8qb" path="res://assets/creatures/animals/rabbit.png" id="24_jl4ha"]
+[ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="25_iambh"]
 [ext_resource type="Script" uid="uid://df3xr5h1hdajt" path="res://features/creatures/needs/types/fear_need.gd" id="fear_s"]
 [ext_resource type="Script" uid="uid://cn573jqod1ca3" path="res://features/creatures/needs/types/fetch_desire_need.gd" id="fetch_desire_s"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
@@ -85,7 +86,7 @@ ExtResource("8_16ulj"): 100
 })
 sensors = Array[ExtResource("13_iambh")]([ExtResource("21_7x0m5")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_rabbit"), SubResource("need_taming_rabbit"), SubResource("need_fear_rabbit"), SubResource("need_stamina_rabbit"), SubResource("need_fetch_desire_rabbit")])
-traits = Array[Resource]([SubResource("trait_rabbit_fetcher"), SubResource("trait_rabbit_tamable")])
+traits = Array[ExtResource("25_iambh")]([SubResource("trait_rabbit_fetcher"), SubResource("trait_rabbit_tamable")])
 size = 12
 hop_multiplier = 0.5
 movement_profiles = Array[ExtResource("9_7x0m5")]([ExtResource("10_fm44f"), ExtResource("11_jl4ha"), ExtResource("12_pqtku")])

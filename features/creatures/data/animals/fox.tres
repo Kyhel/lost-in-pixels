@@ -14,11 +14,12 @@
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="7_food"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="9_0l1a1"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="10_dpj8p"]
+[ext_resource type="Script" uid="uid://3yd4r2l0onpw" path="res://features/creatures/traits/tamable_trait.gd" id="17_tamable"]
+[ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="19_4fs08"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://dnelfqnj6r5rt" path="res://features/creatures/needs/types/taming_need.gd" id="taming_s"]
-[ext_resource type="Script" path="res://features/creatures/traits/tamable_trait.gd" id="17_tamable"]
 
 [sub_resource type="Resource" id="need_hunger_fox"]
 script = ExtResource("hunger_s")
@@ -59,7 +60,7 @@ ExtResource("4_follow"): 60
 })
 sensors = Array[ExtResource("6_6fm8k")]([ExtResource("7_food")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_fox"), SubResource("need_taming_fox"), SubResource("need_stamina_fox")])
-traits = Array[Resource]([SubResource("trait_fox_tamable")])
+traits = Array[ExtResource("19_4fs08")]([SubResource("trait_fox_tamable")])
 size = 32
 hitbox_size = 20
 base_speed = 50.0
