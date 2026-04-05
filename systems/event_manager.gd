@@ -3,6 +3,7 @@ extends Node
 signal object_picked_up(actor: Node, world_object: WorldObject)
 signal object_eaten(eater: Creature, world_object: WorldObject)
 signal creature_eaten(eater: Creature, prey: Creature)
+signal creature_tamed(creature: Creature)
 signal player_got_hit(attacker: Node, player: Player, amount: int)
 
 
