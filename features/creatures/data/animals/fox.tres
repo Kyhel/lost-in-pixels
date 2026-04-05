@@ -43,10 +43,9 @@ initial_value = 100.0
 
 [sub_resource type="Resource" id="trait_fox_tamable"]
 script = ExtResource("17_tamable")
-taming_by_food = {
+taming_by_food = Dictionary[ExtResource("3_lbjb4"), int]({
 ExtResource("5_ewph6"): 110
-}
-id = &"tamable"
+})
 
 [resource]
 script = ExtResource("2_ovces")

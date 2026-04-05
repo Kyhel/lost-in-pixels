@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="6_pkv1c"]
 [ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://features/creatures/ai/sensors/player_sensor.tres" id="7_agakg"]
 [ext_resource type="Texture2D" uid="uid://b6uo16m3yivp7" path="res://assets/creatures/animals/deer.png" id="8_bhdii"]
+[ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="10_ma7pn"]
 
 [resource]
 script = ExtResource("5_ma7pn")

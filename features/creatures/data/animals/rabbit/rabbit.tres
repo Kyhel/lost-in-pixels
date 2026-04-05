@@ -63,14 +63,12 @@ initial_value = 80.0
 [sub_resource type="Resource" id="trait_rabbit_fetcher"]
 script = ExtResource("16_fetcher_trait")
 fetchable_objects = Array[ExtResource("2_rn8le")]([ExtResource("4_carrot_ground")])
-id = &"rabbit_fetcher"
 
 [sub_resource type="Resource" id="trait_rabbit_tamable"]
 script = ExtResource("17_tamable")
-taming_by_food = {
+taming_by_food = Dictionary[ExtResource("2_rn8le"), int]({
 ExtResource("4_cfgnk"): 20
-}
-id = &"tamable"
+})
 
 [resource]
 script = ExtResource("1_jmif1")
