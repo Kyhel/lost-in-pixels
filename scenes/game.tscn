@@ -19,7 +19,7 @@
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 [ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
-[ext_resource type="Script" path="res://ui/tamed_creatures_panel.gd" id="20_tamed"]
+[ext_resource type="Script" uid="uid://d08y03vw1y2tn" path="res://ui/tamed_creatures_panel.gd" id="20_tamed"]
 [ext_resource type="PackedScene" uid="uid://bu5j6ogejbau6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]

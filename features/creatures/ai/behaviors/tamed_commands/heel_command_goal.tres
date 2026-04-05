@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="HeelCommandGoal" format=3]
+[gd_resource type="Resource" script_class="HeelCommandGoal" format=3 uid="uid://bwast03s15i7u"]
 
-[ext_resource type="Script" path="res://features/creatures/ai/behaviors/tamed_commands/heel_command_goal.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://ddyvcvqh23mfu" path="res://features/creatures/ai/behaviors/tamed_commands/heel_command_goal.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://features/creatures/ai/behaviors/tamed_commands/heel_command_bt.tscn" id="2_bt"]
 
 [resource]
 script = ExtResource("1_script")
 behavior_tree = ExtResource("2_bt")
-commit_time = 1.0
 tags = Array[String](["follow_player", "heel"])
