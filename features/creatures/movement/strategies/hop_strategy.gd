@@ -30,39 +30,11 @@ func move(creature: Creature, request: MovementRequest, delta: float) -> void:
 	var relative_speed = lerp(base_speed, max_speed, request.speed_desire)
 	var hop_speed = relative_speed * creature.creature_data.hop_multiplier / hop_ratio
 
-	var k: Dictionary = _resolve_request_kinematics(creature, request, hop_speed)
-	if not k["allow_translate"]:
-		creature.velocity = Vector2.ZERO
-		if request.face_target:
-			_rotate_toward_world_point(creature, k["face_point"], delta)
-		return
-
 	if hop_timer < rest_duration:
 		creature.velocity = Vector2.ZERO
 		return
 
-	var move_goal: Vector2 = k["move_goal"]
-	var direction: Vector2 = (move_goal - creature.global_position)
-	if direction.length_squared() < 0.0001:
-		creature.velocity = Vector2.ZERO
-		if request.face_target:
-			_rotate_toward_world_point(creature, k["face_point"], delta)
-		return
-	direction = direction.normalized()
-	var target_angle := direction.angle()
-	var angle_diff := angle_difference(creature.virtual_rotation, target_angle)
-	var angle_diff_abs = abs(angle_diff)
-	var max_turn := creature.creature_data.rotating_speed * delta
-
-	creature.virtual_rotation += sign(angle_diff) * min(angle_diff_abs, max_turn)
-
-	if angle_diff_abs >= NO_MOVEMENT_DIRECTION_THRESHOLD:
-		creature.velocity = Vector2.ZERO
-		return
-
-	var rotation_ratio = (NO_MOVEMENT_DIRECTION_THRESHOLD - angle_diff_abs) / NO_MOVEMENT_DIRECTION_THRESHOLD
-
-	creature.velocity = Vector2.from_angle(creature.virtual_rotation).normalized() * hop_speed * rotation_ratio
+	_move_toward_with_speed(creature, request, delta, hop_speed)
 
 func reset() -> void:
 	hop_timer = 0.0
