@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_bt"]
 [ext_resource type="Script" path="res://features/creatures/ai/base/behavior_trees/bt_sequence.gd" id="2_seq"]
-[ext_resource type="Script" path="res://features/creatures/ai/behaviors/_shared/conditions/is_tamed_condition.gd" id="3_cond"]
 [ext_resource type="Script" path="res://features/creatures/ai/behaviors/tamed_commands/stay_action.gd" id="4_stay"]
 
 [node name="StayCommandBt" type="Node"]
@@ -10,9 +9,6 @@ script = ExtResource("1_bt")
 
 [node name="BTSequence" type="Node" parent="."]
 script = ExtResource("2_seq")
-
-[node name="IsTamedCondition" type="Node" parent="BTSequence"]
-script = ExtResource("3_cond")
 
 [node name="Stay" type="Node" parent="BTSequence"]
 script = ExtResource("4_stay")

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://btwhlq5528hg2" path="res://features/creatures/ai/base/behavior_trees/behavior_tree.gd" id="1_bt"]
 [ext_resource type="Script" uid="uid://dg12bfp1f47bf" path="res://features/creatures/ai/base/behavior_trees/bt_sequence.gd" id="2_seq"]
-[ext_resource type="Script" uid="uid://cvlgbd3kxevkg" path="res://features/creatures/ai/behaviors/_shared/conditions/is_tamed_condition.gd" id="3_cond"]
 [ext_resource type="Script" uid="uid://birw33176dc1d" path="res://features/creatures/ai/behaviors/follow_player/follow_player_action.gd" id="4_act"]
 
 [node name="FollowPlayerBt" type="Node" unique_id=714804786]
@@ -10,9 +9,6 @@ script = ExtResource("1_bt")
 
 [node name="BTSequence" type="Node" parent="." unique_id=484426171]
 script = ExtResource("2_seq")
-
-[node name="IsTamedCondition" type="Node" parent="BTSequence" unique_id=2051634184]
-script = ExtResource("3_cond")
 
 [node name="FollowPlayerAction" type="Node" parent="BTSequence" unique_id=997689741]
 script = ExtResource("4_act")
