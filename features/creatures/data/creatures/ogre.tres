@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://dbxsejnfss52t" path="res://assets/creatures/ogre.png" id="4_l5rue"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="5_1ghcg"]
 [ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://features/creatures/ai/sensors/player_sensor.tres" id="5_5ttwk"]
+[ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="12_k1ig1"]
+[ext_resource type="Script" uid="uid://brnsc777efkrv" path="res://features/creatures/traits/terrain_preference_trait.gd" id="13_ue4yf"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 
 [sub_resource type="Resource" id="need_stamina_ogre"]
@@ -17,6 +19,11 @@ script = ExtResource("stamina_s")
 id = &"stamina"
 base_decay_rate = -10.0
 initial_value = 100.0
+
+[sub_resource type="Resource" id="Resource_pek3m"]
+script = ExtResource("13_ue4yf")
+preferred_terrains = Array[int]([4])
+metadata/_custom_type_script = "uid://brnsc777efkrv"
 
 [resource]
 script = ExtResource("2_vncba")
@@ -29,6 +36,7 @@ ExtResource("3_1vhlf"): 100
 })
 sensors = Array[ExtResource("4_5ttwk")]([ExtResource("5_5ttwk")])
 needs = Array[ExtResource("5_1ghcg")]([SubResource("need_stamina_ogre")])
+traits = Array[ExtResource("12_k1ig1")]([SubResource("Resource_pek3m")])
 size_type = 1
 size = 40
 hitbox_size = 36
