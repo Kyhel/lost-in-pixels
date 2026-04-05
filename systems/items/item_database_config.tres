@@ -7,7 +7,8 @@
 [ext_resource type="Resource" uid="uid://cpw8xv4np1rrg" path="res://features/items/data/flower_red_1.tres" id="5_flower"]
 [ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="5_xg1e2"]
 [ext_resource type="Resource" uid="uid://dp4fch7ro7shh" path="res://features/items/data/carrot.tres" id="6_carrot"]
+[ext_resource type="Resource" uid="uid://c4m9k3wf0jxpq" path="res://features/items/data/fish.tres" id="7_fish"]
 
 [resource]
 script = ExtResource("2_cfgscr")
-items = Array[ExtResource("1_itemscr")]([ExtResource("3_coin"), ExtResource("4_potion"), ExtResource("5_flower"), ExtResource("5_xg1e2"), ExtResource("6_carrot")])
+items = Array[ExtResource("1_itemscr")]([ExtResource("3_coin"), ExtResource("4_potion"), ExtResource("5_flower"), ExtResource("5_xg1e2"), ExtResource("6_carrot"), ExtResource("7_fish")])

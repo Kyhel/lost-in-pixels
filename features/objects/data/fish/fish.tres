@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://b3m8k2wf9jxpq"]
+
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_ot3co"]
+[ext_resource type="Script" uid="uid://bde0a6i4r563" path="res://features/objects/behaviors/pickable_behavior.gd" id="4_5vll0"]
+[ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="6_2p4ut"]
+[ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="7_pgmcc"]
+[ext_resource type="Texture2D" uid="uid://diwwxhn83exrx" path="res://assets/food/fish.png" id="8_fish"]
+
+[sub_resource type="Resource" id="Resource_pkb"]
+script = ExtResource("4_5vll0")
+item_id = &"fish"
+
+[resource]
+script = ExtResource("7_pgmcc")
+id = &"fish"
+display_name = "Fish"
+texture = ExtResource("8_fish")
+scene = ExtResource("6_2p4ut")
+hitbox_radius = 6.0
+behaviors = Array[ExtResource("1_ot3co")]([SubResource("Resource_pkb")])
+metadata/_custom_type_script = "uid://b12224xo0dkcj"

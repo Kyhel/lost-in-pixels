@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c4nak3wf0jxpq"]
+
+[ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="1_02xg5"]
+[ext_resource type="Texture2D" uid="uid://diwwxhn83exrx" path="res://assets/food/fish.png" id="2_fish"]
+[ext_resource type="Script" uid="uid://ewn46rjqc0a2" path="res://features/items/food_effect.gd" id="4_food"]
+[ext_resource type="Resource" uid="uid://b3m8k2wf9jxpq" path="res://features/objects/data/fish/fish.tres" id="5_fish_obj"]
+
+[sub_resource type="Resource" id="Resource_food"]
+script = ExtResource("4_food")
+amount = 30.0
+
+[resource]
+script = ExtResource("1_02xg5")
+id = &"fish"
+display_name = "Fish"
+texture = ExtResource("2_fish")
+consume_effects = Array[Resource]([SubResource("Resource_food")])
+on_drop_object = ExtResource("5_fish_obj")
+metadata/_custom_type_script = "uid://dendcxderw11w"
