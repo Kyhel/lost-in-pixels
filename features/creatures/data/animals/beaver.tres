@@ -17,6 +17,10 @@
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://brnsc777efkrv" path="res://features/creatures/traits/terrain_preference_trait.gd" id="terrain_pref_s"]
+[ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="item_data_s"]
+[ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="berry_red_item"]
+[ext_resource type="Resource" uid="uid://c5peuwgs8ywnj" path="res://features/items/data/fish.tres" id="fish_item"]
+[ext_resource type="Script" uid="uid://d2htr8v1k4qnq" path="res://features/creatures/traits/trader_trait.gd" id="trader_trait_s"]
 
 [sub_resource type="Resource" id="need_hunger_beaver"]
 script = ExtResource("hunger_s")
@@ -36,6 +40,12 @@ script = ExtResource("terrain_pref_s")
 preferred_terrains = Array[int]([1, 8])
 max_distance = 3
 
+[sub_resource type="Resource" id="trait_beaver_trader"]
+script = ExtResource("trader_trait_s")
+trades = Dictionary[ExtResource("item_data_s"), ExtResource("item_data_s")]({
+ExtResource("berry_red_item"): ExtResource("fish_item")
+})
+
 [resource]
 script = ExtResource("2_yyua3")
 id = &"beaver"
@@ -47,7 +57,7 @@ ExtResource("2_eat"): 50
 })
 sensors = Array[ExtResource("4_djyqf")]([ExtResource("5_food")])
 needs = Array[ExtResource("need_base")]([SubResource("need_hunger_beaver"), SubResource("need_stamina_beaver")])
-traits = Array[ExtResource("16_w1odu")]([SubResource("trait_beaver_terrain_preference")])
+traits = Array[ExtResource("16_w1odu")]([SubResource("trait_beaver_terrain_preference"), SubResource("trait_beaver_trader")])
 can_swim = true
 size = 30
 hitbox_size = 12

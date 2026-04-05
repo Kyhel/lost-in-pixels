@@ -107,6 +107,12 @@ func creature_receive_item_from_player(creature: Creature, item_id: StringName) 
 	var item_data: ItemData = ItemDatabase.get_item_data(item_id)
 	var item_name := item_data.display_name if item_data != null else String(item_id)
 	GameLog.log_message("%s received %s from player" % [creature_name, item_name])
+	if creature.creature_data != null and item_data != null:
+		var trader := TraderTrait.find_on(creature.creature_data)
+		if trader != null:
+			var reward: ItemData = trader.get_reward_for_received(item_data)
+			if reward != null:
+				creature_give_item_to_player(creature, reward.id, 1)
 
 
 func creature_give_item_to_player(creature: Creature, item_id: StringName, amount: int = 1) -> void:
