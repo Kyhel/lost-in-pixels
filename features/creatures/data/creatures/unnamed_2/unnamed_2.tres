@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CreatureData" format=3]
+
+[ext_resource type="Script" uid="uid://b03s60gt6mpeu" path="res://features/creatures/ai/base/goals/goal.gd" id="1_goal"]
+[ext_resource type="Resource" uid="uid://dhnvy30mkocgp" path="res://features/creatures/ai/behaviors/wander/wander_goal.tres" id="2_wander"]
+[ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="3_data"]
+[ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="4_sensor"]
+[ext_resource type="Resource" uid="uid://p8nwtp6m3rqi" path="res://features/creatures/ai/sensors/player_sensor.tres" id="5_player"]
+[ext_resource type="Texture2D" uid="uid://dsimlqd3cur3n" path="res://assets/creatures/aggressive/unnamed_2.png" id="6_tex"]
+
+[resource]
+script = ExtResource("3_data")
+id = &"unnamed_2"
+display_name = "Unnamed 2"
+sprite = ExtResource("6_tex")
+goals = Dictionary[ExtResource("1_goal"), int]({
+ExtResource("2_wander"): 20
+})
+sensors = Array[ExtResource("4_sensor")]([ExtResource("5_player")])
+size = 50
+hitbox_size = 25
+running_multiplier = 3.0
+can_swim = true
+biomes = Array[int]([7])
+excluded_tile_types = Array[int]([0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+navigable_terrain_types = Array[int]([1])
+metadata/_custom_type_script = "uid://clk4ii14vm1a2"
