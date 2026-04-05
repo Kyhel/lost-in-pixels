@@ -32,6 +32,8 @@ func _on_object_eaten(eater: Creature, world_object: WorldObject) -> void:
 	var now_tamed: bool = int(taming) >= threshold
 	if now_tamed:
 		eater.blackboard.set_value(Blackboard.KEY_TAMED, true)
+		eater.blackboard.set_value(Blackboard.KEY_TAME_COMMAND, TameCommand.Kind.FREE)
+		eater.blackboard.clear(Blackboard.KEY_STAY_END_TIME_MS)
 
 	if was_tamed:
 		return

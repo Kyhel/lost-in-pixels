@@ -13,6 +13,9 @@ const KEY_AGGRESSIVENESS := "aggressiveness"
 ## When true, aggressiveness does not build up; cleared only when aggressiveness reaches 0.
 const KEY_AGGRESSIVENESS_RECOVERING := "aggressiveness_recovering"
 const KEY_CHASING_STATE := "chasing_state"
+const KEY_TAME_COMMAND := "tame_command"
+## Wall-clock deadline ([method Time.get_ticks_msec]) while [constant KEY_TAME_COMMAND] is Stay.
+const KEY_STAY_END_TIME_MS := "stay_end_time_ms"
 
 enum State {
 	IDLE,

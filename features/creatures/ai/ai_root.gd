@@ -95,3 +95,9 @@ func on_goal_changed(old_goal: Goal, new_goal: Goal):
 
 	if new_goal != null and new_goal.has_tag(GoalTags.TAG_FOLLOW_PLAYER):
 		creature.add_to_group(Groups.FOLLOWING_CREATURES)
+
+	if old_goal != null and old_goal.has_tag(GoalTags.TAG_HEEL):
+		creature.remove_from_group(Groups.HEELING_CREATURES)
+
+	if new_goal != null and new_goal.has_tag(GoalTags.TAG_HEEL):
+		creature.add_to_group(Groups.HEELING_CREATURES)
