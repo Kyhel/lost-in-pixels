@@ -65,6 +65,7 @@ metadata/_custom_type_script = "uid://bmemkokxjo2af"
 script = ExtResource("6_3l0t6")
 player_config = ExtResource("7_player_cfg")
 day_night_cycle_config = ExtResource("19_day_night_cfg")
+day_night_cycle_enabled = true
 allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("3_yq3s8"), ExtResource("2_wm4lb"), ExtResource("4_w2q5h"), ExtResource("5_4nmm5"), ExtResource("6_wm4lb"), ExtResource("7_uqt4q"), ExtResource("8_un2")])
 biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_k3ah5"), ExtResource("9_oshmg"), ExtResource("10_fklpv")])
 chunk_load_radius = 3

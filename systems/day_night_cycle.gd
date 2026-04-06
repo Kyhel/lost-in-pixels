@@ -64,6 +64,12 @@ func _process(delta: float) -> void:
 		_world_canvas_modulate.color = _config.day_color
 		return
 
+	if ConfigManager.config != null and not ConfigManager.config.day_night_cycle_enabled:
+		_cycle_elapsed_seconds = 0.0
+		_apply_current_color()
+		current_phase = _ellapsed_seconds_to_phase(_cycle_elapsed_seconds)
+		return
+
 	_cycle_elapsed_seconds = fposmod(_cycle_elapsed_seconds + delta, _config.cycle_duration_seconds)
 	_apply_current_color()
 	current_phase = _ellapsed_seconds_to_phase(_cycle_elapsed_seconds)
