@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://cr322prb20pyg" path="res://ui/hud_root.gd" id="13_kvuet"]
 [ext_resource type="Script" uid="uid://o8cqffnmgf1p" path="res://ui/pause_menu.gd" id="14_pause"]
 [ext_resource type="Script" uid="uid://btgnvradaiwwp" path="res://ui/death_overlay.gd" id="15_death"]
+[ext_resource type="PackedScene" uid="uid://c4h8n2lam1wq5" path="res://ui/tamed_creature_slot.tscn" id="16_5newe"]
 [ext_resource type="Script" uid="uid://b5u1v60qgyuj4" path="res://ui/abilities_bar.gd" id="16_abbar"]
 [ext_resource type="Script" uid="uid://ckmgk5l2wyiii" path="res://ui/chat_log_panel.gd" id="17_chat"]
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
@@ -159,6 +160,7 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 6
 script = ExtResource("20_tamed")
+creature_slot_scene = ExtResource("16_5newe")
 
 [node name="BottomCenterPanel" type="VBoxContainer" parent="HUDLayer/HUDRoot" unique_id=990011001]
 layout_mode = 1

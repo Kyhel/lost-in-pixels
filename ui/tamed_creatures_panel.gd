@@ -3,8 +3,11 @@ extends VBoxContainer
 const SLOT_SIZE := Vector2(108, 36)
 const STAY_DURATION_MS := 10_000
 
-var _rows: Dictionary ## Creature -> TextureRect
+@export var creature_slot_scene: PackedScene
+
+var _rows: Dictionary ## Creature -> TamedCreatureSlot
 var _died_cbs: Dictionary ## Creature -> Callable
+var _bb_cbs: Dictionary ## Creature -> Callable
 var _command_menu: PopupMenu
 var _command_target: Creature
 
@@ -39,30 +42,66 @@ func _add_creature(creature: Creature) -> void:
 	if _rows.has(creature):
 		return
 
-	var row := TextureRect.new()
-	row.custom_minimum_size = SLOT_SIZE
-	row.size = SLOT_SIZE
-	row.texture = creature.creature_data.sprite
-	row.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	var row := creature_slot_scene.instantiate() as TamedCreatureSlot
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	row.gui_input.connect(_on_row_gui_input.bind(creature))
 	add_child(row)
+	row.portrait.texture = creature.creature_data.sprite
+
+	var cmd_lbl := row.command_label
+
+	_apply_command_label(creature, cmd_lbl)
+
+	var bb_cb := _on_creature_blackboard_changed.bind(creature, cmd_lbl)
+	creature.blackboard.value_changed.connect(bb_cb)
+	_bb_cbs[creature] = bb_cb
+
 	_rows[creature] = row
 
-	var cb := _on_tamed_creature_died.bind(creature)
+	var cb := _remove_creature.bind(creature)
 	creature.died.connect(cb)
 	_died_cbs[creature] = cb
 	_fit_height.call_deferred()
 
 
-func _on_tamed_creature_died(creature: Creature) -> void:
+func _command_label_text(creature: Creature) -> String:
+	var cmd: int = int(creature.blackboard.get_value(Blackboard.KEY_TAME_COMMAND, TameCommand.Kind.FREE))
+	match cmd:
+		TameCommand.Kind.FREE:
+			return "Free"
+		TameCommand.Kind.HEEL:
+			return "Heel"
+		TameCommand.Kind.STAY:
+			return "Stay"
+	return "Unknown"
+
+
+func _apply_command_label(creature: Creature, label: Label) -> void:
+	if not _creature_supports_commands(creature):
+		label.visible = false
+		return
+	label.visible = true
+	label.text = _command_label_text(creature)
+
+
+func _on_creature_blackboard_changed(key: Variant, _value: Variant, creature: Creature, label: Label) -> void:
+	if key != Blackboard.KEY_TAME_COMMAND:
+		return
+	_apply_command_label(creature, label)
+
+
+func _remove_creature(creature: Creature) -> void:
 	if not _rows.has(creature):
 		return
-	var cb: Callable = _died_cbs.get(creature, Callable())
+	var bb_cb: Callable = _bb_cbs.get(creature)
+	if not bb_cb.is_null() and creature.blackboard.value_changed.is_connected(bb_cb):
+		creature.blackboard.value_changed.disconnect(bb_cb)
+	_bb_cbs.erase(creature)
+	var cb: Callable = _died_cbs.get(creature)
 	if not cb.is_null() and creature.died.is_connected(cb):
 		creature.died.disconnect(cb)
 	_died_cbs.erase(creature)
-	var row: TextureRect = _rows[creature]
+	var row: TamedCreatureSlot = _rows[creature]
 	_rows.erase(creature)
 	if is_instance_valid(row):
 		row.queue_free()
@@ -73,14 +112,18 @@ func _fit_height() -> void:
 	var sep := get_theme_constant(&"separation", &"VBoxContainer")
 	var h := 0.0
 	var idx := 0
+	var panel_w := SLOT_SIZE.x
 	for row in _rows.values():
 		if not is_instance_valid(row):
 			continue
 		if idx > 0:
 			h += sep
-		h += (row as Control).get_combined_minimum_size().y
+		var slot: Control = row
+		h += slot.get_combined_minimum_size().y
+		if idx == 0:
+			panel_w = slot.custom_minimum_size.x
 		idx += 1
-	offset_right = offset_left + SLOT_SIZE.x
+	offset_right = offset_left + panel_w
 	offset_bottom = offset_top + h
 
 
