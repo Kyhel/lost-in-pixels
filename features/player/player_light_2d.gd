@@ -6,7 +6,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	visible = ConfigManager.config.player_light and DayNightCycle.is_night()
+	_update_visibility()
 
 
 func _apply_from_player_config() -> void:
@@ -14,3 +14,17 @@ func _apply_from_player_config() -> void:
 	if texture != null:
 		var texture_width: float = maxf(1.0, texture.get_size().x)
 		texture_scale = (configured_radius * 2.0) / texture_width
+
+func _update_visibility() -> void:
+
+	if ConfigManager.config.player_light != true:
+		visible = false
+		return
+
+	if DayNightCycle.current_phase == DayNightCycle.DayNightCyclePhase.NIGHT and not visible:
+		visible = true
+		return
+
+	if DayNightCycle.current_phase == DayNightCycle.DayNightCyclePhase.DAY and visible:
+		visible = false
+		return

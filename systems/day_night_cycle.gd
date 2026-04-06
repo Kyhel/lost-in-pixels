@@ -6,6 +6,26 @@ var _cycle_elapsed_seconds: float = 0.0
 
 var _config: DayNightCycleConfig
 
+enum DayNightCyclePhase {
+	DAY,
+	SUNSET,
+	NIGHT,
+	SUNRISE,
+}
+
+var current_phase: DayNightCyclePhase = DayNightCyclePhase.DAY
+
+func _ellapsed_seconds_to_phase(ellapsed_seconds: float) -> DayNightCyclePhase:
+
+	var ellapsed_time = ellapsed_seconds / _config.cycle_duration_seconds * _total_phase_duration()
+
+	if ellapsed_time < _config.day_duration:
+		return DayNightCyclePhase.DAY
+	if ellapsed_time < _config.day_duration + _config.sunset_duration:
+		return DayNightCyclePhase.SUNSET
+	if ellapsed_time < _config.day_duration + _config.sunset_duration + _config.night_duration:
+		return DayNightCyclePhase.NIGHT
+	return DayNightCyclePhase.SUNRISE
 
 func _ready() -> void:
 	_config = ConfigManager.get_day_night_cycle_config()
@@ -29,6 +49,7 @@ func _process(delta: float) -> void:
 
 	_cycle_elapsed_seconds = fposmod(_cycle_elapsed_seconds + delta, _config.cycle_duration_seconds)
 	_apply_current_color()
+	current_phase = _ellapsed_seconds_to_phase(_cycle_elapsed_seconds)
 
 
 func _apply_current_color() -> void:
@@ -41,15 +62,6 @@ func _phase() -> float:
 	if _config.cycle_duration_seconds <= 0.0:
 		return 0.0
 	return _cycle_elapsed_seconds / _config.cycle_duration_seconds
-
-
-func is_night() -> bool:
-	var phase_bounds: Vector2 = _night_phase_bounds()
-	if phase_bounds.x >= phase_bounds.y:
-		return false
-
-	var phase: float = _phase()
-	return phase >= phase_bounds.x and phase < phase_bounds.y
 
 
 func _night_phase_bounds() -> Vector2:
