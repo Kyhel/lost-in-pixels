@@ -205,7 +205,10 @@ func _create_chunk_with_terrain(chunk_x: int, chunk_y: int) -> void:
 
 
 func _spawn_chunk_creatures(chunk: Chunk, key: Vector2i) -> void:
-	CreatureManager.spawn_entities(chunk, key)
+
+	if ConfigManager.config.generate_creatures:
+		CreatureManager.spawn_creatures(chunk, key)
+
 	chunk.creatures_generated = true
 
 

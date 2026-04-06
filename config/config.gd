@@ -4,7 +4,8 @@ extends Resource
 @export var player_config: PlayerConfig
 @export var day_night_cycle_config: DayNightCycleConfig
 @export var day_night_cycle_enabled := true
-@export var spawn_rabbits := true
+@export var spawn_creatures := true
+@export var generate_creatures := true
 @export var allowed_creatures : Array[CreatureData] = []
 @export var biome_creature_spawn_profiles : Array[Resource] = []
 @export var chunk_load_radius := 4

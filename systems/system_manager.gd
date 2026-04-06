@@ -12,11 +12,6 @@ func _ready():
 	SignalUtils.safe_connect(world_reset, GameLog._on_world_reset)
 	SignalUtils.safe_connect(world_reset, SimulationSystem._on_world_reset)
 	
-	var spawn_system: SpawnSystem = get_node_or_null("SpawnSystem") as SpawnSystem
-	if spawn_system != null:
-		SignalUtils.safe_connect(ChunkManager.chunk_unloaded, spawn_system._on_chunk_unloaded)
-		SignalUtils.safe_connect(world_reset, spawn_system._on_world_reset)
-
 
 func reset_world_state() -> void:
 	world_reset.emit()

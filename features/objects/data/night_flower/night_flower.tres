@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://d2k8m4n7p9q3r"]
+[gd_resource type="Resource" script_class="ObjectData" format=3 uid="uid://d2k8m4n7qaq3r"]
 
+[ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="1_h0daq"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="1_obj"]
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="2_scene"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="3_wof"]
@@ -12,6 +13,6 @@ id = &"night_flower"
 display_name = "Night Flower"
 texture = ExtResource("4_fern")
 scene = ExtResource("2_scene")
-hitbox_radius = 10.0
+hitbox_radius = 6.0
 features = Array[ExtResource("3_wof")]([ExtResource("5_ntf")])
 metadata/_custom_type_script = "uid://b12224xo0dkcj"

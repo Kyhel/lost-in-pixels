@@ -22,6 +22,8 @@ func apply(world_object: WorldObject) -> void:
 
 
 func _tick_spawn(world_object: WorldObject) -> void:
+	if not ConfigManager.config.spawn_creatures:
+		return
 	if not is_instance_valid(world_object):
 		return
 	var world_pos: Vector2 = world_object.global_position
