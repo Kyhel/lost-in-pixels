@@ -1,73 +1,107 @@
-class_name DayNightCycle
 extends Node
 
-@export var cycle_duration_seconds: float = 30.0
-@export var world_canvas_modulate: CanvasModulate
-
-@export var day_color: Color = Color(1.0, 1.0, 1.0, 1.0)
-@export var sunset_color: Color = Color(0.86, 0.68, 0.52, 1.0)
-@export var night_color: Color = Color(0.42, 0.47, 0.62, 1.0)
-@export var sunrise_color: Color = Color(0.80, 0.72, 0.62, 1.0)
-@export var day_duration: float = 12.0
-@export var sunset_duration: float = 3.0
-@export var night_duration: float = 6.0
-@export var sunrise_duration: float = 3.0
+var _world_canvas_modulate: CanvasModulate
 
 var _cycle_elapsed_seconds: float = 0.0
 
+var _config: DayNightCycleConfig
+
 
 func _ready() -> void:
+	_config = ConfigManager.get_day_night_cycle_config()
+	if _config == null:
+		push_error("DayNightCycle: DayNightCycleConfig is missing. Configure it in the main config.")
+		set_process(false)
+		return
+
+	_resolve_world_canvas_modulate()
 	_apply_current_color()
 
 
 func _process(delta: float) -> void:
-	if world_canvas_modulate == null:
+	if _world_canvas_modulate == null:
+		_resolve_world_canvas_modulate()
+	if _world_canvas_modulate == null:
 		return
-	if cycle_duration_seconds <= 0.0:
-		world_canvas_modulate.color = day_color
+	if _config.cycle_duration_seconds <= 0.0:
+		_world_canvas_modulate.color = _config.day_color
 		return
 
-	_cycle_elapsed_seconds = fposmod(_cycle_elapsed_seconds + delta, cycle_duration_seconds)
+	_cycle_elapsed_seconds = fposmod(_cycle_elapsed_seconds + delta, _config.cycle_duration_seconds)
 	_apply_current_color()
 
 
 func _apply_current_color() -> void:
-	if world_canvas_modulate == null:
+	if _world_canvas_modulate == null:
 		return
-	world_canvas_modulate.color = _color_at_phase(_phase())
+	_world_canvas_modulate.color = _color_at_phase(_phase())
 
 
 func _phase() -> float:
-	if cycle_duration_seconds <= 0.0:
+	if _config.cycle_duration_seconds <= 0.0:
 		return 0.0
-	return _cycle_elapsed_seconds / cycle_duration_seconds
+	return _cycle_elapsed_seconds / _config.cycle_duration_seconds
+
+
+func is_night() -> bool:
+	var phase_bounds: Vector2 = _night_phase_bounds()
+	if phase_bounds.x >= phase_bounds.y:
+		return false
+
+	var phase: float = _phase()
+	return phase >= phase_bounds.x and phase < phase_bounds.y
+
+
+func _night_phase_bounds() -> Vector2:
+	var total_phase_duration: float = _total_phase_duration()
+	if total_phase_duration <= 0.0:
+		return Vector2.ZERO
+
+	var day_end: float = _config.day_duration / total_phase_duration
+	var sunset_end: float = day_end + (_config.sunset_duration / total_phase_duration)
+	var night_end: float = sunset_end + (_config.night_duration / total_phase_duration)
+	return Vector2(sunset_end, night_end)
 
 
 func _color_at_phase(phase: float) -> Color:
 	# day (constant) -> sunset (interpolate) -> night (constant) -> sunrise (interpolate)
 	var total_phase_duration: float = _total_phase_duration()
 	if total_phase_duration <= 0.0:
-		return day_color
+		return _config.day_color
 
-	var day_end: float = day_duration / total_phase_duration
-	var sunset_end: float = day_end + (sunset_duration / total_phase_duration)
-	var night_end: float = sunset_end + (night_duration / total_phase_duration)
+	var day_end: float = _config.day_duration / total_phase_duration
+	var sunset_end: float = day_end + (_config.sunset_duration / total_phase_duration)
+	var night_end: float = sunset_end + (_config.night_duration / total_phase_duration)
 
 	if phase < day_end:
-		return day_color
+		return _config.day_color
 	if phase < sunset_end:
-		return _segment_color_with_mid(phase, day_end, sunset_end, day_color, sunset_color, night_color)
+		return _segment_color_with_mid(
+			phase,
+			day_end,
+			sunset_end,
+			_config.day_color,
+			_config.sunset_color,
+			_config.night_color
+		)
 	if phase < night_end:
-		return night_color
-	return _segment_color_with_mid(phase, night_end, 1.0, night_color, sunrise_color, day_color)
+		return _config.night_color
+	return _segment_color_with_mid(
+		phase,
+		night_end,
+		1.0,
+		_config.night_color,
+		_config.sunrise_color,
+		_config.day_color
+	)
 
 
 func _total_phase_duration() -> float:
 	return (
-		maxf(day_duration, 0.0)
-		+ maxf(sunset_duration, 0.0)
-		+ maxf(night_duration, 0.0)
-		+ maxf(sunrise_duration, 0.0)
+		maxf(_config.day_duration, 0.0)
+		+ maxf(_config.sunset_duration, 0.0)
+		+ maxf(_config.night_duration, 0.0)
+		+ maxf(_config.sunrise_duration, 0.0)
 	)
 
 
@@ -88,3 +122,11 @@ func _segment_color_with_mid(
 	if t < 0.5:
 		return from.lerp(mid, t * 2.0)
 	return mid.lerp(to, (t - 0.5) * 2.0)
+
+
+func _resolve_world_canvas_modulate() -> void:
+	var current_scene: Node = get_tree().current_scene
+	if current_scene == null:
+		return
+	var world_canvas_modulate_path: NodePath = _config.world_canvas_modulate_path
+	_world_canvas_modulate = current_scene.get_node_or_null(world_canvas_modulate_path) as CanvasModulate

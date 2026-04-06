@@ -2,7 +2,6 @@ class_name CreatureVisibilitySystem
 extends Node
 
 @export var player: Node2D
-@export var player_light_node: CanvasItem
 
 
 func _process(_delta: float) -> void:
@@ -12,8 +11,6 @@ func _process(_delta: float) -> void:
 
 
 func update_visibility(p: Player) -> void:
-	if player_light_node != null:
-		player_light_node.visible = ConfigManager.config.player_light
 	if p == null or not is_instance_valid(p):
 		return
 

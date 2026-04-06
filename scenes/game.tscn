@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 [ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
 [ext_resource type="Script" uid="uid://d08y03vw1y2tn" path="res://ui/tamed_creatures_panel.gd" id="20_tamed"]
-[ext_resource type="Script" uid="uid://cftp8v7tjgsnc" path="res://systems/day_night_cycle.gd" id="21_daynight"]
 [ext_resource type="PackedScene" uid="uid://bu5j6ogejbau6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
 
 [sub_resource type="Gradient" id="Gradient_player_light"]
@@ -101,15 +100,9 @@ player = NodePath("../../World/Entities/Player")
 script = ExtResource("8_dinhu")
 metadata/_custom_type_script = "uid://buon80ox32fe5"
 
-[node name="DayNightCycle" type="Node" parent="Systems/SystemManager" unique_id=43244901 node_paths=PackedStringArray("world_canvas_modulate")]
-script = ExtResource("21_daynight")
-world_canvas_modulate = NodePath("../../../WorldCanvasModulate")
-night_color = Color(0.1972, 0.22039999, 0.29, 1)
-
-[node name="CreatureVisibilitySystem" type="Node" parent="Systems/SystemManager" unique_id=1409381696 node_paths=PackedStringArray("player", "player_light_node")]
+[node name="CreatureVisibilitySystem" type="Node" parent="Systems/SystemManager" unique_id=1409381696 node_paths=PackedStringArray("player")]
 script = ExtResource("19_cvsys")
 player = NodePath("../../../World/Entities/Player")
-player_light_node = NodePath("../../../World/Entities/Player/PlayerLight2D")
 
 [node name="AlphaMaskViewport" type="SubViewport" parent="." unique_id=1206419223]
 transparent_bg = true

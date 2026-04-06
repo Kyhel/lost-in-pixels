@@ -25,3 +25,9 @@ func sync_creature_visibility_state() -> CreatureVisibilityCullingSync:
 		return CreatureVisibilityCullingSync.STEADY_OFF if not v else CreatureVisibilityCullingSync.STEADY_ON
 	_creature_visibility_prev = v
 	return CreatureVisibilityCullingSync.TURNED_OFF if not v else CreatureVisibilityCullingSync.TURNED_ON
+
+
+func get_day_night_cycle_config() -> DayNightCycleConfig:
+	if config == null:
+		return null
+	return config.day_night_cycle_config

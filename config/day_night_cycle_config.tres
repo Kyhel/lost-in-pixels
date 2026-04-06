@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="DayNightCycleConfig" format=3 uid="uid://dnaelh8ybnilf"]
+
+[ext_resource type="Script" uid="uid://c8b1efd1fwr8h" path="res://config/day_night_cycle_config.gd" id="1_day_night_cycle_cfg"]
+
+[resource]
+script = ExtResource("1_day_night_cycle_cfg")
+night_color = Color(0.1972, 0.2204, 0.29, 1)

@@ -1,11 +1,12 @@
 extends PointLight2D
 
+
 func _ready() -> void:
 	_apply_from_player_config()
 
 
 func _process(_delta: float) -> void:
-	visible = ConfigManager.config.player_light
+	visible = ConfigManager.config.player_light and DayNightCycle.is_night()
 
 
 func _apply_from_player_config() -> void:
