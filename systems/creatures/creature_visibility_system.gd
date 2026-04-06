@@ -2,7 +2,7 @@ class_name CreatureVisibilitySystem
 extends Node
 
 @export var player: Node2D
-@export var player_light_layer: CanvasLayer
+@export var player_light_node: CanvasItem
 
 
 func _process(_delta: float) -> void:
@@ -12,18 +12,18 @@ func _process(_delta: float) -> void:
 
 
 func update_visibility(p: Player) -> void:
-	if player_light_layer != null:
-		player_light_layer.visible = ConfigManager.config.player_light
+	if player_light_node != null:
+		player_light_node.visible = ConfigManager.config.player_light
 	if p == null or not is_instance_valid(p):
 		return
 
-	match ConfigManager.sync_player_light_state():
-		ConfigManager.PlayerLightSync.STEADY_OFF:
+	match ConfigManager.sync_creature_visibility_state():
+		ConfigManager.CreatureVisibilityCullingSync.STEADY_OFF:
 			return
-		ConfigManager.PlayerLightSync.TURNED_OFF:
+		ConfigManager.CreatureVisibilityCullingSync.TURNED_OFF:
 			_restore_all_visible()
 			return
-		ConfigManager.PlayerLightSync.STEADY_ON, ConfigManager.PlayerLightSync.TURNED_ON:
+		ConfigManager.CreatureVisibilityCullingSync.STEADY_ON, ConfigManager.CreatureVisibilityCullingSync.TURNED_ON:
 			_apply_culling(p)
 
 

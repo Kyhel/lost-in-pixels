@@ -1,6 +1,6 @@
 extends Node
 
-enum PlayerLightSync {
+enum CreatureVisibilityCullingSync {
 	STEADY_OFF,
 	TURNED_OFF,
 	STEADY_ON,
@@ -9,19 +9,19 @@ enum PlayerLightSync {
 
 var config: Config
 
-var _player_light_prev: bool
+var _creature_visibility_prev: bool
 
 func _init() -> void:
 	config = load("res://config/config.tres")
 
 
 func _ready() -> void:
-	_player_light_prev = config.player_light
+	_creature_visibility_prev = config.creature_visibility_culling
 
 
-func sync_player_light_state() -> PlayerLightSync:
-	var v: bool = config.player_light
-	if v == _player_light_prev:
-		return PlayerLightSync.STEADY_OFF if not v else PlayerLightSync.STEADY_ON
-	_player_light_prev = v
-	return PlayerLightSync.TURNED_OFF if not v else PlayerLightSync.TURNED_ON
+func sync_creature_visibility_state() -> CreatureVisibilityCullingSync:
+	var v: bool = config.creature_visibility_culling
+	if v == _creature_visibility_prev:
+		return CreatureVisibilityCullingSync.STEADY_OFF if not v else CreatureVisibilityCullingSync.STEADY_ON
+	_creature_visibility_prev = v
+	return CreatureVisibilityCullingSync.TURNED_OFF if not v else CreatureVisibilityCullingSync.TURNED_ON

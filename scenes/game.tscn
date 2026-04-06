@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://e6m62ghn4205"]
 
 [ext_resource type="Script" uid="uid://cfr34ldh2f3fm" path="res://scenes/game.gd" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://dvv7d12m2esl1" path="res://features/player/player_light_layer.gd" id="3_gee14"]
 [ext_resource type="Script" uid="uid://qjm0yiid752v" path="res://features/player/player.gd" id="3_iywne"]
-[ext_resource type="Shader" uid="uid://bnx32mppxvww1" path="res://scenes/game.gdshader" id="3_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dtf5cww62bsgu" path="res://assets/Player.PNG" id="4_iywne"]
+[ext_resource type="Script" uid="uid://d0qk1on46ulok" path="res://features/player/player_light_2d.gd" id="4_light2d"]
 [ext_resource type="Script" uid="uid://bdvwgquo0u5is" path="res://systems/system_manager.gd" id="4_p57ef"]
 [ext_resource type="Script" uid="uid://buon80ox32fe5" path="res://systems/spawn_system.gd" id="8_dinhu"]
 [ext_resource type="Shader" uid="uid://c8ctknmakcmwm" path="res://scenes/alpha_spot_mask.gdshader" id="9_kvpfn"]
@@ -20,13 +19,17 @@
 [ext_resource type="PackedScene" uid="uid://cxujp0khnwvg2" path="res://ui/inventory_panel.tscn" id="18_inv"]
 [ext_resource type="Script" uid="uid://bserud5evahke" path="res://systems/creatures/creature_visibility_system.gd" id="19_cvsys"]
 [ext_resource type="Script" uid="uid://d08y03vw1y2tn" path="res://ui/tamed_creatures_panel.gd" id="20_tamed"]
+[ext_resource type="Script" uid="uid://cftp8v7tjgsnc" path="res://systems/day_night_cycle.gd" id="21_daynight"]
 [ext_resource type="PackedScene" uid="uid://bu5j6ogejbau6" path="res://ui/creature_interaction_menu.tscn" id="creature_menu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gee14"]
-shader = ExtResource("3_u5sy4")
-shader_parameter/light_pos = Vector2(0, 0)
-shader_parameter/radius = 300.0
-shader_parameter/softness = 200.0
+[sub_resource type="Gradient" id="Gradient_player_light"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_player_light"]
+gradient = SubResource("Gradient_player_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gee14"]
 resource_local_to_scene = true
@@ -55,19 +58,6 @@ script = ExtResource("1_uwrxv")
 
 [node name="World" type="Node2D" parent="." unique_id=351035125]
 
-[node name="PlayerLightLayer" type="CanvasLayer" parent="World" unique_id=380552608 node_paths=PackedStringArray("player")]
-script = ExtResource("3_gee14")
-player = NodePath("../Entities/Player")
-
-[node name="ColorRect" type="ColorRect" parent="World/PlayerLightLayer" unique_id=820227772]
-material = SubResource("ShaderMaterial_gee14")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.9019608)
-
 [node name="Entities" type="Node2D" parent="World" unique_id=1123457807]
 
 [node name="Player" type="CharacterBody2D" parent="World/Entities" unique_id=1652367432]
@@ -77,6 +67,11 @@ script = ExtResource("3_iywne")
 
 [node name="Sprite2D" type="Sprite2D" parent="World/Entities/Player" unique_id=1558994929]
 texture = ExtResource("4_iywne")
+
+[node name="PlayerLight2D" type="PointLight2D" parent="World/Entities/Player" unique_id=819955202]
+texture = SubResource("GradientTexture2D_player_light")
+texture_scale = 2.34375
+script = ExtResource("4_light2d")
 
 [node name="Camera" type="Camera2D" parent="World/Entities/Player" unique_id=526099589]
 zoom = Vector2(0.5, 0.5)
@@ -94,6 +89,8 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Entities/Player/AttackHitbox" unique_id=560303145]
 shape = SubResource("CircleShape2D_attack")
 
+[node name="WorldCanvasModulate" type="CanvasModulate" parent="." unique_id=1939210554]
+
 [node name="Systems" type="Node2D" parent="." unique_id=668813161]
 
 [node name="SystemManager" type="Node" parent="Systems" unique_id=2134014044 node_paths=PackedStringArray("player")]
@@ -104,10 +101,15 @@ player = NodePath("../../World/Entities/Player")
 script = ExtResource("8_dinhu")
 metadata/_custom_type_script = "uid://buon80ox32fe5"
 
-[node name="CreatureVisibilitySystem" type="Node" parent="Systems/SystemManager" unique_id=1409381696 node_paths=PackedStringArray("player", "player_light_layer")]
+[node name="DayNightCycle" type="Node" parent="Systems/SystemManager" unique_id=43244901 node_paths=PackedStringArray("world_canvas_modulate")]
+script = ExtResource("21_daynight")
+world_canvas_modulate = NodePath("../../../WorldCanvasModulate")
+night_color = Color(0.1972, 0.22039999, 0.29, 1)
+
+[node name="CreatureVisibilitySystem" type="Node" parent="Systems/SystemManager" unique_id=1409381696 node_paths=PackedStringArray("player", "player_light_node")]
 script = ExtResource("19_cvsys")
 player = NodePath("../../../World/Entities/Player")
-player_light_layer = NodePath("../../../World/PlayerLightLayer")
+player_light_node = NodePath("../../../World/Entities/Player/PlayerLight2D")
 
 [node name="AlphaMaskViewport" type="SubViewport" parent="." unique_id=1206419223]
 transparent_bg = true

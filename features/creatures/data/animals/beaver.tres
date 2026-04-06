@@ -13,14 +13,14 @@
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="7_3fdru"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="8_0t3oh"]
 [ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="16_w1odu"]
+[ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="berry_red_item"]
+[ext_resource type="Resource" uid="uid://c5peuwgs8ywnj" path="res://features/items/data/fish.tres" id="fish_item"]
 [ext_resource type="Script" uid="uid://vohpvk4rc8jx" path="res://features/creatures/needs/types/hunger_need.gd" id="hunger_s"]
+[ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="item_data_s"]
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://brnsc777efkrv" path="res://features/creatures/traits/terrain_preference_trait.gd" id="terrain_pref_s"]
-[ext_resource type="Script" uid="uid://dendcxderw11w" path="res://features/items/item_data.gd" id="item_data_s"]
-[ext_resource type="Resource" uid="uid://uk033bynwhew" path="res://features/items/data/berry_red.tres" id="berry_red_item"]
-[ext_resource type="Resource" uid="uid://c5peuwgs8ywnj" path="res://features/items/data/fish.tres" id="fish_item"]
-[ext_resource type="Script" uid="uid://d2htr8v1k4qnq" path="res://features/creatures/traits/trader_trait.gd" id="trader_trait_s"]
+[ext_resource type="Script" path="res://features/creatures/traits/trader_trait.gd" id="trader_trait_s"]
 
 [sub_resource type="Resource" id="need_hunger_beaver"]
 script = ExtResource("hunger_s")

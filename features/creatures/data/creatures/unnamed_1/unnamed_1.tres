@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="6_3elvg"]
 [ext_resource type="Resource" uid="uid://bqm8k2p7vx4nw" path="res://features/creatures/data/creatures/unnamed_1/unnamed_1_player_sensor.tres" id="7_ypdqt"]
 [ext_resource type="Texture2D" uid="uid://cecjugb0g0jmw" path="res://assets/creatures/aggressive/unnamed_1.png" id="8_82itp"]
+[ext_resource type="Script" uid="uid://px77e76p5bnh" path="res://features/creatures/traits/creature_trait.gd" id="12_tyi1x"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 
 [sub_resource type="Resource" id="need_stamina_unnamed_1"]
