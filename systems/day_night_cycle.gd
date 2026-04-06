@@ -27,6 +27,23 @@ func _ellapsed_seconds_to_phase(ellapsed_seconds: float) -> DayNightCyclePhase:
 		return DayNightCyclePhase.NIGHT
 	return DayNightCyclePhase.SUNRISE
 
+
+func is_player_light_visible() -> bool:
+	if _config == null or _config.cycle_duration_seconds <= 0.0:
+		return false
+	var ellapsed_time: float = (
+		_cycle_elapsed_seconds / _config.cycle_duration_seconds * _total_phase_duration()
+	)
+	var on_from: float = _config.day_duration + _config.sunset_duration * 0.5
+	var on_until: float = (
+		_config.day_duration
+		+ _config.sunset_duration
+		+ _config.night_duration
+		+ _config.sunrise_duration * 0.5
+	)
+	return ellapsed_time >= on_from and ellapsed_time < on_until
+
+
 func _ready() -> void:
 	_config = ConfigManager.get_day_night_cycle_config()
 	if _config == null:

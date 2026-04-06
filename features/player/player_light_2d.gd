@@ -16,15 +16,7 @@ func _apply_from_player_config() -> void:
 		texture_scale = (configured_radius * 2.0) / texture_width
 
 func _update_visibility() -> void:
-
 	if ConfigManager.config.player_light != true:
 		visible = false
 		return
-
-	if DayNightCycle.current_phase == DayNightCycle.DayNightCyclePhase.NIGHT and not visible:
-		visible = true
-		return
-
-	if DayNightCycle.current_phase == DayNightCycle.DayNightCyclePhase.DAY and visible:
-		visible = false
-		return
+	visible = DayNightCycle.is_player_light_visible()
