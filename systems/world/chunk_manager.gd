@@ -7,6 +7,7 @@ const TILE_HALF_SIZE = TILE_SIZE / 2.0
 const TILE_HALF_SIZE_VECTOR = Vector2.ONE * TILE_HALF_SIZE
 const CHUNK_SIZE = Chunk.CHUNK_SIZE
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
+const RABBIT_BURROW_SEED_SALT := 0x52AB17E7
 
 const TERRAIN_VISION_RADIUS = 20
 
@@ -147,7 +148,43 @@ func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> voi
 	if vegetation_generator != null:
 		vegetation_generator.generate_chunk_vegetation(Vector2i(chunk_x, chunk_y), chunk, CHUNK_SIZE)
 
+	_try_generate_rabbit_burrow(chunk_x, chunk_y, chunk)
+
 	chunk.vegetation_generated = true
+
+
+func _try_generate_rabbit_burrow(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
+	var grass_count := 0
+	for lx in range(CHUNK_SIZE):
+		for ly in range(CHUNK_SIZE):
+			if chunk.get_tile_type(lx, ly) == Terrain.Type.GRASS:
+				grass_count += 1
+	if grass_count == 0:
+		return
+	var grass_ratio := float(grass_count) / float(CHUNK_AREA)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = get_chunk_seed(chunk_x, chunk_y) ^ RABBIT_BURROW_SEED_SALT
+	if rng.randf() >= 0.5 * grass_ratio:
+		return
+	var idx := rng.randi() % grass_count
+	for lx in range(CHUNK_SIZE):
+		for ly in range(CHUNK_SIZE):
+			if chunk.get_tile_type(lx, ly) != Terrain.Type.GRASS:
+				continue
+			if idx == 0:
+				var local_tile := Vector2i(lx, ly)
+				var world_tile := Vector2i(
+					chunk_x * CHUNK_SIZE + lx,
+					chunk_y * CHUNK_SIZE + ly
+				)
+				var world_pos := world_tile_to_world_center(world_tile)
+				var burrow_data: ObjectData = ObjectDatabase.get_object_data(ObjectIds.RABBIT_BURROW)
+				if burrow_data == null:
+					return
+				ObjectsManager.spawn_object_at(burrow_data, world_pos)
+				chunk.register_environment_tile(local_tile)
+				return
+			idx -= 1
 
 
 func _create_chunk_with_terrain(chunk_x: int, chunk_y: int) -> void:

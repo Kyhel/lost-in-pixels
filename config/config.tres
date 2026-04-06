@@ -26,6 +26,7 @@
 [ext_resource type="Resource" uid="uid://dcoj2sx4a6d6e" path="res://features/objects/data/flowers/flower_red_1.tres" id="17_flower_od"]
 [ext_resource type="Resource" uid="uid://bh16hdymgbxaw" path="res://features/objects/data/carrots/carrot_in_ground.tres" id="18_carrot_od"]
 [ext_resource type="Resource" uid="uid://dnaelh8ybnilf" path="res://config/day_night_cycle_config.tres" id="19_day_night_cfg"]
+[ext_resource type="Resource" uid="uid://d2k8m4n7qaq3r" path="res://features/objects/data/night_flower/night_flower.tres" id="20_night_flower_od"]
 
 [sub_resource type="Resource" id="Resource_rt_flower_den"]
 script = ExtResource("15_hy8ka")
@@ -61,19 +62,38 @@ excluded_tile_types = Array[int]([1])
 spawn_rules = Array[ExtResource("14_e6hh3")]([SubResource("Resource_rt_carrot_den"), SubResource("Resource_rt_carrot_tree")])
 metadata/_custom_type_script = "uid://bmemkokxjo2af"
 
+[sub_resource type="Resource" id="Resource_rt_night_flower_den"]
+script = ExtResource("15_hy8ka")
+max_items = 1
+radius = 30
+item_type = &"night_flower"
+metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
+
+[sub_resource type="Resource" id="Resource_rt_night_flower_tree"]
+script = ExtResource("16_a8qsm")
+metadata/_custom_type_script = "uid://ihk51y7nqyh1"
+
+[sub_resource type="Resource" id="Resource_rt_night_flower"]
+script = ExtResource("12_oyubt")
+object_data = ExtResource("20_night_flower_od")
+biomes = Array[int]([2])
+excluded_tile_types = Array[int]([1])
+spawn_rules = Array[ExtResource("14_e6hh3")]([SubResource("Resource_rt_night_flower_den"), SubResource("Resource_rt_night_flower_tree")])
+metadata/_custom_type_script = "uid://bmemkokxjo2af"
+
 [resource]
 script = ExtResource("6_3l0t6")
 player_config = ExtResource("7_player_cfg")
 day_night_cycle_config = ExtResource("19_day_night_cfg")
-day_night_cycle_enabled = true
 allowed_creatures = Array[ExtResource("1_ndyc7")]([ExtResource("3_yq3s8"), ExtResource("2_wm4lb"), ExtResource("4_w2q5h"), ExtResource("5_4nmm5"), ExtResource("6_wm4lb"), ExtResource("7_uqt4q"), ExtResource("8_un2")])
 biome_creature_spawn_profiles = Array[Resource]([ExtResource("8_k3ah5"), ExtResource("9_oshmg"), ExtResource("10_fklpv")])
 chunk_load_radius = 3
 max_creatures_per_chunk = 3
 small_vegetation = Array[ExtResource("11_objdata")]([ExtResource("12_berry"), ExtResource("13_lily"), ExtResource("14_gwnb0")])
 realtime_spawn_definitions = Dictionary[ExtResource("12_oyubt"), bool]({
-SubResource("Resource_rt_flower"): true,
-SubResource("Resource_rt_carrot"): true
+SubResource("Resource_rt_flower"): false,
+SubResource("Resource_rt_carrot"): true,
+SubResource("Resource_rt_night_flower"): true
 })
 starting_abilities = Array[ExtResource("15_soift")]([ExtResource("16_uqt4q")])
 metadata/_custom_type_script = "uid://dx3c2xv76tb7s"

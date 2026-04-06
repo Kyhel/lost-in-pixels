@@ -1,26 +1,24 @@
 extends Node
 
-## Central staggered updates for sensors, AI, and produce behaviors.
+## Central staggered updates for sensors, AI, world object ticks (produce, spawners), and creature needs.
 
 ## Global step between sensor ticks. At most one tick per entry per interval. <= 0 runs every physics frame.
 @export var sensor_update_interval: float = 0.2
 ## Global step between AI ticks. <= 0 runs every physics frame.
 @export var ai_update_interval: float = 0.1
-## Global step between produce physics_update calls. <= 0 runs every physics frame (legacy regrow timing).
-@export var produce_update_interval: float = 5.0
 ## Global step between creature need ticks. At most one tick per creature per interval.
 @export var need_update_interval: float = 0.1
 
 var _sensor_entries: Array[Dictionary] = []
 var _ai_entries: Array[Dictionary] = []
-var _produce_entries: Array[Dictionary] = []
+var _world_object_entries: Array[Dictionary] = []
 var _needs_entries: Array[Dictionary] = []
 
 
 func _on_world_reset() -> void:
 	_sensor_entries.clear()
 	_ai_entries.clear()
-	_produce_entries.clear()
+	_world_object_entries.clear()
 	_needs_entries.clear()
 
 
@@ -32,8 +30,8 @@ func register_ai(root: AIRoot, on_tick: Callable) -> void:
 	_register_entry(_ai_entries, root, ai_update_interval, on_tick)
 
 
-func register_produce(world_object: WorldObject, on_tick: Callable) -> void:
-	_register_entry(_produce_entries, world_object, produce_update_interval, on_tick)
+func register_world_object_tick(world_object: WorldObject, interval: float, on_tick: Callable) -> void:
+	_register_world_object_entry(world_object, interval, on_tick)
 
 
 func register_needs(creature: Creature, on_tick: Callable) -> void:
@@ -59,10 +57,23 @@ func _register_entry(entries: Array[Dictionary], node: Object, interval: float, 
 	})
 
 
+func _register_world_object_entry(node: Object, interval: float, on_tick: Callable) -> void:
+	if node == null or not on_tick.is_valid():
+		return
+	_remove_entry_by_node(_world_object_entries, node)
+	var phase: float = _get_stagger_phase_offset(node, interval)
+	_world_object_entries.append({
+		"node_wr": weakref(node),
+		"elapsed": -phase,
+		"on_tick": on_tick,
+		"interval": interval,
+	})
+
+
 func _physics_process(delta: float) -> void:
 	_process_stagger_queue(_sensor_entries, sensor_update_interval, delta)
 	_process_stagger_queue(_ai_entries, ai_update_interval, delta)
-	_process_stagger_queue(_produce_entries, produce_update_interval, delta)
+	_process_world_object_entries(delta)
 	_process_stagger_queue(_needs_entries, need_update_interval, delta)
 
 
@@ -91,6 +102,23 @@ func _process_stagger_queue(entries: Array[Dictionary], interval: float, delta: 
 		var node: Object = e.node_wr.get_ref()
 		if node == null:
 			entries.remove_at(i)
+			continue
+		(e.on_tick as Callable).call(node, tick_delta as float)
+		i += 1
+
+
+func _process_world_object_entries(delta: float) -> void:
+	var i := 0
+	while i < _world_object_entries.size():
+		var e: Dictionary = _world_object_entries[i]
+		var interval: float = float(e.get("interval", 5.0))
+		var tick_delta: Variant = _advance_stagger_timer(e, delta, interval)
+		if tick_delta == null:
+			i += 1
+			continue
+		var node: Object = e.node_wr.get_ref()
+		if node == null:
+			_world_object_entries.remove_at(i)
 			continue
 		(e.on_tick as Callable).call(node, tick_delta as float)
 		i += 1

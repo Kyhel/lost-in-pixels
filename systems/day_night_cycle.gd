@@ -6,26 +6,39 @@ var _cycle_elapsed_seconds: float = 0.0
 
 var _config: DayNightCycleConfig
 
-enum DayNightCyclePhase {
+enum CyclePhase {
 	DAY,
 	SUNSET,
 	NIGHT,
 	SUNRISE,
 }
 
-var current_phase: DayNightCyclePhase = DayNightCyclePhase.DAY
+signal phase_changed(phase: CyclePhase)
 
-func _ellapsed_seconds_to_phase(ellapsed_seconds: float) -> DayNightCyclePhase:
+var current_phase: CyclePhase = CyclePhase.DAY
+
+
+func is_night_phase() -> bool:
+	return current_phase == CyclePhase.NIGHT
+
+
+func _set_phase(new_phase: CyclePhase) -> void:
+	if new_phase == current_phase:
+		return
+	current_phase = new_phase
+	phase_changed.emit(current_phase)
+
+func _ellapsed_seconds_to_phase(ellapsed_seconds: float) -> CyclePhase:
 
 	var ellapsed_time = ellapsed_seconds / _config.cycle_duration_seconds * _total_phase_duration()
 
 	if ellapsed_time < _config.day_duration:
-		return DayNightCyclePhase.DAY
+		return CyclePhase.DAY
 	if ellapsed_time < _config.day_duration + _config.sunset_duration:
-		return DayNightCyclePhase.SUNSET
+		return CyclePhase.SUNSET
 	if ellapsed_time < _config.day_duration + _config.sunset_duration + _config.night_duration:
-		return DayNightCyclePhase.NIGHT
-	return DayNightCyclePhase.SUNRISE
+		return CyclePhase.NIGHT
+	return CyclePhase.SUNRISE
 
 
 func is_player_light_visible() -> bool:
@@ -53,6 +66,10 @@ func _ready() -> void:
 
 	_resolve_world_canvas_modulate()
 	_apply_current_color()
+	if _config.cycle_duration_seconds <= 0.0:
+		_set_phase(CyclePhase.DAY)
+	else:
+		_set_phase(_ellapsed_seconds_to_phase(_cycle_elapsed_seconds))
 
 
 func _process(delta: float) -> void:
@@ -62,17 +79,18 @@ func _process(delta: float) -> void:
 		return
 	if _config.cycle_duration_seconds <= 0.0:
 		_world_canvas_modulate.color = _config.day_color
+		_set_phase(CyclePhase.DAY)
 		return
 
 	if ConfigManager.config != null and not ConfigManager.config.day_night_cycle_enabled:
 		_cycle_elapsed_seconds = 0.0
 		_apply_current_color()
-		current_phase = _ellapsed_seconds_to_phase(_cycle_elapsed_seconds)
+		_set_phase(_ellapsed_seconds_to_phase(_cycle_elapsed_seconds))
 		return
 
 	_cycle_elapsed_seconds = fposmod(_cycle_elapsed_seconds + delta, _config.cycle_duration_seconds)
 	_apply_current_color()
-	current_phase = _ellapsed_seconds_to_phase(_cycle_elapsed_seconds)
+	_set_phase(_ellapsed_seconds_to_phase(_cycle_elapsed_seconds))
 
 
 func _apply_current_color() -> void:

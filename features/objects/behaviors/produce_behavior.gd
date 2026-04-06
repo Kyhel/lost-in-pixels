@@ -20,8 +20,9 @@ func apply(world_object: WorldObject) -> void:
 	world_object.add_behavior_instance(instance)
 	for i in range(slot_count):
 		_spawn_at_slot(world_object, instance, i)
-	SimulationSystem.register_produce(
+	SimulationSystem.register_world_object_tick(
 		world_object,
+		regrow_interval,
 		func(_n: Object, _td: float) -> void:
 			_tick_regrow(world_object, instance)
 	)
