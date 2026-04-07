@@ -192,9 +192,7 @@ func get_nearby_world_objects(origin: Vector2, radius: float) -> Array[WorldObje
 				if wo == null or !is_instance_valid(wo):
 					continue
 
-				var dx: float = wo.global_position.x - origin.x
-				var dy: float = wo.global_position.y - origin.y
-				var dist_sq: float = dx * dx + dy * dy
+				var dist_sq := origin.distance_squared_to(wo.global_position)
 
 				if dist_sq <= radius_sq:
 					results.append(wo)

@@ -170,8 +170,6 @@ func _spawn_carrot() -> void:
 
 func try_pickup_in_front() -> void:
 	var forward := Vector2.UP.rotated(sprite.rotation)
-	if forward.is_zero_approx():
-		forward = Vector2.UP
 	var cos_threshold: float = cos(PICKUP_CONE_HALF_ANGLE)
 	var scored: Array[Dictionary] = []
 	for wo in ObjectsManager.get_nearby_world_objects(global_position, FRONT_PICKUP_RADIUS):

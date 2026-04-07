@@ -290,12 +290,13 @@ func update_chunks(player_pos: Vector2) -> void:
 
 func unload_far_chunks(player_pos: Vector2) -> void:
 	var player_chunk = world_pos_to_chunk_coords(player_pos)
+	var unload_radius = get_unload_radius()
 
 	for key in loaded_chunks.keys():
 		var dx = abs(key.x - player_chunk.x)
 		var dy = abs(key.y - player_chunk.y)
 
-		if dx > get_unload_radius() or dy > get_unload_radius():
+		if dx > unload_radius or dy > unload_radius:
 			var chunk: Node = loaded_chunks[key]
 			_emit_chunk_unloaded(key, chunk)
 			if chunk is Chunk:
