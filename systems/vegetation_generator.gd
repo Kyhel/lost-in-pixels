@@ -51,14 +51,14 @@ func _spawn_tree(tile_position: Vector2i, tree_type: TreeGenerator.TreeType) -> 
 func _spawn_object_on_tile(object_data: ObjectData, world_tile: Vector2i) -> void:
 	if object_data == null:
 		return
-	var world_pos: Vector2 = ChunkManager.world_tile_to_world_center(world_tile)
+	var world_pos: Vector2 = ChunkUtils.world_tile_to_world_center(world_tile)
 	var world_object: WorldObject = ObjectsManager.spawn_object_at(object_data, world_pos)
 	if world_object == null:
 		return
-	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+	var chunk_coords: Vector2i = ChunkUtils.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk_node != null:
-		var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
+		var local_tile: Vector2i = ChunkUtils.world_tile_to_local_tile(world_tile)
 		chunk_node.register_environment_tile(local_tile)
 
 
@@ -211,9 +211,9 @@ func _shuffle_vec2i_with_rng(arr: Array[Vector2i], rng: RandomNumberGenerator) -
 
 
 func _is_environment_tile_occupied(world_tile: Vector2i) -> bool:
-	var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
+	var chunk_coords: Vector2i = ChunkUtils.world_tile_to_chunk_coords(world_tile)
 	var chunk_node: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 	if chunk_node == null:
 		return false
-	var local_tile: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
+	var local_tile: Vector2i = ChunkUtils.world_tile_to_local_tile(world_tile)
 	return chunk_node.is_environment_tile_occupied(local_tile)

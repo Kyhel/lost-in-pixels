@@ -34,5 +34,5 @@ func _tick_spawn(world_object: WorldObject) -> void:
 	if randf() >= spawn_probability:
 		return
 	var spawn_pos: Vector2 = world_pos + Vector2(Chunk.TILE_HALF_SIZE, 0.0)
-	var chunk_coords: Vector2i = ChunkManager.world_pos_to_chunk_coords(spawn_pos)
+	var chunk_coords: Vector2i = ChunkUtils.world_pos_to_chunk_coords(spawn_pos)
 	CreatureManager.spawn_creature_at(chunk_coords, creature_data, spawn_pos)

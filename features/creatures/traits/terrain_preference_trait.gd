@@ -27,6 +27,6 @@ func is_tile_valid(tile_coords: Vector2i) -> bool:
 
 func _is_preferred_tile(tile_x: int, tile_y: int) -> bool:
 	var tile_coords := Vector2i(tile_x, tile_y)
-	var world_pos := ChunkManager.world_tile_to_world_center(tile_coords)
+	var world_pos := ChunkUtils.world_tile_to_world_center(tile_coords)
 	var tile_type := ChunkManager.get_tile_type_at_world_pos(world_pos)
 	return preferred_terrains.has(tile_type)

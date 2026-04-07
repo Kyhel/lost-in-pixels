@@ -46,7 +46,7 @@ func _slot_occupied(instance: ProduceBehaviorInstance, slot_i: int) -> bool:
 
 
 func _spawn_at_slot(world_object: WorldObject, instance: ProduceBehaviorInstance, slot_i: int) -> void:
-	var chunk_coords: Vector2i = ChunkManager.world_pos_to_chunk_coords(world_object.global_position)
+	var chunk_coords: Vector2i = ChunkUtils.world_pos_to_chunk_coords(world_object.global_position)
 	var spawned: Variant = ObjectsManager.spawn_object_attached_in_chunk(
 		chunk_coords,
 		produce_object_data,
@@ -67,7 +67,7 @@ func _on_produced_destroyed(_reason: String, slot_i: int, instance: ProduceBehav
 func _init_slots(world_object: WorldObject, instance: ProduceBehaviorInstance) -> void:
 	instance.slot_offsets.clear()
 	instance.slot_refs.clear()
-	var world_tile: Vector2i = ChunkManager.world_pos_to_world_tile(world_object.global_position)
+	var world_tile: Vector2i = ChunkUtils.world_pos_to_world_tile(world_object.global_position)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_world_seed() ^ hash(world_tile) ^ seed_salt
 	var half_tile: float = Chunk.TILE_SIZE * 0.5

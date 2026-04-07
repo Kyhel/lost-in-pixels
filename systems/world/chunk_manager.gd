@@ -172,7 +172,7 @@ func _try_generate_rabbit_burrow(chunk_x: int, chunk_y: int, chunk: Chunk) -> vo
 					chunk_x * Chunk.CHUNK_SIZE + lx,
 					chunk_y * Chunk.CHUNK_SIZE + ly
 				)
-				var world_pos := world_tile_to_world_center(world_tile)
+				var world_pos := ChunkUtils.world_tile_to_world_center(world_tile)
 				var burrow_data: ObjectData = ObjectDatabase.get_object_data(ObjectIds.RABBIT_BURROW)
 				if burrow_data == null:
 					return
@@ -190,10 +190,7 @@ func _create_chunk_with_terrain(chunk_x: int, chunk_y: int) -> void:
 	var chunk: Chunk = chunk_scene.instantiate() as Chunk
 	chunk.coords = key
 	add_child(chunk)
-	chunk.position = Vector2i(
-		chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE,
-		chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE
-	)
+	chunk.position = chunk.coords * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE
 	loaded_chunks[key] = chunk
 	chunk.init_fog(fog_memory.get(key, null))
 	_generate_chunk_terrain(chunk_x, chunk_y, chunk)
@@ -243,7 +240,7 @@ func _build_required_chunks(player_chunk: Vector2i, stream_radius: int) -> Dicti
 
 
 func update_chunks(player_pos: Vector2) -> void:
-	var player_chunk: Vector2i = world_pos_to_chunk_coords(player_pos)
+	var player_chunk: Vector2i = ChunkUtils.world_pos_to_chunk_coords(player_pos)
 	var stream_r: int = get_terrain_only_stream_radius()
 	var required: Dictionary = _build_required_chunks(player_chunk, stream_r)
 	var full_r: int = get_full_generation_radius()
@@ -284,7 +281,7 @@ func update_chunks(player_pos: Vector2) -> void:
 
 
 func unload_far_chunks(player_pos: Vector2) -> void:
-	var player_chunk = world_pos_to_chunk_coords(player_pos)
+	var player_chunk = ChunkUtils.world_pos_to_chunk_coords(player_pos)
 	var unload_radius = get_unload_radius()
 
 	for key in loaded_chunks.keys():
@@ -316,7 +313,7 @@ func is_area_walkable_for_creature(creature: Creature, center: Vector2, size_pix
 	if size_pixels <= 0.0:
 		return can_creature_moveat_tile(creature, center)
 	var radius := size_pixels
-	var base_tile := world_pos_to_world_tile(center)
+	var base_tile := ChunkUtils.world_pos_to_world_tile(center)
 	var tile_radius := ceili(radius / Chunk.TILE_SIZE)
 	for dx in range(-tile_radius, tile_radius + 1):
 		for dy in range(-tile_radius, tile_radius + 1):
@@ -357,7 +354,7 @@ func is_environment_blocking_creature(creature: Creature, world_pos: Vector2) ->
 
 func reveal_around_player(player_pos):
 
-	var tile_pos: Vector2i = world_pos_to_world_tile(player_pos)
+	var tile_pos: Vector2i = ChunkUtils.world_pos_to_world_tile(player_pos)
 
 	var radius = TERRAIN_VISION_RADIUS
 
@@ -376,79 +373,48 @@ func get_tile_def_from_world_pos(world_pos: Vector2) -> TerrainDefinition:
 
 
 func get_tile_type_at_world_pos(world_pos: Vector2) -> Terrain.Type:
-	var world_tile_coords: Vector2i = world_pos_to_world_tile(world_pos)
+	var world_tile_coords: Vector2i = ChunkUtils.world_pos_to_world_tile(world_pos)
 	return get_tile_type_at_world_tile(world_tile_coords)
 
 
 func get_tile_type_at_world_tile(world_tile: Vector2i) -> Terrain.Type:
-	var chunk_coords: Vector2i = world_tile_to_chunk_coords(world_tile)
+	var chunk_coords: Vector2i = ChunkUtils.world_tile_to_chunk_coords(world_tile)
 	if not loaded_chunks.has(chunk_coords):
 		return Terrain.Type.NONE
 	var chunk: Chunk = loaded_chunks[chunk_coords] as Chunk
 	if not is_instance_valid(chunk):
 		return Terrain.Type.NONE
-	var local: Vector2i = world_tile_to_local_tile(world_tile)
+	var local: Vector2i = ChunkUtils.world_tile_to_local_tile(world_tile)
 	return chunk.get_tile_type(local.x, local.y)
 
 
 func reveal_tile(world_x, world_y):
 
 	var world_tile: Vector2i = Vector2i(world_x, world_y)
-	var key: Vector2i = world_tile_to_chunk_coords(world_tile)
+	var key: Vector2i = ChunkUtils.world_tile_to_chunk_coords(world_tile)
 
 	if !loaded_chunks.has(key):
 		return
 	var chunk = loaded_chunks[key]
 
-	var local_tile: Vector2i = world_tile_to_local_tile(world_tile)
+	var local_tile: Vector2i = ChunkUtils.world_tile_to_local_tile(world_tile)
 
 	chunk.reveal(local_tile.x, local_tile.y)
 
 func get_chunk_seed(chunk_x:int, chunk_y:int) -> int:
 	return world_generator.terrain_noise.seed ^ (chunk_x * 73856093) ^ (chunk_y * 19349663)
 
-func world_pos_to_world_tile(world_pos: Vector2) -> Vector2i:
-	return Vector2i(
-		int(floor(world_pos.x / float(Chunk.TILE_SIZE))),
-		int(floor(world_pos.y / float(Chunk.TILE_SIZE)))
-	)
-
-func world_tile_to_world_pos(world_tile: Vector2i) -> Vector2:
-	return world_tile * Chunk.TILE_SIZE
-
-func world_tile_to_world_center(world_tile: Vector2i) -> Vector2:
-	return world_tile_to_world_pos(world_tile) + Chunk.TILE_HALF_SIZE_VECTOR
-
-func world_pos_to_chunk_coords(pos: Vector2) -> Vector2i:
-	return Vector2i(
-		int(floor(pos.x / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE))),
-		int(floor(pos.y / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)))
-	)
-
-
-func world_tile_to_chunk_coords(world_tile: Vector2i) -> Vector2i:
-	return Vector2i(
-		int(floor(world_tile.x / float(Chunk.CHUNK_SIZE))),
-		int(floor(world_tile.y / float(Chunk.CHUNK_SIZE)))
-	)
-
-func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
-	return Vector2i(
-		posmod(world_tile.x, Chunk.CHUNK_SIZE),
-		posmod(world_tile.y, Chunk.CHUNK_SIZE)
-	)
-
 ## Vegetation generation only: loaded chunk tile data, no world generator fallback.
 func get_tile_type_for_generation(world_x: int, world_y: int) -> Terrain.Type:
 	var world_tile := Vector2i(world_x, world_y)
-	var key := world_tile_to_chunk_coords(world_tile)
+	var key := ChunkUtils.world_tile_to_chunk_coords(world_tile)
 	if not loaded_chunks.has(key):
 		push_error("ChunkManager.get_tile_type_for_generation: chunk not loaded %s" % str(key))
 		return Terrain.Type.NONE
 	var ch: Node = loaded_chunks[key]
 	if not is_instance_valid(ch) or not (ch is Chunk):
 		return Terrain.Type.WATER
-	var local_tile := world_tile_to_local_tile(world_tile)
+	var local_tile := ChunkUtils.world_tile_to_local_tile(world_tile)
 	return (ch as Chunk).get_tile_type(local_tile.x, local_tile.y)
 
 

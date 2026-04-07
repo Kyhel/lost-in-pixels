@@ -19,8 +19,8 @@ func _water_is_near_non_water(wx: int, wy: int) -> bool:
 			var tx: int = wx + dx
 			var ty: int = wy + dy
 			var world_tile: Vector2i = Vector2i(tx, ty)
-			var chunk_coords: Vector2i = ChunkManager.world_tile_to_chunk_coords(world_tile)
-			var local: Vector2i = ChunkManager.world_tile_to_local_tile(world_tile)
+			var chunk_coords: Vector2i = ChunkUtils.world_tile_to_chunk_coords(world_tile)
+			var local: Vector2i = ChunkUtils.world_tile_to_local_tile(world_tile)
 			var ch: Chunk = ChunkManager.get_loaded_chunk(chunk_coords)
 			var tile_type: int = Terrain.Type.WATER
 			if ch != null:

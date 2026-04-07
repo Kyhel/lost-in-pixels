@@ -16,7 +16,7 @@ static func is_valid_wander_destination(creature: Creature, world_pos: Vector2) 
 
 
 static func _passes_terrain_preference_traits(data: CreatureData, world_pos: Vector2) -> bool:
-	var tile_coords := ChunkManager.world_pos_to_world_tile(world_pos)
+	var tile_coords := ChunkUtils.world_pos_to_world_tile(world_pos)
 	for trait_res in data.traits:
 		if trait_res == null:
 			continue

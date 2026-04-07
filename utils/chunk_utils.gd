@@ -1,5 +1,41 @@
 class_name ChunkUtils
 
+static func world_pos_to_world_tile(world_pos: Vector2) -> Vector2i:
+	return Vector2i(
+		int(floor(world_pos.x / float(Chunk.TILE_SIZE))),
+		int(floor(world_pos.y / float(Chunk.TILE_SIZE)))
+	)
+
+
+static func world_tile_to_world_pos(world_tile: Vector2i) -> Vector2:
+	return world_tile * Chunk.TILE_SIZE
+
+
+static func world_tile_to_world_center(world_tile: Vector2i) -> Vector2:
+	return world_tile_to_world_pos(world_tile) + Chunk.TILE_HALF_SIZE_VECTOR
+
+
+static func world_pos_to_chunk_coords(pos: Vector2) -> Vector2i:
+	return Vector2i(
+		int(floor(pos.x / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE))),
+		int(floor(pos.y / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)))
+	)
+
+
+static func world_tile_to_chunk_coords(world_tile: Vector2i) -> Vector2i:
+	return Vector2i(
+		int(floor(world_tile.x / float(Chunk.CHUNK_SIZE))),
+		int(floor(world_tile.y / float(Chunk.CHUNK_SIZE)))
+	)
+
+
+static func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
+	return Vector2i(
+		posmod(world_tile.x, Chunk.CHUNK_SIZE),
+		posmod(world_tile.y, Chunk.CHUNK_SIZE)
+	)
+
+
 static func get_chunk_coords_intersecting_circle(origin: Vector2, radius: float) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
 	if radius < 0.0:

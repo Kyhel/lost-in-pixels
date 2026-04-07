@@ -122,7 +122,7 @@ func update_entity_chunks(delta: float) -> void:
 			if !is_instance_valid(monster):
 				continue
 
-			var new_chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(monster.global_position)
+			var new_chunk: Vector2i = ChunkUtils.world_pos_to_chunk_coords(monster.global_position)
 			if new_chunk != coords:
 				move_monster(monster, coords, new_chunk)
 
