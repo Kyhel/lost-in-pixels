@@ -11,7 +11,7 @@ func can_spawn(world_pos: Vector2, _context: Dictionary) -> bool:
 	if item_type == null:
 		return true
 
-	var radius_px: float = radius * ChunkManager.TILE_SIZE
+	var radius_px: float = radius * Chunk.TILE_SIZE
 	var nearby: Array = ObjectsManager.get_nearby_world_objects(world_pos, radius_px)
 
 	var count: int = 0

@@ -68,7 +68,7 @@ func _spawn_small_vegetation(chunk_coords: Vector2i, chunk: Chunk) -> void:
 		return
 
 	var tile_to_defs: Dictionary = {}
-	var chunk_size: int = ChunkManager.CHUNK_SIZE
+	var chunk_size: int = Chunk.CHUNK_SIZE
 
 	for local_x in range(chunk_size):
 		for local_y in range(chunk_size):

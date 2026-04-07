@@ -2,11 +2,6 @@ extends Node2D
 
 signal chunk_unloaded(chunk_coords: Vector2i, chunk: Chunk)
 
-const TILE_SIZE = 16
-const TILE_HALF_SIZE = TILE_SIZE / 2.0
-const TILE_HALF_SIZE_VECTOR = Vector2.ONE * TILE_HALF_SIZE
-const CHUNK_SIZE = Chunk.CHUNK_SIZE
-const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 const RABBIT_BURROW_SEED_SALT := 0x52AB17E7
 
 const TERRAIN_VISION_RADIUS = 20
@@ -131,11 +126,11 @@ func get_loaded_chunk(chunk_coords: Vector2i) -> Chunk:
 
 func _generate_chunk_terrain(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 	var tile_types: Array[Terrain.Type] = world_generator.compute_chunk_tile_types(
-		chunk_x, chunk_y, CHUNK_SIZE
+		chunk_x, chunk_y, Chunk.CHUNK_SIZE
 	)
 	var ti := 0
-	for x in range(CHUNK_SIZE):
-		for y in range(CHUNK_SIZE):
+	for x in range(Chunk.CHUNK_SIZE):
+		for y in range(Chunk.CHUNK_SIZE):
 			var tile_type := tile_types[ti]
 			ti += 1
 			var biome: int = world_generator.biome_from_tile_type(tile_type)
@@ -146,7 +141,7 @@ func _generate_chunk_terrain(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 
 func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 	if vegetation_generator != null:
-		vegetation_generator.generate_chunk_vegetation(Vector2i(chunk_x, chunk_y), chunk, CHUNK_SIZE)
+		vegetation_generator.generate_chunk_vegetation(Vector2i(chunk_x, chunk_y), chunk, Chunk.CHUNK_SIZE)
 
 	_try_generate_rabbit_burrow(chunk_x, chunk_y, chunk)
 
@@ -155,27 +150,27 @@ func _generate_chunk_vegetation(chunk_x: int, chunk_y: int, chunk: Chunk) -> voi
 
 func _try_generate_rabbit_burrow(chunk_x: int, chunk_y: int, chunk: Chunk) -> void:
 	var grass_count := 0
-	for lx in range(CHUNK_SIZE):
-		for ly in range(CHUNK_SIZE):
+	for lx in range(Chunk.CHUNK_SIZE):
+		for ly in range(Chunk.CHUNK_SIZE):
 			if chunk.get_tile_type(lx, ly) == Terrain.Type.GRASS:
 				grass_count += 1
 	if grass_count == 0:
 		return
-	var grass_ratio := float(grass_count) / float(CHUNK_AREA)
+	var grass_ratio := float(grass_count) / float(Chunk.CHUNK_AREA)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = get_chunk_seed(chunk_x, chunk_y) ^ RABBIT_BURROW_SEED_SALT
 	if rng.randf() >= 0.5 * grass_ratio:
 		return
 	var idx := rng.randi() % grass_count
-	for lx in range(CHUNK_SIZE):
-		for ly in range(CHUNK_SIZE):
+	for lx in range(Chunk.CHUNK_SIZE):
+		for ly in range(Chunk.CHUNK_SIZE):
 			if chunk.get_tile_type(lx, ly) != Terrain.Type.GRASS:
 				continue
 			if idx == 0:
 				var local_tile := Vector2i(lx, ly)
 				var world_tile := Vector2i(
-					chunk_x * CHUNK_SIZE + lx,
-					chunk_y * CHUNK_SIZE + ly
+					chunk_x * Chunk.CHUNK_SIZE + lx,
+					chunk_y * Chunk.CHUNK_SIZE + ly
 				)
 				var world_pos := world_tile_to_world_center(world_tile)
 				var burrow_data: ObjectData = ObjectDatabase.get_object_data(ObjectIds.RABBIT_BURROW)
@@ -196,8 +191,8 @@ func _create_chunk_with_terrain(chunk_x: int, chunk_y: int) -> void:
 	chunk.coords = key
 	add_child(chunk)
 	chunk.position = Vector2i(
-		chunk_x * CHUNK_SIZE * TILE_SIZE,
-		chunk_y * CHUNK_SIZE * TILE_SIZE
+		chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE,
+		chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE
 	)
 	loaded_chunks[key] = chunk
 	chunk.init_fog(fog_memory.get(key, null))
@@ -322,13 +317,13 @@ func is_area_walkable_for_creature(creature: Creature, center: Vector2, size_pix
 		return can_creature_moveat_tile(creature, center)
 	var radius := size_pixels
 	var base_tile := world_pos_to_world_tile(center)
-	var tile_radius := ceili(radius / TILE_SIZE)
+	var tile_radius := ceili(radius / Chunk.TILE_SIZE)
 	for dx in range(-tile_radius, tile_radius + 1):
 		for dy in range(-tile_radius, tile_radius + 1):
 			var tile_coords := Vector2i(base_tile.x + dx, base_tile.y + dy)
 			var tile_center := Vector2(
-				(tile_coords.x + 0.5) * TILE_SIZE,
-				(tile_coords.y + 0.5) * TILE_SIZE
+				(tile_coords.x + 0.5) * Chunk.TILE_SIZE,
+				(tile_coords.y + 0.5) * Chunk.TILE_SIZE
 			)
 			if center.distance_to(tile_center) > radius:
 				continue
@@ -414,32 +409,33 @@ func get_chunk_seed(chunk_x:int, chunk_y:int) -> int:
 
 func world_pos_to_world_tile(world_pos: Vector2) -> Vector2i:
 	return Vector2i(
-		int(floor(world_pos.x / float(TILE_SIZE))),
-		int(floor(world_pos.y / float(TILE_SIZE)))
+		int(floor(world_pos.x / float(Chunk.TILE_SIZE))),
+		int(floor(world_pos.y / float(Chunk.TILE_SIZE)))
 	)
 
 func world_tile_to_world_pos(world_tile: Vector2i) -> Vector2:
-	return world_tile * TILE_SIZE
+	return world_tile * Chunk.TILE_SIZE
 
 func world_tile_to_world_center(world_tile: Vector2i) -> Vector2:
-	return world_tile_to_world_pos(world_tile) + TILE_HALF_SIZE_VECTOR
+	return world_tile_to_world_pos(world_tile) + Chunk.TILE_HALF_SIZE_VECTOR
 
 func world_pos_to_chunk_coords(pos: Vector2) -> Vector2i:
 	return Vector2i(
-		int(floor(pos.x / float(CHUNK_SIZE * TILE_SIZE))),
-		int(floor(pos.y / float(CHUNK_SIZE * TILE_SIZE)))
+		int(floor(pos.x / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE))),
+		int(floor(pos.y / float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)))
 	)
+
 
 func world_tile_to_chunk_coords(world_tile: Vector2i) -> Vector2i:
 	return Vector2i(
-		int(floor(world_tile.x / float(CHUNK_SIZE))),
-		int(floor(world_tile.y / float(CHUNK_SIZE)))
+		int(floor(world_tile.x / float(Chunk.CHUNK_SIZE))),
+		int(floor(world_tile.y / float(Chunk.CHUNK_SIZE)))
 	)
 
 func world_tile_to_local_tile(world_tile: Vector2i) -> Vector2i:
 	return Vector2i(
-		posmod(world_tile.x, CHUNK_SIZE),
-		posmod(world_tile.y, CHUNK_SIZE)
+		posmod(world_tile.x, Chunk.CHUNK_SIZE),
+		posmod(world_tile.y, Chunk.CHUNK_SIZE)
 	)
 
 ## Vegetation generation only: loaded chunk tile data, no world generator fallback.

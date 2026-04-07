@@ -4,6 +4,9 @@ class_name Chunk
 const CHUNK_SIZE = 32
 const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE
 const FOG_TILE = 0
+const TILE_SIZE = 16
+const TILE_HALF_SIZE = TILE_SIZE / 2.0
+const TILE_HALF_SIZE_VECTOR = Vector2.ONE * TILE_HALF_SIZE
 
 var fog_grid = [] # tableau 2D CHUNK_SIZE x CHUNK_SIZE
 

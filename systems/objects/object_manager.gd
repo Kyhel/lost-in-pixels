@@ -161,40 +161,18 @@ func _on_world_object_tree_exiting(world_object: WorldObject) -> void:
 func get_nearby_world_objects(origin: Vector2, radius: float) -> Array[WorldObject]:
 	var results: Array[WorldObject] = []
 	var radius_sq := radius * radius
-	var chunk_px := float(ChunkManager.CHUNK_SIZE * ChunkManager.TILE_SIZE)
 
-	var min_x := origin.x - radius
-	var max_x := origin.x + radius
-	var min_y := origin.y - radius
-	var max_y := origin.y + radius
-
-	var min_cx := int(floor(min_x / chunk_px))
-	var max_cx := int(floor(max_x / chunk_px))
-	var min_cy := int(floor(min_y / chunk_px))
-	var max_cy := int(floor(max_y / chunk_px))
-
-	for cx in range(min_cx, max_cx + 1):
-		for cy in range(min_cy, max_cy + 1):
-			var rect_min := Vector2(float(cx), float(cy)) * chunk_px
-			var rect_max := rect_min + Vector2(chunk_px, chunk_px)
-			var nearest_x := clampf(origin.x, rect_min.x, rect_max.x)
-			var nearest_y := clampf(origin.y, rect_min.y, rect_max.y)
-			var ddx := origin.x - nearest_x
-			var ddy := origin.y - nearest_y
-			if ddx * ddx + ddy * ddy > radius_sq:
+	for key in ChunkUtils.get_chunk_coords_intersecting_circle(origin, radius):
+		var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
+		if chunk == null:
+			continue
+		for wo in chunk.get_world_objects():
+			if wo == null or !is_instance_valid(wo):
 				continue
 
-			var key: Vector2i = Vector2i(cx, cy)
-			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
-			if chunk == null:
-				continue
-			for wo in chunk.get_world_objects():
-				if wo == null or !is_instance_valid(wo):
-					continue
+			var dist_sq := origin.distance_squared_to(wo.global_position)
 
-				var dist_sq := origin.distance_squared_to(wo.global_position)
-
-				if dist_sq <= radius_sq:
-					results.append(wo)
+			if dist_sq <= radius_sq:
+				results.append(wo)
 
 	return results

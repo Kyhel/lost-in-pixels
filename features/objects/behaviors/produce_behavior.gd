@@ -70,7 +70,7 @@ func _init_slots(world_object: WorldObject, instance: ProduceBehaviorInstance) -
 	var world_tile: Vector2i = ChunkManager.world_pos_to_world_tile(world_object.global_position)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = ChunkManager.get_world_seed() ^ hash(world_tile) ^ seed_salt
-	var half_tile: float = ChunkManager.TILE_SIZE * 0.5
+	var half_tile: float = Chunk.TILE_SIZE * 0.5
 	var base_angle: float = rng.randf_range(0.0, TAU)
 	var ring_base: float = half_tile * 0.8
 	for i in range(slot_count):

@@ -40,10 +40,10 @@ func spawn_creatures(chunk: Chunk, chunk_position: Vector2i) -> void:
 	var entity_count := rng.randi_range(1, ConfigManager.config.max_creatures_per_chunk)
 
 	for i in range(entity_count):
-		var local_x := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
-		var local_y := rng.randi_range(0, ChunkManager.CHUNK_SIZE - 1)
-		var world_x: int = chunk_position.x * ChunkManager.CHUNK_SIZE + local_x
-		var world_y: int = chunk_position.y * ChunkManager.CHUNK_SIZE + local_y
+		var local_x := rng.randi_range(0, Chunk.CHUNK_SIZE - 1)
+		var local_y := rng.randi_range(0, Chunk.CHUNK_SIZE - 1)
+		var world_x: int = chunk_position.x * Chunk.CHUNK_SIZE + local_x
+		var world_y: int = chunk_position.y * Chunk.CHUNK_SIZE + local_y
 		var tile_type := chunk.get_tile_type(local_x, local_y)
 		var biome := chunk.get_biome(local_x, local_y)
 
@@ -82,8 +82,8 @@ func spawn_creatures(chunk: Chunk, chunk_position: Vector2i) -> void:
 		var picked_index := rng.rand_weighted(weights)
 		var creature_data: CreatureData = candidate_creatures[picked_index]
 		var pos := Vector2(
-			world_x * ChunkManager.TILE_SIZE,
-			world_y * ChunkManager.TILE_SIZE
+			world_x * Chunk.TILE_SIZE,
+			world_y * Chunk.TILE_SIZE
 		)
 		spawn_creature_at(chunk_position, creature_data, pos)
 
@@ -163,34 +163,25 @@ func spawn_creature_at(chunk_coords: Vector2i, creature_data: CreatureData, worl
 	target_container.add_child(creature)
 	creature.global_position = world_pos
 
-func get_nearby_entities(origin: Vector2, radius: float) -> Array:
-	var results: Array = []
+func get_nearby_entities(origin: Vector2, radius: float) -> Array[Creature]:
+	var results: Array[Creature] = []
 	var radius_sq := radius * radius
 
-	# Determine the chunk the origin is in
-	var origin_chunk: Vector2i = ChunkManager.world_pos_to_chunk_coords(origin)
+	for key in ChunkUtils.get_chunk_coords_intersecting_circle(origin, radius):
+		var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
+		if chunk == null:
+			continue
+		var creatures_container: Node2D = chunk.get_creatures_container()
+		if creatures_container == null:
+			continue
 
-	# Only look in the origin chunk and its immediate neighbors (3x3 area)
-	for cx in range(origin_chunk.x - 1, origin_chunk.x + 2):
-		for cy in range(origin_chunk.y - 1, origin_chunk.y + 2):
-			var key: Vector2i = Vector2i(cx, cy)
-			var chunk: Chunk = ChunkManager.get_loaded_chunk(key)
-			if chunk == null:
-				continue
-			var creatures_container: Node2D = chunk.get_creatures_container()
-			if creatures_container == null:
+		for monster in creatures_container.get_children():
+			if !is_instance_valid(monster) or not (monster is Creature):
 				continue
 
-			# Iterate safely and skip any invalid (already freed) instances.
-			for monster in creatures_container.get_children():
-				if !is_instance_valid(monster):
-					continue
+			var dist_sq := origin.distance_squared_to(monster.global_position)
 
-				var dx = monster.global_position.x - origin.x
-				var dy = monster.global_position.y - origin.y
-				var dist_sq = dx * dx + dy * dy
-
-				if dist_sq <= radius_sq:
-					results.append(monster)
+			if dist_sq <= radius_sq:
+				results.append(monster as Creature)
 
 	return results

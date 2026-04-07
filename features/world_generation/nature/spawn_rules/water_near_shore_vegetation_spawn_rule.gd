@@ -7,8 +7,8 @@ extends StaticVegetationSpawnRule
 
 
 func is_valid(local_tile: Vector2i, chunk: Chunk) -> bool:
-	var wx: int = chunk.coords.x * ChunkManager.CHUNK_SIZE + local_tile.x
-	var wy: int = chunk.coords.y * ChunkManager.CHUNK_SIZE + local_tile.y
+	var wx: int = chunk.coords.x * Chunk.CHUNK_SIZE + local_tile.x
+	var wy: int = chunk.coords.y * Chunk.CHUNK_SIZE + local_tile.y
 	return _water_is_near_non_water(wx, wy)
 
 

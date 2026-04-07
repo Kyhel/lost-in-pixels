@@ -5,21 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://bti2rydm2g6ad" path="res://features/objects/scenes/base_world_object.tscn" id="3_scn"]
 [ext_resource type="Script" uid="uid://c4p8kb2qnx0wt" path="res://features/objects/behaviors/world_object_behavior.gd" id="4_wob"]
 [ext_resource type="Script" uid="uid://c5647tu313au" path="res://features/objects/world_object_feature.gd" id="5_0mnkb"]
-[ext_resource type="Script" uid="uid://b5hlqawjlqfc5" path="res://features/live_spawning/rules/density_rule.gd" id="5_fw2rb"]
+[ext_resource type="Script" uid="uid://d07o2j0vwc50i" path="res://features/live_spawning/rules/creature_density_rule.gd" id="5_fw2rb"]
 [ext_resource type="Script" uid="uid://dak2m7n4p8q1w" path="res://features/objects/behaviors/spawner_behavior.gd" id="5_spb"]
 [ext_resource type="Script" uid="uid://ph73uwqahm4c" path="res://features/live_spawning/spawn_rule.gd" id="6_sr"]
 [ext_resource type="Resource" uid="uid://06r8vifs4yfn" path="res://features/creatures/data/animals/rabbit/rabbit.tres" id="7_rab"]
 
 [sub_resource type="Resource" id="Resource_3s3r5"]
 script = ExtResource("5_fw2rb")
-radius = 300
-item_type = &"rabbit"
-metadata/_custom_type_script = "uid://b5hlqawjlqfc5"
+max_creatures = 10
+radius = 300.0
+creature_id = &"rabbit"
 
 [sub_resource type="Resource" id="Resource_spb"]
 script = ExtResource("5_spb")
-spawn_check_interval = 10.0
-spawn_probability = 0.1
+spawn_probability = 0.2
 creature_data = ExtResource("7_rab")
 spawn_rules = Array[ExtResource("6_sr")]([SubResource("Resource_3s3r5")])
 

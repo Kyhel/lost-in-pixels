@@ -33,14 +33,14 @@ func spawn_world_objects(chunk: Chunk) -> void:
 
 	var context: Dictionary = {}
 
-	for local_y in ChunkManager.CHUNK_SIZE:
-		for local_x in ChunkManager.CHUNK_SIZE:
+	for local_y in Chunk.CHUNK_SIZE:
+		for local_x in Chunk.CHUNK_SIZE:
 
-			var world_tile_x: int = chunk.coords.x * ChunkManager.CHUNK_SIZE + local_x
-			var world_tile_y: int = chunk.coords.y * ChunkManager.CHUNK_SIZE + local_y
+			var world_tile_x: int = chunk.coords.x * Chunk.CHUNK_SIZE + local_x
+			var world_tile_y: int = chunk.coords.y * Chunk.CHUNK_SIZE + local_y
 			var world_pos: Vector2 = Vector2(
-				world_tile_x * ChunkManager.TILE_SIZE,
-				world_tile_y * ChunkManager.TILE_SIZE
+				world_tile_x * Chunk.TILE_SIZE,
+				world_tile_y * Chunk.TILE_SIZE
 			)
 			var tile_type = chunk.get_tile_type(local_x, local_y)
 			var biome = chunk.get_biome(local_x, local_y)
@@ -65,7 +65,7 @@ func spawn_world_objects(chunk: Chunk) -> void:
 						break
 
 				if can_spawn:
-					var centered := world_pos + Vector2.ONE * ChunkManager.TILE_SIZE / 2.0
+					var centered := world_pos + Vector2.ONE * Chunk.TILE_SIZE / 2.0
 					if ObjectsManager.is_object_spawn_blocked(centered, object_data):
 						continue
 					ObjectsManager.spawn_object_in_chunk(chunk.coords, object_data, centered)

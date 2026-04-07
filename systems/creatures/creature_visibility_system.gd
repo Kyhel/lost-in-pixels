@@ -44,7 +44,7 @@ func _apply_culling(p: Player) -> void:
 	var player_pos := p.global_position
 	var radius_px := float(p.player_config.light_radius)
 	var radius_sq := radius_px * radius_px
-	var chunk_px := float(ChunkManager.CHUNK_SIZE * ChunkManager.TILE_SIZE)
+	var chunk_px := float(Chunk.CHUNK_SIZE * Chunk.TILE_SIZE)
 
 	for chunk_node: Node in ChunkManager.loaded_chunks.values():
 		if not is_instance_valid(chunk_node) or not chunk_node is Chunk:

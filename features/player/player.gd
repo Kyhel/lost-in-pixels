@@ -164,7 +164,7 @@ func attack():
 
 
 func _spawn_carrot() -> void:
-	var spawn_pos := global_position + Vector2(ChunkManager.TILE_SIZE, 0)
+	var spawn_pos := global_position + Vector2(Chunk.TILE_SIZE, 0)
 	ObjectsManager.spawn_object_at(ObjectDatabase.get_object_data(ObjectIds.CARROT), spawn_pos, true)
 
 
