@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AreaEventDatabaseConfig" format=3]
+
+[ext_resource type="Script" uid="uid://bred05dqbpobw" path="res://systems/area_events/area_event_database_config.gd" id="1_cfg"]
+[ext_resource type="Script" uid="uid://cb37gx8x7t8bd" path="res://systems/area_events/area_event.gd" id="2_base"]
+[ext_resource type="Resource" path="res://systems/area_events/rabbit_eating_frenzy/rabbit_eating_frenzy_event.tres" id="3_frenzy"]
+
+[resource]
+script = ExtResource("1_cfg")
+events = Array[ExtResource("2_base")]([ExtResource("3_frenzy")])

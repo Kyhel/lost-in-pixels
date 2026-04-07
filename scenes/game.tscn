@@ -282,9 +282,49 @@ text = "Restore"
 layout_mode = 2
 text = "New game"
 
+[node name="Debug" type="Button" parent="PauseMenuRoot/Panel/VBox" unique_id=993728406]
+layout_mode = 2
+text = "Debug"
+
 [node name="Quit" type="Button" parent="PauseMenuRoot/Panel/VBox" unique_id=626775686]
 layout_mode = 2
 text = "Quit"
+
+[node name="DebugVBox" type="VBoxContainer" parent="PauseMenuRoot/Panel" unique_id=993728407]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -180.0
+offset_right = 160.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DebugTitle" type="Label" parent="PauseMenuRoot/Panel/DebugVBox" unique_id=993728408]
+layout_mode = 2
+text = "Area events"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PauseMenuRoot/Panel/DebugVBox" unique_id=993728409]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EventList" type="VBoxContainer" parent="PauseMenuRoot/Panel/DebugVBox/ScrollContainer" unique_id=993728410]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="DebugBack" type="Button" parent="PauseMenuRoot/Panel/DebugVBox" unique_id=993728411]
+layout_mode = 2
+text = "Back"
 
 [node name="ConfirmNewGame" type="AcceptDialog" parent="PauseMenuRoot" unique_id=1064158172]
 title = "New game"
@@ -356,7 +396,9 @@ dialog_text = "Start a new world? Unsaved progress will be lost."
 [connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Save" to="PauseMenuRoot" method="_on_save_pressed"]
 [connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Restore" to="PauseMenuRoot" method="_on_restore_pressed"]
 [connection signal="pressed" from="PauseMenuRoot/Panel/VBox/NewGame" to="PauseMenuRoot" method="_on_new_game_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Debug" to="PauseMenuRoot" method="_on_debug_pressed"]
 [connection signal="pressed" from="PauseMenuRoot/Panel/VBox/Quit" to="PauseMenuRoot" method="_on_quit_pressed"]
+[connection signal="pressed" from="PauseMenuRoot/Panel/DebugVBox/DebugBack" to="PauseMenuRoot" method="_on_debug_back_pressed"]
 [connection signal="confirmed" from="PauseMenuRoot/ConfirmNewGame" to="PauseMenuRoot" method="_on_confirm_new_confirmed"]
 [connection signal="pressed" from="DeathOverlay/Panel/VBox/Restore" to="DeathOverlay" method="_on_restore_pressed"]
 [connection signal="pressed" from="DeathOverlay/Panel/VBox/NewGame" to="DeathOverlay" method="_on_new_game_pressed"]

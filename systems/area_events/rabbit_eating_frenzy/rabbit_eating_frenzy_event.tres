@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="RabbitEatingFrenzyEventData" format=3]
+
+[ext_resource type="Script" uid="uid://b0vncbpxu78nx" path="res://systems/area_events/rabbit_eating_frenzy/rabbit_eating_frenzy_event.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"rabbit_eating_frenzy"
+radius = 500.0

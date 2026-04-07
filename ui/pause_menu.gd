@@ -1,6 +1,9 @@
 extends CanvasLayer
 
 @onready var _confirm_new: AcceptDialog = $ConfirmNewGame
+@onready var _main_vbox: VBoxContainer = $Panel/VBox
+@onready var _debug_vbox: VBoxContainer = $Panel/DebugVBox
+@onready var _event_list: VBoxContainer = $Panel/DebugVBox/ScrollContainer/EventList
 
 var _open: bool = false
 
@@ -60,6 +63,37 @@ func _on_confirm_new_confirmed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_debug_pressed() -> void:
+	_main_vbox.hide()
+	_debug_vbox.show()
+	_refresh_area_event_buttons()
+
+
+func _on_debug_back_pressed() -> void:
+	_debug_vbox.hide()
+	_main_vbox.show()
+
+
+func _refresh_area_event_buttons() -> void:
+	for child in _event_list.get_children():
+		child.queue_free()
+	for ev_any in AreaEventDatabase.get_all():
+		if ev_any == null or not ev_any is AreaEvent:
+			continue
+		var ev: AreaEvent = ev_any as AreaEvent
+		var btn := Button.new()
+		btn.text = String(ev.id)
+		btn.pressed.connect(_on_area_event_button_pressed.bind(ev))
+		_event_list.add_child(btn)
+
+
+func _on_area_event_button_pressed(event_data: AreaEvent) -> void:
+	var p: Player = _get_player()
+	if p == null:
+		return
+	event_data.apply(p.global_position)
 
 
 func _get_player() -> Player:

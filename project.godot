@@ -38,6 +38,7 @@ AbilityManager="*res://systems/player/ability_manager.gd"
 ObjectsManager="*uid://dp4jmd73t0oak"
 PlayerInputManager="*res://systems/player_input_manager.gd"
 DayNightCycle="*res://systems/day_night_cycle.gd"
+AreaEventDatabase="*res://systems/area_events/area_event_database.gd"
 
 [display]
 

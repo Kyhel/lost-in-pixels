@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="EatingFrenzyEffect" format=3 uid="uid://c7cfgqmvv5qys"]
+
+[ext_resource type="Script" uid="uid://gouulq0d6g1c" path="res://systems/area_events/rabbit_eating_frenzy/eating_frenzy_effect.gd" id="1_kvpfk"]
+
+[resource]
+script = ExtResource("1_kvpfk")
+color_modulate = Color(0, 0.9, 0.9, 1)
+metadata/_custom_type_script = "uid://gouulq0d6g1c"

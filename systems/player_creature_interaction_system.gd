@@ -2,6 +2,8 @@ extends Node
 
 ## Autoload: creature targeting, interaction menu lifecycle, give/pet actions.
 
+signal creature_received_item(creature: Creature, item_id: StringName)
+
 const CREATURE_INTERACTION_RANGE: float = 96.0
 
 var _target_creature: Creature = null
@@ -103,6 +105,7 @@ func creature_receive_item_from_player(creature: Creature, item_id: StringName) 
 		return
 	if not Inventory.remove_item(item_id, 1):
 		return
+	creature_received_item.emit(creature, item_id)
 	var creature_name := _creature_display_name(creature)
 	var item_data: ItemData = ItemDatabase.get_item_data(item_id)
 	var item_name := item_data.display_name if item_data != null else String(item_id)

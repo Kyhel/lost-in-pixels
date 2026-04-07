@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_script")
-id = &"night_flower_1"
+id = &"night_flower"
 display_name = "Night Flower"
 description = "A faintly glowing bloom that only yields its petals under moonlight."
 texture = ExtResource("2_tex")
