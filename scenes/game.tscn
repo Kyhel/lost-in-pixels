@@ -61,7 +61,7 @@ script = ExtResource("1_uwrxv")
 [node name="Entities" type="Node2D" parent="World" unique_id=1123457807]
 
 [node name="Player" type="CharacterBody2D" parent="World/Entities" unique_id=1652367432]
-collision_mask = 50
+collision_mask = 54
 motion_mode = 1
 script = ExtResource("3_iywne")
 
