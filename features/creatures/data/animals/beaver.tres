@@ -20,7 +20,7 @@
 [ext_resource type="Script" uid="uid://bohlkuwdsiv22" path="res://features/creatures/needs/need.gd" id="need_base"]
 [ext_resource type="Script" uid="uid://d0vpb1qjf7qej" path="res://features/creatures/needs/types/stamina_need.gd" id="stamina_s"]
 [ext_resource type="Script" uid="uid://brnsc777efkrv" path="res://features/creatures/traits/terrain_preference_trait.gd" id="terrain_pref_s"]
-[ext_resource type="Script" path="res://features/creatures/traits/trader_trait.gd" id="trader_trait_s"]
+[ext_resource type="Script" uid="uid://d2htr8v1k4qnq" path="res://features/creatures/traits/trader_trait.gd" id="trader_trait_s"]
 
 [sub_resource type="Resource" id="need_hunger_beaver"]
 script = ExtResource("hunger_s")

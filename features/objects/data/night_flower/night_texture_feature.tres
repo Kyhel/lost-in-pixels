@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="NightTextureFeature" format=3 uid="uid://bqm8nf3x7k2wp"]
 
-[ext_resource type="Script" path="res://features/objects/night_texture_feature.gd" id="1_ntf"]
+[ext_resource type="Script" uid="uid://dnjhqnxnmkpq7" path="res://features/objects/night_texture_feature.gd" id="1_ntf"]
 [ext_resource type="Texture2D" uid="uid://bsidp52xu4vi" path="res://assets/nature/night_flower/night_flower_1.png" id="2_night"]
 
 [resource]

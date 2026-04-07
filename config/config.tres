@@ -10,7 +10,7 @@
 [ext_resource type="Resource" uid="uid://dk58v5rim3ab7" path="res://config/player_config.tres" id="7_player_cfg"]
 [ext_resource type="Resource" uid="uid://pk3684ivf6kb" path="res://features/creatures/data/animals/deer.tres" id="7_uqt4q"]
 [ext_resource type="Resource" uid="uid://ceb4dhu7kc0pk" path="res://features/world_generation/creatures/forest_spawn_profile.tres" id="8_k3ah5"]
-[ext_resource type="Resource" path="res://features/creatures/data/creatures/unnamed_2/unnamed_2.tres" id="8_un2"]
+[ext_resource type="Resource" uid="uid://dl55kkn000k0r" path="res://features/creatures/data/creatures/unnamed_2/unnamed_2.tres" id="8_un2"]
 [ext_resource type="Resource" uid="uid://b1ncob6mvl0vg" path="res://features/world_generation/creatures/plains_spawn_profile.tres" id="9_oshmg"]
 [ext_resource type="Resource" uid="uid://b1t077bmvl0vg" path="res://features/world_generation/creatures/water_spawn_profile.tres" id="10_fklpv"]
 [ext_resource type="Script" uid="uid://b12224xo0dkcj" path="res://features/objects/object_data.gd" id="11_objdata"]

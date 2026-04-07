@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://clk4ii14vm1a2" path="res://features/creatures/creature_data.gd" id="1_creatureDataScript"]
 [ext_resource type="Script" uid="uid://b0bggfn8ieexe" path="res://features/world_generation/creatures/biome_creature_spawn_profile.gd" id="2_profileScript"]
 [ext_resource type="Resource" uid="uid://0x6ua5yre7y1" path="res://features/creatures/data/animals/beaver.tres" id="3_beaver"]
-[ext_resource type="Resource" path="res://features/creatures/data/creatures/unnamed_2/unnamed_2.tres" id="4_un2"]
+[ext_resource type="Resource" uid="uid://dl55kkn000k0r" path="res://features/creatures/data/creatures/unnamed_2/unnamed_2.tres" id="4_un2"]
 
 [resource]
 script = ExtResource("2_profileScript")

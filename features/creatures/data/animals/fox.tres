@@ -12,7 +12,7 @@
 [ext_resource type="Resource" uid="uid://ci7sm6dj24ih" path="res://features/creatures/ai/behaviors/tamed_commands/free_command_goal.tres" id="5_5h6o5"]
 [ext_resource type="Resource" uid="uid://d4fipfqbnme6i" path="res://features/objects/data/carrots/carrot.tres" id="5_ewph6"]
 [ext_resource type="Script" uid="uid://n33v4k13pcso" path="res://features/creatures/ai/sensors/sensor.gd" id="6_6fm8k"]
-[ext_resource type="Resource" path="res://features/creatures/ai/behaviors/tamed_commands/stay_command_goal.tres" id="6_xjv71"]
+[ext_resource type="Resource" uid="uid://ca1p3pwwc28en" path="res://features/creatures/ai/behaviors/tamed_commands/stay_command_goal.tres" id="6_xjv71"]
 [ext_resource type="Resource" uid="uid://d5715qs5tu56" path="res://features/creatures/ai/sensors/food_sensor.tres" id="7_food"]
 [ext_resource type="Script" uid="uid://pf7il1knm7h2" path="res://features/creatures/movement/movement_profile.gd" id="9_0l1a1"]
 [ext_resource type="Resource" uid="uid://dofmiigfottcf" path="res://features/creatures/movement/profiles/defaults/default_movement_profile.tres" id="10_dpj8p"]
