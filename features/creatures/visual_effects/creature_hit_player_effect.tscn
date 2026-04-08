@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvyokxafdx35x"]
 
-[ext_resource type="Script" uid="uid://b2bxlr2by4voi" path="res://features/creatures/effects/creature_hit_player_effect.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b2bxlr2by4voi" path="res://features/creatures/visual_effects/creature_hit_player_effect.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cpwwckbyoiycg" path="res://assets/effects/creature_hit_player_effect.png" id="2_texture"]
 
 [node name="CreatureHitPlayerEffect" type="Node2D" unique_id=430064639]

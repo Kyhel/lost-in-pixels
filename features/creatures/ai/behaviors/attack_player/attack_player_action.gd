@@ -1,7 +1,7 @@
 class_name AttackPlayerAction
 extends BTNode
 
-var creature_hit_player_effect_scene := preload("res://features/creatures/effects/creature_hit_player_effect.tscn")
+var creature_hit_player_effect_scene := preload("res://features/creatures/visual_effects/creature_hit_player_effect.tscn")
 var attack_cooldown_timer: float = 0.0
 
 func tick(creature: Creature, delta: float) -> State:
