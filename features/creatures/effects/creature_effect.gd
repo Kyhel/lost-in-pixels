@@ -1,10 +1,12 @@
 class_name CreatureEffect
 extends Resource
 
+enum Type {
+	NONE,
+	ADDITIVE,
+	MULTIPLICATIVE,
+	OVERRIDE
+}
 
-func apply(_creature: Creature) -> void:
-	pass
-
-
-func remove(_creature: Creature) -> void:
-	pass
+@export var type: Type = Type.NONE
+@export var unique: bool = false

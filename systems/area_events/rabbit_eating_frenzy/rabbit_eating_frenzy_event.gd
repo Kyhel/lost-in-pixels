@@ -1,12 +1,12 @@
 class_name RabbitEatingFrenzyEvent
 extends AreaEvent
 
-@export var effect := EatingFrenzyEffect
+@export var effects : Array[CreatureEffect] = []
 
 func apply(world_position: Vector2) -> void:
 	
-	if effect == null:
-		push_error("Can't apply, effect is null")
+	if effects.is_empty():
+		push_error("Can't apply, effects are empty")
 		return
 
 	GameLog.log_message("A strange affliction has befallen the rabbits in the area ! They seem to be hungrier than usual.")
@@ -20,8 +20,26 @@ func apply(world_position: Vector2) -> void:
 			continue
 		if creature.creature_data.id != CreatureIds.RABBIT:
 			continue
-		if EatingFrenzyEffect.find_on(creature) != null:
-			continue
-		var effect_instance = effect.new()
-		creature.add_creature_effect(effect_instance)
-		effect_instance.apply(creature)
+		CreatureEffectsUtils.add_effects(creature, effects)
+		_setup_remove_effects_callback(creature)
+
+
+func _setup_remove_effects_callback(creature: Creature) -> void:
+
+	var _received_item_cb = func(_creature: Creature, item_id: StringName, target: Creature, callable: Callable) -> void:
+		if _on_creature_received_item(_creature, item_id, target):
+			if PlayerCreatureInteractionSystem.creature_received_item.is_connected(callable):
+				PlayerCreatureInteractionSystem.creature_received_item.disconnect(callable)
+	
+	PlayerCreatureInteractionSystem.creature_received_item.connect(_received_item_cb.bind(creature, _received_item_cb))
+
+
+func _on_creature_received_item(creature: Creature, item_id: StringName, target: Creature) -> bool:
+	if creature != target:
+		return false
+	if item_id != ItemIds.NIGHT_FLOWER:
+		return false
+	if not is_instance_valid(creature):
+		return false
+	CreatureEffectsUtils.remove_effects(creature, effects)
+	return true

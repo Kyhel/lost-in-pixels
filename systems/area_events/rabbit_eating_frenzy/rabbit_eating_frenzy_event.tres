@@ -1,8 +1,23 @@
-[gd_resource type="Resource" script_class="RabbitEatingFrenzyEventData" format=3]
+[gd_resource type="Resource" script_class="RabbitEatingFrenzyEvent" format=3 uid="uid://cd7saxv613fdn"]
 
+[ext_resource type="Script" uid="uid://dni41y0tttktj" path="res://features/creatures/effects/creature_effect.gd" id="1_2b411"]
 [ext_resource type="Script" uid="uid://b0vncbpxu78nx" path="res://systems/area_events/rabbit_eating_frenzy/rabbit_eating_frenzy_event.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://drocvblxbt4xh" path="res://features/creatures/effects/creature_effect_color_modulate.gd" id="2_eeulq"]
+[ext_resource type="Script" uid="uid://bw1mscol0kk1n" path="res://features/creatures/effects/creature_effect_need_modifier.gd" id="3_eeulq"]
+
+[sub_resource type="Resource" id="Resource_eyanl"]
+script = ExtResource("2_eeulq")
+value = Color(0, 0.9019608, 0.9019608, 1)
+type = 2
+metadata/_custom_type_script = "uid://drocvblxbt4xh"
+
+[sub_resource type="Resource" id="Resource_681ab"]
+script = ExtResource("3_eeulq")
+value = 10.0
+type = 2
 
 [resource]
 script = ExtResource("1_script")
+effects = Array[ExtResource("1_2b411")]([SubResource("Resource_eyanl"), SubResource("Resource_681ab")])
 id = &"rabbit_eating_frenzy"
 radius = 1000.0

@@ -25,7 +25,7 @@ var alpha_mask: Node2D
 
 var virtual_rotation: float = 0
 
-var _creature_effects: Array[CreatureEffect] = []
+var creature_effects: Array[CreatureEffect] = []
 
 @onready var visualRoot: = $Visuals
 @onready var heldItemAnchor: Node2D = $Visuals/HeldItem
@@ -160,26 +160,6 @@ func get_obstacle_avoidance_shape_query() -> PhysicsShapeQueryParameters2D:
 		_obstacle_avoid_query_params.collide_with_bodies = true
 		_obstacle_avoid_query_params.collide_with_areas = false
 	return _obstacle_avoid_query_params
-
-
-func add_creature_effect(effect: CreatureEffect) -> void:
-	if effect == null:
-		return
-	_creature_effects.append(effect)
-
-
-func remove_creature_effect(effect: CreatureEffect) -> void:
-	if effect == null:
-		return
-	var i := _creature_effects.find(effect)
-	if i < 0:
-		return
-	effect.remove(self)
-	_creature_effects.remove_at(i)
-
-
-func get_creature_effects() -> Array[CreatureEffect]:
-	return _creature_effects.duplicate()
 
 
 func get_held_item_anchor() -> Node2D:
