@@ -8,6 +8,8 @@ func apply(world_position: Vector2) -> void:
 	if effect == null:
 		push_error("Can't apply, effect is null")
 		return
+
+	GameLog.log_message("A strange affliction has befallen the rabbits in the area ! They seem to be hungrier than usual.")
 	
 	var nearby: Array = CreatureManager.get_nearby_entities(world_position, radius)
 	for node in nearby:
